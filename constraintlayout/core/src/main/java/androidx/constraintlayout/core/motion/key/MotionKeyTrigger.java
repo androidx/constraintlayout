@@ -122,6 +122,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKeyTrigger copy(MotionKey src) {
         super.copy(src);
         MotionKeyTrigger k = (MotionKeyTrigger) src;
@@ -148,6 +149,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKey clone() {
         return new MotionKeyTrigger().copy(this);
     }
@@ -207,6 +209,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case TriggerType.TYPE_TRIGGER_SLACK:
@@ -221,6 +224,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case TriggerType.TYPE_CROSS:
@@ -247,6 +251,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, boolean value) {
         switch (type) {
             case TriggerType.TYPE_POST_LAYOUT:

@@ -33,6 +33,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     /**
      * Returns objet as a JSON5 String
      */
+    @Override
     public String toJSON() {
         StringBuilder json = new StringBuilder(getDebugName() + "{ ");
         boolean first = true;
@@ -58,6 +59,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     /**
      * Returns as a formatted JSON5 String with an indentation
      */
+    @Override
     public String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder(getDebugName());
         json.append("{\n");
@@ -81,7 +83,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
         return new CLObjectIterator(this);
     }
 
-    private class CLObjectIterator implements Iterator<CLKey> {
+    private static class CLObjectIterator implements Iterator<CLKey> {
         CLObject mObject;
         int mIndex = 0;
 

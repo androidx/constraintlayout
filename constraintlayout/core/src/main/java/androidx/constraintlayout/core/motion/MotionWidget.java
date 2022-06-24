@@ -115,6 +115,7 @@ public class MotionWidget implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public String toString() {
         return mWidgetFrame.left + ", " + mWidgetFrame.top + ", "
                 + mWidgetFrame.right + ", " + mWidgetFrame.bottom;

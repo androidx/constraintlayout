@@ -242,6 +242,7 @@ public abstract class ViewSpline extends SplineSet {
          * @param position the position
          * @param value the value
          */
+        @Override
         public void setPoint(int position, float value) {
             throw new RuntimeException("call of custom attribute setPoint");
         }

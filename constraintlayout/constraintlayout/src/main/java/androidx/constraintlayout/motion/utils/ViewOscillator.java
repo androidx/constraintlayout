@@ -181,6 +181,7 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
         float[] mValue = new float[1];
         protected ConstraintAttribute mCustom;
 
+        @Override
         protected void setCustom(Object custom) {
             mCustom = (ConstraintAttribute) custom;
         }

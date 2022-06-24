@@ -195,6 +195,7 @@ public abstract class SplineSet {
         KeyFrameArray.CustomArray mConstraintAttributeList;
         float[] mTempValues;
 
+        @SuppressWarnings("StringSplitter")
         public CustomSet(String attribute, KeyFrameArray.CustomArray attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
@@ -227,6 +228,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value) {
             throw new RuntimeException("don't call for custom "
                     + "attribute call setPoint(pos, ConstraintAttribute)");
@@ -258,6 +260,7 @@ public abstract class SplineSet {
             mStart = currentTime;
         }
 
+        @Override
         public void setProperty(TypedValues widget, float t) {
             int id = widget.getId(mType);
             widget.setValue(id, get(t));
@@ -269,6 +272,7 @@ public abstract class SplineSet {
         KeyFrameArray.CustomVar mConstraintAttributeList;
         float[] mTempValues;
 
+        @SuppressWarnings("StringSplitter")
         public CustomSpline(String attribute, KeyFrameArray.CustomVar attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
@@ -277,6 +281,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
@@ -301,6 +306,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value) {
             throw new RuntimeException("don't call for custom attribute"
                     + " call setPoint(pos, ConstraintAttribute)");
@@ -309,6 +315,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setProperty(TypedValues widget, float t) {
             setProperty((MotionWidget) widget, t);
         }

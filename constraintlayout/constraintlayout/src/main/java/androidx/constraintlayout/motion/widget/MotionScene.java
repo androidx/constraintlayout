@@ -328,12 +328,12 @@ public class MotionScene {
                     transition.mTouchResponse.setRTL(mRtl);
                     RectF region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
                     if (region != null && lastTouchDown != null
-                            && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
+                            && !region.contains(lastTouchDown.getX(), lastTouchDown.getY())) {
                         continue;
                     }
                     region = transition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
                     if (region != null && lastTouchDown != null
-                            && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
+                            && !region.contains(lastTouchDown.getX(), lastTouchDown.getY())) {
                         continue;
                     }
 
@@ -1708,8 +1708,8 @@ public class MotionScene {
                         region = mCurrentTransition.mTouchResponse
                                 .getTouchRegion(mMotionLayout, cache);
                         if (region != null
-                                && (!region.contains(mLastTouchDown.getX(),
-                                mLastTouchDown.getY()))) {
+                                && !region.contains(mLastTouchDown.getX(),
+                                mLastTouchDown.getY())) {
                             mMotionOutsideRegion = true;
                         } else {
                             mMotionOutsideRegion = false;
@@ -1729,7 +1729,7 @@ public class MotionScene {
                     if (DEBUG) {
                         Log.v(TAG, "----- ACTION_MOVE " + dx + "," + dy);
                     }
-                    if (dx == 0.0 && dy == 0.0 || mLastTouchDown == null) {
+                    if ((dx == 0.0 && dy == 0.0) || mLastTouchDown == null) {
                         return;
                     }
 

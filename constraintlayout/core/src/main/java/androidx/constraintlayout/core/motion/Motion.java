@@ -296,7 +296,7 @@ public class Motion implements TypedValues {
                 (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -386,7 +386,7 @@ public class Motion implements TypedValues {
                 (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -442,7 +442,7 @@ public class Motion implements TypedValues {
         float mils = 1.0f / (pointCount - 1);
         double x = 0, y = 0;
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
 
             double p = position;
 
@@ -583,7 +583,7 @@ public class Motion implements TypedValues {
     void buildRectangles(float[] path, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             position = getAdjustedPosition(position, null);
             mSpline[0].getPos(position, mInterpolateData);
             mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, i * 8);

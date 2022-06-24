@@ -85,6 +85,7 @@ public class KeyCycle extends Key {
      * @param context
      * @param attrs
      */
+    @Override
     public void load(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyCycle);
         Loader.read(this, a);
@@ -491,6 +492,7 @@ public class KeyCycle extends Key {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyCycle k = (KeyCycle) src;
@@ -521,6 +523,7 @@ public class KeyCycle extends Key {
      * Clone this KeyAttributes
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyCycle().copy(this);
     }

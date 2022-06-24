@@ -39,6 +39,7 @@ import java.util.HashMap;
  */
 public class ConstraintAttribute {
     private static final String TAG = "TransitionLayout";
+    private static final boolean DEBUG = false;
     private boolean mMethod = false;
     String mName;
     private AttributeType mType;
@@ -179,7 +180,7 @@ public class ConstraintAttribute {
                 int a = 0xFF & (mColorValue >> 24);
                 int r = 0xFF & (mColorValue >> 16);
                 int g = 0xFF & (mColorValue >> 8);
-                int b = 0xFF & (mColorValue);
+                int b = 0xFF & mColorValue;
                 float f_r = (float) Math.pow(r / 255.0f, 2.2);
                 float f_g = (float) Math.pow(g / 255.0f, 2.2);
                 float f_b = (float) Math.pow(b / 255.0f, 2.2);
@@ -196,6 +197,10 @@ public class ConstraintAttribute {
             case DIMENSION_TYPE:
                 ret[0] = mFloatValue;
                 break;
+            default:
+                if (DEBUG) {
+                    Log.v(TAG, mType.toString());
+                }
         }
     }
 
@@ -224,6 +229,10 @@ public class ConstraintAttribute {
                 break;
             case DIMENSION_TYPE:
                 mFloatValue = value[0];
+            default:
+                if (DEBUG) {
+                    Log.v(TAG, mType.toString());
+                }
 
         }
     }

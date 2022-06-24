@@ -208,7 +208,7 @@ public class CustomVariable {
                 int a = 0xFF & (mIntegerValue >> 24);
                 int r = 0xFF & (mIntegerValue >> 16);
                 int g = 0xFF & (mIntegerValue >> 8);
-                int b = 0xFF & (mIntegerValue);
+                int b = 0xFF & mIntegerValue;
                 float f_r = (float) Math.pow(r / 255.0f, 2.2);
                 float f_g = (float) Math.pow(g / 255.0f, 2.2);
                 float f_b = (float) Math.pow(b / 255.0f, 2.2);

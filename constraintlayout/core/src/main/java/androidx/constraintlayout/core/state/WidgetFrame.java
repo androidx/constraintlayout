@@ -506,7 +506,6 @@ public class WidgetFrame {
         for (int i = 0; i < n; i++) {
             CLElement tmp = obj.get(i);
             CLKey k = ((CLKey) tmp);
-            String name = k.content();
             CLElement v = k.getValue();
             String vStr = v.content();
             if (vStr.matches("#[0-9a-fA-F]+")) {

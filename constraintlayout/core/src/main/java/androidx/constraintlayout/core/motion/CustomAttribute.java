@@ -150,7 +150,7 @@ public class CustomAttribute {
                 int a = 0xFF & (mColorValue >> 24);
                 int r = 0xFF & (mColorValue >> 16);
                 int g = 0xFF & (mColorValue >> 8);
-                int b = 0xFF & (mColorValue);
+                int b = 0xFF & mColorValue;
                 float f_r = (float) Math.pow(r / 255.0f, 2.2);
                 float f_g = (float) Math.pow(g / 255.0f, 2.2);
                 float f_b = (float) Math.pow(b / 255.0f, 2.2);

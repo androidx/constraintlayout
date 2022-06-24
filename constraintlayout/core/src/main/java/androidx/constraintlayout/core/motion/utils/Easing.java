@@ -90,6 +90,7 @@ public class Easing {
     /**
      * @TODO: add description
      */
+    @Override
     public String toString() {
         return mStr;
     }
@@ -164,6 +165,7 @@ public class Easing {
          * binary search for the region
          * and linear interpolate the answer
          */
+        @Override
         public double getDiff(double x) {
             double t = 0.5;
             double range = 0.5;
@@ -189,6 +191,7 @@ public class Easing {
          * binary search for the region
          * and linear interpolate the answer
          */
+        @Override
         public double get(double x) {
             if (x <= 0.0) {
                 return 0;
