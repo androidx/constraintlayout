@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
+
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.State;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -66,7 +68,10 @@ public class HorizontalChainReference extends ChainReference {
                 previous.endToStart(reference.getKey()).margin(getPostMargin(preKey));
                 reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));
             }
-            reference.setHorizontalChainWeight(getWeight(key.toString()));
+            float weight = getWeight(key.toString());
+            if (weight != UNKNOWN) {
+                reference.setHorizontalChainWeight(weight);
+            }
             previous = reference;
         }
 
