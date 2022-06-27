@@ -17,7 +17,6 @@
 package com.example.composemail.ui.home.toptoolbar
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +49,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.example.composemail.ui.theme.textBackgroundColor
 import com.example.composemail.ui.utils.rememberConstraintSet
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TopToolbar(
     modifier: Modifier = Modifier,

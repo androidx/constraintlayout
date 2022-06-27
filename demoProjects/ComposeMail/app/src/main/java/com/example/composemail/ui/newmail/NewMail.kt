@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -335,7 +334,6 @@ fun NewMailButton(
 }
 
 @Suppress("NOTHING_TO_INLINE")
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal inline fun ColorableIconButton(
     modifier: Modifier,
