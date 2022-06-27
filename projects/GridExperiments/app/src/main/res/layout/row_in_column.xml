@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/column"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        app:constraint_referenced_ids="btn0,row,btn1"
+        app:grid_horizontalGaps="10dp"
+        app:grid_columns="1"
+        app:grid_rows="0" />
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/row"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        app:constraint_referenced_ids="btn2,innerColumn,btn3"
+        app:grid_horizontalGaps="10dp"
+        app:grid_columns="0"
+        app:grid_rows="1" />
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/innerColumn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        app:constraint_referenced_ids="btn4,btn5,btn6"
+        app:grid_horizontalGaps="10dp"
+        app:grid_columns="1"
+        app:grid_rows="0" />
+
+    <Button
+        android:id="@+id/btn0"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="57dp" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="301dp" />
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="2"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="301dp" />
+
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="3"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="545dp" />
+
+    <Button
+        android:id="@+id/btn4"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="4"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="57dp" />
+
+    <Button
+        android:id="@+id/btn5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="5"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="545dp" />
+
+    <Button
+        android:id="@+id/btn6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="6"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="57dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

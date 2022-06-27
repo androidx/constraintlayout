@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * MainActivity for Grid helper
@@ -148,13 +150,15 @@ public class MainActivity extends AppCompatActivity {
     private static int[] getLayouts( ) {
         ArrayList<String> list = new ArrayList<>();
         Field[] f = R.layout.class.getDeclaredFields();
+        Set<String> layouts = new HashSet<>(Arrays.asList("activity_main",
+                "column_in_row", "row_in_column"));
 
         int []ret = new int[f.length];
          int count = 0;
         for (int i = 0; i < f.length; i++) {
             try {
                 String name = f[i].getName();
-                if (!name.contains("_") || name.equals("activity_main")) {
+                if (!name.contains("_") || layouts.contains(name)) {
                     ret[count++] = f[i].getInt(null);
                 }
             } catch (IllegalAccessException e) {
