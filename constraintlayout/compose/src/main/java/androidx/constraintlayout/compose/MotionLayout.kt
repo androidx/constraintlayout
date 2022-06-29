@@ -452,19 +452,16 @@ internal inline fun MotionLayoutCore(
 @Suppress("unused")
 @LayoutScopeMarker
 class MotionLayoutScope @PublishedApi internal constructor(
-    measurer: MotionMeasurer,
-    private val progressState: MotionProgress
+    private val measurer: MotionMeasurer,
+    private val motionProgress: MotionProgress
 ) {
-    private var myMeasurer = measurer
 
-    class MotionProperties internal constructor(
+    inner class MotionProperties internal constructor(
         id: String,
-        tag: String?,
-        measurer: MotionMeasurer
+        tag: String?
     ) {
         private var myId = id
         private var myTag = tag
-        private var myMeasurer = measurer
 
         fun id(): String {
             return myId
@@ -475,74 +472,56 @@ class MotionLayoutScope @PublishedApi internal constructor(
         }
 
         fun color(name: String): Color {
-            return myMeasurer.getCustomColor(myId, name)
+            return measurer.getCustomColor(myId, name, motionProgress.currentProgress)
         }
 
         fun float(name: String): Float {
-            return myMeasurer.getCustomFloat(myId, name)
+            return measurer.getCustomFloat(myId, name, motionProgress.currentProgress)
         }
 
         fun int(name: String): Int {
-            return myMeasurer.getCustomFloat(myId, name).toInt()
+            return measurer.getCustomFloat(myId, name, motionProgress.currentProgress).toInt()
         }
 
         fun distance(name: String): Dp {
-            return myMeasurer.getCustomFloat(myId, name).dp
+            return measurer.getCustomFloat(myId, name, motionProgress.currentProgress).dp
         }
 
         fun fontSize(name: String): TextUnit {
-            return myMeasurer.getCustomFloat(myId, name).sp
+            return measurer.getCustomFloat(myId, name, motionProgress.currentProgress).sp
         }
     }
 
     @Composable
     fun motionProperties(id: String): State<MotionProperties> =
-    // TODO: Make properly observable, passing the progressState as a remember 'key' is a hack
-        //  to make it work as observable
-        remember(id, progressState.currentProgress) {
-            mutableStateOf(MotionProperties(id, null, myMeasurer))
+        // TODO: There's no point on returning a [State] object, and probably no point on this being
+        //  a Composable
+        remember(id) {
+            mutableStateOf(MotionProperties(id, null))
         }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionProperties(id: String, tag: String): MotionProperties {
-        return MotionProperties(id, tag, myMeasurer)
+        return MotionProperties(id, tag)
     }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionColor(id: String, name: String): Color {
-        return myMeasurer.getCustomColor(id, name)
+        return measurer.getCustomColor(id, name, motionProgress.currentProgress)
     }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionFloat(id: String, name: String): Float {
-        return myMeasurer.getCustomFloat(id, name)
+        return measurer.getCustomFloat(id, name, motionProgress.currentProgress)
     }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionInt(id: String, name: String): Int {
-        return myMeasurer.getCustomFloat(id, name).toInt()
+        return measurer.getCustomFloat(id, name, motionProgress.currentProgress).toInt()
     }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionDistance(id: String, name: String): Dp {
-        return myMeasurer.getCustomFloat(id, name).dp
+        return measurer.getCustomFloat(id, name, motionProgress.currentProgress).dp
     }
 
-    /**
-     * FIXME: This implementation is not observable
-     */
     fun motionFontSize(id: String, name: String): TextUnit {
-        return myMeasurer.getCustomFloat(id, name).sp
+        return measurer.getCustomFloat(id, name, motionProgress.currentProgress).sp
     }
 }
 

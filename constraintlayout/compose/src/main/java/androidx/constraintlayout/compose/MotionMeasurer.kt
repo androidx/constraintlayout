@@ -43,7 +43,7 @@ import androidx.constraintlayout.core.widgets.Optimizer
 @PublishedApi
 internal class MotionMeasurer : Measurer() {
     private val DEBUG = false
-    private var motionProgress = 0f
+    private var lastProgressInInterpolation = 0f
     val transition = Transition()
 
     // TODO: Explicitly declare `getDesignInfo` so that studio tooling can identify the method, also
@@ -97,7 +97,7 @@ internal class MotionMeasurer : Measurer() {
 
         val needsRemeasure = needsRemeasure(constraints)
 
-        if (motionProgress != progress ||
+        if (lastProgressInInterpolation != progress ||
             (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE &&
                 layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) ||
             needsRemeasure
@@ -170,7 +170,7 @@ internal class MotionMeasurer : Measurer() {
         progress: Float,
         remeasure: Boolean
     ) {
-        motionProgress = progress
+        lastProgressInInterpolation = progress
         if (remeasure) {
             this.transition.clear()
             resetMeasureState()
@@ -469,19 +469,32 @@ internal class MotionMeasurer : Measurer() {
         }
     }
 
-    fun getCustomColor(id: String, name: String): Color {
+    /**
+     * Calculates and returns a [Color] value of the custom property given by [name] on the
+     * ConstraintWidget corresponding to [id], the value is calculated at the given [progress] value
+     * on the current Transition.
+     *
+     * Returns [Color.Black] if the custom property doesn't exist.
+     */
+    fun getCustomColor(id: String, name: String, progress: Float): Color {
         if (!transition.contains(id)) {
             return Color.Black
         }
-
-        transition.interpolate(root.width, root.height, motionProgress)
+        transition.interpolate(root.width, root.height, progress)
 
         val interpolatedFrame = transition.getInterpolated(id)
         val color = interpolatedFrame.getCustomColor(name)
         return Color(color)
     }
 
-    fun getCustomFloat(id: String, name: String): Float {
+    /**
+     * Calculates and returns a [Float] value of the custom property given by [name] on the
+     * ConstraintWidget corresponding to [id], the value is calculated at the given [progress] value
+     * on the current Transition.
+     *
+     * Returns `0f` if the custom property doesn't exist.
+     */
+    fun getCustomFloat(id: String, name: String, progress: Float): Float {
         if (!transition.contains(id)) {
             return 0f
         }
@@ -489,7 +502,7 @@ internal class MotionMeasurer : Measurer() {
         val endFrame = transition.getEnd(id)
         val startFloat = startFrame.getCustomFloat(name)
         val endFloat = endFrame.getCustomFloat(name)
-        return (1f - motionProgress) * startFloat + motionProgress * endFloat
+        return (1f - progress) * startFloat + progress * endFloat
     }
 
     fun clearConstraintSets() {
