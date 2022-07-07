@@ -798,7 +798,7 @@ public class Transition implements TypedValues {
         return this.mState.get(widgetId);
     }
 
-    private WidgetState getWidgetState(String widgetId,
+    public WidgetState getWidgetState(String widgetId,
             ConstraintWidget child,
             int transitionState) {
         WidgetState widgetState = this.mState.get(widgetId);
@@ -849,7 +849,7 @@ public class Transition implements TypedValues {
         return mAutoTransition;
     }
 
-    static class WidgetState {
+    public static class WidgetState {
         WidgetFrame mStart;
         WidgetFrame mEnd;
         WidgetFrame mInterpolated;
@@ -862,7 +862,7 @@ public class Transition implements TypedValues {
         int mParentHeight = -1;
         int mParentWidth = -1;
 
-        WidgetState() {
+        public WidgetState() {
             mStart = new WidgetFrame();
             mEnd = new WidgetFrame();
             mInterpolated = new WidgetFrame();

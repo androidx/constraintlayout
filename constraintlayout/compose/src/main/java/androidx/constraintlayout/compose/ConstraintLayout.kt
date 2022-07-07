@@ -1364,53 +1364,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         measurables.fastForEach { measurable ->
             val frame = frameCache[measurable] ?: return
-            if (frame.isDefaultTransform) {
-                val x = frameCache[measurable]!!.left
-                val y = frameCache[measurable]!!.top
-                placeables[measurable]?.place(IntOffset(x, y))
-            } else {
-                val layerBlock: GraphicsLayerScope.() -> Unit = {
-                    if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
-                        val pivotX = if (frame.pivotX.isNaN()) 0.5f else frame.pivotX
-                        val pivotY = if (frame.pivotY.isNaN()) 0.5f else frame.pivotY
-                        transformOrigin = TransformOrigin(pivotX, pivotY)
-                    }
-                    if (!frame.rotationX.isNaN()) {
-                        rotationX = frame.rotationX
-                    }
-                    if (!frame.rotationY.isNaN()) {
-                        rotationY = frame.rotationY
-                    }
-                    if (!frame.rotationZ.isNaN()) {
-                        rotationZ = frame.rotationZ
-                    }
-                    if (!frame.translationX.isNaN()) {
-                        translationX = frame.translationX
-                    }
-                    if (!frame.translationY.isNaN()) {
-                        translationY = frame.translationY
-                    }
-                    if (!frame.translationZ.isNaN()) {
-                        shadowElevation = frame.translationZ
-                    }
-                    if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
-                        scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
-                        scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
-                    }
-                    if (!frame.alpha.isNaN()) {
-                        alpha = frame.alpha
-                    }
-                }
-                val x = frameCache[measurable]!!.left
-                val y = frameCache[measurable]!!.top
-                val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
-                placeables[measurable]?.placeWithLayer(
-                    x,
-                    y,
-                    layerBlock = layerBlock,
-                    zIndex = zIndex
-                )
-            }
+            val placeable = placeables[measurable] ?: return
+            placeWithFrameTransform(placeable, frame)
         }
         if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
             computeLayoutResult()
@@ -1540,6 +1495,56 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         if (constraintSet is JSONConstraintSet) {
             constraintSet.emitDesignElements(designElements)
         }
+    }
+}
+
+fun Placeable.PlacementScope.placeWithFrameTransform(placeable: Placeable, frame: WidgetFrame, offset: IntOffset = IntOffset.Zero) {
+    if (frame.isDefaultTransform) {
+        val x = frame.left - offset.x
+        val y = frame.top - offset.y
+        placeable.place(IntOffset(x, y))
+    } else {
+        val layerBlock: GraphicsLayerScope.() -> Unit = {
+            if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
+                val pivotX = if (frame.pivotX.isNaN()) 0.5f else frame.pivotX
+                val pivotY = if (frame.pivotY.isNaN()) 0.5f else frame.pivotY
+                transformOrigin = TransformOrigin(pivotX, pivotY)
+            }
+            if (!frame.rotationX.isNaN()) {
+                rotationX = frame.rotationX
+            }
+            if (!frame.rotationY.isNaN()) {
+                rotationY = frame.rotationY
+            }
+            if (!frame.rotationZ.isNaN()) {
+                rotationZ = frame.rotationZ
+            }
+            if (!frame.translationX.isNaN()) {
+                translationX = frame.translationX
+            }
+            if (!frame.translationY.isNaN()) {
+                translationY = frame.translationY
+            }
+            if (!frame.translationZ.isNaN()) {
+                shadowElevation = frame.translationZ
+            }
+            if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
+                scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
+                scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
+            }
+            if (!frame.alpha.isNaN()) {
+                alpha = frame.alpha
+            }
+        }
+        val x = frame.left - offset.x
+        val y = frame.top - offset.y
+        val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
+        placeable.placeWithLayer(
+            x,
+            y,
+            layerBlock = layerBlock,
+            zIndex = zIndex
+        )
     }
 }
 

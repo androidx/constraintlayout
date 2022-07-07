@@ -39,11 +39,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
+import androidx.constraintlayout.compose.OnSwipe
+import androidx.constraintlayout.compose.SwipeDirection
+import androidx.constraintlayout.compose.SwipeMode
+import androidx.constraintlayout.compose.SwipeSide
+import androidx.constraintlayout.compose.Transition
 import androidx.constraintlayout.compose.layoutId
 import androidx.constraintlayout.compose.rememberMotionLayoutState
+import java.util.EnumSet
 
 @Preview
 @Composable
@@ -465,4 +473,59 @@ fun SimpleSwipe(mode: String, endWidth: Int, touchUp: String) {
     }
 }
 
+private const val BoxId = "box"
 
+@Preview
+@Composable
+fun OnSwipeWithDsl() {
+    var mode by remember { mutableStateOf(SwipeMode.Spring) }
+    Column(Modifier.fillMaxSize()) {
+        MotionLayout(
+            modifier = Modifier.fillMaxWidth().weight(1.0f, true),
+            start = remember {
+                ConstraintSet {
+                    constrain(createRefFor(BoxId)) {
+                        width = Dimension.value(80.dp)
+                        height = Dimension.value(80.dp)
+                        bottom.linkTo(parent.bottom, 8.dp)
+                        start.linkTo(parent.start, 8.dp)
+                    }
+                }
+            },
+            end = remember {
+                ConstraintSet {
+                    constrain(createRefFor(BoxId)) {
+                        width = Dimension.value(40.dp)
+                        height = Dimension.value(40.dp)
+                        end.linkTo(parent.end, 8.dp)
+                        top.linkTo(parent.top, 8.dp)
+                    }
+                }
+            },
+            transition = Transition {
+                onSwipe = OnSwipe(
+                    anchor = BoxId,
+                    side = SwipeSide.Right,
+                    direction = SwipeDirection.End,
+                    mode = mode
+                )
+            },
+            progress = 0f,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(modifier = Modifier
+                .layoutId(BoxId)
+                .background(Color.Red)) {
+
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { mode = SwipeMode.Spring }) {
+                Text(text = "Spring")
+            }
+            Button(onClick = { mode = SwipeMode.Velocity }) {
+                Text(text = "Velocity")
+            }
+        }
+    }
+}
