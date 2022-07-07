@@ -35,7 +35,8 @@ public class TransitionParser {
      * @param json       Transition Object to parse.
      * @param transition Transition Object to write transition to
      */
-    public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel)
+    public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel,
+            Integer count)
             throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
@@ -79,7 +80,7 @@ public class TransitionParser {
         if (onSwipe != null) {
             parseOnSwipe(onSwipe, transition);
         }
-        parseKeyFrames(json, transition);
+        parseKeyFrames(json, transition, count);
     }
 
     private static void parseOnSwipe(CLContainer onSwipe, Transition transition) {
@@ -145,7 +146,8 @@ public class TransitionParser {
      * @param transitionCLObject the CLObject for the root transition json
      * @param transition         core object that holds the state of the Transition
      */
-    public static void parseKeyFrames(CLObject transitionCLObject, Transition transition)
+    public static void parseKeyFrames(CLObject transitionCLObject, Transition transition,
+            Integer count)
             throws CLParsingException {
         CLContainer keyframes = transitionCLObject.getObjectOrNull("KeyFrames");
         if (keyframes == null) return;
@@ -163,7 +165,7 @@ public class TransitionParser {
             for (int i = 0; i < keyAttributes.size(); i++) {
                 CLElement keyAttribute = keyAttributes.get(i);
                 if (keyAttribute instanceof CLObject) {
-                    parseKeyAttribute((CLObject) keyAttribute, transition);
+                    parseKeyAttribute((CLObject) keyAttribute, transition, count);
                 }
             }
         }
@@ -238,7 +240,7 @@ public class TransitionParser {
     }
 
     private static void parseKeyAttribute(CLObject keyAttribute,
-            Transition transition) throws CLParsingException {
+            Transition transition, Integer count) throws CLParsingException {
         CLArray targets = keyAttribute.getArrayOrNull("target");
         if (targets == null) {
             return;
@@ -321,20 +323,40 @@ public class TransitionParser {
             }
         }
         String curveFit = keyAttribute.getStringOrNull("curveFit");
-        for (int i = 0; i < targets.size(); i++) {
-            for (int j = 0; j < bundles.length; j++) {
-                String target = targets.getString(i);
-                TypedBundle bundle = bundles[j];
+        if (targets.size() == 1 && targets.getString(0).equals("MOVABLE_ITEM")) {
+            for (int i = 0; i < count; i++) {
+                for (int j = 0; j < bundles.length; j++) {
+                    String target = Integer.toString(1000 + i);
+                    TypedBundle bundle = bundles[j];
 
-                if (curveFit != null) {
-                    bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT,
-                            map(curveFit, "spline", "linear"));
+                    if (curveFit != null) {
+                        bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT,
+                                map(curveFit, "spline", "linear"));
+                    }
+                    bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING,
+                            transitionEasing);
+                    int frame = frames.getInt(j);
+                    bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+                    transition.addKeyAttribute(target, bundle);
                 }
-                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING,
-                        transitionEasing);
-                int frame = frames.getInt(j);
-                bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
-                transition.addKeyAttribute(target, bundle);
+            }
+        }
+        else {
+            for (int i = 0; i < targets.size(); i++) {
+                for (int j = 0; j < bundles.length; j++) {
+                    String target = targets.getString(i);
+                    TypedBundle bundle = bundles[j];
+
+                    if (curveFit != null) {
+                        bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT,
+                                map(curveFit, "spline", "linear"));
+                    }
+                    bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING,
+                            transitionEasing);
+                    int frame = frames.getInt(j);
+                    bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+                    transition.addKeyAttribute(target, bundle);
+                }
             }
         }
     }

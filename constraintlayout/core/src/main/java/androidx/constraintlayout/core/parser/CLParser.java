@@ -15,6 +15,8 @@
  */
 package androidx.constraintlayout.core.parser;
 
+import static androidx.constraintlayout.core.parser.CLElementUtils.createElement;
+
 public class CLParser {
 
     static boolean sDebug = false;
@@ -79,7 +81,7 @@ public class CLParser {
                     continue;
                 }
             }
-            if (false) {
+            if (sDebug) {
                 System.out.println("Looking at " + i + " : <" + c + ">");
             }
             if (currentElement == null) {
@@ -159,8 +161,11 @@ public class CLParser {
         return root;
     }
 
-    private CLElement getNextJsonElement(int position, char c, CLElement currentElement,
+    private CLElement getNextJsonElement(int position,
+            char c,
+            CLElement currentElement,
             char[] content) throws CLParsingException {
+        CLElement nextElement = null;
         switch (c) {
             case ' ':
             case ':':
@@ -172,13 +177,11 @@ public class CLParser {
             }
             break;
             case '{': {
-                currentElement = createElement(currentElement,
-                        position, TYPE.OBJECT, true, content);
+                nextElement = createElement(currentElement, position, TYPE.OBJECT, content, mLineNumber);
             }
             break;
             case '[': {
-                currentElement = createElement(currentElement,
-                        position, TYPE.ARRAY, true, content);
+                nextElement = createElement(currentElement, position, TYPE.ARRAY, content, mLineNumber);
             }
             break;
             case ']':
@@ -191,11 +194,9 @@ public class CLParser {
             case '"':
             case '\'': {
                 if (currentElement instanceof CLObject) {
-                    currentElement = createElement(currentElement,
-                            position, TYPE.KEY, true, content);
+                    nextElement = createElement(currentElement, position, TYPE.KEY, content, mLineNumber);
                 } else {
-                    currentElement = createElement(currentElement,
-                            position, TYPE.STRING, true, content);
+                    nextElement = createElement(currentElement, position, TYPE.STRING, content, mLineNumber);
                 }
             }
             break;
@@ -218,77 +219,29 @@ public class CLParser {
             case '7':
             case '8':
             case '9': {
-                currentElement = createElement(currentElement,
-                        position, TYPE.NUMBER, true, content);
+                nextElement = createElement(currentElement, position, TYPE.NUMBER, content, mLineNumber);
             }
             break;
             default: {
                 if (currentElement instanceof CLContainer
                         && !(currentElement instanceof CLObject)) {
-                    currentElement = createElement(currentElement,
-                            position, TYPE.TOKEN, true, content);
-                    CLToken token = (CLToken) currentElement;
+                    nextElement = createElement(currentElement, position, TYPE.TOKEN, content,
+                            mLineNumber);
+                    CLToken token = (CLToken) nextElement;
                     if (!token.validate(c, position)) {
                         throw new CLParsingException("incorrect token <"
                                 + c + "> at line " + mLineNumber, token);
                     }
                 } else {
-                    currentElement = createElement(currentElement,
-                            position, TYPE.KEY, true, content);
+                    nextElement = createElement(currentElement, position, TYPE.KEY, content, mLineNumber);
                 }
             }
         }
-        return currentElement;
+        if (nextElement != null) {
+            return nextElement;
+        }
+        else {
+            return currentElement;
+        }
     }
-
-    private CLElement createElement(CLElement currentElement, int position,
-            TYPE type, boolean applyStart, char[] content) {
-        CLElement newElement = null;
-        if (sDebug) {
-            System.out.println("CREATE " + type + " at " + content[position]);
-        }
-        switch (type) {
-            case OBJECT: {
-                newElement = CLObject.allocate(content);
-                position++;
-            }
-            break;
-            case ARRAY: {
-                newElement = CLArray.allocate(content);
-                position++;
-            }
-            break;
-            case STRING: {
-                newElement = CLString.allocate(content);
-            }
-            break;
-            case NUMBER: {
-                newElement = CLNumber.allocate(content);
-            }
-            break;
-            case KEY: {
-                newElement = CLKey.allocate(content);
-            }
-            break;
-            case TOKEN: {
-                newElement = CLToken.allocate(content);
-            }
-            break;
-            default:
-                break;
-        }
-        if (newElement == null) {
-            return null;
-        }
-        newElement.setLine(mLineNumber);
-        if (applyStart) {
-            newElement.setStart(position);
-        }
-        if (currentElement instanceof CLContainer) {
-            CLContainer container = (CLContainer) currentElement;
-            newElement.setContainer(container);
-        }
-        return newElement;
-    }
-
 }
