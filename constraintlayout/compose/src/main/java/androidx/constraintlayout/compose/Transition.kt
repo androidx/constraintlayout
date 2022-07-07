@@ -70,17 +70,19 @@ fun Transition(@Language("json5") content: String): Transition? {
  *
  * Used to reduced the exposed API from [Transition].
  */
+@PublishedApi
 internal class TransitionImpl(
     private val parsedTransition: CLObject,
     private val pixelDp: CorePixelDp
 ) : Transition {
+    var count = 0
 
     /**
      * Applies all Transition properties to [transition].
      */
     fun applyAllTo(transition: androidx.constraintlayout.core.state.Transition, type: Int) {
         try {
-            TransitionParser.parse(parsedTransition, transition, pixelDp)
+            TransitionParser.parse(parsedTransition, transition, pixelDp, count)
         } catch (e: CLParsingException) {
             Log.e("CML", "Error parsing JSON $e")
         }
@@ -92,7 +94,7 @@ internal class TransitionImpl(
      */
     fun applyKeyFramesTo(transition: androidx.constraintlayout.core.state.Transition) {
         try {
-            TransitionParser.parseKeyFrames(parsedTransition, transition)
+            TransitionParser.parseKeyFrames(parsedTransition, transition, 0)
         } catch (e: CLParsingException) {
             Log.e("CML", "Error parsing JSON $e")
         }

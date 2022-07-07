@@ -32,6 +32,8 @@ import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
 
+val itemized = "MOVABLE_ITEM"
+
 @Composable
 fun Transition(
     from: String = "start",
@@ -329,7 +331,6 @@ data class OnSwipe(
     val mode: SwipeMode = SwipeMode.Velocity,
     val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete
 )
-
 
 class SwipeMode internal constructor(internal val propName: String) {
     companion object {
