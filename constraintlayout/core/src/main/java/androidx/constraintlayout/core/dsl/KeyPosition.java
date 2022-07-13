@@ -16,6 +16,10 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Provides the API for creating a KeyPosition Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ */
 public class KeyPosition extends Keys {
 
     private String mTarget = null;
@@ -109,10 +113,10 @@ public class KeyPosition extends Keys {
         ret.append("KeyPositions:{\n");
 
         append(ret, "target", mTarget);
-        ret.append("frame: ").append(mFrame).append(",\n");
+        ret.append("frame:").append(mFrame).append(",\n");
 
         if (mPositionType != null) {
-            ret.append("type: '").append(mPositionType).append("',\n");
+            ret.append("type:'").append(mPositionType).append("',\n");
         }
 
         append(ret, "easing", mTransitionEasing);

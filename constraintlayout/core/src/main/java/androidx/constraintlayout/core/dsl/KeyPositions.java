@@ -18,6 +18,11 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.Arrays;
 
+/**
+ * Provides the API for creating a KeyPosition Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ * This allows multiple KeyPosition positions to defined in one object.
+ */
 public class KeyPositions extends Keys {
 
     private String[] mTarget = null;
@@ -40,7 +45,7 @@ public class KeyPositions extends Keys {
         mTarget = targets;
         mFrames = new int[numOfFrames];
         // the default is evenly spaced  1 at 50, 2 at 33 & 66, 3 at 25,50,75
-        float gap = 100f/(mFrames.length+1);
+        float gap = 100f / (mFrames.length + 1);
         for (int i = 0; i < mFrames.length; i++) {
             mFrames[i] = (int) (i * gap + gap);
         }
@@ -113,10 +118,10 @@ public class KeyPositions extends Keys {
 
         append(ret, "target", mTarget);
 
-        ret.append("frame: ").append(Arrays.toString(mFrames)).append(",\n");
+        ret.append("frame:").append(Arrays.toString(mFrames)).append(",\n");
 
         if (mPositionType != null) {
-            ret.append("type: '").append(mPositionType).append("',\n");
+            ret.append("type:'").append(mPositionType).append("',\n");
         }
 
         append(ret, "easing", mTransitionEasing);

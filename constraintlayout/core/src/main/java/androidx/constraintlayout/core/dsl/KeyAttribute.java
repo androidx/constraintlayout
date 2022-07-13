@@ -16,8 +16,12 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Provides the API for creating a KeyAttribute Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ */
 public class KeyAttribute extends Keys {
-    protected String TYPE = "KeyAttribute";
+    protected String TYPE = "KeyAttributes";
     private String mTarget = null;
     private int mFrame = 0;
     private String mTransitionEasing;
@@ -190,16 +194,17 @@ public class KeyAttribute extends Keys {
         ret.append("}\n");
         return ret.toString();
     }
+
     protected void attributesToString(StringBuilder builder) {
         append(builder, "target", mTarget);
-        builder.append("frame: ").append(mFrame).append(",\n");
+        builder.append("frame:").append(mFrame).append(",\n");
 
         append(builder, "easing", mTransitionEasing);
         if (mCurveFit != null) {
-            builder.append("fit: '").append(mCurveFit).append("',\n");
+            builder.append("fit:'").append(mCurveFit).append("',\n");
         }
         if (mVisibility != null) {
-            builder.append("visibility: '").append(mVisibility).append("',\n");
+            builder.append("visibility:'").append(mVisibility).append("',\n");
         }
         append(builder, "alpha", mAlpha);
         append(builder, "rotationX", mRotationX);

@@ -18,10 +18,15 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.ArrayList;
 
+/**
+ * This defines to MotionScene container
+ * It contains ConstraintSet and Transitions
+ */
 public class MotionScene {
     ArrayList<Transition> mTransitions = new ArrayList<>();
     ArrayList<ConstraintSet> mConstraintSets = new ArrayList<>();
 
+    // todo add support for variables, generate and helpers
     public void addTransition(Transition transition) {
         mTransitions.add(transition);
     }
@@ -34,14 +39,14 @@ public class MotionScene {
     public String toString() {
         StringBuilder ret = new StringBuilder("{\n");
         if (!mTransitions.isEmpty()) {
-            ret.append("Transitions: { \n");
+            ret.append("Transitions:{\n");
             for (Transition transition : mTransitions) {
                 ret.append(transition.toString());
             }
             ret.append("}\n");
         }
         if (!mConstraintSets.isEmpty()) {
-            ret.append("ConstraintSets: { \n");
+            ret.append("ConstraintSets:{ \n");
             for (ConstraintSet constraintSet : mConstraintSets) {
                 ret.append(constraintSet.toString());
             }

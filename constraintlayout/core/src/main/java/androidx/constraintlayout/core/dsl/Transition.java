@@ -16,6 +16,10 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Create a Transition Object.
+ * Transition objects reference the start and end Constraints
+ */
 public class Transition {
     private OnSwipe mOnSwipe = null;
     final int UNSET = -1;
@@ -30,7 +34,7 @@ public class Transition {
     private int mDuration = DEFAULT_DURATION;
     private float mStagger = DEFAULT_STAGGER;
 
-    private  KeyFrames mKeyFrames = new KeyFrames();
+    private KeyFrames mKeyFrames = new KeyFrames();
 
     public void setOnSwipe(OnSwipe onSwipe) {
         mOnSwipe = onSwipe;
@@ -78,9 +82,9 @@ public class Transition {
 
     @Override
     public String toString() {
-        String ret = mId + ":{ \n"
-                + "from: '" + mConstraintSetStart + "',\n"
-                + "to: '" + mConstraintSetEnd + "',\n";
+        String ret = mId + ":{\n"
+                + "from:'" + mConstraintSetStart + "',\n"
+                + "to:'" + mConstraintSetEnd + "',\n";
         if (mDuration != DEFAULT_DURATION) {
             ret += "duration:" + mDuration + ",\n";
         }

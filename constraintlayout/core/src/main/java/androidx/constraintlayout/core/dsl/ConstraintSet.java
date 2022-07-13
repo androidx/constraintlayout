@@ -18,9 +18,19 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.ArrayList;
 
+/**
+ * Provides the API for creating a ConstraintSet Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ */
 public class ConstraintSet {
-  ArrayList<Constraint> mConstraints = new ArrayList<>();
-  public void add(Constraint c) {
-      mConstraints.add(c);
-  }
+    private final String mName;
+    ArrayList<Constraint> mConstraints = new ArrayList<>();
+
+    public ConstraintSet(String name) {
+        mName = name;
+    }
+
+    public void add(Constraint c) {
+        mConstraints.add(c);
+    }
 }

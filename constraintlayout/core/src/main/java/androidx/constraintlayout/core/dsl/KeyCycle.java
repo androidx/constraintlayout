@@ -21,10 +21,10 @@ public class KeyCycle extends KeyAttribute {
     private Wave mWaveShape = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = Float.NaN;
-    private float mWavePhase  = Float.NaN;
+    private float mWavePhase = Float.NaN;
 
     KeyCycle(int frame, String target) {
-        super(frame,target);
+        super(frame, target);
         TYPE = "KeyCycle";
     }
 
@@ -73,7 +73,7 @@ public class KeyCycle extends KeyAttribute {
         super.attributesToString(builder);
 
         if (mWaveShape != null) {
-            builder.append("shape: '").append(mWaveShape).append("',\n");
+            builder.append("shape:'").append(mWaveShape).append("',\n");
         }
         append(builder, "period", mWavePeriod);
         append(builder, "offset", mWaveOffset);

@@ -16,17 +16,20 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Create automatic swipe handling object
+ */
 public class OnSwipe {
 
     private Drag mDragDirection = null;
     private Side mTouchAnchorSide = null;
 
-    private String mTouchAnchorId =null;
+    private String mTouchAnchorId = null;
     private String mLimitBoundsTo = null;
     private TouchUp mOnTouchUp = null;
     private String mRotationCenterId = null;
     private float mMaxVelocity = Float.NaN;
-    private float mMaxAcceleration  = Float.NaN;
+    private float mMaxAcceleration = Float.NaN;
     private float mDragScale = Float.NaN;
 
     private float mDragThreshold = Float.NaN;
@@ -37,25 +40,26 @@ public class OnSwipe {
     private Boundary mSpringBoundary = null;
     private Mode mAutoCompleteMode = null;
 
-   public OnSwipe() {
+    public OnSwipe() {
     }
 
     public OnSwipe(String anchor, Side side, Drag dragDirection) {
-       mTouchAnchorId = anchor;
-       mTouchAnchorSide = side;
-       mDragDirection = dragDirection;
+        mTouchAnchorId = anchor;
+        mTouchAnchorSide = side;
+        mDragDirection = dragDirection;
     }
+
     enum Mode {
         VELOCITY,
         SPRING
     }
 
-   enum Boundary {
-      OVERSHOOT,
-      BOUNCE_START,
-      BOUNCE_END,
-      BOUNCE_BOTH,
-   }
+    enum Boundary {
+        OVERSHOOT,
+        BOUNCE_START,
+        BOUNCE_END,
+        BOUNCE_BOTH,
+    }
 
 
     enum Drag {
@@ -76,7 +80,7 @@ public class OnSwipe {
         TOP,
         LEFT,
         RIGHT,
-        BOTTON,
+        BOTTOM,
         MIDDLE,
         START,
         END,
@@ -84,21 +88,18 @@ public class OnSwipe {
 
     enum TouchUp {
         AUTOCOMPLETE,
-        AUTOCOMPLETE_TO_START,
-        AUTOCOMPLETE_TO_END,
+        TO_START,
+        NEVER_COMPLETE_END,
+        TO_END,
         STOP,
         DECELERATE,
-        DECELERATE_AND_COMPLETE,
-        NEVER_TO_START,
-        NEVER_TO_END,
+        DECELERATE_COMPLETE,
+        NEVER_COMPLETE_START
     }
 
     /**
      * The id of the view who's movement is matched to your drag
      * If not specified it will map to a linear movement across the width of the motionLayout
-     *
-     * @param id
-     * @return
      */
     public OnSwipe setTouchAnchorId(String id) {
         mTouchAnchorId = id;
@@ -113,9 +114,6 @@ public class OnSwipe {
      * This side of the view that matches the drag movement.
      * Only meaning full if the object changes size during the movement.
      * (rotation is not considered)
-     *
-     * @param side
-     * @return
      */
     public OnSwipe setTouchAnchorSide(Side side) {
         mTouchAnchorSide = side;
@@ -128,9 +126,6 @@ public class OnSwipe {
 
     /**
      * The direction of the drag.
-     *
-     * @param dragDirection
-     * @return
      */
     public OnSwipe setDragDirection(Drag dragDirection) {
         mDragDirection = dragDirection;
@@ -143,9 +138,6 @@ public class OnSwipe {
 
     /**
      * The maximum velocity (Change in progress per second) animation can achieve
-     *
-     * @param maxVelocity
-     * @return
      */
     public OnSwipe setMaxVelocity(int maxVelocity) {
         mMaxVelocity = maxVelocity;
@@ -160,9 +152,6 @@ public class OnSwipe {
      * The maximum acceleration and deceleration of the animation
      * (Change in Change in progress per second)
      * Faster makes the object seem lighter and quicker
-     *
-     * @param maxAcceleration
-     * @return
      */
     public OnSwipe setMaxAcceleration(int maxAcceleration) {
         mMaxAcceleration = maxAcceleration;
@@ -176,9 +165,6 @@ public class OnSwipe {
 
     /**
      * Normally 1 this can be tweaked to make the acceleration faster
-     *
-     * @param dragScale
-     * @return
      */
     public OnSwipe setDragScale(int dragScale) {
         mDragScale = dragScale;
@@ -193,9 +179,6 @@ public class OnSwipe {
      * This sets the threshold before the animation is kicked off.
      * It is important when have multi state animations the have some play before the
      * System decides which animation to jump on.
-     *
-     * @param dragThreshold
-     * @return
      */
     public OnSwipe setDragThreshold(int dragThreshold) {
         mDragThreshold = dragThreshold;
@@ -213,7 +196,6 @@ public class OnSwipe {
      * ON_UP_STOP, ON_UP_DECELERATE, ON_UP_DECELERATE_AND_COMPLETE
      *
      * @param mode default = ON_UP_AUTOCOMPLETE
-     * @return
      */
     public OnSwipe setOnTouchUp(TouchUp mode) {
         mOnTouchUp = mode;
@@ -226,9 +208,6 @@ public class OnSwipe {
 
     /**
      * Only allow touch actions to be initiated within this region
-     *
-     * @param id
-     * @return
      */
     public OnSwipe setLimitBoundsTo(String id) {
         mLimitBoundsTo = id;
@@ -242,7 +221,6 @@ public class OnSwipe {
     /**
      * The view to center the rotation about
      *
-     * @param rotationCenterId
      * @return this
      */
     public OnSwipe setRotateCenter(String rotationCenterId) {
@@ -263,7 +241,6 @@ public class OnSwipe {
      * Set the damping of the spring if using spring.
      * c in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
      *
-     * @param springDamping
      * @return this
      */
     public OnSwipe setSpringDamping(float springDamping) {
@@ -274,8 +251,6 @@ public class OnSwipe {
     /**
      * Get the mass of the spring.
      * the m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
-     *
-     * @return
      */
     public float getSpringMass() {
         return mSpringMass;
@@ -285,7 +260,6 @@ public class OnSwipe {
      * Set the Mass of the spring if using spring.
      * m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
      *
-     * @param springMass
      * @return this
      */
     public OnSwipe setSpringMass(float springMass) {
@@ -307,9 +281,6 @@ public class OnSwipe {
      * If this is set the swipe will use a spring return system.
      * If set to NaN it will revert to the norm system.
      * K in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
-     *
-     * @param springStiffness
-     * @return
      */
     public OnSwipe setSpringStiffness(float springStiffness) {
         mSpringStiffness = springStiffness;
@@ -318,8 +289,6 @@ public class OnSwipe {
 
     /**
      * The threshold for spring motion to stop.
-     *
-     * @return
      */
     public float getSpringStopThreshold() {
         return mSpringStopThreshold;
@@ -331,7 +300,6 @@ public class OnSwipe {
      * If the spring will never go above that threshold again it will stop.
      *
      * @param springStopThreshold when to stop.
-     * @return
      */
     public OnSwipe setSpringStopThreshold(float springStopThreshold) {
         mSpringStopThreshold = springStopThreshold;
@@ -340,8 +308,6 @@ public class OnSwipe {
 
     /**
      * The behaviour at the boundaries 0 and 1
-     *
-     * @return
      */
     public Boundary getSpringBoundary() {
         return mSpringBoundary;
@@ -350,8 +316,7 @@ public class OnSwipe {
     /**
      * The behaviour at the boundaries 0 and 1.
      *
-     * @param springBoundary  behaviour at the boundaries
-     * @return
+     * @param springBoundary behaviour at the boundaries
      */
     public OnSwipe setSpringBoundary(Boundary springBoundary) {
         mSpringBoundary = springBoundary;
@@ -365,12 +330,11 @@ public class OnSwipe {
 
     /**
      * sets the behaviour at the boundaries 0 and 1
-     *     COMPLETE_MODE_CONTINUOUS_VELOCITY = 0;
-     *      COMPLETE_MODE_SPRING = 1;
-     *
+     * COMPLETE_MODE_CONTINUOUS_VELOCITY = 0;
+     * COMPLETE_MODE_SPRING = 1;
      */
     public void setAutoCompleteMode(Mode autoCompleteMode) {
-        mAutoCompleteMode =  autoCompleteMode;
+        mAutoCompleteMode = autoCompleteMode;
     }
 
     @Override
@@ -378,53 +342,54 @@ public class OnSwipe {
         StringBuilder ret = new StringBuilder();
         ret.append("OnSwipe:{\n");
         if (mTouchAnchorId != null) {
-            ret.append("anchor: '").append(mTouchAnchorId).append("',\n");
+            ret.append("anchor:'").append(mTouchAnchorId).append("',\n");
         }
         if (mDragDirection != null) {
-            ret.append("direction: '").append(mDragDirection).append("',\n");
+            ret.append("direction:'").append(mDragDirection.toString().toLowerCase()).append(
+                    "',\n");
         }
         if (mTouchAnchorSide != null) {
-            ret.append("side: '").append(mTouchAnchorSide).append("',\n");
+            ret.append("side:'").append(mTouchAnchorSide.toString().toLowerCase()).append("',\n");
         }
         if (!Float.isNaN(mDragScale)) {
-            ret.append("scale: '").append(mDragScale).append("',\n");
+            ret.append("scale:'").append(mDragScale).append("',\n");
         }
-        if (!Float.isNaN(mDragThreshold )) {
-            ret.append("threshold: '").append(mDragThreshold).append("',\n");
+        if (!Float.isNaN(mDragThreshold)) {
+            ret.append("threshold:'").append(mDragThreshold).append("',\n");
         }
         if (!Float.isNaN(mMaxVelocity)) {
-            ret.append("maxVelocity: '").append(mMaxVelocity).append("',\n");
+            ret.append("maxVelocity:'").append(mMaxVelocity).append("',\n");
         }
         if (!Float.isNaN(mMaxAcceleration)) {
-            ret.append("maxAccel: '").append(mMaxAcceleration).append("',\n");
+            ret.append("maxAccel:'").append(mMaxAcceleration).append("',\n");
         }
         if (mLimitBoundsTo != null) {
-            ret.append("limitBounds: '").append(mLimitBoundsTo).append("',\n");
+            ret.append("limitBounds:'").append(mLimitBoundsTo).append("',\n");
         }
         if (mAutoCompleteMode != null) {
-            ret.append("mode: '").append(mAutoCompleteMode).append("',\n");
+            ret.append("mode:'").append(mAutoCompleteMode.toString().toLowerCase()).append("',\n");
         }
         if (mOnTouchUp != null) {
-            ret.append("touchUp: '").append(mOnTouchUp).append("',\n");
+            ret.append("touchUp:'").append(mOnTouchUp.toString().toLowerCase()).append("',\n");
         }
         if (!Float.isNaN(mSpringMass)) {
-            ret.append("springMass: '").append(mSpringMass).append("',\n");
+            ret.append("springMass:'").append(mSpringMass).append("',\n");
         }
 
-        if (!Float.isNaN(mSpringStiffness )) {
-            ret.append("springStiffness: '").append(mSpringStiffness).append("',\n");
+        if (!Float.isNaN(mSpringStiffness)) {
+            ret.append("springStiffness:'").append(mSpringStiffness).append("',\n");
         }
-        if (!Float.isNaN(mSpringDamping )) {
-            ret.append("springDamping: '").append(mSpringDamping).append("',\n");
+        if (!Float.isNaN(mSpringDamping)) {
+            ret.append("springDamping:'").append(mSpringDamping).append("',\n");
         }
-        if (!Float.isNaN(mSpringStopThreshold )) {
-            ret.append("stopThreshold: '").append(mSpringStopThreshold).append("',\n");
+        if (!Float.isNaN(mSpringStopThreshold)) {
+            ret.append("stopThreshold:'").append(mSpringStopThreshold).append("',\n");
         }
-        if ( mSpringBoundary != null ) {
-            ret.append("springBoundary: '").append(mSpringBoundary).append("',\n");
+        if (mSpringBoundary != null) {
+            ret.append("springBoundary:'").append(mSpringBoundary).append("',\n");
         }
-        if (mRotationCenterId != null ) {
-            ret.append("around: '").append(mRotationCenterId).append("',\n");
+        if (mRotationCenterId != null) {
+            ret.append("around:'").append(mRotationCenterId).append("',\n");
         }
 
         ret.append("}\n");
