@@ -16,7 +16,17 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Provides the API for creating a Constraint Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ */
 public class Constraint {
+
+    private final String mId;
+
+    public Constraint(String id) {
+        mId = id;
+    }
 
     public class Anchor {
         final Side mSide;
@@ -32,6 +42,7 @@ public class Constraint {
             return Constraint.this;
         }
     }
+
     enum Behaviour {
         SPREAD,
         WRAP,
@@ -39,11 +50,13 @@ public class Constraint {
         RATIO,
         RESOLVED,
     }
+
     enum ChainMode {
         SPREAD,
         SPREAD_INSIDE,
         PACKED,
     }
+
     enum Side {
         LEFT,
         RIGHT,
@@ -53,8 +66,11 @@ public class Constraint {
         END,
         BASELINE
     }
+
     static int UNSET = Integer.MIN_VALUE;
-    String helperJason;
+    String helperType = null;
+    String helperJason = null;
+
     Anchor left = new Anchor(Side.LEFT);
     Anchor right = new Anchor(Side.RIGHT);
     Anchor top = new Anchor(Side.TOP);
@@ -68,12 +84,12 @@ public class Constraint {
     public float verticalBias = Float.NaN;
     public String dimensionRatio = null;
     public String circleConstraint = null;
-    public int circleRadius = Integer.MIN_VALUE;;
-    public float circleAngle =  Float.NaN;
+    public int circleRadius = Integer.MIN_VALUE;
+    public float circleAngle = Float.NaN;
     public int editorAbsoluteX = Integer.MIN_VALUE;
-    public int editorAbsoluteY =  Integer.MIN_VALUE;
+    public int editorAbsoluteY = Integer.MIN_VALUE;
     public float verticalWeight = Float.NaN;
-    public float horizontalWeight =  Float.NaN;
+    public float horizontalWeight = Float.NaN;
     public ChainMode horizontalChainStyle = null;
     public ChainMode verticalChainStyle = null;
     public Behaviour widthDefault = null;
@@ -83,8 +99,8 @@ public class Constraint {
     public int widthMin = UNSET;
     public int heightMin = UNSET;
 
-    public float widthPercent =  Float.NaN;
-    public float heightPercent =  Float.NaN;
+    public float widthPercent = Float.NaN;
+    public float heightPercent = Float.NaN;
     public String[] mReferenceIds = null;
     public boolean constrainedWidth = false;
     public boolean constrainedHeight = false;

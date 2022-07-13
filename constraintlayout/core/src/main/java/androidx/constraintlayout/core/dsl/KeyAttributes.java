@@ -18,26 +18,31 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.Arrays;
 
+/**
+ * Provides the API for creating a KeyAttribute Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ * This allows multiple KeyAttribute positions to defined in one object.
+ */
 public class KeyAttributes extends Keys {
-    protected String TYPE = "KeyAttribute";
+    protected String TYPE = "KeyAttributes";
     private String[] mTarget = null;
     private String mTransitionEasing;
     private Fit mCurveFit = null;
     private int[] mFrames = null;
 
     private Visibility[] mVisibility = null;
-    private float [] mAlpha = null;
-    private float [] mRotation = null;
-    private float [] mRotationX = null;
-    private float [] mRotationY = null;
-    private float [] mPivotX = null;
-    private float [] mPivotY = null;
-    private float [] mTransitionPathRotate = null;
-    private float [] mScaleX = null;
-    private float [] mScaleY = null;
-    private float [] mTranslationX = null;
-    private float [] mTranslationY = null;
-    private float [] mTranslationZ = null;
+    private float[] mAlpha = null;
+    private float[] mRotation = null;
+    private float[] mRotationX = null;
+    private float[] mRotationY = null;
+    private float[] mPivotX = null;
+    private float[] mPivotY = null;
+    private float[] mTransitionPathRotate = null;
+    private float[] mScaleX = null;
+    private float[] mScaleY = null;
+    private float[] mTranslationX = null;
+    private float[] mTranslationY = null;
+    private float[] mTranslationZ = null;
 
     enum Fit {
         spline,
@@ -49,11 +54,12 @@ public class KeyAttributes extends Keys {
         INVISIBLE,
         GONE
     }
-    KeyAttributes(int numOfFrames,String ... targets) {
+
+    KeyAttributes(int numOfFrames, String... targets) {
         mTarget = targets;
         mFrames = new int[numOfFrames];
         // the default is evenly spaced  1 at 50, 2 at 33 & 66, 3 at 25,50,75
-        float gap = 100f/(mFrames.length+1);
+        float gap = 100f / (mFrames.length + 1);
         for (int i = 0; i < mFrames.length; i++) {
             mFrames[i] = (int) (i * gap + gap);
         }
@@ -87,7 +93,7 @@ public class KeyAttributes extends Keys {
         return mVisibility;
     }
 
-    public void setVisibility(Visibility...visibility) {
+    public void setVisibility(Visibility... visibility) {
         mVisibility = visibility;
     }
 
@@ -201,14 +207,14 @@ public class KeyAttributes extends Keys {
 
     protected void attributesToString(StringBuilder builder) {
         append(builder, "target", mTarget);
-        builder.append("frame: ").append(Arrays.asList(mFrames)).append(",\n");
+        builder.append("frame:").append(Arrays.asList(mFrames)).append(",\n");
 
         append(builder, "easing", mTransitionEasing);
         if (mCurveFit != null) {
-            builder.append("fit: '").append(mCurveFit).append("',\n");
+            builder.append("fit:'").append(mCurveFit).append("',\n");
         }
         if (mVisibility != null) {
-            builder.append("visibility: '").append(mVisibility).append("',\n");
+            builder.append("visibility:'").append(mVisibility).append("',\n");
         }
         append(builder, "alpha", mAlpha);
         append(builder, "rotationX", mRotationX);

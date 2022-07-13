@@ -18,13 +18,16 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.Arrays;
 
-public class Keys {
+/**
+ * This is the base Key for all the key (KeyCycle, KeyPosition, etc.) Objects
+ */
+class Keys {
 
-    protected String unpack(String[]str) {
+    protected String unpack(String[] str) {
         StringBuilder ret = new StringBuilder("[");
         for (int i = 0; i < str.length; i++) {
 
-                ret.append((i==0)?"'":",'");
+            ret.append((i == 0) ? "'" : ",'");
 
             ret.append(str[i]);
             ret.append("'");
@@ -34,10 +37,17 @@ public class Keys {
         return ret.toString();
     }
 
+    protected void append(StringBuilder builder, String name, int value) {
+        if (value != Integer.MIN_VALUE) {
+            builder.append(name);
+            builder.append(":'").append(value).append("',\n");
+        }
+    }
+
     protected void append(StringBuilder builder, String name, String value) {
         if (value != null) {
             builder.append(name);
-            builder.append(": '").append(value).append("',\n");
+            builder.append(":'").append(value).append("',\n");
         }
     }
 
@@ -46,21 +56,21 @@ public class Keys {
             return;
         }
         builder.append(name);
-        builder.append(": ").append(value).append(",\n");
+        builder.append(":").append(value).append(",\n");
 
     }
 
-    protected void append(StringBuilder builder, String name, String[]array) {
+    protected void append(StringBuilder builder, String name, String[] array) {
         if (array != null) {
             builder.append(name);
-            builder.append(": ").append(unpack(array)).append(",\n");
+            builder.append(":").append(unpack(array)).append(",\n");
         }
     }
 
-    protected void append(StringBuilder builder, String name, float[]array) {
+    protected void append(StringBuilder builder, String name, float[] array) {
         if (array != null) {
             builder.append(name);
-            builder.append("percentWidth: [").append(Arrays.toString(array)).append("],\n");
+            builder.append("percentWidth:[").append(Arrays.toString(array)).append("],\n");
         }
     }
 

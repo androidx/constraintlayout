@@ -18,6 +18,12 @@ package androidx.constraintlayout.core.dsl;
 
 import java.util.ArrayList;
 
+/**
+ * Provides the API for creating a KeyFrames Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ * KeyFrames is a container for KeyAttribute,KeyCycle,KeyPosition etc.
+ */
+
 public class KeyFrames {
     ArrayList<Keys> mKeys = new ArrayList<>();
 
@@ -29,7 +35,7 @@ public class KeyFrames {
     public String toString() {
         StringBuilder ret = new StringBuilder();
         if (!mKeys.isEmpty()) {
-            ret.append("keyFrames: {\n");
+            ret.append("keyFrames:{\n");
             for (Keys key : mKeys) {
                 ret.append(key.toString());
             }

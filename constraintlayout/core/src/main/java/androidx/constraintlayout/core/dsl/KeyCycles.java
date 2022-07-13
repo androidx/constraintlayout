@@ -16,6 +16,11 @@
 
 package androidx.constraintlayout.core.dsl;
 
+/**
+ * Provides the API for creating a KeyCycle Object for use in the Core
+ * ConstraintLayout & MotionLayout system
+ * This allows multiple KeyCycle positions to defined in one object.
+ */
 public class KeyCycles extends KeyAttributes {
 
 
@@ -29,12 +34,12 @@ public class KeyCycles extends KeyAttributes {
     }
 
     private KeyCycles.Wave mWaveShape = null;
-    private float []mWavePeriod = null;
-    private float []mWaveOffset  = null;
-    private float []mWavePhase  = null;
+    private float[] mWavePeriod = null;
+    private float[] mWaveOffset = null;
+    private float[] mWavePhase = null;
 
-    KeyCycles(int numOfFrames,String ... targets) {
-        super(  numOfFrames,  targets);
+    KeyCycles(int numOfFrames, String... targets) {
+        super(numOfFrames, targets);
         TYPE = "KeyCycle";
     }
 
@@ -50,7 +55,7 @@ public class KeyCycles extends KeyAttributes {
         return mWavePeriod;
     }
 
-    public void setWavePeriod(float...wavePeriod) {
+    public void setWavePeriod(float... wavePeriod) {
         mWavePeriod = wavePeriod;
     }
 
@@ -66,7 +71,7 @@ public class KeyCycles extends KeyAttributes {
         return mWavePhase;
     }
 
-    public void setWavePhase(float...wavePhase) {
+    public void setWavePhase(float... wavePhase) {
         mWavePhase = wavePhase;
     }
 
@@ -74,7 +79,7 @@ public class KeyCycles extends KeyAttributes {
         super.attributesToString(builder);
 
         if (mWaveShape != null) {
-            builder.append("shape: '").append(mWaveShape).append("',\n");
+            builder.append("shape:'").append(mWaveShape).append("',\n");
         }
         append(builder, "period", mWavePeriod);
         append(builder, "offset", mWaveOffset);
