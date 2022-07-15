@@ -235,7 +235,7 @@ public class DslTest {
         Constraint constraint = new Constraint("a");
         Constraint constraint2 = new Constraint("b");
         constraintSet.add(constraint);
-        constraint.left.mConnection = constraint2.left;
+        constraint.connectLeft(constraint2.getLeft());
         motionScene.addConstraintSet(constraintSet);
         System.out.println(motionScene);
         String exp = "{\n"
@@ -257,8 +257,7 @@ public class DslTest {
         Constraint constraint = new Constraint("a");
         Constraint constraint2 = new Constraint("b");
         constraintSet.add(constraint);
-        constraint.left.mConnection = constraint2.left;
-        constraint.left.mMargin = 15;
+        constraint.connectLeft(constraint2.getLeft(), 15);
         motionScene.addConstraintSet(constraintSet);
         System.out.println(motionScene);
         String exp = "{\n"
@@ -282,12 +281,9 @@ public class DslTest {
         Constraint constraint3 = new Constraint("c");
         Constraint constraint4 = new Constraint("d");
         constraintSet.add(constraint);
-        constraint.left.mConnection = constraint2.right;
-        constraint.left.mMargin = 5;
-        constraint.left.mGoneMargin = 10;
-        constraint.top.mConnection = constraint3.bottom;
-        constraint.top.mGoneMargin = 15;
-        constraint.baseline.mConnection = constraint4.baseline;
+        constraint.connectLeft(constraint2.getRight(), 5, 10);
+        constraint.connectTop(constraint3.getBottom(),0, 15);
+        constraint.connectBaseline(constraint4.getBaseline());
         motionScene.addConstraintSet(constraintSet);
         System.out.println(motionScene);
         String exp = "{\n"
@@ -311,9 +307,7 @@ public class DslTest {
         Constraint constraint = new Constraint("a");
         constraint.setHeight(0);
         constraint.setWidth(40);
-        constraint.dimensionRatio = "1:1";
-        constraint.editorAbsoluteX = 15;
-        constraint.editorAbsoluteY = 25;
+        constraint.setDimensionRatio("1:1");
         constraintSet.add(constraint);
         motionScene.addConstraintSet(constraintSet);
         System.out.println(motionScene);
@@ -324,8 +318,6 @@ public class DslTest {
                 + "width:40,\n"
                 + "height:0,\n"
                 + "dimensionRatio:'1:1',\n"
-                + "editorAbsoluteX:15,\n"
-                + "editorAbsoluteY:25,\n"
                 + "},\n"
                 + "},\n"
                 + "}\n"
@@ -338,14 +330,14 @@ public class DslTest {
         MotionScene motionScene = new MotionScene();
         ConstraintSet constraintSet = new ConstraintSet("start");
         Constraint constraint = new Constraint("a");
-        constraint.widthPercent = 50;
-        constraint.heightPercent = 60;
-        constraint.horizontalBias = 0.3f;
-        constraint.verticalBias = 0.2f;
-        constraint.circleConstraint = "parent";
-        constraint.circleRadius = 10;
-        constraint.verticalWeight = 2.1f;
-        constraint.horizontalWeight = 1f;
+        constraint.setWidthPercent(50);
+        constraint.setHeightPercent(60);
+        constraint.setHorizontalBias(0.3f);
+        constraint.setVerticalBias(0.2f);
+        constraint.setCircleConstraint("parent");
+        constraint.setCircleRadius(10);
+        constraint.setVerticalWeight(2.1f);
+        constraint.setHorizontalWeight(1f);
         constraintSet.add(constraint);
         motionScene.addConstraintSet(constraintSet);
         System.out.println(motionScene);
@@ -372,18 +364,18 @@ public class DslTest {
         MotionScene motionScene = new MotionScene();
         ConstraintSet constraintSet = new ConstraintSet("start");
         Constraint constraint = new Constraint("a");
-        constraint.widthDefault = Constraint.Behaviour.WRAP;
-        constraint.heightDefault = Constraint.Behaviour.SPREAD;
-        constraint.widthMax = 30;
-        constraint.widthMin = 10;
-        constraint.circleConstraint = "parent";
-        constraint.circleAngle = 10;
-        constraint.mReferenceIds = new String[] {"a", "b", "c"};
+        constraint.setWidthDefault(Constraint.Behaviour.WRAP);
+        constraint.setHeightDefault(Constraint.Behaviour.SPREAD);
+        constraint.setWidthMax(30);
+        constraint.setWidthMin(10);
+        constraint.setCircleConstraint("parent");
+        constraint.setCircleAngle(10);
+        constraint.setReferenceIds(new String[] {"a", "b", "c"});
         Constraint constraint2 = new Constraint("b");
-        constraint2.horizontalChainStyle = Constraint.ChainMode.SPREAD_INSIDE;
-        constraint2.verticalChainStyle = Constraint.ChainMode.PACKED;
-        constraint2.constrainedWidth = true;
-        constraint2.constrainedHeight = true;
+        constraint2.setHorizontalChainStyle(Constraint.ChainMode.SPREAD_INSIDE);
+        constraint2.setVerticalChainStyle(Constraint.ChainMode.PACKED);
+        constraint2.setConstrainedWidth(true);
+        constraint2.setConstrainedHeight(true);
         constraintSet.add(constraint);
         constraintSet.add(constraint2);
         motionScene.addConstraintSet(constraintSet);
@@ -454,24 +446,20 @@ public class DslTest {
         constraint1.setHeight(60);
         constraint2.setWidth(30);
         constraint2.setHeight(0);
-        constraint2.dimensionRatio = "1:1";
-        constraint1.left.mConnection = constraint2.left;
-        constraint1.left.mMargin = 10;
-        constraint1.right.mConnection = constraint2.right;
-        constraint1.right.mGoneMargin = 15;
+        constraint2.setDimensionRatio("1:1");
+        constraint1.connectLeft(constraint2.getLeft(), 10);
+        constraint1.connectRight(constraint2.getRight(), 0, 15);
         constraintSet1.add(constraint1);
-        constraint3.heightPercent = 40;
-        constraint3.widthPercent = 30;
+        constraint3.setHeightPercent(40);
+        constraint3.setWidthPercent(30);
         constraint4.setHeight(20);
         constraint4.setHeight(30);
-        constraint4.widthDefault = Constraint.Behaviour.SPREAD;
-        constraint4.heightDefault = Constraint.Behaviour.WRAP;
-        constraint4.heightMax = 100;
-        constraint4.heightMin = 80;
-        constraint4.top.mConnection = constraint3.top;
-        constraint4.top.mMargin = 5;
-        constraint4.top.mGoneMargin = 10;
-        constraint4.bottom.mConnection = constraint3.bottom;
+        constraint4.setWidthDefault(Constraint.Behaviour.SPREAD);
+        constraint4.setHeightDefault(Constraint.Behaviour.WRAP);
+        constraint4.setHeightMax(100);
+        constraint4.setHeightMin(80);
+        constraint4.connectTop(constraint3.getTop(), 5, 10);
+        constraint4.connectBottom(constraint3.getBottom());
         constraintSet1.add(constraint2);
         constraintSet2.add(constraint3);
         constraintSet2.add(constraint4);
