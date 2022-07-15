@@ -46,7 +46,7 @@ public class MotionScene {
             ret.append("}\n");
         }
         if (!mConstraintSets.isEmpty()) {
-            ret.append("ConstraintSets:{ \n");
+            ret.append("ConstraintSets:{\n");
             for (ConstraintSet constraintSet : mConstraintSets) {
                 ret.append(constraintSet.toString());
             }
