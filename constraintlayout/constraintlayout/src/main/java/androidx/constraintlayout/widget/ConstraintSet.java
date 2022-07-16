@@ -1525,6 +1525,21 @@ public class ConstraintSet {
                     CONSTRAINT_REFERENCED_IDS);
             sMapToConstant.append(R.styleable.Layout_barrierAllowsGoneWidgets,
                     BARRIER_ALLOWS_GONE_WIDGETS);
+            sMapToConstant.append(R.styleable.Layout_layout_constraintWidth_max,
+                    WIDTH_MAX);
+            sMapToConstant.append(R.styleable.Layout_layout_constraintWidth_min,
+                    WIDTH_MIN);
+            sMapToConstant.append(R.styleable.Layout_layout_constraintWidth_max,
+                    HEIGHT_MAX);
+            sMapToConstant.append(R.styleable.Layout_layout_constraintHeight_min,
+                    HEIGHT_MIN);
+
+            sMapToConstant.append(R.styleable.Layout_layout_constraintWidth, CONSTRAINED_WIDTH);
+            sMapToConstant.append(R.styleable.Layout_layout_constraintHeight, CONSTRAINED_HEIGHT);
+            sMapToConstant.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag,
+                    CONSTRAINT_TAG);
+            sMapToConstant.append(R.styleable.Layout_guidelineUseRtl, GUIDE_USE_RTL);
+
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
@@ -2275,7 +2290,6 @@ public class ConstraintSet {
          * Return a copy of the Constraint
          * @return
          */
-        @Override
         public Constraint clone() {
             Constraint clone = new Constraint();
             clone.layout.copyFrom(layout);
@@ -6149,10 +6163,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + ++mUnknownCount;
+                    return "unknown" + (++mUnknownCount);
                 }
             } catch (Exception ex) {
-                return "unknown" + ++mUnknownCount;
+                return "unknown" + (++mUnknownCount);
             }
         }
 
@@ -6405,10 +6419,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + ++mUnknownCount;
+                    return "unknown" + (++mUnknownCount);
                 }
             } catch (Exception ex) {
-                return "unknown" + ++mUnknownCount;
+                return "unknown" + (++mUnknownCount);
             }
         }
 
