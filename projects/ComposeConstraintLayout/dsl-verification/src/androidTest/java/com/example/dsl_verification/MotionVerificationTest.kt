@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout
+package com.example.dsl_verification
 
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
@@ -27,8 +27,8 @@ import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.example.constraintlayout.verification.ComposableInvocator
-import com.example.constraintlayout.verification.motiondsl.MotionTestInfoProviderKey
+import com.example.dsl_verification.ComposableInvocator
+import com.example.dsl_verification.motion.MotionTestInfoProviderKey
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,7 +40,7 @@ class MotionVerificationTest {
     val rule = createComposeRule()
 
     val invocator = ComposableInvocator(
-        packageString = "com.example.constraintlayout.verification.motiondsl",
+        packageString = "com.example.dsl_verification.motion",
         fileName = "MotionDslVerification"
     )
 

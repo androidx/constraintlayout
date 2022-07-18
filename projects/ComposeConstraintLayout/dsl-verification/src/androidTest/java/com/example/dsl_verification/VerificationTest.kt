@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout
+package com.example.dsl_verification
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -26,7 +29,6 @@ import androidx.test.filters.MediumTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import com.example.constraintlayout.verification.ComposableInvocator
 
 /**
  * Unit test to verify layout results.
@@ -43,7 +45,7 @@ class VerificationTest {
     val rule = createComposeRule()
 
     val invocator = ComposableInvocator(
-        packageString = "com.example.constraintlayout.verification.dsl",
+        packageString = "com.example.dsl_verification.constraint",
         fileName = "DslVerification"
     )
 

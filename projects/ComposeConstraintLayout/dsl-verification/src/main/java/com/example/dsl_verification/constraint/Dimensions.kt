@@ -17,7 +17,7 @@
 @file:JvmName("DslVerificationKt")
 @file:JvmMultifileClass
 
-package com.example.constraintlayout.verification.dsl
+package com.example.dsl_verification.constraint
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,8 +31,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.*
-import com.example.constraintlayout.verification.dsl.DslVerification.TwoBoxConstraintSet
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.atLeast
+import androidx.constraintlayout.compose.atLeastWrapContent
+import androidx.constraintlayout.compose.atMost
+import androidx.constraintlayout.compose.atMostWrapContent
+import com.example.dsl_verification.constraint.DslVerification.TwoBoxConstraintSet
 
 @Preview
 @Composable

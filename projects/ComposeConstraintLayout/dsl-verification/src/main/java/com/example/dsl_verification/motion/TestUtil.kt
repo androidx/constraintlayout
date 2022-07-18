@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout.verification.motiondsl
+package com.example.dsl_verification.motion
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisallowComposableCalls
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
@@ -31,7 +35,7 @@ import kotlinx.coroutines.launch
 
 interface MotionTestInfo {
     fun setProgress(
-        @FloatRange(from = 0.0, to = 1.0, fromInclusive = true, toInclusive = true)progress: Float
+        @FloatRange(from = 0.0, to = 1.0, fromInclusive = true, toInclusive = true) progress: Float
     )
 
     fun recompose()
@@ -61,8 +65,7 @@ internal inline fun MotionTestWrapper(
     if (progress != lastParameterProgress.value) {
         internalProgress.value = progress
         lastParameterProgress.value = progress
-    }
-    else {
+    } else {
         internalProgress.value = testProgress.value
     }
 
