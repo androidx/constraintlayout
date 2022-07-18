@@ -1009,29 +1009,13 @@ public class Constraint {
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder(mId + ":{\n");
-
-        if (mLeft.mConnection != null) {
-            mLeft.build(ret);
-        }
-        if (mRight.mConnection != null) {
-            mRight.build(ret);
-        }
-        if (mTop.mConnection != null) {
-            mTop.build(ret);
-        }
-        if (mBottom.mConnection != null) {
-            mBottom.build(ret);
-        }
-        if (mStart.mConnection != null) {
-            mStart.build(ret);
-        }
-        if (mEnd.mConnection != null) {
-            mEnd.build(ret);
-        }
-        if (mBaseline.mConnection != null) {
-            mBaseline.build(ret);
-        }
-
+        mLeft.build(ret);
+        mRight.build(ret);
+        mTop.build(ret);
+        mBottom.build(ret);
+        mStart.build(ret);
+        mEnd.build(ret);
+        mBaseline.build(ret);
 
         if (mWidth != UNSET) {
             ret.append("width:").append(mWidth).append(",\n");
