@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion compile_target_sdk_version
 
     defaultConfig {
         applicationId "androidx.constaitnlayout.compose.app"
         minSdkVersion 29
-        targetSdkVersion 30
+        targetSdkVersion compile_target_sdk_version
         versionCode 1
         versionName "1.0"
 
@@ -39,7 +39,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-        useIR = true
     }
 
     composeOptions {
@@ -85,6 +84,7 @@ dependencies {
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         substitute module("androidx.constraintlayout:constraintlayout-core") using project(":core") because "we work with the unreleased development version"
+        substitute module("androidx.constraintlayout:constraintlayout") using project(":constraintlayout") because "we work with the unreleased development version"
     }
 }
 
