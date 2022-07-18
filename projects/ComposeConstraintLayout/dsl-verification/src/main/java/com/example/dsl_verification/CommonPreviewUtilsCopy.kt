@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout.verification
+package com.example.dsl_verification
 
 import androidx.compose.runtime.Composer
 import java.lang.reflect.Method
@@ -33,8 +33,8 @@ object CommonPreviewUtilsCopy {
         actualTypes: Array<Class<*>>
     ): Boolean =
         methodTypes.size == actualTypes.size &&
-                methodTypes.mapIndexed { index, clazz -> clazz.isAssignableFrom(actualTypes[index]) }
-                    .all { it }
+            methodTypes.mapIndexed { index, clazz -> clazz.isAssignableFrom(actualTypes[index]) }
+                .all { it }
 
     /**
      * Same as [Class#getDeclaredMethod] but it accounts for compatible types so the signature does
@@ -111,8 +111,8 @@ object CommonPreviewUtilsCopy {
         val thisParams = if (instance != null) 1 else 0
         val changedParams = changedParamCount(realParams, thisParams)
         val totalParamsWithoutDefaults = realParams +
-                1 + // composer
-                changedParams
+            1 + // composer
+            changedParams
         val totalParams = parameterTypes.size
         val isDefault = totalParams != totalParamsWithoutDefaults
         val defaultParams = if (isDefault)
@@ -122,10 +122,10 @@ object CommonPreviewUtilsCopy {
 
         check(
             realParams +
-                    1 + // composer
-                    changedParams +
-                    defaultParams ==
-                    totalParams
+                1 + // composer
+                changedParams +
+                defaultParams ==
+                totalParams
         )
 
         val changedStartIndex = composerIndex + 1

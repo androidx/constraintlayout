@@ -17,11 +17,14 @@
 @file:JvmName("DslVerificationKt")
 @file:JvmMultifileClass
 
-package com.example.constraintlayout.verification.dsl
+package com.example.dsl_verification.constraint
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.constraintlayout.R
+import com.example.dsl_verification.R
 
 
 @Preview

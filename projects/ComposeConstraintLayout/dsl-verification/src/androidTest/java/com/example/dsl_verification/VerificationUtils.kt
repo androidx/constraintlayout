@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout
+package com.example.dsl_verification
 
 import junit.framework.TestCase
 import org.junit.Assert.assertEquals

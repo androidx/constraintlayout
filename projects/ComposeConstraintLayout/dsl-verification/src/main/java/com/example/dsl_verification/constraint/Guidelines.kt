@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout.verification.dsl
+@file:JvmName("DslVerificationKt")
+@file:JvmMultifileClass
+
+package com.example.dsl_verification.constraint
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,48 +28,49 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.layoutId
+import com.example.dsl_verification.constraint.DslVerification.TwoBoxConstraintSet
 
-@Suppress("NOTHING_TO_INLINE")
-object DslVerification {
-    internal val TwoBoxConstraintSet = ConstraintSet {
+@Preview
+@Composable
+fun Test4() {
+    val constraintSet = ConstraintSet(TwoBoxConstraintSet) {
         val box1 = createRefFor("box1")
-        val box2 = createRefFor("box2")
+
+        val guideBott = createGuidelineFromBottom(10.dp)
+        val guideTop = createGuidelineFromTop(0.5f)
+        val guideLeft = createGuidelineFromAbsoluteLeft(10.dp)
+        val guideEnd = createGuidelineFromEnd(0.5f)
+
         constrain(box1) {
-            centerTo(parent)
-            width = Dimension.value(30.dp)
-            height = Dimension.value(100.dp)
-        }
-        constrain(box2) {
-            width = Dimension.value(50.dp)
-            height = Dimension.value(50.dp)
-            centerHorizontallyTo(parent)
-            top.linkTo(box1.bottom, 8.dp)
+            linkTo(guideLeft, guideEnd)
+            linkTo(guideTop, guideBott)
         }
     }
 
-
-    @Composable
-    internal inline fun TwoBoxLayout(
-        constraintSet: ConstraintSet,
-        noinline content: @Composable () -> Unit = {}
-    ) {
-        Column {
-            ConstraintLayout(modifier = Modifier
+    Column {
+        ConstraintLayout(
+            modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f, fill = true), constraintSet = constraintSet) {
-                Box(modifier = Modifier
+                .weight(1f, fill = true), constraintSet = constraintSet
+        ) {
+            Box(
+                modifier = Modifier
                     .background(Color.Red)
-                    .layoutId("box1"))
-                Box(modifier = Modifier
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
                     .background(Color.Blue)
-                    .layoutId("box2"))
-            }
-            content()
+                    .layoutId("box2")
+            )
+        }
+        Button(onClick = { }) {
+            Text(text = "Run")
         }
     }
 }

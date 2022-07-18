@@ -17,7 +17,7 @@
 @file:JvmName("DslVerificationKt")
 @file:JvmMultifileClass
 
-package com.example.constraintlayout.verification.dsl
+package com.example.dsl_verification.constraint
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
