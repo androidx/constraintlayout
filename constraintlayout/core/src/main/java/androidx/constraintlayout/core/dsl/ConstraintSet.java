@@ -33,4 +33,17 @@ public class ConstraintSet {
     public void add(Constraint c) {
         mConstraints.add(c);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder(mName + ":{\n");
+        if (!mConstraints.isEmpty()) {
+            for (Constraint cs: mConstraints) {
+                ret.append(cs.toString());
+            }
+        }
+
+        ret.append("},\n");
+        return ret.toString();
+    }
 }
