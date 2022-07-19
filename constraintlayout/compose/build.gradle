@@ -43,23 +43,24 @@ android {
       exclude 'META-INF/AL2.0'
       exclude 'META-INF/LGPL2.1'
     }
+}
 
-    dependencies {
-        implementation "androidx.compose.ui:ui:$compose_version"
-        implementation "androidx.compose.ui:ui-unit:$compose_version"
-        implementation "androidx.compose.ui:ui-util:$compose_version"
-        implementation "androidx.compose.foundation:foundation-layout:$compose_version"
-        implementation "androidx.compose.foundation:foundation:$compose_version"
-        implementation "androidx.compose.material:material:$compose_version"
-        implementation project(':core')
-        androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-        androidTestImplementation 'junit:junit:4.13.1'
-        androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
-        androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-        androidTestImplementation 'androidx.test:runner:1.3.0'
-        androidTestImplementation 'androidx.test:rules:1.3.0'
-        androidTestImplementation "androidx.activity:activity:1.1.0"
-  }
+dependencies {
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-unit:$compose_version"
+    implementation "androidx.compose.ui:ui-util:$compose_version"
+    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation project(':core')
+
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestImplementation 'junit:junit:4.13.1'
+    androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation "androidx.compose.material:material:$compose_version"
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation "androidx.activity:activity:1.3.0"
 }
 
 configurations.all {
@@ -67,17 +68,6 @@ configurations.all {
         substitute module("androidx.constraintlayout:constraintlayout-core") using project(":core") because "we work with the unreleased development version"
     }
 }
- configurations.configureEach {
-         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-             if (details.requested.group == 'androidx.lifecycle' &&
-                     details.requested.name != 'lifecycle-viewmodel-compose') {
-                 details.useVersion('2.3.0-rc01')
-             }
-             if (details.requested.group == 'androidx.savedstate') {
-                 details.useVersion('1.1.0-rc01')
-             }
-         }
- }
 
 globalConfig {
     pomName = 'ConstraintLayout for Jetpack Compose'
