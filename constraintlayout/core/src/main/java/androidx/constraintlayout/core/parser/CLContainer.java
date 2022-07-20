@@ -111,6 +111,13 @@ public class CLContainer extends CLElement {
         put(name, new CLNumber(value));
     }
 
+    public void putString(String name, String value) {
+        CLElement stringElement = new CLString(value.toCharArray());
+        stringElement.setStart(0L);
+        stringElement.setEnd(value.length() - 1);
+        put(name, stringElement);
+    }
+
     /**
      * @TODO: add description
      */
@@ -125,6 +132,10 @@ public class CLContainer extends CLElement {
         for (CLElement element : toRemove) {
             mElements.remove(element);
         }
+    }
+
+    public void clear() {
+        mElements.clear();
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -257,6 +268,16 @@ public class CLContainer extends CLElement {
             return (CLArray) element;
         }
         return null;
+    }
+
+    public CLArray getArrayOrCreate(String name) {
+        CLArray array = getArrayOrNull(name);
+        if (array != null) {
+            return array;
+        }
+        array = new CLArray(new char[]{});
+        put(name, array);
+        return array;
     }
 
     /**
