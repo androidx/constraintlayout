@@ -23,7 +23,6 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionB
 import androidx.constraintlayout.core.Cache;
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.SolverVariable;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.analyzer.ChainRun;
 import androidx.constraintlayout.core.widgets.analyzer.HorizontalWidgetRun;
@@ -3590,7 +3589,6 @@ public class ConstraintWidget {
 
         mMaxDimension = Arrays.copyOf(src.mMaxDimension, src.mMaxDimension.length);
         mCircleConstraintAngle = src.mCircleConstraintAngle;
-        Utils.logStack(" copying angle = "+mCircleConstraintAngle, 5);
 
         mHasBaseline = src.mHasBaseline;
         mInPlaceholder = src.mInPlaceholder;
