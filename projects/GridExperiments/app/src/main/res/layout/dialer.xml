@@ -9,7 +9,7 @@
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:constraint_referenced_ids="calculatorText,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,star,btn0,pound,call"
+        app:constraint_referenced_ids="dialerText,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,star,btn0,pound,call"
         app:grid_columns="3"
         app:grid_rows="6"
         app:grid_horizontalGaps="5dp"
@@ -17,14 +17,6 @@
         app:grid_orientation="horizontal"
         app:grid_spans="0:1x3"
         app:grid_skips="15:1x1"/>
-
-
-    <TextView
-        android:id="@+id/dialerText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/cardview_shadow_start_color"
-        android:text="8" />
 
     <Button
         android:id="@+id/call"
@@ -53,7 +45,7 @@
 
 
     <TextView
-        android:id="@+id/calculatorText"
+        android:id="@+id/dialerText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/cardview_shadow_start_color"

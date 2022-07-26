@@ -9,80 +9,17 @@
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:constraint_referenced_ids="calculatorText,btn0,clear,neg,percent,div,btn7,btn8,btn9,mult,btn4,btn5,btn6,sub,btn1,btn2,btn3,plus,dot,equal"
-        app:grid_columns="4"
-        app:grid_rows="7"
+        android:layout_margin="10dp"
+        app:constraint_referenced_ids="dialerText,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn0"
+        app:grid_columns="3"
+        app:grid_rows="5"
+        app:grid_skips="12:1x1"
+        app:grid_spans="0:1x3"
         app:grid_horizontalGaps="5dp"
-        app:grid_verticalGaps="5dp"
-        app:grid_orientation="horizontal"
-        app:grid_spans="0:2x4,24:1x2" />
-
-    <Button
-        android:id="@+id/clear"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="C" />
-
-    <Button
-        android:id="@+id/neg"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="+/-" />
-
-    <Button
-        android:id="@+id/percent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="%" />
-
-    <Button
-        android:id="@+id/div"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="/" />
-
-    <Button
-        android:id="@+id/mult"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="X" />
-
-    <Button
-        android:id="@+id/sub"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="-" />
-
-    <Button
-        android:id="@+id/plus"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="+" />
-
-    <Button
-        android:id="@+id/equal"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="=" />
-
-    <Button
-        android:id="@+id/dot"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textSize="30dp"
-        android:text="." />
-
+        app:grid_rowWeights="2,1,1,1,1"/>
 
     <TextView
-        android:id="@+id/calculatorText"
+        android:id="@+id/dialerText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/cardview_shadow_start_color"
@@ -160,5 +97,5 @@
         android:layout_height="0dp"
         android:textSize="30dp"
         android:text="9" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>
