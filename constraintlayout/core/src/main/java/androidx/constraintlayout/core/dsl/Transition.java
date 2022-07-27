@@ -98,7 +98,7 @@ public class Transition {
         ret += mKeyFrames.toString();
 
 
-        ret += "}\n";
+        ret += "},\n";
 
         return ret;
     }

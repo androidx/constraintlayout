@@ -39,7 +39,7 @@ public class KeyFrames {
             for (Keys key : mKeys) {
                 ret.append(key.toString());
             }
-            ret.append("}\n");
+            ret.append("},\n");
         }
         return ret.toString();
     }

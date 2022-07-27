@@ -125,7 +125,7 @@ public class KeyPosition extends Keys {
         append(ret, "percentWidth", mPercentWidth);
         append(ret, "percentHeight", mPercentHeight);
 
-        ret.append("}\n");
+        ret.append("},\n");
         return ret.toString();
     }
 }
