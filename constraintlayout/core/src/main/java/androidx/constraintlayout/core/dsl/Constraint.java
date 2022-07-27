@@ -26,6 +26,7 @@ import java.util.Map;
 public class Constraint {
 
     private final String mId;
+    public static final Constraint PARENT = new Constraint("parent");
 
     public Constraint(String id) {
         mId = id;
@@ -191,30 +192,12 @@ public class Constraint {
     }
 
     /**
-     * set left anchor
-     *
-     * @param left left anchor
-     */
-    public void setLeft(HAnchor left) {
-        this.mLeft = left;
-    }
-
-    /**
      * get right anchor
      *
      * @return right anchor
      */
     public HAnchor getRight() {
         return mRight;
-    }
-
-    /**
-     * set right anchor
-     *
-     * @param right right anchor
-     */
-    public void setRight(HAnchor right) {
-        this.mRight = right;
     }
 
     /**
@@ -227,30 +210,12 @@ public class Constraint {
     }
 
     /**
-     * set top anchor
-     *
-     * @param top top anchor
-     */
-    public void setTop(VAnchor top) {
-        this.mTop = top;
-    }
-
-    /**
      * get bottom anchor
      *
      * @return bottom anchor
      */
     public VAnchor getBottom() {
         return mBottom;
-    }
-
-    /**
-     * set bottom anchor
-     *
-     * @param bottom bottom anchor
-     */
-    public void setBottom(VAnchor bottom) {
-        this.mBottom = bottom;
     }
 
     /**
@@ -263,15 +228,6 @@ public class Constraint {
     }
 
     /**
-     * set start anchor
-     *
-     * @param start start anchor
-     */
-    public void setStart(HAnchor start) {
-        this.mStart = start;
-    }
-
-    /**
      * get end anchor
      *
      * @return end anchor
@@ -281,30 +237,12 @@ public class Constraint {
     }
 
     /**
-     * set end anchor
-     *
-     * @param end end anchor
-     */
-    public void setEnd(HAnchor end) {
-        this.mEnd = end;
-    }
-
-    /**
      * get baseline anchor
      *
      * @return baseline anchor
      */
     public VAnchor getBaseline() {
         return mBaseline;
-    }
-
-    /**
-     * set baseline anchor
-     *
-     * @param baseline baseline anchor
-     */
-    public void setBaseline(VAnchor baseline) {
-        this.mBaseline = baseline;
     }
 
     /**
@@ -758,8 +696,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectTop(VAnchor anchor) {
-        connectTop(anchor, 0);
+    public void linkToTop(VAnchor anchor) {
+        linkToTop(anchor, 0);
     }
 
     /**
@@ -767,8 +705,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectLeft(HAnchor anchor) {
-        connectLeft(anchor, 0);
+    public void linkToLeft(HAnchor anchor) {
+        linkToLeft(anchor, 0);
     }
 
     /**
@@ -776,8 +714,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectRight(HAnchor anchor) {
-        connectRight(anchor, 0);
+    public void linkToRight(HAnchor anchor) {
+        linkToRight(anchor, 0);
     }
 
     /**
@@ -785,8 +723,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectStart(HAnchor anchor) {
-        connectStart(anchor, 0);
+    public void linkToStart(HAnchor anchor) {
+        linkToStart(anchor, 0);
     }
 
     /**
@@ -794,8 +732,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectEnd(HAnchor anchor) {
-        connectEnd(anchor, 0);
+    public void linkToEnd(HAnchor anchor) {
+        linkToEnd(anchor, 0);
     }
 
     /**
@@ -803,8 +741,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectBottom(VAnchor anchor) {
-        connectBottom(anchor, 0);
+    public void linkToBottom(VAnchor anchor) {
+        linkToBottom(anchor, 0);
     }
 
     /**
@@ -812,8 +750,8 @@ public class Constraint {
      *
      * @param anchor anchor to be connected
      */
-    public void connectBaseline(VAnchor anchor) {
-        connectBaseline(anchor, 0);
+    public void linkToBaseline(VAnchor anchor) {
+        linkToBaseline(anchor, 0);
     }
 
     /**
@@ -822,8 +760,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectTop(VAnchor anchor, int margin) {
-        connectTop(anchor, margin, Integer.MIN_VALUE);
+    public void linkToTop(VAnchor anchor, int margin) {
+        linkToTop(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -832,8 +770,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectLeft(HAnchor anchor, int margin) {
-        connectLeft(anchor, margin, Integer.MIN_VALUE);
+    public void linkToLeft(HAnchor anchor, int margin) {
+        linkToLeft(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -842,8 +780,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectRight(HAnchor anchor, int margin) {
-        connectRight(anchor, margin, Integer.MIN_VALUE);
+    public void linkToRight(HAnchor anchor, int margin) {
+        linkToRight(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -852,8 +790,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectStart(HAnchor anchor, int margin) {
-        connectStart(anchor, margin, Integer.MIN_VALUE);
+    public void linkToStart(HAnchor anchor, int margin) {
+        linkToStart(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -862,8 +800,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectEnd(HAnchor anchor, int margin) {
-        connectEnd(anchor, margin, Integer.MIN_VALUE);
+    public void linkToEnd(HAnchor anchor, int margin) {
+        linkToEnd(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -872,8 +810,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectBottom(VAnchor anchor, int margin) {
-        connectBottom(anchor, margin, Integer.MIN_VALUE);
+    public void linkToBottom(VAnchor anchor, int margin) {
+        linkToBottom(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -882,8 +820,8 @@ public class Constraint {
      * @param anchor anchor to be connected
      * @param margin value of the margin
      */
-    public void connectBaseline(VAnchor anchor, int margin) {
-        connectBaseline(anchor, margin, Integer.MIN_VALUE);
+    public void linkToBaseline(VAnchor anchor, int margin) {
+        linkToBaseline(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
@@ -893,7 +831,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectTop(VAnchor anchor, int margin, int goneMargin) {
+    public void linkToTop(VAnchor anchor, int margin, int goneMargin) {
         mTop.mConnection = anchor;
         mTop.mMargin = margin;
         mTop.mGoneMargin = goneMargin;
@@ -906,7 +844,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectLeft(HAnchor anchor, int margin, int goneMargin) {
+    public void linkToLeft(HAnchor anchor, int margin, int goneMargin) {
         mLeft.mConnection = anchor;
         mLeft.mMargin = margin;
         mLeft.mGoneMargin = goneMargin;
@@ -919,7 +857,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectRight(HAnchor anchor, int margin, int goneMargin) {
+    public void linkToRight(HAnchor anchor, int margin, int goneMargin) {
         mRight.mConnection = anchor;
         mRight.mMargin = margin;
         mRight.mGoneMargin = goneMargin;
@@ -932,7 +870,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectStart(HAnchor anchor, int margin, int goneMargin) {
+    public void linkToStart(HAnchor anchor, int margin, int goneMargin) {
         mStart.mConnection = anchor;
         mStart.mMargin = margin;
         mStart.mGoneMargin = goneMargin;
@@ -945,7 +883,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectEnd(HAnchor anchor, int margin, int goneMargin) {
+    public void linkToEnd(HAnchor anchor, int margin, int goneMargin) {
         mEnd.mConnection = anchor;
         mEnd.mMargin = margin;
         mEnd.mGoneMargin = goneMargin;
@@ -958,7 +896,7 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectBottom(VAnchor anchor, int margin, int goneMargin) {
+    public void linkToBottom(VAnchor anchor, int margin, int goneMargin) {
         mBottom.mConnection = anchor;
         mBottom.mMargin = margin;
         mBottom.mGoneMargin = goneMargin;
@@ -971,10 +909,10 @@ public class Constraint {
      * @param margin value of the margin
      * @param goneMargin value of the goneMargin
      */
-    public void connectBaseline(VAnchor anchor, int margin, int goneMargin) {
+    public void linkToBaseline(VAnchor anchor, int margin, int goneMargin) {
         mBaseline.mConnection = anchor;
-        mEnd.mMargin = margin;
-        mEnd.mGoneMargin = goneMargin;
+        mBaseline.mMargin = margin;
+        mBaseline.mGoneMargin = goneMargin;
     }
 
     /**
@@ -1093,7 +1031,7 @@ public class Constraint {
             ret.append("height:'").append((int) mHeightPercent).append("%',\n");
         }
         if (mReferenceIds != null) {
-            ret.append("mReferenceIds:")
+            ret.append("referenceIds:")
                     .append(convertStringArrayToString(mReferenceIds))
                     .append(",\n");
         }

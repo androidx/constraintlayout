@@ -191,7 +191,7 @@ public class KeyAttribute extends Keys {
         ret.append(":{\n");
         attributesToString(ret);
 
-        ret.append("}\n");
+        ret.append("},\n");
         return ret.toString();
     }
 

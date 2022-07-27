@@ -392,7 +392,7 @@ public class OnSwipe {
             ret.append("around:'").append(mRotationCenterId).append("',\n");
         }
 
-        ret.append("}\n");
+        ret.append("},\n");
 
         return ret.toString();
     }

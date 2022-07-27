@@ -43,14 +43,14 @@ public class MotionScene {
             for (Transition transition : mTransitions) {
                 ret.append(transition.toString());
             }
-            ret.append("}\n");
+            ret.append("},\n");
         }
         if (!mConstraintSets.isEmpty()) {
             ret.append("ConstraintSets:{\n");
             for (ConstraintSet constraintSet : mConstraintSets) {
                 ret.append(constraintSet.toString());
             }
-            ret.append("}\n");
+            ret.append("},\n");
         }
 
         ret.append("}\n");
