@@ -1211,8 +1211,6 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Subclasses can override to build test frameworks
-     *
-     * @return
      */
     protected interface MotionTracker {
         void recycle();
