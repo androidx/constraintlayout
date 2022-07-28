@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class ConstraintSet {
     private final String mName;
     ArrayList<Constraint> mConstraints = new ArrayList<>();
+    ArrayList<Helper> mHelpers = new ArrayList<>();
 
     public ConstraintSet(String name) {
         mName = name;
@@ -34,12 +35,22 @@ public class ConstraintSet {
         mConstraints.add(c);
     }
 
+    public void add(Helper h) {
+        mHelpers.add(h);
+    }
+
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder(mName + ":{\n");
         if (!mConstraints.isEmpty()) {
             for (Constraint cs: mConstraints) {
                 ret.append(cs.toString());
+            }
+        }
+
+        if (!mHelpers.isEmpty()) {
+            for (Helper h: mHelpers) {
+                ret.append(h.toString());
             }
         }
 
