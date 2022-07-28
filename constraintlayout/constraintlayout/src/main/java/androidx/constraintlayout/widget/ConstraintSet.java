@@ -5868,7 +5868,7 @@ public class ConstraintSet {
      * If true perform validation checks when parsing ConstraintSets
      * This will slow down parsing and should only be used for debugging
      *
-     * @param validate
+     * @return validate
      */
     public boolean isValidateOnParse() {
         return mValidate;
