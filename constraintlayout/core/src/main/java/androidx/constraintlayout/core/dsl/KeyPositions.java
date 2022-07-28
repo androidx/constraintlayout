@@ -35,7 +35,7 @@ public class KeyPositions extends Keys {
     private float[] mPercentX = null;
     private float[] mPercentY = null;
 
-    enum Type {
+    public enum Type {
         CARTESIAN,
         SCREEN,
         PATH

@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Helper {
-    enum Type {
+    public enum Type {
         VERTICAL_GUIDELINE,
         HORIZONTAL_GUIDELINE,
         VERTICAL_CHAIN,
@@ -151,7 +151,7 @@ public class Helper {
         System.out.println(b.toString());
     }
 
-    static final class HelperType {
+    public static final class HelperType {
         final String mName;
 
         public HelperType(String str) {

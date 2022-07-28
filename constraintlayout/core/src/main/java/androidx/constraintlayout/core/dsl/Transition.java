@@ -40,7 +40,7 @@ public class Transition {
         mOnSwipe = onSwipe;
     }
 
-    public void setKeyFrames(Keys keyFrames) {
+    public void setKeyFrames(@SuppressWarnings("HiddenTypeParameter") Keys keyFrames) {
         mKeyFrames.add(keyFrames);
     }
 

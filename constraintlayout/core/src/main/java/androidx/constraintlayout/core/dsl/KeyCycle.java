@@ -28,7 +28,7 @@ public class KeyCycle extends KeyAttribute {
         TYPE = "KeyCycle";
     }
 
-    enum Wave {
+    public enum Wave {
         SIN,
         SQUARE,
         TRIANGLE,

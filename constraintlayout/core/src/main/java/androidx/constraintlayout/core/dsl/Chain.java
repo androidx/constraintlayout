@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Chain extends Helper {
-    enum Style {
+    public enum Style {
         PACKED,
         SPREAD,
         SPREAD_INSIDE
