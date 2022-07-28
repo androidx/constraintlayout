@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.dsl;
 public class KeyCycles extends KeyAttributes {
 
 
-    enum Wave {
+    public enum Wave {
         SIN,
         SQUARE,
         TRIANGLE,

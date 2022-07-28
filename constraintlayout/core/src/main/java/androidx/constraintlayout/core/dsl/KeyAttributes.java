@@ -44,12 +44,12 @@ public class KeyAttributes extends Keys {
     private float[] mTranslationY = null;
     private float[] mTranslationZ = null;
 
-    enum Fit {
-        spline,
-        linear,
+    public enum Fit {
+        SPLINE,
+        LINEAR,
     }
 
-    enum Visibility {
+    public enum Visibility {
         VISIBLE,
         INVISIBLE,
         GONE

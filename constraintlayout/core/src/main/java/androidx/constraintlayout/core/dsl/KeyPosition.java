@@ -31,7 +31,7 @@ public class KeyPosition extends Keys {
     private float mPercentY = Float.NaN;
     private Type mPositionType = Type.CARTESIAN;
 
-    enum Type {
+    public enum Type {
         CARTESIAN,
         SCREEN,
         PATH
