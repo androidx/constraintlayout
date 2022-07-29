@@ -520,6 +520,6 @@ internal class MotionMeasurer : Measurer() {
         start.applyTo(this.transition, Transition.START)
         end.applyTo(this.transition, Transition.END)
         this.transition.interpolate(0, 0, progress)
-        transition?.applyAllTo(this.transition, 0)
+        transition?.applyAllTo(this.transition)
     }
 }

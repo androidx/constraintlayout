@@ -39,7 +39,7 @@ fun Transition(
     transitionContent: TransitionScope.() -> Unit
 ): Transition {
     val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
-    val transitionScope = remember(from, to) { TransitionScope(from = from, to = to) }
+    val transitionScope = remember(from, to) { TransitionScope() }
     val snapshotObserver = remember {
         // We use a Snapshot observer to know when state within the DSL has changed and recompose
         // the transition object
@@ -79,7 +79,7 @@ fun Transition(
     }
 }
 
-class TransitionScope internal constructor(name: String = "default", from: String, to: String) {
+class TransitionScope internal constructor() {
     private val containerObject = CLObject(charArrayOf())
 
     private val keyFramesObject = CLObject(charArrayOf())
