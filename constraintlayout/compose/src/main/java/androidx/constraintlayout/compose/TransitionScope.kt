@@ -330,7 +330,6 @@ data class OnSwipe(
     val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete
 )
 
-
 class SwipeMode internal constructor(internal val propName: String) {
     companion object {
         val Velocity = SwipeMode("velocity")
