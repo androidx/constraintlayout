@@ -342,6 +342,7 @@ public class KeyTrigger extends Key {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyTrigger k = (KeyTrigger) src;
@@ -371,6 +372,7 @@ public class KeyTrigger extends Key {
      *
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyTrigger().copy(this);
     }

@@ -67,6 +67,7 @@ public class Group extends ConstraintHelper {
      * @DoNotShow
      * @param attrs
      */
+    @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         mUseViewMeasure = false;

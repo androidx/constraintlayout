@@ -229,6 +229,7 @@ public class ConstraintAttribute {
                 break;
             case DIMENSION_TYPE:
                 mFloatValue = value[0];
+                break;
             default:
                 if (DEBUG) {
                     Log.v(TAG, mType.toString());

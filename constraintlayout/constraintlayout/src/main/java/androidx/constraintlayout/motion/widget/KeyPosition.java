@@ -125,10 +125,10 @@ public class KeyPosition extends KeyPositionBase {
                                        float endX, float endY) {
         float pathVectorX = endX - startX;
         float pathVectorY = endY - startY;
-        float dxdx = (Float.isNaN(mPercentX)) ? 0 : mPercentX;
-        float dydx = (Float.isNaN(mAltPercentY)) ? 0 : mAltPercentY;
-        float dydy = (Float.isNaN(mPercentY)) ? 0 : mPercentY;
-        float dxdy = (Float.isNaN(mAltPercentX)) ? 0 : mAltPercentX;
+        float dxdx = Float.isNaN(mPercentX) ? 0 : mPercentX;
+        float dydx = Float.isNaN(mAltPercentY) ? 0 : mAltPercentY;
+        float dydy = Float.isNaN(mPercentY) ? 0 : mPercentY;
+        float dxdy = Float.isNaN(mAltPercentX) ? 0 : mAltPercentX;
         mCalculatedPositionX = (int) (startX + pathVectorX * dxdx + pathVectorY * dxdy);
         mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
@@ -414,6 +414,7 @@ public class KeyPosition extends KeyPositionBase {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyPosition k = (KeyPosition) src;
@@ -435,6 +436,7 @@ public class KeyPosition extends KeyPositionBase {
      * Clone this KeyAttributes
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyPosition().copy(this);
     }

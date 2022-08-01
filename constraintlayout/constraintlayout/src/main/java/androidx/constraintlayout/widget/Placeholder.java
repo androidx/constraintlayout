@@ -125,6 +125,7 @@ public class Placeholder extends View {
      * @param canvas
      * @DoNotShow
      */
+    @Override
     public void onDraw(Canvas canvas) {
         if (isInEditMode()) {
             canvas.drawRGB(223, 223, 223);

@@ -372,7 +372,7 @@ class TouchResponse {
                     mAnchorDpDt[1] = 360;
                 }
                 angle2 = Math.toDegrees(Math.atan2(tvy + relativePosY, tvx + relativePosX));
-                drag = (float) ((angle2 - angle1));
+                drag = (float) (angle2 - angle1);
                 float velocity_tweek = SEC_TO_MILLISECONDS / 16f;
                 float angularVelocity = drag * velocity_tweek;
                 if (!Float.isNaN(angularVelocity)) {
@@ -848,8 +848,9 @@ class TouchResponse {
         return dx * mTouchDirectionX + dy * mTouchDirectionY;
     }
 
+    @Override
     public String toString() {
-        return (Float.isNaN(mTouchDirectionX)) ? "rotation"
+        return Float.isNaN(mTouchDirectionX) ? "rotation"
                 : (mTouchDirectionX + " , " + mTouchDirectionY);
     }
 

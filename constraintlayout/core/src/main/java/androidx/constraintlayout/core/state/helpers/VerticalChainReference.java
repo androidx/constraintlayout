@@ -31,6 +31,7 @@ public class VerticalChainReference extends ChainReference {
     /**
      * @TODO: add description
      */
+    @Override
     public void apply() {
         ConstraintReference first = null;
         ConstraintReference previous = null;

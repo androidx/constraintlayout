@@ -125,6 +125,7 @@ public class PriorityGoalRow extends ArrayRow {
             Arrays.fill(mVariable.mGoalStrengthVector, 0);
         }
 
+        @Override
         public String toString() {
             String result = "[ ";
             if (mVariable != null) {

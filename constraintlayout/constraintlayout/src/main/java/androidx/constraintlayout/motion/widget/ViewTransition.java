@@ -178,6 +178,7 @@ public class ViewTransition {
      * debug string for a ViewTransition
      * @return
      */
+    @Override
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
     }
@@ -586,7 +587,7 @@ public class ViewTransition {
         }
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp instanceof ConstraintLayout.LayoutParams) {
-            String tag = ((ConstraintLayout.LayoutParams) (view.getLayoutParams())).constraintTag;
+            String tag = ((ConstraintLayout.LayoutParams) view.getLayoutParams()).constraintTag;
             if (tag != null && tag.matches(mTargetString)) {
                 return true;
             }

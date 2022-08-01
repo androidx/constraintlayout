@@ -310,7 +310,7 @@ public class Debug {
                 try {
                     Object value = declaredField.get(param);
                     String name = declaredField.getName();
-                    if (!(name.contains("To"))) {
+                    if (!name.contains("To")) {
                         continue;
                     }
                     if (value.toString().equals("-1")) {
