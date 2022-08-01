@@ -303,7 +303,7 @@ public class MotionController {
         ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -395,7 +395,7 @@ public class MotionController {
         ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -451,7 +451,7 @@ public class MotionController {
         float mils = 1.0f / (pointCount - 1);
         double x = 0, y = 0;
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
 
             double p = position;
 
@@ -581,7 +581,7 @@ public class MotionController {
     void buildRectangles(float[] path, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             position = getAdjustedPosition(position, null);
             mSpline[0].getPos(position, mInterpolateData);
             mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, i * 8);
@@ -1025,6 +1025,7 @@ public class MotionController {
      *
      * @return
      */
+    @Override
     public String toString() {
         return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
                 + " end: x: " + mEndMotionPath.mX + " y: " + mEndMotionPath.mY;
@@ -1502,8 +1503,8 @@ public class MotionController {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
     }
 
     /**
@@ -1580,8 +1581,8 @@ public class MotionController {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
 
         vmat.clear();
         vmat.setRotationVelocity(rotation, position);

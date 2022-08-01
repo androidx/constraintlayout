@@ -156,7 +156,7 @@ public class KeyFrames {
             for (Key key : list) {
                 String tag =
                         ((ConstraintLayout.LayoutParams)
-                                (motionController.mView.getLayoutParams())).constraintTag;
+                                motionController.mView.getLayoutParams()).constraintTag;
                 if (key.matches(tag)) {
                     motionController.addKey(key);
                 }

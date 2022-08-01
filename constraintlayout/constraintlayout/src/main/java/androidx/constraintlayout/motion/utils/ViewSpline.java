@@ -215,6 +215,7 @@ public abstract class ViewSpline extends SplineSet {
          * @TODO: add description
          * @param curveType
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality =

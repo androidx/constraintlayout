@@ -229,14 +229,14 @@ public class MotionLabel extends View implements FloatLayout {
             if (iw <= 0) {
                 int w = getWidth();
                 if (w == 0) {
-                    w = ((Float.isNaN(mTextureWidth)) ? 128 : (int) mTextureWidth);
+                    w = (Float.isNaN(mTextureWidth) ? 128 : (int) mTextureWidth);
                 }
                 iw = w;
             }
             if (ih <= 0) {
                 int h = getHeight();
                 if (h == 0) {
-                    h = ((Float.isNaN(mTextureHeight)) ? 128 : (int) mTextureHeight);
+                    h = (Float.isNaN(mTextureHeight) ? 128 : (int) mTextureHeight);
                 }
                 ih = h;
             }
@@ -325,7 +325,7 @@ public class MotionLabel extends View implements FloatLayout {
         float scale = Float.isNaN(mBaseTextSize) ? 1.0f : mTextSize / mBaseTextSize;
 
         float textWidth = scale * mPaint.measureText(mText, 0, mText.length());
-        float boxWidth = ((Float.isNaN(mFloatWidth)) ? getMeasuredWidth() : mFloatWidth)
+        float boxWidth = (Float.isNaN(mFloatWidth) ? getMeasuredWidth() : mFloatWidth)
                 - getPaddingLeft()
                 - getPaddingRight();
         return (boxWidth - textWidth) * (1 + mTextPanX) / 2.f;
@@ -336,7 +336,7 @@ public class MotionLabel extends View implements FloatLayout {
 
         Paint.FontMetrics fm = mPaint.getFontMetrics();
 
-        float boxHeight = ((Float.isNaN(mFloatHeight)) ? getMeasuredHeight() : mFloatHeight)
+        float boxHeight = (Float.isNaN(mFloatHeight) ? getMeasuredHeight() : mFloatHeight)
                 - getPaddingTop()
                 - getPaddingBottom();
 
@@ -428,9 +428,9 @@ public class MotionLabel extends View implements FloatLayout {
             float vh = mFloatHeight - mPaddingBottom - mPaddingTop;
             if (normalScale) {
                 if (tw * vh > th * vw) { // width limited tw/vw > th/vh
-                    mPaint.setTextSize((mPaintTextSize * vw) / (tw));
+                    mPaint.setTextSize((mPaintTextSize * vw) / tw);
                 } else { // height limited
-                    mPaint.setTextSize((mPaintTextSize * vh) / (th));
+                    mPaint.setTextSize((mPaintTextSize * vh) / th);
                 }
             } else {
                 scaleText = (tw * vh > th * vw) ? vw / (float) tw : vh / (float) th;
@@ -474,9 +474,9 @@ public class MotionLabel extends View implements FloatLayout {
             float vw = r - l - mPaddingRight - mPaddingLeft;
             float vh = b - t - mPaddingBottom - mPaddingTop;
             if (tw * vh > th * vw) { // width limited tw/vw > th/vh
-                mPaint.setTextSize((mPaintTextSize * vw) / (tw));
+                mPaint.setTextSize((mPaintTextSize * vw) / tw);
             } else { // height limited
-                mPaint.setTextSize((mPaintTextSize * vh) / (th));
+                mPaint.setTextSize((mPaintTextSize * vh) / th);
             }
             if (mUseOutline || !Float.isNaN(mBaseTextSize)) {
                 buildShape(Float.isNaN(mBaseTextSize) ? 1.0f : mTextSize / mBaseTextSize);
@@ -645,7 +645,7 @@ public class MotionLabel extends View implements FloatLayout {
         return mPaint.getTypeface();
     }
 
-    //   @Override
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = View.MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = View.MeasureSpec.getMode(heightMeasureSpec);
@@ -944,16 +944,16 @@ public class MotionLabel extends View implements FloatLayout {
     }
 
     private void updateShaderMatrix() {
-        float panX = (Float.isNaN(mBackgroundPanX)) ? 0 : mBackgroundPanX;
-        float panY = (Float.isNaN(mBackgroundPanY)) ? 0 : mBackgroundPanY;
-        float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
-        float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
+        float panX = Float.isNaN(mBackgroundPanX) ? 0 : mBackgroundPanX;
+        float panY = Float.isNaN(mBackgroundPanY) ? 0 : mBackgroundPanY;
+        float zoom = Float.isNaN(mZoom) ? 1 : mZoom;
+        float rota = Float.isNaN(mRotate) ? 0 : mRotate;
 
         mTextShaderMatrix.reset();
         float iw = mTextBackgroundBitmap.getWidth();
         float ih = mTextBackgroundBitmap.getHeight();
-        float sw = (Float.isNaN(mTextureWidth)) ? mFloatWidth : mTextureWidth;
-        float sh = (Float.isNaN(mTextureHeight)) ? mFloatHeight : mTextureHeight;
+        float sw = Float.isNaN(mTextureWidth) ? mFloatWidth : mTextureWidth;
+        float sh = Float.isNaN(mTextureHeight) ? mFloatHeight : mTextureHeight;
 
         float scale = zoom * ((iw * sh < ih * sw) ? sw / iw : sh / ih);
         mTextShaderMatrix.postScale(scale, scale);
@@ -965,8 +965,8 @@ public class MotionLabel extends View implements FloatLayout {
         if (!Float.isNaN(mTextureWidth)) {
             gapx = mTextureWidth / 2;
         }
-        float tx = 0.5f * (panX * (gapx) + sw - (scale * iw));
-        float ty = 0.5f * (panY * (gapy) + sh - (scale * ih));
+        float tx = 0.5f * (panX * gapx + sw - (scale * iw));
+        float ty = 0.5f * (panY * gapy + sh - (scale * ih));
 
         mTextShaderMatrix.postTranslate(tx, ty);
         mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);

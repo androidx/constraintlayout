@@ -56,6 +56,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     /**
      * @DoNotShow
      */
+    @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {

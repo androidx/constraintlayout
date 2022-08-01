@@ -1740,7 +1740,7 @@ public class MotionScene {
                         region = mCurrentTransition
                                 .mTouchResponse.getTouchRegion(mMotionLayout, cache);
                         mMotionOutsideRegion = region != null
-                                && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()));
+                                && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY());
                         mCurrentTransition.mTouchResponse.setUpTouchEvent(mLastTouchX, mLastTouchY);
                     }
             }

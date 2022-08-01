@@ -2290,6 +2290,7 @@ public class ConstraintSet {
          * Return a copy of the Constraint
          * @return
          */
+        @Override
         public Constraint clone() {
             Constraint clone = new Constraint();
             clone.layout.copyFrom(layout);
@@ -6156,10 +6157,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + (++mUnknownCount);
+                    return "unknown" + ++mUnknownCount;
                 }
             } catch (Exception ex) {
-                return "unknown" + (++mUnknownCount);
+                return "unknown" + ++mUnknownCount;
             }
         }
 
@@ -6412,10 +6413,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + (++mUnknownCount);
+                    return "unknown" + ++mUnknownCount;
                 }
             } catch (Exception ex) {
-                return "unknown" + (++mUnknownCount);
+                return "unknown" + ++mUnknownCount;
             }
         }
 
