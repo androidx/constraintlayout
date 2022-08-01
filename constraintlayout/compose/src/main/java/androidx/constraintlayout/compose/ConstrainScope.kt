@@ -445,7 +445,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     fun clearConstraints() {
         tasks.add { state ->
-            state.constraints(id).clear()
+            state.constraints(id).clearAll()
         }
     }
 

@@ -959,6 +959,41 @@ public class ConstraintReference implements Reference {
     }
 
     /**
+     * Clears all constraints.
+     */
+    public ConstraintReference clearAll() {
+        mLeftToLeft = null;
+        mLeftToRight = null;
+        mMarginLeft = 0;
+        mRightToLeft = null;
+        mRightToRight = null;
+        mMarginRight = 0;
+        mStartToStart = null;
+        mStartToEnd = null;
+        mMarginStart = 0;
+        mEndToStart = null;
+        mEndToEnd = null;
+        mMarginEnd = 0;
+        mTopToTop = null;
+        mTopToBottom = null;
+        mMarginTop = 0;
+        mBottomToTop = null;
+        mBottomToBottom = null;
+        mMarginBottom = 0;
+        mBaselineToBaseline = null;
+        mCircularConstraint = null;
+        mHorizontalBias = 0.5f;
+        mVerticalBias = 0.5f;
+        mMarginLeftGone = 0;
+        mMarginRightGone = 0;
+        mMarginStartGone = 0;
+        mMarginEndGone = 0;
+        mMarginTopGone = 0;
+        mMarginBottomGone = 0;
+        return this;
+    }
+
+    /**
      * @TODO: add description
      */
     public ConstraintReference clear() {
@@ -1024,34 +1059,7 @@ public class ConstraintReference implements Reference {
                     break;
             }
         } else {
-            mLeftToLeft = null;
-            mLeftToRight = null;
-            mMarginLeft = 0;
-            mRightToLeft = null;
-            mRightToRight = null;
-            mMarginRight = 0;
-            mStartToStart = null;
-            mStartToEnd = null;
-            mMarginStart = 0;
-            mEndToStart = null;
-            mEndToEnd = null;
-            mMarginEnd = 0;
-            mTopToTop = null;
-            mTopToBottom = null;
-            mMarginTop = 0;
-            mBottomToTop = null;
-            mBottomToBottom = null;
-            mMarginBottom = 0;
-            mBaselineToBaseline = null;
-            mCircularConstraint = null;
-            mHorizontalBias = 0.5f;
-            mVerticalBias = 0.5f;
-            mMarginLeftGone = 0;
-            mMarginRightGone = 0;
-            mMarginStartGone = 0;
-            mMarginEndGone = 0;
-            mMarginTopGone = 0;
-            mMarginBottomGone = 0;
+            clearAll();
         }
         return this;
     }
