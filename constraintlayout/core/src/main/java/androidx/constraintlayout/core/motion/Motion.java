@@ -1008,6 +1008,7 @@ public class Motion implements TypedValues {
     /**
      * Debug string
      */
+    @Override
     public String toString() {
         return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
                 + " end: x: " + mEndMotionPath.mX + " y: " + mEndMotionPath.mY;
@@ -1487,8 +1488,8 @@ public class Motion implements TypedValues {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
     }
 
     /**
@@ -1570,8 +1571,8 @@ public class Motion implements TypedValues {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
 
         vmat.clear();
         vmat.setRotationVelocity(rotation, position);

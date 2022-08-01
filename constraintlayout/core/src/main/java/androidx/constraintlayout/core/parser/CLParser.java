@@ -29,7 +29,7 @@ public class CLParser {
      * @TODO: add description
      */
     public static CLObject parse(String string) throws CLParsingException {
-        return (new CLParser(string)).parse();
+        return new CLParser(string).parse();
     }
 
     public CLParser(String content) {

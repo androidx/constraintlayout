@@ -897,7 +897,7 @@ public class ConstraintSetParser {
         for (String constraintName : constraints) {
             switch (constraintName) {
                 case "direction": {
-                    switch ((element.getString(constraintName))) {
+                    switch (element.getString(constraintName)) {
                         case "start":
                             reference.setBarrierDirection(State.Direction.START);
                             break;

@@ -95,6 +95,7 @@ public class StepCurve extends Easing {
     /**
      * @TODO: add description
      */
+    @Override
     public double getDiff(double x) {
         return mCurveFit.getSlope(x, 0);
     }
@@ -102,6 +103,7 @@ public class StepCurve extends Easing {
     /**
      * @TODO: add description
      */
+    @Override
     public double get(double x) {
         return mCurveFit.getPos(x, 0);
     }

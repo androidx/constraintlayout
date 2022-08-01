@@ -69,6 +69,7 @@ public class KeyCycle extends KeyAttribute {
         mWavePhase = wavePhase;
     }
 
+    @Override
     protected void attributesToString(StringBuilder builder) {
         super.attributesToString(builder);
 

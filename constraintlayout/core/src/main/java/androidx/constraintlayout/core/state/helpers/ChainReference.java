@@ -101,6 +101,7 @@ public class ChainReference extends HelperReference {
     /**
      * @TODO: add description
      */
+    @Override
     public ChainReference bias(float bias) {
         mBias = bias;
         return this;

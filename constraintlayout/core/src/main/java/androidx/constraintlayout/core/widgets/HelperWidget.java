@@ -40,6 +40,7 @@ public class HelperWidget extends ConstraintWidget implements Helper {
      *
      * @param widget a widget
      */
+    @Override
     public void add(ConstraintWidget widget) {
         if (widget == this || widget == null) {
             return;
@@ -65,6 +66,7 @@ public class HelperWidget extends ConstraintWidget implements Helper {
     /**
      * Reset the widgets list contained by this helper
      */
+    @Override
     public void removeAllIds() {
         mWidgetsCount = 0;
         Arrays.fill(mWidgets, null);

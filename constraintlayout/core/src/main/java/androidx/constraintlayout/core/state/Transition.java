@@ -1000,7 +1000,7 @@ public class Transition implements TypedValues {
                 if (!Float.isNaN(widgetStagger)) {
                     float scale = 1 / (1 - stagger);
 
-                    float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
+                    float offset = stagger - stagger * (widgetStagger - min) / (max - min);
                     if (flip) {
                         offset = stagger - stagger
                                 * ((max - widgetStagger) / (max - min));
@@ -1027,7 +1027,7 @@ public class Transition implements TypedValues {
                 float x = f.getFinalX();
                 float y = f.getFinalY();
                 float widgetStagger = x + y;
-                float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
+                float offset = stagger - stagger * (widgetStagger - min) / (max - min);
                 if (flip) {
                     offset = stagger - stagger
                             * ((max - widgetStagger) / (max - min));

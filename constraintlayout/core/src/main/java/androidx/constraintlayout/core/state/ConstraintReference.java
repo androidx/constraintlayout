@@ -33,10 +33,12 @@ public class ConstraintReference implements Reference {
 
     private Object mKey;
 
+    @Override
     public void setKey(Object key) {
         this.mKey = key;
     }
 
+    @Override
     public Object getKey() {
         return mKey;
     }
@@ -162,6 +164,7 @@ public class ConstraintReference implements Reference {
         }
     }
 
+    @Override
     public Facade getFacade() {
         return mFacade;
     }
@@ -169,6 +172,7 @@ public class ConstraintReference implements Reference {
     /**
      * @TODO: add description
      */
+    @Override
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
             return;
@@ -1164,6 +1168,7 @@ public class ConstraintReference implements Reference {
     /**
      * @TODO: add description
      */
+    @Override
     public void apply() {
         if (mConstraintWidget == null) {
             return;

@@ -45,6 +45,7 @@ public class BarrierReference extends HelperReference {
     /**
      * @TODO: add description
      */
+    @Override
     public ConstraintReference margin(int value) {
         mMargin = value;
         return this;
@@ -61,6 +62,7 @@ public class BarrierReference extends HelperReference {
     /**
      * @TODO: add description
      */
+    @Override
     public void apply() {
         getHelperWidget();
         int direction = Barrier.LEFT;

@@ -80,7 +80,7 @@ public class SpringStopEngine implements StopEngine {
     public float getInterpolation(float time) {
         compute(time - mLastTime);
         mLastTime = time;
-        return (float) (mPos);
+        return (float) mPos;
     }
 
     /**
@@ -126,7 +126,7 @@ public class SpringStopEngine implements StopEngine {
             double a = (-k * x - c * mV) / mMass;
             // This refinement of a simple coding of the acceleration increases accuracy
             double avgV = mV + a * dt / 2; // pass 1 calculate the average velocity
-            double avgX = mPos + dt * (avgV) / 2 - mTargetPos; // pass 1 calculate the average pos
+            double avgX = mPos + dt * avgV / 2 - mTargetPos; // pass 1 calculate the average pos
             a = (-avgX * k - avgV * c) / mMass; //  calculate acceleration over that average pos
 
             double dv = a * dt; //  calculate change in velocity

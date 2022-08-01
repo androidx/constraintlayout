@@ -58,6 +58,7 @@ public abstract class KeyCycleOscillator {
             mTypeId = TypedValues.CycleType.getId(mType);
         }
 
+        @Override
         public void setProperty(MotionWidget widget, float t) {
             widget.setValue(mTypeId, get(t));
         }

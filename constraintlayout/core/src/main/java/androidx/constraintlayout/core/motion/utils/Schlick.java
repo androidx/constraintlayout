@@ -53,6 +53,7 @@ public class Schlick extends Easing {
     /**
      * @TODO: add description
      */
+    @Override
     public double getDiff(double x) {
         return dfunc(x);
     }
@@ -60,6 +61,7 @@ public class Schlick extends Easing {
     /**
      * @TODO: add description
      */
+    @Override
     public double get(double x) {
         return func(x);
     }

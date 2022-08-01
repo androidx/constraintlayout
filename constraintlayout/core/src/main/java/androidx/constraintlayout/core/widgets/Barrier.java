@@ -91,6 +91,7 @@ public class Barrier extends HelperWidget {
         return mResolved;
     }
 
+    @Override
     public boolean isResolvedVertically() {
         return mResolved;
     }
