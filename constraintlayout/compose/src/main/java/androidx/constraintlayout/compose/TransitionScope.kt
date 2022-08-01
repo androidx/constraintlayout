@@ -341,6 +341,7 @@ class SwipeMode internal constructor(internal val propName: String) {
 class SwipeTouchUp internal constructor(internal val propName: String) {
     companion object {
         val AutoComplete: SwipeTouchUp = SwipeTouchUp("autocomplete")
+        val NeverCompleteStart: SwipeTouchUp = SwipeTouchUp("neverCompleteStart")
     }
 }
 
