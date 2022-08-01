@@ -4,18 +4,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-def compose_version = '1.0.0'
-def kotlin_version = "1.5.10"
-
 android {
-    compileSdkVersion 30
+    compileSdkVersion sdk_latest_version
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
 
     defaultConfig {
         minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        targetSdkVersion 30
+        targetSdkVersion sdk_latest_version
     }
 
     compileOptions {
@@ -31,12 +28,10 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-        useIR = true
     }
 
     composeOptions {
-        kotlinCompilerVersion kotlin_version
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_runtime_version
     }
 
     packagingOptions {
@@ -46,18 +41,18 @@ android {
 }
 
 dependencies {
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-unit:$compose_version"
-    implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-unit:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-util:$compose_ui_version"
+    implementation "androidx.compose.foundation:foundation-layout:$compose_ui_version"
+    implementation "androidx.compose.foundation:foundation:$compose_ui_version"
     implementation project(':core')
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'junit:junit:4.13.1'
-    androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    androidTestImplementation "androidx.compose.material:material:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test:$compose_ui_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
+    androidTestImplementation "androidx.compose.material:material:1.0.0"
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
     androidTestImplementation "androidx.activity:activity:1.3.0"
