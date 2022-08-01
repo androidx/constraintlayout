@@ -135,11 +135,11 @@ public class Oscillator {
         switch (mType) {
             default:
             case SIN_WAVE:
-                return Math.sin(mPI2 * (angle));
+                return Math.sin(mPI2 * angle);
             case SQUARE_WAVE:
                 return Math.signum(0.5 - angle % 1);
             case TRIANGLE_WAVE:
-                return 1 - Math.abs(((angle) * 4 + 1) % 4 - 2);
+                return 1 - Math.abs((angle * 4 + 1) % 4 - 2);
             case SAW_WAVE:
                 return ((angle * 2 + 1) % 2) - 1;
             case REVERSE_SAW_WAVE:
@@ -147,7 +147,7 @@ public class Oscillator {
             case COS_WAVE:
                 return Math.cos(mPI2 * (phase + angle));
             case BOUNCE:
-                double x = 1 - Math.abs(((angle) * 4) % 4 - 2);
+                double x = 1 - Math.abs((angle * 4) % 4 - 2);
                 return 1 - x * x;
             case CUSTOM:
                 return mCustomCurve.getPos(angle % 1, 0);
@@ -189,7 +189,7 @@ public class Oscillator {
             case SQUARE_WAVE:
                 return 0;
             case TRIANGLE_WAVE:
-                return 4 * dangle_dtime * Math.signum(((angle) * 4 + 3) % 4 - 2);
+                return 4 * dangle_dtime * Math.signum((angle * 4 + 3) % 4 - 2);
             case SAW_WAVE:
                 return dangle_dtime * 2;
             case REVERSE_SAW_WAVE:
@@ -197,7 +197,7 @@ public class Oscillator {
             case COS_WAVE:
                 return -mPI2 * dangle_dtime * Math.sin(mPI2 * angle);
             case BOUNCE:
-                return 4 * dangle_dtime * (((angle) * 4 + 2) % 4 - 2);
+                return 4 * dangle_dtime * ((angle * 4 + 2) % 4 - 2);
             case CUSTOM:
                 return mCustomCurve.getSlope(angle % 1, 0);
         }

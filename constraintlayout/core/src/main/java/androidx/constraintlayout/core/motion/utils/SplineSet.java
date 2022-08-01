@@ -204,6 +204,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();

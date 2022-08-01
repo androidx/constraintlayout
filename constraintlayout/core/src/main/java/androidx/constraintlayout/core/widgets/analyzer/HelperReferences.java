@@ -152,6 +152,7 @@ class HelperReferences extends WidgetRun {
         }
     }
 
+    @Override
     public void applyToWidget() {
         if (mWidget instanceof Barrier) {
             Barrier barrier = (Barrier) mWidget;

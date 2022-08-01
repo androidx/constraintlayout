@@ -162,6 +162,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -180,6 +181,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case CycleType.TYPE_ALPHA:
@@ -236,6 +238,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case CycleType.TYPE_WAVE_SHAPE:
@@ -254,6 +257,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, boolean value) {
         return super.setValue(type, value);
     }
@@ -261,6 +265,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKeyTimeCycle copy(MotionKey src) {
         super.copy(src);
         MotionKeyTimeCycle k = (MotionKeyTimeCycle) src;
@@ -329,6 +334,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKey clone() {
         return new MotionKeyTimeCycle().copy(this);
     }

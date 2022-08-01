@@ -31,6 +31,7 @@ public class AlignVerticallyReference extends HelperReference {
     /**
      * @TODO: add description
      */
+    @Override
     public void apply() {
         for (Object key : mReferences) {
             ConstraintReference reference = mState.constraints(key);

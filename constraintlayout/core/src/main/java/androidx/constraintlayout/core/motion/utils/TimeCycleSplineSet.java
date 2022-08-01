@@ -117,6 +117,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
@@ -142,6 +143,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");
@@ -285,6 +287,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
@@ -310,6 +313,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");

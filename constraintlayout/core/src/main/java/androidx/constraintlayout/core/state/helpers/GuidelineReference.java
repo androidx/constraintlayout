@@ -32,10 +32,12 @@ public class GuidelineReference implements Facade, Reference {
 
     private Object mKey;
 
+    @Override
     public void setKey(Object key) {
         this.mKey = key;
     }
 
+    @Override
     public Object getKey() {
         return mKey;
     }
@@ -85,6 +87,7 @@ public class GuidelineReference implements Facade, Reference {
     /**
      * @TODO: add description
      */
+    @Override
     public void apply() {
         mGuidelineWidget.setOrientation(mOrientation);
         if (mStart != -1) {

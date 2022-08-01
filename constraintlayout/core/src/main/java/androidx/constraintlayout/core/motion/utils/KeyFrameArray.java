@@ -49,7 +49,7 @@ public class KeyFrameArray {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(mKeys, mCount)));
             System.out.print("K: [");
             for (int i = 0; i < mCount; i++) {
-                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+                System.out.print((i == 0 ? "" : ", ") + valueAt(i));
             }
             System.out.println("]");
         }
@@ -134,7 +134,7 @@ public class KeyFrameArray {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(mKeys, mCount)));
             System.out.print("K: [");
             for (int i = 0; i < mCount; i++) {
-                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+                System.out.print((i == 0 ? "" : ", ") + valueAt(i));
             }
             System.out.println("]");
         }
@@ -213,7 +213,7 @@ public class KeyFrameArray {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(mKeys, mCount)));
             System.out.print("K: [");
             for (int i = 0; i < mCount; i++) {
-                System.out.print(((i == 0 ? "" : ", ")) + Arrays.toString(valueAt(i)));
+                System.out.print((i == 0 ? "" : ", ") + Arrays.toString(valueAt(i)));
             }
             System.out.println("]");
         }

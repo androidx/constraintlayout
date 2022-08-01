@@ -204,6 +204,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -227,6 +228,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case AttributesType.TYPE_ALPHA:
@@ -283,6 +285,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (!Float.isNaN(mAlpha)) {
             interpolation.put(AttributesType.S_ALPHA, mCurveFit);
@@ -336,6 +339,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case AttributesType.TYPE_EASING:

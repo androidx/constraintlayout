@@ -179,6 +179,7 @@ public class MotionKeyTrigger extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
         switch (type) {
             case TriggerType.TYPE_TRIGGER_RECEIVER:

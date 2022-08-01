@@ -116,6 +116,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
         switch (type) {
             case CycleType.TYPE_CURVE_FIT:
@@ -136,6 +137,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case CycleType.TYPE_EASING:
@@ -153,6 +155,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case CycleType.TYPE_ALPHA:

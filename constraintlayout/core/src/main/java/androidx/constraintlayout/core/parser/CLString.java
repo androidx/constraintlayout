@@ -28,10 +28,12 @@ public class CLString extends CLElement {
         return new CLString(content);
     }
 
+    @Override
     protected String toJSON() {
         return "'" + content() + "'";
     }
 
+    @Override
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder();
         addIndent(json, indent);

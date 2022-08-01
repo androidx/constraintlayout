@@ -35,6 +35,7 @@ public class CLNumber extends CLElement {
         return new CLNumber(content);
     }
 
+    @Override
     protected String toJSON() {
         float value = getFloat();
         int intValue = (int) value;
@@ -44,6 +45,7 @@ public class CLNumber extends CLElement {
         return "" + value;
     }
 
+    @Override
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder();
         addIndent(json, indent);

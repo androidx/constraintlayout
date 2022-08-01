@@ -254,6 +254,7 @@ public class Flow extends VirtualLayout {
     /**
      * @TODO: add description
      */
+    @Override
     public void measure(int widthMode, int widthSize, int heightMode, int heightSize) {
         if (mWidgetsCount > 0 && !measureChildren()) {
             setMeasure(0, 0);
@@ -1256,9 +1257,9 @@ public class Flow extends VirtualLayout {
             // get for each row and cols the chain of biggest elements
 
             if (orientation == HORIZONTAL) {
-                rows = (int) (Math.ceil(count / (float) cols));
+                rows = (int) Math.ceil(count / (float) cols);
             } else {
-                cols = (int) (Math.ceil(count / (float) rows));
+                cols = (int) Math.ceil(count / (float) rows);
             }
 
             if (mAlignedBiggestElementsInCols == null
