@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * For asynchronous it will create and drive a MotionController.
  */
 public class ViewTransition {
-    private static String sTAG = "ViewTransition";
+    private static final String TAG = "ViewTransition";
     ConstraintSet mSet;
     public static final String VIEW_TRANSITION_TAG = "ViewTransition";
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
@@ -241,8 +241,8 @@ public class ViewTransition {
                                         mConstraintDelta.mCustomConstraints);
                                 break;
                             default:
-                                Log.e(sTAG, Debug.getLoc() + " unknown tag " + tagName);
-                                Log.e(sTAG, ".xml:" + parser.getLineNumber());
+                                Log.e(TAG, Debug.getLoc() + " unknown tag " + tagName);
+                                Log.e(TAG, ".xml:" + parser.getLineNumber());
                         }
 
                         break;
@@ -254,9 +254,9 @@ public class ViewTransition {
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 

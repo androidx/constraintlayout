@@ -89,14 +89,13 @@ public class CustomSupport {
                     }
             }
         } catch (NoSuchMethodException e) {
-            Log.e(TAG, "no method " + methodName + " on View \"" + Debug.getName(view) + "\"");
-            e.printStackTrace();
+            Log.e(TAG, "No method " + methodName + " on View \"" + Debug.getName(view) + "\"", e);
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "cannot access method " + methodName + " on View \""
-                    + Debug.getName(view) + "\"");
-            e.printStackTrace();
+            Log.e(TAG, "Cannot access method " + methodName + " on View \""
+                    + Debug.getName(view) + "\"", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Cannot invoke method " + methodName + " on View \""
+                    + Debug.getName(view) + "\"", e);
         }
     }
 

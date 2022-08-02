@@ -348,9 +348,9 @@ public class ConstraintLayoutStates {
 //                }
 //            }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 

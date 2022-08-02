@@ -788,7 +788,7 @@ public class DesignTool {
         try {
             mMotionLayout.mScene.getConstraintSet(setId).dump(mMotionLayout.mScene);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(TAG, "Error while dumping: " + set + " (" + setId + ")", ex);
         }
     }
 }

@@ -339,13 +339,14 @@ public class ConstraintAttribute {
                     Object val = method.invoke(view);
                     ret.put(name, new ConstraintAttribute(constraintAttribute, val));
                 }
-
             } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+                Log.e(TAG, viewClass.getName() + " must have a method " + name, e);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                Log.e(TAG, " Custom Attribute \"" + name
+                        + "\" not found on " + viewClass.getName(), e);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
+                Log.e(TAG, " Custom Attribute \"" + name
+                        + "\" not found on " + viewClass.getName(), e);
             }
         }
         return ret;
@@ -402,18 +403,13 @@ public class ConstraintAttribute {
                         method.invoke(view, constraintAttribute.mIntegerValue);
                 }
             } catch (NoSuchMethodException e) {
-                Log.e(TAG, e.getMessage());
-                Log.e(TAG, " Custom Attribute \"" + name
-                        + "\" not found on " + viewClass.getName());
-                Log.e(TAG, viewClass.getName() + " must have a method " + methodName);
+                Log.e(TAG, viewClass.getName() + " must have a method " + methodName, e);
             } catch (IllegalAccessException e) {
                 Log.e(TAG, " Custom Attribute \"" + name
-                        + "\" not found on " + viewClass.getName());
-                e.printStackTrace();
+                        + "\" not found on " + viewClass.getName(), e);
             } catch (InvocationTargetException e) {
                 Log.e(TAG, " Custom Attribute \"" + name
-                        + "\" not found on " + viewClass.getName());
-                e.printStackTrace();
+                        + "\" not found on " + viewClass.getName(), e);
             }
         }
     }
@@ -465,17 +461,14 @@ public class ConstraintAttribute {
                     break;
             }
         } catch (NoSuchMethodException e) {
-            Log.e(TAG, e.getMessage());
-            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            Log.e(TAG, viewClass.getName() + " must have a method " + methodName);
+            Log.e(TAG, viewClass.getName() + " must have a method " + methodName, e);
         } catch (IllegalAccessException e) {
-            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            e.printStackTrace();
+            Log.e(TAG, " Custom Attribute \"" + name
+                    + "\" not found on " + viewClass.getName(), e);
         } catch (InvocationTargetException e) {
-            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            e.printStackTrace();
+            Log.e(TAG, " Custom Attribute \"" + name
+                    + "\" not found on " + viewClass.getName(), e);
         }
-
     }
 
     private static int clamp(int c) {
