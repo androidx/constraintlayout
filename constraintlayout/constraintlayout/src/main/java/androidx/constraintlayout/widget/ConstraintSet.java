@@ -4707,7 +4707,7 @@ public class ConstraintSet {
         Constraint c = new Constraint();
         TypedArray a = context.obtainStyledAttributes(attrs,
                 override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
-        populateConstraint(context, c, a, override);
+        populateConstraint(c, a, override);
         a.recycle();
         return c;
     }
@@ -5358,7 +5358,7 @@ public class ConstraintSet {
         }
     }
 
-    private void populateConstraint(Context ctx, Constraint c, TypedArray a, boolean override) {
+    private void populateConstraint(Constraint c, TypedArray a, boolean override) {
         if (override) {
             populateOverride(c, a);
             return;
@@ -6353,7 +6353,7 @@ public class ConstraintSet {
                                     float dimPercent,
                                     int dimMin,
                                     int dimMax,
-                                    boolean constrainedDim) throws IOException {
+                                    boolean unusedConstrainedDim) throws IOException {
             if (dim == 0) {
                 if (dimMax != UNSET || dimMin != UNSET) {
                     switch (dimDefault) {

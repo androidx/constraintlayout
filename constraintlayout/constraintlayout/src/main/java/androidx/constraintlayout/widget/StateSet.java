@@ -39,11 +39,10 @@ public class StateSet {
     private static final boolean DEBUG = false;
     int mDefaultState = -1;
 
-    ConstraintSet mDefaultConstraintSet;
     int mCurrentStateId = -1; // default
     int mCurrentConstraintNumber = -1; // default
     private SparseArray<State> mStateList = new SparseArray<>();
-    private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
+    @SuppressWarnings("unused")
     private ConstraintsChangedListener mConstraintsChangedListener = null;
 
     /**
@@ -388,7 +387,6 @@ public class StateSet {
                 if (heightDp > mMaxHeight) return false;
             }
             return true;
-
         }
     }
 

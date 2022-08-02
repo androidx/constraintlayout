@@ -525,7 +525,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = getContext()
+            TypedArray a = context
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
             final int count = a.getIndexCount();
             mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);

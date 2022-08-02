@@ -149,6 +149,7 @@ public class ConstraintAttribute {
             case INT_TYPE:
                 return mIntegerValue;
             case FLOAT_TYPE:
+            case DIMENSION_TYPE:
                 return mFloatValue;
             case COLOR_TYPE:
             case COLOR_DRAWABLE_TYPE:
@@ -157,8 +158,8 @@ public class ConstraintAttribute {
                 throw new RuntimeException("Cannot interpolate String");
             case BOOLEAN_TYPE:
                 return mBooleanValue ? 1 : 0;
-            case DIMENSION_TYPE:
-                return mFloatValue;
+            case REFERENCE_TYPE:
+                return Float.NaN;
         }
         return Float.NaN;
     }

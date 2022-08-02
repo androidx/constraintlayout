@@ -231,11 +231,11 @@ class MotionPaths implements Comparable<MotionPaths> {
 
         point.mMode = MotionPaths.SCREEN;
         if (!Float.isNaN(c.mPercentX)) {
-            parentWidth -= point.mWidth;
+            parentWidth -= (int) point.mWidth;
             point.mX = (int) (c.mPercentX * parentWidth);
         }
         if (!Float.isNaN(c.mPercentY)) {
-            parentHeight -= point.mHeight;
+            parentHeight -= (int) point.mHeight;
             point.mY = (int) (c.mPercentY * parentHeight);
         }
 
@@ -307,6 +307,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         return Math.abs(a - b) > 0.000001f;
     }
 
+    @SuppressWarnings("ShortCircuitBoolean") // bitwise operation
     void different(MotionPaths points, boolean[] mask, String[] custom, boolean arcMode) {
         int c = 0;
         boolean diffx = diff(mX, points.mX);
@@ -316,7 +317,6 @@ class MotionPaths implements Comparable<MotionPaths> {
         mask[c++] |= diffx | diffy | arcMode;
         mask[c++] |= diff(mWidth, points.mWidth);
         mask[c++] |= diff(mHeight, points.mHeight);
-
     }
 
     void getCenter(double p, int[] toUse, double[] data, float[] point, int offset) {
@@ -617,7 +617,7 @@ class MotionPaths implements Comparable<MotionPaths> {
                     Log.v(TAG, "dv_width   =" + dv_width);
                     Log.v(TAG, "dv_height  =" + dv_height);
                 }
-                rot += path_rotate + Math.toDegrees(Math.atan2(dy, dx));
+                rot += path_rotate + (float) Math.toDegrees(Math.atan2(dy, dx));
                 view.setRotation(rot);
                 if (DEBUG) {
                     Log.v(TAG, "Rotated " + rot + "  = " + dx + "," + dy);
