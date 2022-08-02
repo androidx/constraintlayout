@@ -270,7 +270,7 @@ internal interface MotionProgress {
 
         fun fromState(
             progressState: State<Float>,
-            onUpdate:  (newProgress: Float) -> Unit
+            onUpdate: (newProgress: Float) -> Unit
         ): MotionProgress =
             object : MotionProgress {
                 override val currentProgress: Float

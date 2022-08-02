@@ -24,7 +24,6 @@ import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.CoreMotionScene
 import org.intellij.lang.annotations.Language
 
-
 /**
  * Information for MotionLayout to animate between multiple [ConstraintSet]s.
  */
@@ -43,7 +42,6 @@ fun MotionScene(@Language("json5") content: String): MotionScene {
         JSONMotionScene(content)
     }
 }
-
 
 internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
     MotionScene {
