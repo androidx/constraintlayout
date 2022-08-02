@@ -286,10 +286,6 @@ public abstract class ConstraintHelper extends View {
 
         idString = idString.trim();
 
-        ConstraintLayout parent = null;
-        if (getParent() instanceof ConstraintLayout) {
-            parent = (ConstraintLayout) getParent();
-        }
         int rscId = findId(idString);
         if (rscId != 0) {
             mMap.put(rscId, idString); // let's remember the idString used,
@@ -640,7 +636,6 @@ public abstract class ConstraintHelper extends View {
 
     private int[] convertReferenceString(View view, String referenceIdString) {
         String[] split = referenceIdString.split(",");
-        Context context = view.getContext();
         int[] rscIds = new int[split.length];
         int count = 0;
         for (int i = 0; i < split.length; i++) {

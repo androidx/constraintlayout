@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Utility class to manipulate MotionLayout from the layout editor
@@ -329,7 +330,7 @@ public class DesignTool {
         if (id == null) {
             id = "motion_base";
         }
-        if (mLastStartState == id) {
+        if (Objects.equals(mLastStartState, id)) {
             return;
         }
 
@@ -608,7 +609,7 @@ public class DesignTool {
             case 3: { // get Attribute
 
                 int duration = mMotionLayout.mScene.getDuration();
-                int frames = duration / 16;
+                @SuppressWarnings("unused") int frames = duration / 16;
 
                 return motionController.getAttributeValues(type, out, outLength);
             }

@@ -215,17 +215,16 @@ public class ViewTransition {
 
     ViewTransition(Context context, XmlPullParser parser) {
         mContext = context;
-        String tagName = null;
         try {
-            Key key = null;
             for (int eventType = parser.getEventType();
                     eventType != XmlResourceParser.END_DOCUMENT;
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         switch (tagName) {
                             case VIEW_TRANSITION_TAG:
                                 parseViewTransitionTags(context, parser);
@@ -251,8 +250,6 @@ public class ViewTransition {
                         if (VIEW_TRANSITION_TAG.equals(parser.getName())) {
                             return;
                         }
-                        break;
-                    case XmlResourceParser.TEXT:
                         break;
                 }
             }

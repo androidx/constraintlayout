@@ -215,8 +215,8 @@ public class KeyPosition extends KeyPositionBase {
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
         float endCenterY = end.centerY();
-        float pathVectorX = endCenterX - startCenterX;
-        float pathVectorY = endCenterY - startCenterY;
+        @SuppressWarnings("unused") float pathVectorX = endCenterX - startCenterX;
+        @SuppressWarnings("unused") float pathVectorY = endCenterY - startCenterY;
         ViewGroup viewGroup = ((ViewGroup) view.getParent());
         int width = viewGroup.getWidth();
         int height = viewGroup.getHeight();

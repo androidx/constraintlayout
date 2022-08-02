@@ -264,7 +264,9 @@ class TouchResponse {
                 mDragStarted = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+                @SuppressWarnings("unused")
                 float dy = event.getRawY() - mLastTouchY;
+                @SuppressWarnings("unused")
                 float dx = event.getRawX() - mLastTouchX;
 
                 float drag;
@@ -548,6 +550,7 @@ class TouchResponse {
                     mAnchorDpDt[1] = minSize * mTouchDirectionY;
                     mAnchorDpDt[0] = minSize * mTouchDirectionX;
                 }
+                @SuppressWarnings("unused")
                 float movmentInDir = mTouchDirectionX * mAnchorDpDt[0]
                         + mTouchDirectionY * mAnchorDpDt[1];
                 float velocity;
@@ -628,6 +631,7 @@ class TouchResponse {
 
         float pos = mMotionLayout.getProgress();
         mMotionLayout.getAnchorDpDt(mTouchAnchorId, pos, mTouchAnchorX, mTouchAnchorY, mAnchorDpDt);
+        @SuppressWarnings("unused")
         float movmentInDir = mTouchDirectionX * mAnchorDpDt[0] + mTouchDirectionY * mAnchorDpDt[1];
         float velocity;
         if (mTouchDirectionX != 0) {
@@ -644,6 +648,7 @@ class TouchResponse {
     }
 
     void scrollMove(float dx, float dy) {
+        @SuppressWarnings("unused")
         float drag = dx * mTouchDirectionX + dy * mTouchDirectionY;
         if (true) { // Todo evaluate || Math.abs(drag) > 10 || mDragStarted) {
             float pos = mMotionLayout.getProgress();
