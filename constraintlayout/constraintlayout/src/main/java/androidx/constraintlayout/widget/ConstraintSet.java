@@ -1809,15 +1809,11 @@ public class ConstraintSet {
                             stringBuilder.append(" = \"");
                             stringBuilder.append(fValue);
                             stringBuilder.append("\"\n");
-
                         }
                     }
-
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error accessing ConstraintSet field", e);
                 }
-
-
             }
         }
     }
@@ -4568,9 +4564,9 @@ public class ConstraintSet {
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 
@@ -4688,9 +4684,9 @@ public class ConstraintSet {
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 
@@ -5931,7 +5927,7 @@ public class ConstraintSet {
                         return field.getName();
                     }
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error accessing ConstraintSet field", e);
                 }
 
             }

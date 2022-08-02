@@ -1296,12 +1296,12 @@ public class MotionScene {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 
@@ -1374,13 +1374,13 @@ public class MotionScene {
                 Log.v(TAG, getLine(context, resourceId, includeParser)
                         + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, includeParser)
                         + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
         return UNSET;
     }
