@@ -461,7 +461,7 @@ public class Grid extends VirtualLayout {
      * @param str spans/skips in string format
      * @return true if it is valid else false
      */
-    private boolean isSpansValid(CharSequence str) {
+    private boolean isSpansValid(@SuppressWarnings("unused") CharSequence str) {
         // TODO: check string has a valid format.
         return true;
     }
@@ -472,7 +472,7 @@ public class Grid extends VirtualLayout {
      * @param str rowWeights/columnsWeights in string format
      * @return true if it is valid else false
      */
-    private boolean isWeightsValid(String str) {
+    private boolean isWeightsValid(@SuppressWarnings("unused") String str) {
         // TODO: check string has a valid format.
         return true;
     }

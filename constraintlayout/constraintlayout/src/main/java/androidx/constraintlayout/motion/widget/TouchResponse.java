@@ -642,7 +642,7 @@ class TouchResponse {
         if (!Float.isNaN(velocity)) {
             pos += velocity / 3; // TODO calibration & animation speed based on velocity
         }
-        if (pos != 0.0f && pos != 1.0f & mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
+        if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
             mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, velocity);
         }
     }

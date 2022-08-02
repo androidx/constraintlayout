@@ -49,6 +49,8 @@ import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 import androidx.core.widget.TextViewCompat;
 
+import java.util.Objects;
+
 /**
  * This class is designed to create complex animated single line text in MotionLayout.
  * Its API are designed with animation in mine.
@@ -84,7 +86,6 @@ public class MotionLabel extends View implements FloatLayout {
     private String mText = "Hello World";
     boolean mNotBuilt = true;
     private Rect mTextBounds = new Rect();
-    private CharSequence mTransformed;
     private int mPaddingLeft = 1;
     private int mPaddingRight = 1;
     private int mPaddingTop = 1;
@@ -128,7 +129,7 @@ public class MotionLabel extends View implements FloatLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setUpTheme(context, attrs);
+        setUpTheme(context);
 
         if (attrs != null) {
             TypedArray a = getContext()
@@ -344,7 +345,7 @@ public class MotionLabel extends View implements FloatLayout {
         return (boxHeight - textHeight) * (1 - mTextPanY) / 2 -  (scale * fm.ascent);
     }
 
-    private void setUpTheme(Context context, @Nullable AttributeSet attrs) {
+    private void setUpTheme(Context context) {
         TypedValue typedValue = new TypedValue();
         final Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
@@ -626,7 +627,7 @@ public class MotionLabel extends View implements FloatLayout {
      * @param tf
      */
     public void setTypeface(Typeface tf) {
-        if (mPaint.getTypeface() != tf) {
+        if (!Objects.equals(mPaint.getTypeface(), tf)) {
             mPaint.setTypeface(tf);
             if (mLayout != null) {
                 mLayout = null;

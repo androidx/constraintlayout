@@ -1793,9 +1793,10 @@ public class ConstraintLayout extends ViewGroup {
         }
         mDirtyHierarchy |= dynamicUpdateConstraints(widthMeasureSpec,  heightMeasureSpec);
 
-        boolean sameSpecsAsPreviousMeasure = (mOnMeasureWidthMeasureSpec == widthMeasureSpec
+        @SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions"})  // TODO re-enable
+        boolean sameSpecsAsPreviousMeasure =
+                false && (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
-        sameSpecsAsPreviousMeasure = false; //TODO re-enable
         if (!mDirtyHierarchy && !sameSpecsAsPreviousMeasure) {
             // it's possible that, if we are already marked for a relayout,
             // a view would not call to request a layout;

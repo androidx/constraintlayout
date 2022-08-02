@@ -412,7 +412,8 @@ public class KeyTrigger extends Key {
                     VT_POSITIVE_CROSS);
         }
 
-        public static void read(KeyTrigger c, TypedArray a, Context context) {
+        public static void read(KeyTrigger c, TypedArray a,
+                @SuppressWarnings("unused") Context context) {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
