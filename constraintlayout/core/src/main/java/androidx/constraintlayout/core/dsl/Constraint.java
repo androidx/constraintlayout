@@ -33,20 +33,14 @@ public class Constraint {
     }
 
     public class VAnchor extends Anchor {
-        final VSide mSide;
-
         VAnchor(VSide side) {
             super(Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 
     public class HAnchor extends Anchor {
-        final HSide mSide;
-
         HAnchor(HSide side) {
             super(Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 
