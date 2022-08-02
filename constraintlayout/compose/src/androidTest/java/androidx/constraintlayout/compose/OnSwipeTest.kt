@@ -110,7 +110,7 @@ class OnSwipeTest {
         // Wait a frame for the Touch Up animation to start
         rule.mainClock.advanceTimeByFrame()
         rule.waitForIdle()
-        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(170.54.dp, 9.5.dp)
+        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(170.dp, 10.dp)
     }
 }
 
@@ -149,7 +149,8 @@ private fun OnSwipeTestJson() {
                 direction: 'end',
                 side: 'end',
                 mode: 'spring',
-                touchUp: 'neverCompleteStart'
+                touchUp: 'neverCompleteStart',
+                stopThreshold: 0.0001
               }
            }
          }
@@ -200,7 +201,8 @@ private fun OnSwipeTestDsl() {
                 direction = SwipeDirection.End,
                 side = SwipeSide.Right,
                 mode = SwipeMode.Spring,
-                onTouchUp = SwipeTouchUp.NeverCompleteStart
+                onTouchUp = SwipeTouchUp.NeverCompleteStart,
+                springThreshold = 0.0001f
             )
         },
         progress = 0.0f
