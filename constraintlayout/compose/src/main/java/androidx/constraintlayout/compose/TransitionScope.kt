@@ -145,6 +145,7 @@ class TransitionScope internal constructor() {
             onSwipeObject.putString("anchor", it.anchor.toString())
             onSwipeObject.putString("side", it.side.propName)
             onSwipeObject.putString("touchUp", it.onTouchUp.propName)
+            onSwipeObject.putNumber("stopThreshold", it.springThreshold)
         }
         return containerObject
     }
@@ -327,7 +328,9 @@ data class OnSwipe(
     val side: SwipeSide,
     val direction: SwipeDirection,
     val mode: SwipeMode = SwipeMode.Velocity,
-    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete
+    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete,
+    // TODO: Consider using proper default + consider making this part of SwipeModes
+    val springThreshold: Float = Float.NaN
 )
 
 class SwipeMode internal constructor(internal val propName: String) {
