@@ -135,7 +135,6 @@ public class MotionLabel extends View implements FloatLayout {
                     .obtainStyledAttributes(attrs, R.styleable.MotionLabel);
             final int count = a.getIndexCount();
 
-            int k = 0;
             for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.MotionLabel_android_text) {
@@ -203,7 +202,6 @@ public class MotionLabel extends View implements FloatLayout {
     }
 
     Bitmap blur(Bitmap bitmapOriginal, int factor) {
-        Long t = System.nanoTime();
         int w = bitmapOriginal.getWidth();
         int h = bitmapOriginal.getHeight();
 
@@ -287,6 +285,7 @@ public class MotionLabel extends View implements FloatLayout {
         if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == 0) {
             gravity |= Gravity.TOP;
         }
+        @SuppressWarnings("unused")
         boolean newLayout = false;
         if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
                 != (mGravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)) {

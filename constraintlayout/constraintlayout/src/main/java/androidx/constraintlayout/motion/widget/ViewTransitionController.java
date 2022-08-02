@@ -154,8 +154,7 @@ public class ViewTransitionController {
                 for (int i = 0; i < count; i++) {
                     View view = mMotionLayout.getChildAt(i);
                     if (viewTransition.matchesView(view)) {
-                        int id = view.getId();
-
+                        @SuppressWarnings("unused") int id = view.getId();
                         mRelatedViews.add(view);
                     }
                 }

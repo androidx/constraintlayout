@@ -4541,19 +4541,17 @@ public class ConstraintSet {
     public void load(Context context, int resourceId) {
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
-        String document = null;
-        String tagName = null;
         try {
-
             for (int eventType = parser.getEventType();
                     eventType != XmlResourceParser.END_DOCUMENT;
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
-                        document = parser.getName();
+                    case XmlResourceParser.END_TAG:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         Constraint constraint = fillFromAttributeList(context,
                                 Xml.asAttributeSet(parser), false);
                         if (tagName.equalsIgnoreCase("Guideline")) {
@@ -4565,11 +4563,6 @@ public class ConstraintSet {
                                     + " " + constraint.mViewId);
                         }
                         mConstraints.put(constraint.mViewId, constraint);
-                        break;
-                    case XmlResourceParser.END_TAG:
-                        tagName = null;
-                        break;
-                    case XmlResourceParser.TEXT:
                         break;
                 }
             }

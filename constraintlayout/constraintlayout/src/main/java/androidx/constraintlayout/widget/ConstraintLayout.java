@@ -1032,15 +1032,11 @@ public class ConstraintLayout extends ViewGroup {
                 return true;
             }
             int lastMode = MeasureSpec.getMode(lastMeasureSpec);
-            int lastSize = MeasureSpec.getSize(lastMeasureSpec);
             int mode = MeasureSpec.getMode(spec);
             int size = MeasureSpec.getSize(spec);
-            if (mode == MeasureSpec.EXACTLY
+            return mode == MeasureSpec.EXACTLY
                     && (lastMode == MeasureSpec.AT_MOST || lastMode == MeasureSpec.UNSPECIFIED)
-                    && widgetSize == size) {
-                return true;
-            }
-            return false;
+                    && widgetSize == size;
         }
 
         @Override

@@ -272,7 +272,7 @@ public class MotionController {
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
         double[] velocity = new double[4];
-        int[] temp = new int[4];
+        @SuppressWarnings("unused") int[] temp = new int[4];
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel, 0);
@@ -385,9 +385,13 @@ public class MotionController {
      */
     void buildBounds(float[] bounds, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
+        @SuppressWarnings("unused")
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
+        @SuppressWarnings("unused")
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
+        @SuppressWarnings("unused")
         ViewOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
+        @SuppressWarnings("unused")
         ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
@@ -557,7 +561,7 @@ public class MotionController {
     String[] mAttributeTable;
 
     int getAttributeValues(String attributeType, float[] points, int pointCount) {
-        float mils = 1.0f / (pointCount - 1);
+        @SuppressWarnings("unused") float mils = 1.0f / (pointCount - 1);
         SplineSet spline = mAttributesMap.get(attributeType);
         if (spline == null) {
             return -1;
@@ -1299,7 +1303,6 @@ public class MotionController {
         float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
-            float pin = position;
             float steps = 1.0f / mQuantizeMotionSteps; // the length of a step
             float jump = (float) Math.floor(position / steps) * steps; // step jumps
             float section = (position % steps) / steps; // float from 0 to 1 in a step

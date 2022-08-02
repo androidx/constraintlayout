@@ -162,8 +162,6 @@ class MotionPaths implements Comparable<MotionPaths> {
         this.mPosition = this.mTime;
         mWidth = (int) (s.mWidth + scaleX * scaleWidth);
         mHeight = (int) (s.mHeight + scaleY * scaleHeight);
-        float startfactor = 1 - position;
-        float endfactor = position;
         switch (c.mPositionType) {
             case KeyPosition.TYPE_SCREEN:
                 this.mX = Float.isNaN(c.mPercentX) ? (position * (e.mX - s.mX) + s.mX) : c.mPercentX
@@ -171,15 +169,9 @@ class MotionPaths implements Comparable<MotionPaths> {
                 this.mY = Float.isNaN(c.mPercentY)
                         ? (position * (e.mY - s.mY) + s.mY) : c.mPercentY;
                 break;
-
-            case KeyPosition.TYPE_PATH:
-                this.mX = (Float.isNaN(c.mPercentX)
-                        ? position : c.mPercentX) * (e.mX - s.mX) + s.mX;
-                this.mY = (Float.isNaN(c.mPercentY)
-                        ? position : c.mPercentY) * (e.mY - s.mY) + s.mY;
-                break;
             default:
             case KeyPosition.TYPE_CARTESIAN:
+            case KeyPosition.TYPE_PATH:
                 this.mX = (Float.isNaN(c.mPercentX)
                         ? position : c.mPercentX) * (e.mX - s.mX) + s.mX;
                 this.mY = (Float.isNaN(c.mPercentY)
@@ -477,11 +469,11 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void getBounds(int[] toUse, double[] data, float[] point, int offset) {
-        float v_x = mX;
-        float v_y = mY;
+        @SuppressWarnings("unused") float v_x = mX;
+        @SuppressWarnings("unused") float v_y = mY;
         float v_width = mWidth;
         float v_height = mHeight;
-        float translationX = 0, translationY = 0;
+        @SuppressWarnings("unused") float translationX = 0, translationY = 0;
         for (int i = 0; i < toUse.length; i++) {
             float value = (float) data[i];
 
@@ -523,7 +515,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         float dv_y = 0;
         float dv_width = 0;
         float dv_height = 0;
-        float delta_path = 0;
+        @SuppressWarnings("unused") float delta_path = 0;
         float path_rotate = Float.NaN;
         String mod;
 
@@ -681,19 +673,17 @@ class MotionPaths implements Comparable<MotionPaths> {
         float v_y = mY;
         float v_width = mWidth;
         float v_height = mHeight;
-        float delta_path = 0;
+        @SuppressWarnings("unused") float delta_path = 0;
         float rotation = 0;
-        float alpha = 0;
-        float rotationX = 0;
-        float rotationY = 0;
+        @SuppressWarnings("unused") float alpha = 0;
+        @SuppressWarnings("unused") float rotationX = 0;
+        @SuppressWarnings("unused") float rotationY = 0;
         float scaleX = 1;
         float scaleY = 1;
         float pivotX = Float.NaN;
         float pivotY = Float.NaN;
         float translationX = 0;
         float translationY = 0;
-
-        String mod;
 
         for (int i = 0; i < toUse.length; i++) {
             float value = (float) data[i];
@@ -828,14 +818,14 @@ class MotionPaths implements Comparable<MotionPaths> {
         float deltaScaleX = 0;
         float deltaScaleY = 0;
 
-        float mPathRotate = Float.NaN;
+        @SuppressWarnings("unused") float mPathRotate = Float.NaN;
         float deltaTranslationX = 0;
         float deltaTranslationY = 0;
 
         String mod = " dd = ";
         for (int i = 0; i < toUse.length; i++) {
             float deltaV = (float) deltaData[i];
-            float value = (float) data[i];
+            @SuppressWarnings("unused") float value = (float) data[i];
             if (DEBUG) {
                 mod += " , D" + sNames[toUse[i]] + "/Dt= " + deltaV;
             }
@@ -967,6 +957,7 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     public void configureRelativeTo(MotionController toOrbit) {
+        @SuppressWarnings("unused")
         double[] p = toOrbit.getPos(mProgress); // get the position in the orbit
     }
 }
