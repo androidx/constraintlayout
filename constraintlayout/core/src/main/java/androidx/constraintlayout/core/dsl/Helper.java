@@ -32,7 +32,7 @@ public class Helper {
     protected HelperType type = null;
     protected String config;
     protected Map<String, String> configMap = new HashMap<>();
-    static protected Map<Constraint.Side, String> sideMap = new HashMap<>();
+    final static protected Map<Constraint.Side, String> sideMap = new HashMap<>();
     static {
         sideMap.put(Constraint.Side.LEFT, "'left'");
         sideMap.put(Constraint.Side.RIGHT, "'right'");
@@ -41,9 +41,9 @@ public class Helper {
         sideMap.put(Constraint.Side.START, "'start'");
         sideMap.put(Constraint.Side.END, "'end'");
         sideMap.put(Constraint.Side.BASELINE, "'baseline'");
-    };
+    }
 
-    static Map<Helper.Type, String> typeMap = new HashMap<>();
+    final static protected Map<Helper.Type, String> typeMap = new HashMap<>();
     static {
         typeMap.put(Type.VERTICAL_GUIDELINE, "vGuideline");
         typeMap.put(Type.HORIZONTAL_GUIDELINE, "hGuideline");

@@ -125,14 +125,14 @@ public class Ref {
      * @param obj object to be parsed
      * @return a number
      */
-    @SuppressWarnings("Finally")
     static public float parseFloat(Object obj) {
         float val = Float.NaN;
         try {
             val = Float.parseFloat(obj.toString());
-        } finally {
-            return val;
+        } catch (Exception e) {
+            // ignore
         }
+        return val;
     }
 
     static public Ref parseStringToRef(String str) {

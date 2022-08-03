@@ -29,12 +29,12 @@ public abstract class Chain extends Helper {
 
     private Style mStyle = null;
     protected ArrayList<Ref> references = new ArrayList<>();
-    static protected Map<Style, String> styleMap = new HashMap<>();
+    final static protected Map<Style, String> styleMap = new HashMap<>();
     static {
         styleMap.put(Style.SPREAD, "'spread'");
         styleMap.put(Style.SPREAD_INSIDE, "'spread_inside'");
         styleMap.put(Style.PACKED, "'packed'");
-    };
+    }
 
     public Chain(String name) {
         super(name, new HelperType(""));
