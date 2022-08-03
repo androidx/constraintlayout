@@ -19,11 +19,8 @@ package androidx.constraintlayout.core.dsl;
 public class VChain extends Chain {
 
     public class VAnchor extends Anchor {
-        final Constraint.VSide mSide;
-
         VAnchor(Constraint.VSide side) {
             super(Constraint.Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 
@@ -113,7 +110,7 @@ public class VChain extends Chain {
      * @param margin value of the margin
      */
     public void linkToBottom(Constraint.VAnchor anchor, int margin) {
-        linkToBottom(anchor, margin);
+        linkToBottom(anchor, margin, Integer.MIN_VALUE);
     }
 
     /**
