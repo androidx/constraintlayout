@@ -262,8 +262,8 @@ public class Flow extends VirtualLayout {
             return;
         }
 
-        int width = 0;
-        int height = 0;
+        @SuppressWarnings("unused") int width = 0;
+        @SuppressWarnings("unused") int height = 0;
         int paddingLeft = getPaddingLeft();
         int paddingRight = getPaddingRight();
         int paddingTop = getPaddingTop();

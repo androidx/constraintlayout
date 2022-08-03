@@ -161,8 +161,8 @@ public class MotionKeyPosition extends MotionKey {
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
         float endCenterY = end.centerY();
-        float pathVectorX = endCenterX - startCenterX;
-        float pathVectorY = endCenterY - startCenterY;
+        @SuppressWarnings("unused") float pathVectorX = endCenterX - startCenterX;
+        @SuppressWarnings("unused") float pathVectorY = endCenterY - startCenterY;
         MotionWidget viewGroup = ((MotionWidget) view.getParent());
         int width = viewGroup.getWidth();
         int height = viewGroup.getHeight();

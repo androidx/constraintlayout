@@ -46,7 +46,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     private int mWaveShape = 0;
 
     // TODO add support of custom wave shapes in KeyTimeCycle
-    private String mCustomWaveShape = null;
+    @SuppressWarnings("unused") private String mCustomWaveShape = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     public static final int KEY_TYPE = 3;

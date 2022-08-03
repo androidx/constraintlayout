@@ -39,7 +39,7 @@ public class Oscillator {
     MonotonicCurveFit mCustomCurve;
     int mType;
     double mPI2 = Math.PI * 2;
-    private boolean mNormalized = false;
+    @SuppressWarnings("unused") private boolean mNormalized = false;
 
     public Oscillator() {
     }

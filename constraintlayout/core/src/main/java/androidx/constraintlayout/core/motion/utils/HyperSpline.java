@@ -80,7 +80,6 @@ public class HyperSpline {
      */
     public void getVelocity(double p, double[] v) {
         double pos = p * mTotalLength;
-        double sum = 0;
         int k = 0;
         for (; k < mCurveLength.length - 1 && mCurveLength[k] < pos; k++) {
             pos -= mCurveLength[k];
@@ -95,7 +94,6 @@ public class HyperSpline {
      */
     public void getPos(double p, double[] x) {
         double pos = p * mTotalLength;
-        double sum = 0;
         int k = 0;
         for (; k < mCurveLength.length - 1 && mCurveLength[k] < pos; k++) {
             pos -= mCurveLength[k];
@@ -110,7 +108,6 @@ public class HyperSpline {
      */
     public void getPos(double p, float[] x) {
         double pos = p * mTotalLength;
-        double sum = 0;
         int k = 0;
         for (; k < mCurveLength.length - 1 && mCurveLength[k] < pos; k++) {
             pos -= mCurveLength[k];
@@ -125,7 +122,6 @@ public class HyperSpline {
      */
     public double getPos(double p, int splineNumber) {
         double pos = p * mTotalLength;
-        double sum = 0;
         int k = 0;
         for (; k < mCurveLength.length - 1 && mCurveLength[k] < pos; k++) {
             pos -= mCurveLength[k];
@@ -140,10 +136,10 @@ public class HyperSpline {
         double sum = 0;
 
         int n = curve.length;
-        double[] old = new double[curve.length];
+        double[] old = new double[n];
         for (double i = 0; i < 1; i += .1) {
             double s = 0;
-            for (int j = 0; j < curve.length; j++) {
+            for (int j = 0; j < n; j++) {
                 double tmp = old[j];
                 tmp -= old[j] = curve[j].eval(i);
                 s += tmp * tmp;
@@ -154,7 +150,7 @@ public class HyperSpline {
 
         }
         double s = 0;
-        for (int j = 0; j < curve.length; j++) {
+        for (int j = 0; j < n; j++) {
             double tmp = old[j];
             tmp -= old[j] = curve[j].eval(1);
             s += tmp * tmp;

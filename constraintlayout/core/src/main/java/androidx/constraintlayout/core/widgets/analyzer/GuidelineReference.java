@@ -71,7 +71,7 @@ class GuidelineReference extends WidgetRun {
         Guideline guideline = (Guideline) mWidget;
         int relativeBegin = guideline.getRelativeBegin();
         int relativeEnd = guideline.getRelativeEnd();
-        float percent = guideline.getRelativePercent();
+        @SuppressWarnings("unused") float percent = guideline.getRelativePercent();
         if (guideline.getOrientation() == ConstraintWidget.VERTICAL) {
             if (relativeBegin != -1) {
                 start.mTargets.add(mWidget.mParent.mHorizontalRun.start);

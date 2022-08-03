@@ -829,7 +829,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
             mSystem.newgraphOptimizer = true;
         }
 
-        int countSolve = 0;
+        @SuppressWarnings("unused") int countSolve = 0;
         final List<ConstraintWidget> allChildren = mChildren;
         boolean hasWrapContent = getHorizontalDimensionBehaviour() == WRAP_CONTENT
                 || getVerticalDimensionBehaviour() == WRAP_CONTENT;

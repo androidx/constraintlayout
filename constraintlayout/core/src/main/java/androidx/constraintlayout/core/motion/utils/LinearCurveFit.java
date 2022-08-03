@@ -30,13 +30,12 @@ public class LinearCurveFit extends CurveFit {
     double[] mSlopeTemp;
 
     public LinearCurveFit(double[] time, double[][] y) {
-        final int n = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
         mT = time;
         mY = y;
         if (dim > 2) {
-            double sum = 0;
+            @SuppressWarnings("unused") double sum = 0;
             double lastx = 0, lasty = 0;
             for (int i = 0; i < time.length; i++) {
                 double px = y[i][0];
@@ -268,7 +267,6 @@ public class LinearCurveFit extends CurveFit {
         for (int i = 0; i < n - 1; i++) {
             if (t <= mT[i + 1]) {
                 double h = mT[i + 1] - mT[i];
-                double x = (t - mT[i]) / h;
                 for (int j = 0; j < dim; j++) {
                     double y1 = mY[i][j];
                     double y2 = mY[i + 1][j];
@@ -296,7 +294,6 @@ public class LinearCurveFit extends CurveFit {
         for (int i = 0; i < n - 1; i++) {
             if (t <= mT[i + 1]) {
                 double h = mT[i + 1] - mT[i];
-                double x = (t - mT[i]) / h;
                 double y1 = mY[i][j];
                 double y2 = mY[i + 1][j];
                 return (y2 - y1) / h;

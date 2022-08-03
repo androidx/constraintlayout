@@ -254,7 +254,7 @@ public abstract class SplineSet {
 
     private static class CoreSpline extends SplineSet {
         String mType;
-        long mStart;
+        @SuppressWarnings("unused") long mStart;
 
         CoreSpline(String str, long currentTime) {
             mType = str;

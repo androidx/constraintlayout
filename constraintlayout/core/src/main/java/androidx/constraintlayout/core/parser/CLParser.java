@@ -40,10 +40,10 @@ public class CLParser {
      * @TODO: add description
      */
     public CLObject parse() throws CLParsingException {
-        CLObject root = null;
+        @SuppressWarnings("unused") CLObject root = null;
 
         char[] content = mContent.toCharArray();
-        CLElement currentElement = null;
+        @SuppressWarnings("unused") CLElement currentElement = null;
 
         final int length = content.length;
 

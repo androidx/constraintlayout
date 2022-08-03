@@ -25,10 +25,10 @@ import java.util.HashSet;
 public class MotionKeyAttributes extends MotionKey {
     static final String NAME = "KeyAttribute";
     private static final String TAG = "KeyAttributes";
-    private static final boolean DEBUG = false;
-    private String mTransitionEasing;
+    @SuppressWarnings("unused") private static final boolean DEBUG = false;
+    @SuppressWarnings("unused") private String mTransitionEasing;
     private int mCurveFit = -1;
-    private int mVisibility = 0;
+    @SuppressWarnings("unused") private int mVisibility = 0;
     private float mAlpha = Float.NaN;
     private float mElevation = Float.NaN;
     private float mRotation = Float.NaN;

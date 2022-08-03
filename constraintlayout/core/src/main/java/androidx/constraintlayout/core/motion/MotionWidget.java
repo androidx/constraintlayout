@@ -31,12 +31,12 @@ public class MotionWidget implements TypedValues {
 
     public static final int VISIBILITY_MODE_NORMAL = 0;
     public static final int VISIBILITY_MODE_IGNORE = 1;
-    private static final int INTERNAL_MATCH_PARENT = -1;
-    private static final int INTERNAL_WRAP_CONTENT = -2;
+    @SuppressWarnings("unused") private static final int INTERNAL_MATCH_PARENT = -1;
+    @SuppressWarnings("unused") private static final int INTERNAL_WRAP_CONTENT = -2;
     public static final int INVISIBLE = 0;
     public static final int VISIBLE = 4;
-    private static final int INTERNAL_MATCH_CONSTRAINT = -3;
-    private static final int INTERNAL_WRAP_CONTENT_CONSTRAINED = -4;
+    @SuppressWarnings("unused") private static final int INTERNAL_MATCH_CONSTRAINT = -3;
+    @SuppressWarnings("unused") private static final int INTERNAL_WRAP_CONTENT_CONSTRAINED = -4;
 
     public static final int ROTATE_NONE = 0;
     public static final int ROTATE_PORTRATE_OF_RIGHT = 1;
@@ -70,8 +70,8 @@ public class MotionWidget implements TypedValues {
         public String mQuantizeInterpolatorString = null;
         public int mQuantizeInterpolatorType = INTERPOLATOR_UNDEFINED; // undefined
         public int mQuantizeInterpolatorID = -1;
-        private static final int INTERPOLATOR_REFERENCE_ID = -2;
-        private static final int SPLINE_STRING = -1;
+        @SuppressWarnings("unused") private static final int INTERPOLATOR_REFERENCE_ID = -2;
+        @SuppressWarnings("unused") private static final int SPLINE_STRING = -1;
         private static final int INTERPOLATOR_UNDEFINED = -3;
     }
 
