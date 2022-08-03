@@ -181,6 +181,9 @@ public class GridEngine {
      * @return true if it is valid else false
      */
     private boolean isSpansValid(CharSequence str) {
+        if (str == null) {
+            return false;
+        }
         return true;
     }
 

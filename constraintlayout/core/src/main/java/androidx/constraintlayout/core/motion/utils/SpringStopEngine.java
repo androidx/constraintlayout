@@ -24,11 +24,11 @@ package androidx.constraintlayout.core.motion.utils;
  */
 public class SpringStopEngine implements StopEngine {
     double mDamping = 0.5f;
-    private static final double UNSET = Double.MAX_VALUE;
-    private boolean mInitialized = false;
+    @SuppressWarnings("unused") private static final double UNSET = Double.MAX_VALUE;
+    @SuppressWarnings("unused") private boolean mInitialized = false;
     private double mStiffness;
     private double mTargetPos;
-    private double mLastVelocity;
+    @SuppressWarnings("unused") private double mLastVelocity;
     private float mLastTime;
     private float mPos;
     private float mV;

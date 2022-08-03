@@ -24,7 +24,7 @@ import java.util.Comparator;
  */
 public class PriorityGoalRow extends ArrayRow {
     private static final float EPSILON = 0.0001f;
-    private static final boolean DEBUG = false;
+    @SuppressWarnings("unused") private static final boolean DEBUG = false;
 
     private int mTableSize = 128;
     private SolverVariable[] mArrayGoals = new SolverVariable[mTableSize];

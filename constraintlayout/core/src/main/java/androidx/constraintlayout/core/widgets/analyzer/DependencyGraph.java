@@ -48,7 +48,7 @@ public class DependencyGraph {
     private static final boolean DEBUG = false;
 
     // TODO: Unused, should we delete?
-    private ArrayList<RunGroup> mRunGroups = new ArrayList<>();
+    @SuppressWarnings("unused") private ArrayList<RunGroup> mRunGroups = new ArrayList<>();
 
     public DependencyGraph(ConstraintWidgetContainer container) {
         this.mWidgetcontainer = container;

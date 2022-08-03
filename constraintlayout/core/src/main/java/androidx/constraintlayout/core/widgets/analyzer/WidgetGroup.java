@@ -155,7 +155,7 @@ public class WidgetGroup {
         ConstraintWidgetContainer container =
                 (ConstraintWidgetContainer) widgets.get(0).getParent();
         system.reset();
-        boolean prevDebug = LinearSystem.FULL_DEBUG;
+        @SuppressWarnings("unused") boolean prevDebug = LinearSystem.FULL_DEBUG;
         container.addToSolver(system, false);
         for (int i = 0; i < widgets.size(); i++) {
             ConstraintWidget widget = widgets.get(i);

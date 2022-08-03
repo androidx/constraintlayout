@@ -26,9 +26,9 @@ public class VirtualLayout extends HelperWidget {
 
     private int mPaddingTop = 0;
     private int mPaddingBottom = 0;
-    private int mPaddingLeft = 0;
-    private int mPaddingRight = 0;
-    private int mPaddingStart = 0;
+    @SuppressWarnings("unused") private int mPaddingLeft = 0;
+    @SuppressWarnings("unused") private int mPaddingRight = 0;
+    @SuppressWarnings("unused") private int mPaddingStart = 0;
     private int mPaddingEnd = 0;
     private int mResolvedPaddingLeft = 0;
     private int mResolvedPaddingRight = 0;

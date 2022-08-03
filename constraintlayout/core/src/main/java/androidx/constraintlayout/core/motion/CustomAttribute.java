@@ -39,12 +39,12 @@ package androidx.constraintlayout.core.motion;
  */
 public class CustomAttribute {
     private static final String TAG = "TransitionLayout";
-    private boolean mMethod = false;
+    @SuppressWarnings("unused") private boolean mMethod = false;
     String mName;
     private AttributeType mType;
     private int mIntegerValue;
     private float mFloatValue;
-    private String mStringValue;
+    @SuppressWarnings("unused") private String mStringValue;
     boolean mBooleanValue;
     private int mColorValue;
 

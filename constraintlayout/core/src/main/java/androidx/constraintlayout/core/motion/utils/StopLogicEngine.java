@@ -34,7 +34,7 @@ public class StopLogicEngine implements StopEngine {
     private boolean mBackwards = false;
     private float mStartPosition;
     private float mLastPosition;
-    private boolean mDone = false;
+    @SuppressWarnings("unused") private boolean mDone = false;
     private static final float EPSILON = 0.00001f;
 
     /**

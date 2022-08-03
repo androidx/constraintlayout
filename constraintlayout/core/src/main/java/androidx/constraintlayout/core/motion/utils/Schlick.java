@@ -21,7 +21,7 @@ package androidx.constraintlayout.core.motion.utils;
  * curve for use in an easing function including quantize functions
  */
 public class Schlick extends Easing {
-    private static final boolean DEBUG = false;
+    @SuppressWarnings("unused") private static final boolean DEBUG = false;
     double mS, mT;
     double mEps;
 
