@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.widgets.ConstraintWidget
+import java.util.Objects
 
 /**
  * Common scope for [ConstraintLayoutScope] and [ConstraintSetScope], the content being shared
@@ -53,24 +54,41 @@ abstract class ConstraintLayoutBaseScope {
     /**
      * Represents a vertical anchor (e.g. start/end of a layout, guideline) that layouts
      * can link to in their `Modifier.constrainAs` or `constrain` blocks.
+     *
+     * @param reference The [LayoutReference] that this anchor belongs to.
      */
     @Stable
-    data class VerticalAnchor internal constructor(internal val id: Any, internal val index: Int)
+    data class VerticalAnchor internal constructor(
+        internal val id: Any,
+        internal val index: Int,
+        val reference: LayoutReference
+    )
 
     /**
      * Represents a horizontal anchor (e.g. top/bottom of a layout, guideline) that layouts
      * can link to in their `Modifier.constrainAs` or `constrain` blocks.
+     *
+     * @param reference The [LayoutReference] that this anchor belongs to.
      */
     @Stable
-    data class HorizontalAnchor internal constructor(internal val id: Any, internal val index: Int)
+    data class HorizontalAnchor internal constructor(
+        internal val id: Any,
+        internal val index: Int,
+        val reference: LayoutReference
+    )
 
     /**
      * Represents a horizontal anchor corresponding to the [FirstBaseline] of a layout that other
      * layouts can link to in their `Modifier.constrainAs` or `constrain` blocks.
+     *
+     * @param reference The [LayoutReference] that this anchor belongs to.
      */
     // TODO(popam): investigate if this can be just a HorizontalAnchor
     @Stable
-    data class BaselineAnchor internal constructor(internal val id: Any)
+    data class BaselineAnchor internal constructor(
+        internal val id: Any,
+        val reference: LayoutReference
+    )
 
     /**
      * Specifies additional constraints associated to the horizontal chain identified with [ref].
@@ -106,7 +124,7 @@ abstract class ConstraintLayoutBaseScope {
         }
         updateHelpersHashCode(1)
         updateHelpersHashCode(offset.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -117,7 +135,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.verticalGuideline(id).apply { start(offset) } }
         updateHelpersHashCode(2)
         updateHelpersHashCode(offset.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -138,7 +156,7 @@ abstract class ConstraintLayoutBaseScope {
         }
         updateHelpersHashCode(3)
         updateHelpersHashCode(fraction.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -152,7 +170,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.verticalGuideline(id).apply { percent(fraction) } }
         updateHelpersHashCode(4)
         updateHelpersHashCode(fraction.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -167,7 +185,7 @@ abstract class ConstraintLayoutBaseScope {
         }
         updateHelpersHashCode(5)
         updateHelpersHashCode(offset.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -178,7 +196,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.verticalGuideline(id).apply { end(offset) } }
         updateHelpersHashCode(6)
         updateHelpersHashCode(offset.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -207,7 +225,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.horizontalGuideline(id).apply { start(offset) } }
         updateHelpersHashCode(7)
         updateHelpersHashCode(offset.hashCode())
-        return HorizontalAnchor(id, 0)
+        return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -220,7 +238,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.horizontalGuideline(id).apply { percent(fraction) } }
         updateHelpersHashCode(8)
         updateHelpersHashCode(fraction.hashCode())
-        return HorizontalAnchor(id, 0)
+        return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -231,7 +249,7 @@ abstract class ConstraintLayoutBaseScope {
         tasks.add { state -> state.horizontalGuideline(id).apply { end(offset) } }
         updateHelpersHashCode(9)
         updateHelpersHashCode(offset.hashCode())
-        return HorizontalAnchor(id, 0)
+        return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -247,7 +265,7 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a start barrier, containing the specified elements.
      */
     fun createStartBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createHelperId()
@@ -264,14 +282,14 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(10)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
      * Creates and returns a left barrier, containing the specified elements.
      */
     fun createAbsoluteLeftBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createHelperId()
@@ -283,14 +301,14 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(11)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
      * Creates and returns a top barrier, containing the specified elements.
      */
     fun createTopBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): HorizontalAnchor {
         val id = createHelperId()
@@ -302,14 +320,14 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(12)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return HorizontalAnchor(id, 0)
+        return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
      * Creates and returns an end barrier, containing the specified elements.
      */
     fun createEndBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createHelperId()
@@ -326,14 +344,14 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(13)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
      * Creates and returns a right barrier, containing the specified elements.
      */
     fun createAbsoluteRightBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createHelperId()
@@ -345,14 +363,14 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(14)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return VerticalAnchor(id, 0)
+        return VerticalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
      * Creates and returns a bottom barrier, containing the specified elements.
      */
     fun createBottomBarrier(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         margin: Dp = 0.dp
     ): HorizontalAnchor {
         val id = createHelperId()
@@ -364,7 +382,7 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(15)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
-        return HorizontalAnchor(id, 0)
+        return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
     /**
@@ -375,7 +393,7 @@ abstract class ConstraintLayoutBaseScope {
      */
     // TODO(popam, b/157783937): this API should be improved
     fun createHorizontalChain(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         chainStyle: ChainStyle = ChainStyle.Spread
     ): HorizontalChainReference {
         val id = createHelperId()
@@ -405,7 +423,7 @@ abstract class ConstraintLayoutBaseScope {
      */
     // TODO(popam, b/157783937): this API should be improved
     fun createVerticalChain(
-        vararg elements: ConstrainedLayoutReference,
+        vararg elements: LayoutReference,
         chainStyle: ChainStyle = ChainStyle.Spread
     ): VerticalChainReference {
         val id = createHelperId()
@@ -429,51 +447,82 @@ abstract class ConstraintLayoutBaseScope {
 }
 
 /**
- * Represents a layout within a [ConstraintLayout].
+ * Represents a [ConstraintLayout] item that requires a unique identifier. Typically a layout or a
+ * helper such as barriers, guidelines or chains.
  */
 @Stable
-class ConstrainedLayoutReference(val id: Any) {
+abstract class LayoutReference internal constructor(internal open val id: Any) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LayoutReference
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
+
+/**
+ * Basic implementation of [LayoutReference], used as fallback for items that don't fit other
+ * implementations of [LayoutReference], such as [ConstrainedLayoutReference].
+ */
+@Stable
+internal class LayoutReferenceImpl internal constructor(id: Any) : LayoutReference(id)
+
+/**
+ * Represents a layout within a [ConstraintLayout].
+ *
+ * This is a [LayoutReference] that may be constrained to other elements.
+ */
+@Stable
+class ConstrainedLayoutReference(override val id: Any) : LayoutReference(id) {
     /**
      * The start anchor of this layout. Represents left in LTR layout direction, or right in RTL.
      */
     @Stable
-    val start = ConstraintLayoutBaseScope.VerticalAnchor(id, -2)
+    val start = ConstraintLayoutBaseScope.VerticalAnchor(id, -2, this)
 
     /**
      * The left anchor of this layout.
      */
     @Stable
-    val absoluteLeft = ConstraintLayoutBaseScope.VerticalAnchor(id, 0)
+    val absoluteLeft = ConstraintLayoutBaseScope.VerticalAnchor(id, 0, this)
 
     /**
      * The top anchor of this layout.
      */
     @Stable
-    val top = ConstraintLayoutBaseScope.HorizontalAnchor(id, 0)
+    val top = ConstraintLayoutBaseScope.HorizontalAnchor(id, 0, this)
 
     /**
      * The end anchor of this layout. Represents right in LTR layout direction, or left in RTL.
      */
     @Stable
-    val end = ConstraintLayoutBaseScope.VerticalAnchor(id, -1)
+    val end = ConstraintLayoutBaseScope.VerticalAnchor(id, -1, this)
 
     /**
      * The right anchor of this layout.
      */
     @Stable
-    val absoluteRight = ConstraintLayoutBaseScope.VerticalAnchor(id, 1)
+    val absoluteRight = ConstraintLayoutBaseScope.VerticalAnchor(id, 1, this)
 
     /**
      * The bottom anchor of this layout.
      */
     @Stable
-    val bottom = ConstraintLayoutBaseScope.HorizontalAnchor(id, 1)
+    val bottom = ConstraintLayoutBaseScope.HorizontalAnchor(id, 1, this)
 
     /**
      * The baseline anchor of this layout.
      */
     @Stable
-    val baseline = ConstraintLayoutBaseScope.BaselineAnchor(id)
+    val baseline = ConstraintLayoutBaseScope.BaselineAnchor(id, this)
 }
 
 /**
@@ -482,20 +531,20 @@ class ConstrainedLayoutReference(val id: Any) {
  * The anchors correspond to the first and last elements in the chain.
  */
 @Stable
-class HorizontalChainReference internal constructor(internal val id: Any) {
+class HorizontalChainReference internal constructor(id: Any) : LayoutReference(id) {
     /**
      * The start anchor of the first element in the chain.
      *
      * Represents left in LTR layout direction, or right in RTL.
      */
     @Stable
-    val start = ConstraintLayoutBaseScope.VerticalAnchor(id, -2)
+    val start = ConstraintLayoutBaseScope.VerticalAnchor(id, -2, this)
 
     /**
      * The left anchor of the first element in the chain.
      */
     @Stable
-    val absoluteLeft = ConstraintLayoutBaseScope.VerticalAnchor(id, 0)
+    val absoluteLeft = ConstraintLayoutBaseScope.VerticalAnchor(id, 0, this)
 
     /**
      * The end anchor of the last element in the chain.
@@ -503,13 +552,13 @@ class HorizontalChainReference internal constructor(internal val id: Any) {
      * Represents right in LTR layout direction, or left in RTL.
      */
     @Stable
-    val end = ConstraintLayoutBaseScope.VerticalAnchor(id, -1)
+    val end = ConstraintLayoutBaseScope.VerticalAnchor(id, -1, this)
 
     /**
      * The right anchor of the last element in the chain.
      */
     @Stable
-    val absoluteRight = ConstraintLayoutBaseScope.VerticalAnchor(id, 1)
+    val absoluteRight = ConstraintLayoutBaseScope.VerticalAnchor(id, 1, this)
 }
 
 /**
@@ -518,18 +567,18 @@ class HorizontalChainReference internal constructor(internal val id: Any) {
  * The anchors correspond to the first and last elements in the chain.
  */
 @Stable
-class VerticalChainReference internal constructor(internal val id: Any) {
+class VerticalChainReference internal constructor(id: Any) : LayoutReference(id) {
     /**
      * The top anchor of the first element in the chain.
      */
     @Stable
-    val top = ConstraintLayoutBaseScope.HorizontalAnchor(id, 0)
+    val top = ConstraintLayoutBaseScope.HorizontalAnchor(id, 0, this)
 
     /**
      * The bottom anchor of the last element in the chain.
      */
     @Stable
-    val bottom = ConstraintLayoutBaseScope.HorizontalAnchor(id, 1)
+    val bottom = ConstraintLayoutBaseScope.HorizontalAnchor(id, 1, this)
 }
 
 /**

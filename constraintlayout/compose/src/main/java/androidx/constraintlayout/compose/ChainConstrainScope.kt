@@ -64,12 +64,12 @@ class VerticalChainScope internal constructor(internal val id: Any) {
     val parent = ConstrainedLayoutReference(SolverState.PARENT)
 
     /**
-     * The top anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
+     * The top anchor of the chain - can be constrained using [HorizontalAnchorable.linkTo].
      */
     val top: HorizontalAnchorable = ChainHorizontalAnchorable(tasks, id, 0)
 
     /**
-     * The bottom anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
+     * The bottom anchor of the chain - can be constrained using [HorizontalAnchorable.linkTo].
      */
     val bottom: HorizontalAnchorable = ChainHorizontalAnchorable(tasks, id, 1)
 }

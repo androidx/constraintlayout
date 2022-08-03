@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.round
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import kotlin.math.roundToInt
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -64,7 +65,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.math.roundToInt
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -1376,7 +1376,8 @@ class ConstraintLayoutTest {
                 Box(
                     Modifier
                         .size(box1Size.toDp())
-                        .layoutId("box1"))
+                        .layoutId("box1")
+                )
                 Box(
                     Modifier
                         .layoutId("box2")
@@ -1502,7 +1503,8 @@ class ConstraintLayoutTest {
                 Box(
                     Modifier
                         .size(box1Size.toDp())
-                        .layoutId("box1"))
+                        .layoutId("box1")
+                )
                 Box(
                     Modifier
                         .layoutId("box2")
@@ -1569,4 +1571,86 @@ class ConstraintLayoutTest {
         rule.waitForIdle()
         rule.onNodeWithTag(boxTag).assertPositionInRootIsEqualTo(175.dp, 5.dp)
     }
+
+    @Test
+    fun testLayoutReference_withConstraintSet() {
+        val boxTag1 = "box1"
+        val boxTag2 = "box2"
+        val constraintSet = ConstraintSet {
+            val box1 = createRefFor(boxTag1)
+            val g1 = createGuidelineFromEnd(50.dp)
+            val b1 = createEndBarrier(g1.reference, box1)
+
+            constrain(box1) {
+                width = Dimension.value(10.dp)
+                height = Dimension.value(10.dp)
+                top.linkTo(parent.top)
+                end.linkTo(g1, 10.dp)
+            }
+            constrain(createRefFor(boxTag2)) {
+                width = Dimension.value(10.dp)
+                height = Dimension.value(10.dp)
+                top.linkTo(parent.top)
+                start.linkTo(b1, 10.dp)
+            }
+        }
+        rule.setContent {
+            ConstraintLayout(
+                modifier = Modifier.size(100.dp),
+                constraintSet = constraintSet
+            ) {
+                Box(
+                    modifier = Modifier
+                        .layoutTestId(boxTag1)
+                        .background(Color.Red)
+                )
+                Box(
+                    modifier = Modifier
+                        .layoutTestId(boxTag2)
+                        .background(Color.Blue)
+                )
+            }
+        }
+        rule.waitForIdle()
+        // TODO: Investigate, Left position should be 30.dp
+        rule.onNodeWithTag(boxTag1).assertPositionInRootIsEqualTo(29.5.dp, 0.dp)
+        rule.onNodeWithTag(boxTag2).assertPositionInRootIsEqualTo(60.dp, 0.dp)
+    }
+
+    @Test
+    fun testLayoutReference_withInlineDsl() {
+        val boxTag1 = "box1"
+        val boxTag2 = "box2"
+        rule.setContent {
+            ConstraintLayout(modifier = Modifier.size(100.dp)) {
+                val (box1, box2) = createRefs()
+                val g1 = createGuidelineFromEnd(50.dp)
+                val b1 = createEndBarrier(g1.reference, box1)
+                Box(modifier = Modifier
+                    .constrainAs(box1) {
+                        width = Dimension.value(10.dp)
+                        height = Dimension.value(10.dp)
+                        top.linkTo(parent.top)
+                        end.linkTo(g1, 10.dp)
+                    }
+                    .layoutTestId(boxTag1)
+                    .background(Color.Red))
+                Box(modifier = Modifier
+                    .constrainAs(box2) {
+                        width = Dimension.value(10.dp)
+                        height = Dimension.value(10.dp)
+                        top.linkTo(parent.top)
+                        start.linkTo(b1, 10.dp)
+                    }
+                    .layoutTestId(boxTag2)
+                    .background(Color.Blue))
+            }
+        }
+        rule.waitForIdle()
+        // TODO: Investigate, Left position should be 30.dp
+        rule.onNodeWithTag(boxTag1).assertPositionInRootIsEqualTo(29.5.dp, 0.dp)
+        rule.onNodeWithTag(boxTag2).assertPositionInRootIsEqualTo(60.dp, 0.dp)
+    }
 }
+
+private fun Modifier.layoutTestId(id: Any): Modifier = testTag(id.toString()).layoutId(id)
