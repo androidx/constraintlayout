@@ -81,17 +81,22 @@ class TouchResponse {
             {-1.0f, 0.0f}, // start (dynamically updated)
             {1.0f, 0.0f}, // end  (dynamically updated)
     };
+    @SuppressWarnings("unused")
     private static final int TOUCH_UP = 0;
+    @SuppressWarnings("unused")
     private static final int TOUCH_DOWN = 1;
     private static final int TOUCH_LEFT = 2;
     private static final int TOUCH_RIGHT = 3;
     private static final int TOUCH_START = 4;
     private static final int TOUCH_END = 5;
 
+    @SuppressWarnings("unused")
     private static final int SIDE_TOP = 0;
     private static final int SIDE_LEFT = 1;
     private static final int SIDE_RIGHT = 2;
+    @SuppressWarnings("unused")
     private static final int SIDE_BOTTOM = 3;
+    @SuppressWarnings("unused")
     private static final int SIDE_MIDDLE = 4;
     private static final int SIDE_START = 5;
     private static final int SIDE_END = 6;

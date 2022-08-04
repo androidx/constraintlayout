@@ -50,6 +50,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     double[] mTempValue = new double[18];
     double[] mTempDelta = new double[18];
     private float mAlpha = 1;
+    @SuppressWarnings("unused")
     private boolean mApplyElevation = false;
     private float mElevation = 0;
     private float mRotation = 0;

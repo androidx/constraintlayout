@@ -159,6 +159,7 @@ public class Grid extends VirtualLayout {
     /**
      * Indicates whether to use RTL layout direction
      */
+    @SuppressWarnings("unused")
     private boolean mUseRtl;
 
     /**

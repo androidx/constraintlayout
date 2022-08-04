@@ -927,6 +927,7 @@ public class MotionController {
         for (int j = 0; j < mInterpolateVariables.length; j++) {
             int interpolateVariable = mInterpolateVariables[j];
             if (interpolateVariable < MotionPaths.sNames.length) {
+                @SuppressWarnings("unused")
                 String s = MotionPaths.sNames[mInterpolateVariables[j]] + " [";
                 for (int i = 0; i < points.length; i++) {
                     s += splineData[i][j];
@@ -1198,6 +1199,8 @@ public class MotionController {
                 return new BounceInterpolator();
             case OVERSHOOT:
                 return new OvershootInterpolator();
+            case INTERPOLATOR_UNDEFINED:
+                return null;
         }
         return null;
     }
