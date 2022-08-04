@@ -388,7 +388,7 @@ public class TransitionParser {
                 0,
                 0,
                 2,
-                1,
+                0,
         };
 
 //  TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
