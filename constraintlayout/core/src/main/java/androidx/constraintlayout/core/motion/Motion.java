@@ -673,7 +673,8 @@ public class Motion implements TypedValues {
             int parentHeight,
             float transitionDuration,
             long currentTime) {
-        @SuppressWarnings("unused") HashSet<String> springAttributes = new HashSet<>();
+        @SuppressWarnings({"unused", "ModifiedButNotUsed"})
+        HashSet<String> springAttributes = new HashSet<>();
         // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate

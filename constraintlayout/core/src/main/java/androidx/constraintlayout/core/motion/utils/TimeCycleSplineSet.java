@@ -107,7 +107,7 @@ public abstract class TimeCycleSplineSet {
         KeyFrameArray.CustomArray mConstraintAttributeList;
         KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
-        float[] mCache;
+        @SuppressWarnings("HidingField") float[] mCache;
 
         public CustomSet(String attribute, KeyFrameArray.CustomArray attrList) {
             mAttributeName = attribute.split(",")[1];
