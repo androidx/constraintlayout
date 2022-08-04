@@ -4582,14 +4582,7 @@ public class MotionLayout extends ConstraintLayout implements
                 || (mTransitionListeners != null && !mTransitionListeners.isEmpty())) {
             if (mListenerPosition != mTransitionPosition) {
                 if (mListenerState != UNSET) {
-                    if (mTransitionListener != null) {
-                        mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
-                    }
-                    if (mTransitionListeners != null) {
-                        for (TransitionListener listeners : mTransitionListeners) {
-                            listeners.onTransitionStarted(this, mBeginState, mEndState);
-                        }
-                    }
+                    fireTransitionStarted();
                     mIsAnimating = true;
                 }
                 mListenerState = UNSET;
@@ -5022,13 +5015,13 @@ public class MotionLayout extends ConstraintLayout implements
         return mInteractionEnabled;
     }
 
-    private void fireTransitionStarted(MotionLayout motionLayout, int mBeginState, int mEndState) {
+    private void fireTransitionStarted() {
         if (mTransitionListener != null) {
             mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
         }
         if (mTransitionListeners != null) {
             for (TransitionListener listeners : mTransitionListeners) {
-                listeners.onTransitionStarted(motionLayout, mBeginState, mEndState);
+                listeners.onTransitionStarted(this, mBeginState, mEndState);
             }
         }
     }

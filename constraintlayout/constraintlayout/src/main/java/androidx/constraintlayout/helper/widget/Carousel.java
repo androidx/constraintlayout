@@ -245,6 +245,7 @@ public class Carousel extends MotionHelper {
         }
     }
 
+    @SuppressWarnings("unused")
     private void enableAllTransitions(boolean enable) {
         ArrayList<MotionScene.Transition> transitions = mMotionLayout.getDefinedTransitions();
         for (MotionScene.Transition transition : transitions) {
