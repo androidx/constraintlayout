@@ -23,6 +23,8 @@ import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
 import androidx.constraintlayout.core.parser.CLParsingException;
 
+import java.util.Arrays;
+
 public class KeyParser {
 
     private interface Ids {
@@ -68,7 +70,11 @@ public class KeyParser {
                 }
             }
         } catch (CLParsingException e) {
-            e.printStackTrace();
+            //TODO replace with something not equal to printStackTrace();
+            System.err.println(e.toString()+"\n"+ Arrays.toString(e.getStackTrace())
+                    .replace("[","   at ")
+                    .replace(",","\n   at")
+                    .replace("]",""));
         }
         return bundle;
     }

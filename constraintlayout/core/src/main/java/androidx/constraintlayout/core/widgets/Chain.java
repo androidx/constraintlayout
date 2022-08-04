@@ -69,7 +69,7 @@ public class Chain {
             // otherwise the values we use may not be correctly initialized
             // (as we initialize them in the ConstraintWidget.addToSolver())
             first.define();
-            if (widgets == null || widgets != null && widgets.contains(first.mFirst)) {
+            if (widgets == null || widgets.contains(first.mFirst)) {
                 applyChainConstraints(constraintWidgetContainer,
                         system, orientation, offset, first);
             }

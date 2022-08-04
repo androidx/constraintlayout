@@ -56,6 +56,7 @@ public class LinearCurveFit extends CurveFit {
      *
      * @param t the point to calculate the length to
      */
+    @SuppressWarnings("unused")
     private double getLength2D(double t) {
         if (Double.isNaN(mTotalLength)) {
             return 0;

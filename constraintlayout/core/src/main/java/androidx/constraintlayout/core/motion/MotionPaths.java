@@ -236,7 +236,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
         point.mMode = MotionPaths.SCREEN;
         if (!Float.isNaN(c.mPercentX)) {
-            parentWidth -= point.mWidth;
+            parentWidth -= (float) point.mWidth;
             point.mX = (int) (c.mPercentX * parentWidth);
         }
         if (!Float.isNaN(c.mPercentY)) {
@@ -617,7 +617,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
                     Utils.log(TAG, "dv_width   =" + dv_width);
                     Utils.log(TAG, "dv_height  =" + dv_height);
                 }
-                rot += path_rotate + Math.toDegrees(Math.atan2(dy, dx));
+                rot += (float) (path_rotate + Math.toDegrees(Math.atan2(dy, dx)));
                 view.setRotationZ(rot);
                 if (DEBUG) {
                     Utils.log(TAG, "Rotated " + rot + "  = " + dx + "," + dy);

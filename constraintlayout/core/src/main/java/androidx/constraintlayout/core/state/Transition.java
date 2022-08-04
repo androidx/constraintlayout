@@ -794,6 +794,7 @@ public class Transition implements TypedValues {
         return widgetState.mMotionControl.buildKeyFrames(rectangles, pathMode, position);
     }
 
+    @SuppressWarnings("unused")
     private WidgetState getWidgetState(String widgetId) {
         return this.mState.get(widgetId);
     }

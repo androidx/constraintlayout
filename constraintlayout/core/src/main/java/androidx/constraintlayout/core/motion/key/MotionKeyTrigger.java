@@ -154,6 +154,7 @@ public class MotionKeyTrigger extends MotionKey {
         return new MotionKeyTrigger().copy(this);
     }
 
+    @SuppressWarnings("unused")
     private void fireCustom(String str, MotionWidget widget) {
         boolean callAll = str.length() == 1;
         if (!callAll) {

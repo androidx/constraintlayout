@@ -431,7 +431,7 @@ public class GridEngine {
      * @param spans new spans value
      */
     public void setSpans(CharSequence spans) {
-        if (mStrSpans != null && mStrSpans.equals(spans)) {
+        if (mStrSpans != null && mStrSpans.equals(spans.toString())) {
             return;
         }
 

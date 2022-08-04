@@ -94,7 +94,7 @@ public class Oscillator {
         }
         // scale periods to normalize it
         for (int i = 0; i < mPeriod.length; i++) {
-            mPeriod[i] *= totalCount / totalArea;
+            mPeriod[i] *= (float) (totalCount / totalArea);
         }
         mArea[0] = 0;
         for (int i = 1; i < mPeriod.length; i++) {
