@@ -321,7 +321,7 @@ public class MotionKeyCycle extends MotionKey {
                 }
 
                 osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod,
-                        mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
+                        mWaveOffset, mWavePhase/360, cValue.getValueToInterpolate(), cValue);
                 continue;
             }
             float value = getValue(key);
@@ -335,7 +335,7 @@ public class MotionKeyCycle extends MotionKey {
             }
 
             osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape,
-                    -1, mWavePeriod, mWaveOffset, mWavePhase, value);
+                    -1, mWavePeriod, mWaveOffset, mWavePhase/360, value);
         }
     }
 
