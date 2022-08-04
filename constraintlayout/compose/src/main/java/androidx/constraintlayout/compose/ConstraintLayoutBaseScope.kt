@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.widgets.ConstraintWidget
-import java.util.Objects
 
 /**
  * Common scope for [ConstraintLayoutScope] and [ConstraintSetScope], the content being shared
