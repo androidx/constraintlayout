@@ -236,11 +236,11 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
         point.mMode = MotionPaths.SCREEN;
         if (!Float.isNaN(c.mPercentX)) {
-            parentWidth -= (float) point.mWidth;
+            parentWidth -= (int) point.mWidth;
             point.mX = (int) (c.mPercentX * parentWidth);
         }
         if (!Float.isNaN(c.mPercentY)) {
-            parentHeight -= point.mHeight;
+            parentHeight -= (int) point.mHeight;
             point.mY = (int) (c.mPercentY * parentHeight);
         }
 
@@ -318,8 +318,8 @@ public class MotionPaths implements Comparable<MotionPaths> {
         boolean diffx = diff(mX, points.mX);
         boolean diffy = diff(mY, points.mY);
         mask[c++] |= diff(mPosition, points.mPosition);
-        mask[c++] |= diffx | diffy | arcMode;
-        mask[c++] |= diffx | diffy | arcMode;
+        mask[c++] |= diffx || diffy || arcMode;
+        mask[c++] |= diffx || diffy || arcMode;
         mask[c++] |= diff(mWidth, points.mWidth);
         mask[c++] |= diff(mHeight, points.mHeight);
 

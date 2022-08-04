@@ -220,7 +220,7 @@ public class ConstraintSetParser {
             int maxInt = (int) mMax;
             for (int i = value; i <= maxInt; i++) {
                 array.add(mPrefix + value + mPostfix);
-                value += (float) mStep;
+                value += (int) mStep;
             }
             return array;
 
