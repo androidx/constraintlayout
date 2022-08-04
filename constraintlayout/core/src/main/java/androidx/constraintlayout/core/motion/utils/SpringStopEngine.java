@@ -131,8 +131,8 @@ public class SpringStopEngine implements StopEngine {
 
             double dv = a * dt; //  calculate change in velocity
             avgV = mV + dv / 2; //  average  velocity is current + half change
-            mV += dv;
-            mPos += avgV * dt;
+            mV += (float) dv;
+            mPos += (float) (avgV * dt);
             if (mBoundaryMode > 0) {
                 if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
                     mPos = -mPos;

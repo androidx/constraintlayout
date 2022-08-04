@@ -34,7 +34,7 @@ public class AlignVerticallyReference extends HelperReference {
     @Override
     public void apply() {
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
             reference.clearVertical();
             if (mTopToTop != null) {
                 reference.topToTop(mTopToTop);

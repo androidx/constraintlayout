@@ -47,6 +47,7 @@ public class StepCurve extends Easing {
         mCurveFit = genSpline(Arrays.copyOf(values, count));
     }
 
+    @SuppressWarnings("unused")
     private static MonotonicCurveFit genSpline(String str) {
         String wave = str;
         String[] sp = wave.split("\\s+");

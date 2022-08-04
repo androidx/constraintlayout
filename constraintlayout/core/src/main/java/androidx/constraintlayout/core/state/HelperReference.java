@@ -24,14 +24,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class HelperReference extends ConstraintReference implements Facade {
-    protected final State mState;
+    protected final State mHelperState;
     final State.Helper mType;
     protected ArrayList<Object> mReferences = new ArrayList<>();
     private HelperWidget mHelperWidget;
 
     public HelperReference(State state, State.Helper type) {
         super(state);
-        mState = state;
+        mHelperState = state;
         mType = type;
     }
 

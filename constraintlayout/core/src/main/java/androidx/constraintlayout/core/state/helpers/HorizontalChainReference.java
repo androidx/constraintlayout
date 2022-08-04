@@ -36,12 +36,12 @@ public class HorizontalChainReference extends ChainReference {
         ConstraintReference first = null;
         ConstraintReference previous = null;
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
             reference.clearHorizontal();
         }
 
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
 
             if (first == null) {
                 first = reference;

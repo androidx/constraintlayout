@@ -34,7 +34,7 @@ public class AlignHorizontallyReference extends HelperReference {
     @Override
     public void apply() {
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
             reference.clearHorizontal();
             if (mStartToStart != null) {
                 reference.startToStart(mStartToStart);

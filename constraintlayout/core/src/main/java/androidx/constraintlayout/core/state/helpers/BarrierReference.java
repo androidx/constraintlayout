@@ -38,7 +38,7 @@ public class BarrierReference extends HelperReference {
 
     @Override
     public ConstraintReference margin(Object marginValue) {
-        margin(mState.convertDimension(marginValue));
+        margin(mHelperState.convertDimension(marginValue));
         return this;
     }
 

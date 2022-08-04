@@ -474,7 +474,7 @@ public class Motion implements TypedValues {
             mSpline[0].getPos(p, mInterpolateData);
             mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, 0);
             if (i > 0) {
-                sum += Math.hypot(y - points[1], x - points[0]);
+                sum += (float) Math.hypot(y - points[1], x - points[0]);
             }
             x = points[0];
             y = points[1];

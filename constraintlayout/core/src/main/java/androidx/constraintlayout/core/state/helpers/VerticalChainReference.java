@@ -36,12 +36,12 @@ public class VerticalChainReference extends ChainReference {
         ConstraintReference first = null;
         ConstraintReference previous = null;
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
             reference.clearVertical();
         }
 
         for (Object key : mReferences) {
-            ConstraintReference reference = mState.constraints(key);
+            ConstraintReference reference = mHelperState.constraints(key);
             if (first == null) {
                 first = reference;
                 if (mTopToTop != null) {

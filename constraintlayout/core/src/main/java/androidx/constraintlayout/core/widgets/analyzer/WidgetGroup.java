@@ -26,6 +26,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Represents a group of widget for the grouping mechanism.
@@ -175,7 +176,11 @@ public class WidgetGroup {
         try {
             system.minimize();
         } catch (Exception e) {
-            e.printStackTrace();
+            //TODO remove fancy version of e.printStackTrace()
+            System.err.println(e.toString()+"\n"+Arrays.toString(e.getStackTrace())
+                    .replace("[","   at ")
+                    .replace(",","\n   at")
+                    .replace("]",""));
         }
 
         // save results
