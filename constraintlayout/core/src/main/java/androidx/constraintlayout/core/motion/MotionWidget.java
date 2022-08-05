@@ -446,7 +446,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public float getAlpha() {
-        return mPropertySet.alpha;
+        return mWidgetFrame.alpha;
     }
 
     public int getX() {
