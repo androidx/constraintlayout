@@ -73,7 +73,24 @@ fun FunCircles() {
             },
             start: {
              Extends: 'end',
- 
+
+             ball0: {alpha: 0},
+             ball1: {alpha: 0},
+             ball2: {alpha: 0},
+             ball3: {alpha: 0},
+             ball4: {alpha: 0},
+             ball5: {alpha: 0},
+             ball6: {alpha: 0},
+             ball7: {alpha: 0},
+
+             line0: {alpha: 0},
+             line1: {alpha: 0},
+             line2: {alpha: 0},
+             line3: {alpha: 0},
+             line4: {alpha: 0},
+             line5: {alpha: 0},
+             line6: {alpha: 0},
+             line7: {alpha: 0},
 
           },
           },
@@ -86,13 +103,13 @@ fun FunCircles() {
               KeyFrames: {
                  KeyAttributes : [
                  { target:['ball0','line0'], frames:[0,1], alpha:[0, 1] },
-                 { target:['ball1','line1'], frames:[0,2,3], alpha:[0, 0, 1] },
-                 { target:['ball2','line2'], frames:[0,3,4], alpha:[0, 0, 1] },
-                 { target:['ball3','line3'], frames:[0,4,5], alpha:[0, 0, 1] },
-                 { target:['ball4','line4'], frames:[0,5,6], alpha:[0, 0, 1] },
-                 { target:['ball5','line5'], frames:[0,6,7], alpha:[0, 0, 1] },
-                 { target:['ball6','line6'], frames:[0,7,8], alpha:[0, 0, 1] },
-                 { target:['ball7','line7'], frames:[0,8,9], alpha:[0, 0, 1] },
+                 { target:['ball1','line1'], frames:[2,3], alpha:[0, 1] },
+                 { target:['ball2','line2'], frames:[3,4], alpha:[0, 1] },
+                 { target:['ball3','line3'], frames:[4,5], alpha:[0, 1] },
+                 { target:['ball4','line4'], frames:[5,6], alpha:[0, 1] },
+                 { target:['ball5','line5'], frames:[6,7], alpha:[0, 1] },
+                 { target:['ball6','line6'], frames:[7,8], alpha:[0, 1] },
+                 { target:['ball7','line7'], frames:[8,9], alpha:[0, 1] },
                  ],
                  
 
