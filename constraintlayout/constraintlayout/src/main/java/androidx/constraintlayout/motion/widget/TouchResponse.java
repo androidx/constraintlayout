@@ -81,17 +81,22 @@ class TouchResponse {
             {-1.0f, 0.0f}, // start (dynamically updated)
             {1.0f, 0.0f}, // end  (dynamically updated)
     };
+    @SuppressWarnings("unused")
     private static final int TOUCH_UP = 0;
+    @SuppressWarnings("unused")
     private static final int TOUCH_DOWN = 1;
     private static final int TOUCH_LEFT = 2;
     private static final int TOUCH_RIGHT = 3;
     private static final int TOUCH_START = 4;
     private static final int TOUCH_END = 5;
 
+    @SuppressWarnings("unused")
     private static final int SIDE_TOP = 0;
     private static final int SIDE_LEFT = 1;
     private static final int SIDE_RIGHT = 2;
+    @SuppressWarnings("unused")
     private static final int SIDE_BOTTOM = 3;
+    @SuppressWarnings("unused")
     private static final int SIDE_MIDDLE = 4;
     private static final int SIDE_START = 5;
     private static final int SIDE_END = 6;
@@ -264,7 +269,9 @@ class TouchResponse {
                 mDragStarted = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+                @SuppressWarnings("unused")
                 float dy = event.getRawY() - mLastTouchY;
+                @SuppressWarnings("unused")
                 float dx = event.getRawX() - mLastTouchX;
 
                 float drag;
@@ -372,7 +379,7 @@ class TouchResponse {
                     mAnchorDpDt[1] = 360;
                 }
                 angle2 = Math.toDegrees(Math.atan2(tvy + relativePosY, tvx + relativePosX));
-                drag = (float) ((angle2 - angle1));
+                drag = (float) (angle2 - angle1);
                 float velocity_tweek = SEC_TO_MILLISECONDS / 16f;
                 float angularVelocity = drag * velocity_tweek;
                 if (!Float.isNaN(angularVelocity)) {
@@ -548,6 +555,7 @@ class TouchResponse {
                     mAnchorDpDt[1] = minSize * mTouchDirectionY;
                     mAnchorDpDt[0] = minSize * mTouchDirectionX;
                 }
+                @SuppressWarnings("unused")
                 float movmentInDir = mTouchDirectionX * mAnchorDpDt[0]
                         + mTouchDirectionY * mAnchorDpDt[1];
                 float velocity;
@@ -628,6 +636,7 @@ class TouchResponse {
 
         float pos = mMotionLayout.getProgress();
         mMotionLayout.getAnchorDpDt(mTouchAnchorId, pos, mTouchAnchorX, mTouchAnchorY, mAnchorDpDt);
+        @SuppressWarnings("unused")
         float movmentInDir = mTouchDirectionX * mAnchorDpDt[0] + mTouchDirectionY * mAnchorDpDt[1];
         float velocity;
         if (mTouchDirectionX != 0) {
@@ -638,12 +647,13 @@ class TouchResponse {
         if (!Float.isNaN(velocity)) {
             pos += velocity / 3; // TODO calibration & animation speed based on velocity
         }
-        if (pos != 0.0f && pos != 1.0f & mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
+        if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
             mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, velocity);
         }
     }
 
     void scrollMove(float dx, float dy) {
+        @SuppressWarnings("unused")
         float drag = dx * mTouchDirectionX + dy * mTouchDirectionY;
         if (true) { // Todo evaluate || Math.abs(drag) > 10 || mDragStarted) {
             float pos = mMotionLayout.getProgress();
@@ -848,8 +858,9 @@ class TouchResponse {
         return dx * mTouchDirectionX + dy * mTouchDirectionY;
     }
 
+    @Override
     public String toString() {
-        return (Float.isNaN(mTouchDirectionX)) ? "rotation"
+        return Float.isNaN(mTouchDirectionX) ? "rotation"
                 : (mTouchDirectionX + " , " + mTouchDirectionY);
     }
 

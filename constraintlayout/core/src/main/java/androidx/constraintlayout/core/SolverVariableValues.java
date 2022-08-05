@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     private static final boolean DEBUG = false;
-    private static final boolean HASH = true;
+    @SuppressWarnings("unused") private static final boolean HASH = true;
     private static float sEpsilon = 0.001f;
     private final int mNone = -1;
     private int mSize = 16;

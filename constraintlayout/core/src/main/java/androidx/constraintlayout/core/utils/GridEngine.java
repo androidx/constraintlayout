@@ -181,6 +181,9 @@ public class GridEngine {
      * @return true if it is valid else false
      */
     private boolean isSpansValid(CharSequence str) {
+        if (str == null) {
+            return false;
+        }
         return true;
     }
 
@@ -428,7 +431,7 @@ public class GridEngine {
      * @param spans new spans value
      */
     public void setSpans(CharSequence spans) {
-        if (mStrSpans != null && mStrSpans.equals(spans)) {
+        if (mStrSpans != null && mStrSpans.equals(spans.toString())) {
             return;
         }
 

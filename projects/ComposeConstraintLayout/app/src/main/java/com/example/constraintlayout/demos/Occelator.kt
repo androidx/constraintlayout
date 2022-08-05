@@ -73,7 +73,6 @@ fun FunCircles() {
             },
             start: {
              Extends: 'end',
-
              ball0: {alpha: 0},
              ball1: {alpha: 0},
              ball2: {alpha: 0},
@@ -91,7 +90,6 @@ fun FunCircles() {
              line5: {alpha: 0},
              line6: {alpha: 0},
              line7: {alpha: 0},
-
           },
           },
           
@@ -110,6 +108,7 @@ fun FunCircles() {
                  { target:['ball5','line5'], frames:[6,7], alpha:[0, 1] },
                  { target:['ball6','line6'], frames:[7,8], alpha:[0, 1] },
                  { target:['ball7','line7'], frames:[8,9], alpha:[0, 1] },
+ 
                  ],
                  
 

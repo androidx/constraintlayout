@@ -49,7 +49,7 @@ public class Transition implements TypedValues {
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
     private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFERENCE_ID = -2;
+    @SuppressWarnings("unused") private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
     private HashMap<String, WidgetState> mState = new HashMap<>();
     private TypedBundle mBundle = new TypedBundle();
@@ -101,9 +101,9 @@ public class Transition implements TypedValues {
                 {1.0f, 0.5f}, // end  TODO (dynamically updated)
         };
 
-        private String mRotationCenterId;
-        private String mLimitBoundsTo;
-        private boolean mDragVertical = true;
+        @SuppressWarnings("unused") private String mRotationCenterId;
+        @SuppressWarnings("unused") private String mLimitBoundsTo;
+        @SuppressWarnings("unused") private boolean mDragVertical = true;
         private int mDragDirection = 0;
         public static final int DRAG_UP = 0;
         public static final int DRAG_DOWN = 1;
@@ -117,7 +117,7 @@ public class Transition implements TypedValues {
                 "end", "clockwise", "anticlockwise"};
 
         private float mDragScale = 1;
-        private float mDragThreshold = 10;
+        @SuppressWarnings("unused") private float mDragThreshold = 10;
         private int mAutoCompleteMode = 0;
         public static final int MODE_CONTINUOUS_VELOCITY = 0;
         public static final int MODE_SPRING = 1;
@@ -794,6 +794,7 @@ public class Transition implements TypedValues {
         return widgetState.mMotionControl.buildKeyFrames(rectangles, pathMode, position);
     }
 
+    @SuppressWarnings("unused")
     private WidgetState getWidgetState(String widgetId) {
         return this.mState.get(widgetId);
     }
@@ -970,7 +971,6 @@ public class Transition implements TypedValues {
 
         float stagger = Math.abs(mStagger);
         float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
-        int n = mState.size();
         boolean useMotionStagger = false;
 
         for (String widgetId : mState.keySet()) {
@@ -1000,7 +1000,7 @@ public class Transition implements TypedValues {
                 if (!Float.isNaN(widgetStagger)) {
                     float scale = 1 / (1 - stagger);
 
-                    float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
+                    float offset = stagger - stagger * (widgetStagger - min) / (max - min);
                     if (flip) {
                         offset = stagger - stagger
                                 * ((max - widgetStagger) / (max - min));
@@ -1027,7 +1027,7 @@ public class Transition implements TypedValues {
                 float x = f.getFinalX();
                 float y = f.getFinalY();
                 float widgetStagger = x + y;
-                float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
+                float offset = stagger - stagger * (widgetStagger - min) / (max - min);
                 if (flip) {
                     offset = stagger - stagger
                             * ((max - widgetStagger) / (max - min));

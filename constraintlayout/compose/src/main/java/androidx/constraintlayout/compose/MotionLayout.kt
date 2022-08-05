@@ -318,7 +318,7 @@ internal inline fun MotionLayoutCore(
     start: ConstraintSet,
     end: ConstraintSet,
     modifier: Modifier = Modifier,
-    transition: TransitionImpl? = null,
+    @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl? = null,
     motionProgress: MotionProgress,
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     informationReceiver: LayoutInformationReceiver? = null,
@@ -538,7 +538,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     debug: EnumSet<MotionLayoutDebugFlags>,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
-    transition: TransitionImpl?,
+    @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
     motionProgress: MotionProgress,
     measurer: MotionMeasurer
 ) = remember(

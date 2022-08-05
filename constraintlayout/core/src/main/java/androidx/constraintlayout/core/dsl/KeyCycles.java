@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.dsl;
 public class KeyCycles extends KeyAttributes {
 
 
-    enum Wave {
+    public enum Wave {
         SIN,
         SQUARE,
         TRIANGLE,
@@ -75,6 +75,7 @@ public class KeyCycles extends KeyAttributes {
         mWavePhase = wavePhase;
     }
 
+    @Override
     protected void attributesToString(StringBuilder builder) {
         super.attributesToString(builder);
 

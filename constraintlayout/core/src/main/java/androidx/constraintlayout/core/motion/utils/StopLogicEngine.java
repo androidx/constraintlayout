@@ -34,7 +34,7 @@ public class StopLogicEngine implements StopEngine {
     private boolean mBackwards = false;
     private float mStartPosition;
     private float mLastPosition;
-    private boolean mDone = false;
+    @SuppressWarnings("unused") private boolean mDone = false;
     private static final float EPSILON = 0.00001f;
 
     /**
@@ -44,6 +44,7 @@ public class StopLogicEngine implements StopEngine {
      * @param time Time during animation
      * @return string useful for debugging the state of the StopLogic
      */
+    @Override
     public String debug(String desc, float time) {
         String ret = desc + " ===== " + mType + "\n";
         ret += desc + (mBackwards ? "backwards" : "forward ")
@@ -92,9 +93,10 @@ public class StopLogicEngine implements StopEngine {
     /**
      * @TODO: add description
      */
+    @Override
     public float getVelocity(float x) {
         if (x <= mStage1Duration) {
-            return mStage1Velocity + (mStage2Velocity - mStage1Velocity) * x / (mStage1Duration);
+            return mStage1Velocity + (mStage2Velocity - mStage1Velocity) * x / mStage1Duration;
         }
         if (mNumberOfStages == 1) {
             return 0;
@@ -102,7 +104,7 @@ public class StopLogicEngine implements StopEngine {
         x -= mStage1Duration;
         if (x < mStage2Duration) {
 
-            return mStage2Velocity + (mStage3Velocity - mStage2Velocity) * x / (mStage2Duration);
+            return mStage2Velocity + (mStage3Velocity - mStage2Velocity) * x / mStage2Duration;
         }
         if (mNumberOfStages == 2) {
             return mStage2EndPosition;
@@ -110,7 +112,7 @@ public class StopLogicEngine implements StopEngine {
         x -= mStage2Duration;
         if (x < mStage3Duration) {
 
-            return mStage3Velocity - mStage3Velocity * x / (mStage3Duration);
+            return mStage3Velocity - mStage3Velocity * x / mStage3Duration;
         }
         return mStage3EndPosition;
     }
@@ -162,14 +164,16 @@ public class StopLogicEngine implements StopEngine {
     /**
      * @TODO: add description
      */
+    @Override
     public float getInterpolation(float v) {
         float y = calcY(v);
         mLastPosition = v;
-        return (mBackwards) ? mStartPosition - y : mStartPosition + y;
+        return mBackwards ? mStartPosition - y : mStartPosition + y;
     }
 
+    @Override
     public float getVelocity() {
-        return (mBackwards) ? -getVelocity(mLastPosition) : getVelocity(mLastPosition);
+        return mBackwards ? -getVelocity(mLastPosition) : getVelocity(mLastPosition);
     }
 
     @Override
@@ -188,7 +192,7 @@ public class StopLogicEngine implements StopEngine {
         float stopDistance = min_time_to_stop * velocity / 2;
 
         if (velocity < 0) { // backward
-            float timeToZeroVelocity = (-velocity) / maxAcceleration;
+            float timeToZeroVelocity = -velocity / maxAcceleration;
             float reversDistanceTraveled = timeToZeroVelocity * velocity / 2;
             float totalDistance = distance - reversDistanceTraveled;
             float peak_v = (float) Math.sqrt(maxAcceleration * totalDistance);

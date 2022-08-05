@@ -28,7 +28,7 @@ public class KeyCycle extends KeyAttribute {
         TYPE = "KeyCycle";
     }
 
-    enum Wave {
+    public enum Wave {
         SIN,
         SQUARE,
         TRIANGLE,
@@ -69,6 +69,7 @@ public class KeyCycle extends KeyAttribute {
         mWavePhase = wavePhase;
     }
 
+    @Override
     protected void attributesToString(StringBuilder builder) {
         super.attributesToString(builder);
 

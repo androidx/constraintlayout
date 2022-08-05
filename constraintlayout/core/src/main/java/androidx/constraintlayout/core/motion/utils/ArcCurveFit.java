@@ -324,10 +324,10 @@ public class ArcCurveFit extends CurveFit {
                 return;
             }
             mLut = new double[101];
-            mEllipseA = (dx) * ((mVertical) ? -1 : 1);
-            mEllipseB = (dy) * ((mVertical) ? 1 : -1);
-            mEllipseCenterX = (mVertical) ? x2 : x1;
-            mEllipseCenterY = (mVertical) ? y1 : y2;
+            mEllipseA = dx * (mVertical ? -1 : 1);
+            mEllipseB = dy * (mVertical ? 1 : -1);
+            mEllipseCenterX = mVertical ? x2 : x1;
+            mEllipseCenterY = mVertical ? y1 : y2;
             buildTable(x1, y1, x2, y2);
             mArcVelocity = mArcDistance * mOneOverDeltaTime;
         }
@@ -388,8 +388,8 @@ public class ArcCurveFit extends CurveFit {
                 return 1;
             }
             double pos = v * (mLut.length - 1);
-            int iv = (int) (pos);
-            double off = pos - (int) (pos);
+            int iv = (int) pos;
+            double off = pos - (int) pos;
 
             return mLut[iv] + (off * (mLut[iv + 1] - mLut[iv]));
         }

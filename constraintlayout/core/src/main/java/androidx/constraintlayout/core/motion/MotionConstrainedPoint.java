@@ -38,7 +38,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     private float mAlpha = 1;
     int mVisibilityMode = MotionWidget.VISIBILITY_MODE_NORMAL;
     int mVisibility;
-    private boolean mApplyElevation = false;
+    @SuppressWarnings("unused") private boolean mApplyElevation = false;
     private float mElevation = 0;
     private float mRotation = 0;
     private float mRotationX = 0;
@@ -50,8 +50,8 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     private float mTranslationX = 0;
     private float mTranslationY = 0;
     private float mTranslationZ = 0;
-    private Easing mKeyFrameEasing;
-    private int mDrawPath = 0;
+    @SuppressWarnings("unused") private Easing mKeyFrameEasing;
+    @SuppressWarnings("unused") private int mDrawPath = 0;
     private float mPosition;
     private float mX;
     private float mY;
@@ -59,7 +59,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     private float mHeight;
     private float mPathRotate = Float.NaN;
     private float mProgress = Float.NaN;
-    private int mAnimateRelativeTo = -1;
+    @SuppressWarnings("unused") private int mAnimateRelativeTo = -1;
 
     static final int PERPENDICULAR = 1;
     static final int CARTESIAN = 2;

@@ -33,20 +33,14 @@ public class Constraint {
     }
 
     public class VAnchor extends Anchor {
-        final VSide mSide;
-
         VAnchor(VSide side) {
             super(Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 
     public class HAnchor extends Anchor {
-        final HSide mSide;
-
         HAnchor(HSide side) {
             super(Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 
@@ -101,7 +95,7 @@ public class Constraint {
         }
     }
 
-    enum Behaviour {
+    public enum Behaviour {
         SPREAD,
         WRAP,
         PERCENT,
@@ -109,26 +103,26 @@ public class Constraint {
         RESOLVED,
     }
 
-    enum ChainMode {
+    public enum ChainMode {
         SPREAD,
         SPREAD_INSIDE,
         PACKED,
     }
 
-    enum VSide {
+    public enum VSide {
         TOP,
         BOTTOM,
         BASELINE
     }
 
-    enum HSide {
+    public enum HSide {
         LEFT,
         RIGHT,
         START,
         END
     }
 
-    enum Side {
+    public enum Side {
         LEFT,
         RIGHT,
         TOP,
@@ -445,6 +439,7 @@ public class Constraint {
      *
      * @return verticalChainStyle
      */
+    @SuppressWarnings("HiddenTypeParameter")
     public ChainMode getVerticalChainStyle() {
         return mVerticalChainStyle;
     }
@@ -455,7 +450,7 @@ public class Constraint {
      * @param verticalChainStyle
      */
     public void setVerticalChainStyle(
-            ChainMode verticalChainStyle) {
+            @SuppressWarnings("HiddenTypeParameter") ChainMode verticalChainStyle) {
         this.mVerticalChainStyle = verticalChainStyle;
     }
 
@@ -464,6 +459,7 @@ public class Constraint {
      *
      * @return widthDefault
      */
+    @SuppressWarnings("HiddenTypeParameter")
     public Behaviour getWidthDefault() {
         return mWidthDefault;
     }
@@ -473,7 +469,8 @@ public class Constraint {
      *
      * @param widthDefault
      */
-    public void setWidthDefault(Behaviour widthDefault) {
+    public void setWidthDefault(@SuppressWarnings("HiddenTypeParameter")
+            Behaviour widthDefault) {
         this.mWidthDefault = widthDefault;
     }
 
@@ -482,6 +479,7 @@ public class Constraint {
      *
      * @return heightDefault
      */
+    @SuppressWarnings("HiddenTypeParameter")
     public Behaviour getHeightDefault() {
         return mHeightDefault;
     }
@@ -491,7 +489,8 @@ public class Constraint {
      *
      * @param heightDefault
      */
-    public void setHeightDefault(Behaviour heightDefault) {
+    public void setHeightDefault(@SuppressWarnings("HiddenTypeParameter")
+            Behaviour heightDefault) {
         this.mHeightDefault = heightDefault;
     }
 

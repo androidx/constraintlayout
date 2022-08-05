@@ -220,7 +220,7 @@ public class ConstraintSetParser {
             int maxInt = (int) mMax;
             for (int i = value; i <= maxInt; i++) {
                 array.add(mPrefix + value + mPostfix);
-                value += mStep;
+                value += (int) mStep;
             }
             return array;
 
@@ -897,7 +897,7 @@ public class ConstraintSetParser {
         for (String constraintName : constraints) {
             switch (constraintName) {
                 case "direction": {
-                    switch ((element.getString(constraintName))) {
+                    switch (element.getString(constraintName)) {
                         case "start":
                             reference.setBarrierDirection(State.Direction.START);
                             break;

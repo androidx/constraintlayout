@@ -49,12 +49,12 @@ public class OnSwipe {
         mDragDirection = dragDirection;
     }
 
-    enum Mode {
+    public enum Mode {
         VELOCITY,
         SPRING
     }
 
-    enum Boundary {
+    public enum Boundary {
         OVERSHOOT,
         BOUNCE_START,
         BOUNCE_END,
@@ -62,7 +62,7 @@ public class OnSwipe {
     }
 
 
-    enum Drag {
+    public enum Drag {
         UP,
         DOWN,
         LEFT,
@@ -76,7 +76,7 @@ public class OnSwipe {
     public static final int FLAG_DISABLE_POST_SCROLL = 1;
     public static final int FLAG_DISABLE_SCROLL = 2;
 
-    enum Side {
+    public enum Side {
         TOP,
         LEFT,
         RIGHT,
@@ -86,7 +86,7 @@ public class OnSwipe {
         END,
     }
 
-    enum TouchUp {
+    public enum TouchUp {
         AUTOCOMPLETE,
         TO_START,
         NEVER_COMPLETE_END,

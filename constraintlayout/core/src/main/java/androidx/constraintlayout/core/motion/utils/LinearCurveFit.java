@@ -30,13 +30,12 @@ public class LinearCurveFit extends CurveFit {
     double[] mSlopeTemp;
 
     public LinearCurveFit(double[] time, double[][] y) {
-        final int n = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
         mT = time;
         mY = y;
         if (dim > 2) {
-            double sum = 0;
+            @SuppressWarnings("unused") double sum = 0;
             double lastx = 0, lasty = 0;
             for (int i = 0; i < time.length; i++) {
                 double px = y[i][0];
@@ -57,6 +56,7 @@ public class LinearCurveFit extends CurveFit {
      *
      * @param t the point to calculate the length to
      */
+    @SuppressWarnings("unused")
     private double getLength2D(double t) {
         if (Double.isNaN(mTotalLength)) {
             return 0;
@@ -103,6 +103,7 @@ public class LinearCurveFit extends CurveFit {
     /**
      * @TODO: add description
      */
+    @Override
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -159,6 +160,7 @@ public class LinearCurveFit extends CurveFit {
     /**
      * @TODO: add description
      */
+    @Override
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -215,6 +217,7 @@ public class LinearCurveFit extends CurveFit {
     /**
      * @TODO: add description
      */
+    @Override
     public double getPos(double t, int j) {
         final int n = mT.length;
         if (mExtrapolate) {
@@ -252,6 +255,7 @@ public class LinearCurveFit extends CurveFit {
     /**
      * @TODO: add description
      */
+    @Override
     public void getSlope(double t, double[] v) {
         final int n = mT.length;
         int dim = mY[0].length;
@@ -264,7 +268,6 @@ public class LinearCurveFit extends CurveFit {
         for (int i = 0; i < n - 1; i++) {
             if (t <= mT[i + 1]) {
                 double h = mT[i + 1] - mT[i];
-                double x = (t - mT[i]) / h;
                 for (int j = 0; j < dim; j++) {
                     double y1 = mY[i][j];
                     double y2 = mY[i + 1][j];
@@ -280,6 +283,7 @@ public class LinearCurveFit extends CurveFit {
     /**
      * @TODO: add description
      */
+    @Override
     public double getSlope(double t, int j) {
         final int n = mT.length;
 
@@ -291,7 +295,6 @@ public class LinearCurveFit extends CurveFit {
         for (int i = 0; i < n - 1; i++) {
             if (t <= mT[i + 1]) {
                 double h = mT[i + 1] - mT[i];
-                double x = (t - mT[i]) / h;
                 double y1 = mY[i][j];
                 double y2 = mY[i + 1][j];
                 return (y2 - y1) / h;

@@ -1211,8 +1211,6 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Subclasses can override to build test frameworks
-     *
-     * @return
      */
     protected interface MotionTracker {
         void recycle();
@@ -1405,7 +1403,6 @@ public class MotionLayout extends ConstraintLayout implements
     public void setTransition(int transitionId) {
         if (mScene != null) {
             MotionScene.Transition transition = getTransition(transitionId);
-            int current = mCurrentState;
             mBeginState = transition.getStartConstraintSetId();
             mEndState = transition.getEndConstraintSetId();
 
@@ -2842,7 +2839,6 @@ public class MotionLayout extends ConstraintLayout implements
 
             mWidthMeasureMode = widthMode;
             mHeightMeasureMode = heightMode;
-            int optimisationLevel = getOptimizationLevel();
 
             computeStartEndSize(widthMeasureSpec, heightMeasureSpec);
 
@@ -3437,6 +3433,7 @@ public class MotionLayout extends ConstraintLayout implements
                 mPath.lineTo(x - mDiamondSize, y);
                 mPath.close();
 
+                @SuppressWarnings("unused")
                 MotionPaths framePoint = motionController.getKeyFrame(i - 1);
                 float dx = 0; //framePoint.translationX;
                 float dy = 0; //framePoint.translationY;
@@ -4449,6 +4446,7 @@ public class MotionLayout extends ConstraintLayout implements
             float y = v.getY();
             float deltaPos = pos - mLastPos;
             float deltaY = y - mLastY;
+            @SuppressWarnings("unused")
             float dydp = (deltaPos != 0.0f) ? deltaY / deltaPos : Float.NaN;
             if (DEBUG) {
                 Log.v(TAG, " getAnchorDpDt " + Debug.getName(v) + " "
@@ -4584,14 +4582,7 @@ public class MotionLayout extends ConstraintLayout implements
                 || (mTransitionListeners != null && !mTransitionListeners.isEmpty())) {
             if (mListenerPosition != mTransitionPosition) {
                 if (mListenerState != UNSET) {
-                    if (mTransitionListener != null) {
-                        mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
-                    }
-                    if (mTransitionListeners != null) {
-                        for (TransitionListener listeners : mTransitionListeners) {
-                            listeners.onTransitionStarted(this, mBeginState, mEndState);
-                        }
-                    }
+                    fireTransitionStarted();
                     mIsAnimating = true;
                 }
                 mListenerState = UNSET;
@@ -5024,13 +5015,13 @@ public class MotionLayout extends ConstraintLayout implements
         return mInteractionEnabled;
     }
 
-    private void fireTransitionStarted(MotionLayout motionLayout, int mBeginState, int mEndState) {
+    private void fireTransitionStarted() {
         if (mTransitionListener != null) {
             mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
         }
         if (mTransitionListeners != null) {
             for (TransitionListener listeners : mTransitionListeners) {
-                listeners.onTransitionStarted(motionLayout, mBeginState, mEndState);
+                listeners.onTransitionStarted(this, mBeginState, mEndState);
             }
         }
     }

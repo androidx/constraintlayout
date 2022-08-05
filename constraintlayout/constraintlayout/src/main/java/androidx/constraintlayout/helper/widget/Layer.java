@@ -73,6 +73,7 @@ public class Layer extends ConstraintHelper {
      * @param attrs
      * @DoNotShow
      */
+    @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         mUseViewMeasure = false;
@@ -329,7 +330,7 @@ public class Layer extends ConstraintHelper {
         }
         calcCenters();
 
-        double rad = (Float.isNaN(mGroupRotateAngle)) ? 0.0 : Math.toRadians(mGroupRotateAngle);
+        double rad = Float.isNaN(mGroupRotateAngle) ? 0.0 : Math.toRadians(mGroupRotateAngle);
         float sin = (float) Math.sin(rad);
         float cos = (float) Math.cos(rad);
         float m11 = mScaleX * cos;

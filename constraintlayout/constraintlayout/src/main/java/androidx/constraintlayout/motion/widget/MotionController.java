@@ -272,7 +272,7 @@ public class MotionController {
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
         double[] velocity = new double[4];
-        int[] temp = new int[4];
+        @SuppressWarnings("unused") int[] temp = new int[4];
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel, 0);
@@ -303,7 +303,7 @@ public class MotionController {
         ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -385,13 +385,17 @@ public class MotionController {
      */
     void buildBounds(float[] bounds, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
+        @SuppressWarnings("unused")
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
+        @SuppressWarnings("unused")
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
+        @SuppressWarnings("unused")
         ViewOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
+        @SuppressWarnings("unused")
         ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             if (mStaggerScale != 1.0f) {
                 if (position < mStaggerOffset) {
                     position = 0;
@@ -447,7 +451,7 @@ public class MotionController {
         float mils = 1.0f / (pointCount - 1);
         double x = 0, y = 0;
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
 
             double p = position;
 
@@ -480,7 +484,7 @@ public class MotionController {
             mSpline[0].getPos(p, mInterpolateData);
             mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, 0);
             if (i > 0) {
-                sum += Math.hypot(y - points[1], x - points[0]);
+                sum += (float) Math.hypot(y - points[1], x - points[0]);
             }
             x = points[0];
             y = points[1];
@@ -557,7 +561,7 @@ public class MotionController {
     String[] mAttributeTable;
 
     int getAttributeValues(String attributeType, float[] points, int pointCount) {
-        float mils = 1.0f / (pointCount - 1);
+        @SuppressWarnings("unused") float mils = 1.0f / (pointCount - 1);
         SplineSet spline = mAttributesMap.get(attributeType);
         if (spline == null) {
             return -1;
@@ -577,7 +581,7 @@ public class MotionController {
     void buildRectangles(float[] path, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         for (int i = 0; i < pointCount; i++) {
-            float position = (i) * mils;
+            float position = i * mils;
             position = getAdjustedPosition(position, null);
             mSpline[0].getPos(position, mInterpolateData);
             mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, i * 8);
@@ -923,6 +927,7 @@ public class MotionController {
         for (int j = 0; j < mInterpolateVariables.length; j++) {
             int interpolateVariable = mInterpolateVariables[j];
             if (interpolateVariable < MotionPaths.sNames.length) {
+                @SuppressWarnings("unused")
                 String s = MotionPaths.sNames[mInterpolateVariables[j]] + " [";
                 for (int i = 0; i < points.length; i++) {
                     s += splineData[i][j];
@@ -1021,6 +1026,7 @@ public class MotionController {
      *
      * @return
      */
+    @Override
     public String toString() {
         return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
                 + " end: x: " + mEndMotionPath.mX + " y: " + mEndMotionPath.mY;
@@ -1193,6 +1199,8 @@ public class MotionController {
                 return new BounceInterpolator();
             case OVERSHOOT:
                 return new OvershootInterpolator();
+            case INTERPOLATOR_UNDEFINED:
+                return null;
         }
         return null;
     }
@@ -1299,7 +1307,6 @@ public class MotionController {
         float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
-            float pin = position;
             float steps = 1.0f / mQuantizeMotionSteps; // the length of a step
             float jump = (float) Math.floor(position / steps) * steps; // step jumps
             float section = (position % steps) / steps; // float from 0 to 1 in a step
@@ -1499,8 +1506,8 @@ public class MotionController {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
     }
 
     /**
@@ -1577,8 +1584,8 @@ public class MotionController {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
 
         vmat.clear();
         vmat.setRotationVelocity(rotation, position);

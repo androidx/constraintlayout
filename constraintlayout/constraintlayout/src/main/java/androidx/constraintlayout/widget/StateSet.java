@@ -39,11 +39,10 @@ public class StateSet {
     private static final boolean DEBUG = false;
     int mDefaultState = -1;
 
-    ConstraintSet mDefaultConstraintSet;
     int mCurrentStateId = -1; // default
     int mCurrentConstraintNumber = -1; // default
     private SparseArray<State> mStateList = new SparseArray<>();
-    private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
+    @SuppressWarnings("unused")
     private ConstraintsChangedListener mConstraintsChangedListener = null;
 
     /**
@@ -78,10 +77,8 @@ public class StateSet {
         }
         a.recycle();
 
-        String tagName = null;
         try {
             Variant match;
-            String document = null;
             State state = null;
             for (int eventType = parser.getEventType();
                     eventType != XmlResourceParser.END_DOCUMENT;
@@ -89,10 +86,10 @@ public class StateSet {
 
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
-                        document = parser.getName();
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         switch(tagName) {
                             case "LayoutDescription":
                                 break;
@@ -123,18 +120,14 @@ public class StateSet {
                             }
                             return;
                         }
-
-                        tagName = null;
-                        break;
-                    case XmlResourceParser.TEXT:
                         break;
                 }
             }
 
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 
@@ -291,6 +284,7 @@ public class StateSet {
                 } else if (attr == R.styleable.State_constraints) {
                     mConstraintID = a.getResourceId(attr, mConstraintID);
                     String type = context.getResources().getResourceTypeName(mConstraintID);
+                    @SuppressWarnings("unused")
                     String name = context.getResources().getResourceName(mConstraintID);
 
                     if ("layout".equals(type)) {
@@ -337,6 +331,7 @@ public class StateSet {
                 if (attr == R.styleable.Variant_constraints) {
                     mConstraintID = a.getResourceId(attr, mConstraintID);
                     String type = context.getResources().getResourceTypeName(mConstraintID);
+                    @SuppressWarnings("unused")
                     String name = context.getResources().getResourceName(mConstraintID);
 
                     if ("layout".equals(type)) {
@@ -392,7 +387,6 @@ public class StateSet {
                 if (heightDp > mMaxHeight) return false;
             }
             return true;
-
         }
     }
 

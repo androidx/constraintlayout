@@ -775,12 +775,12 @@ public class ConstraintProperties {
         connect(LEFT, leftId, (leftId == PARENT_ID) ? LEFT : RIGHT, 0);
         connect(RIGHT, rightId, (rightId == PARENT_ID) ? RIGHT : LEFT, 0);
         if (leftId != PARENT_ID) {
-            View leftView = ((ViewGroup) (mView.getParent())).findViewById(leftId);
+            View leftView = ((ViewGroup) mView.getParent()).findViewById(leftId);
             ConstraintProperties leftProp = new ConstraintProperties(leftView);
             leftProp.connect(RIGHT, mView.getId(), LEFT, 0);
         }
         if (rightId != PARENT_ID) {
-            View rightView = ((ViewGroup) (mView.getParent())).findViewById(rightId);
+            View rightView = ((ViewGroup) mView.getParent()).findViewById(rightId);
             ConstraintProperties rightProp = new ConstraintProperties(rightView);
             rightProp.connect(LEFT, mView.getId(), RIGHT, 0);
         }
@@ -798,12 +798,12 @@ public class ConstraintProperties {
         connect(START, leftId, (leftId == PARENT_ID) ? START : END, 0);
         connect(END, rightId, (rightId == PARENT_ID) ? END : START, 0);
         if (leftId != PARENT_ID) {
-            View leftView = ((ViewGroup) (mView.getParent())).findViewById(leftId);
+            View leftView = ((ViewGroup) mView.getParent()).findViewById(leftId);
             ConstraintProperties leftProp = new ConstraintProperties(leftView);
             leftProp.connect(END, mView.getId(), START, 0);
         }
         if (rightId != PARENT_ID) {
-            View rightView = ((ViewGroup) (mView.getParent())).findViewById(rightId);
+            View rightView = ((ViewGroup) mView.getParent()).findViewById(rightId);
             ConstraintProperties rightProp = new ConstraintProperties(rightView);
             rightProp.connect(START, mView.getId(), END, 0);
         }
@@ -821,12 +821,12 @@ public class ConstraintProperties {
         connect(TOP, topId, (topId == PARENT_ID) ? TOP : BOTTOM, 0);
         connect(BOTTOM, bottomId, (bottomId == PARENT_ID) ? BOTTOM : TOP, 0);
         if (topId != PARENT_ID) {
-            View topView = ((ViewGroup) (mView.getParent())).findViewById(topId);
+            View topView = ((ViewGroup) mView.getParent()).findViewById(topId);
             ConstraintProperties topProp = new ConstraintProperties(topView);
             topProp.connect(BOTTOM, mView.getId(), TOP, 0);
         }
         if (bottomId != PARENT_ID) {
-            View bottomView = ((ViewGroup) (mView.getParent())).findViewById(bottomId);
+            View bottomView = ((ViewGroup) mView.getParent()).findViewById(bottomId);
             ConstraintProperties bottomProp = new ConstraintProperties(bottomView);
             bottomProp.connect(TOP, mView.getId(), BOTTOM, 0);
         }
@@ -844,9 +844,9 @@ public class ConstraintProperties {
         int topId = mParams.topToBottom;
         int bottomId = mParams.bottomToTop;
         if (topId != mParams.UNSET || bottomId != mParams.UNSET) {
-            View topView = ((ViewGroup) (mView.getParent())).findViewById(topId);
+            View topView = ((ViewGroup) mView.getParent()).findViewById(topId);
             ConstraintProperties topProp = new ConstraintProperties(topView);
-            View bottomView = ((ViewGroup) (mView.getParent())).findViewById(bottomId);
+            View bottomView = ((ViewGroup) mView.getParent()).findViewById(bottomId);
             ConstraintProperties bottomProp = new ConstraintProperties(bottomView);
             if (topId != mParams.UNSET && bottomId != mParams.UNSET) {
                 // top and bottom connected to views
@@ -880,9 +880,9 @@ public class ConstraintProperties {
         int rightId = mParams.rightToLeft;
 
         if (leftId != mParams.UNSET || rightId != mParams.UNSET) {
-            View leftView = ((ViewGroup) (mView.getParent())).findViewById(leftId);
+            View leftView = ((ViewGroup) mView.getParent()).findViewById(leftId);
             ConstraintProperties leftProp = new ConstraintProperties(leftView);
-            View rightView = ((ViewGroup) (mView.getParent())).findViewById(rightId);
+            View rightView = ((ViewGroup) mView.getParent()).findViewById(rightId);
             ConstraintProperties rightProp = new ConstraintProperties(rightView);
             if (leftId != mParams.UNSET && rightId != mParams.UNSET) {
                 // left and right connected to views
@@ -904,9 +904,9 @@ public class ConstraintProperties {
             int startId = mParams.startToEnd;
             int endId = mParams.endToStart;
             if (startId != mParams.UNSET || endId != mParams.UNSET) {
-                View startView = ((ViewGroup) (mView.getParent())).findViewById(startId);
+                View startView = ((ViewGroup) mView.getParent()).findViewById(startId);
                 ConstraintProperties startProp = new ConstraintProperties(startView);
-                View endView = ((ViewGroup) (mView.getParent())).findViewById(endId);
+                View endView = ((ViewGroup) mView.getParent()).findViewById(endId);
                 ConstraintProperties endProp = new ConstraintProperties(endView);
 
                 if (startId != mParams.UNSET && endId != mParams.UNSET) {

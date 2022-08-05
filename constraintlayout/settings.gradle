@@ -6,17 +6,15 @@ pluginManagement {
         google()
         mavenCentral()
     }
+}
 
-    plugins {
-        id 'org.jetbrains.kotlin.android' version '1.5.10'
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        mavenCentral()
     }
-    resolutionStrategy {
-        eachPlugin {
-            if (it.requested.id.namespace == "com.android") {
-                it.useModule("com.android.tools.build:gradle:7.0.3")
-            }
-        }
-    }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
 
 rootProject.name = 'constraintlayout'
@@ -28,14 +26,3 @@ include ':core',
         ':swing'
 
 includeBuild 'build-logic'
-
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-        google()
-        maven { url "../../prebuilts/tools/common/m2/repository" }
-        maven { url "https://androidx.dev/snapshots/builds/7352378/artifacts/repository/" }
-        mavenCentral()
-    }
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-}

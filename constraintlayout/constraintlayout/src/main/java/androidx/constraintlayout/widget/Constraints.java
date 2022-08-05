@@ -42,13 +42,13 @@ public class Constraints extends ViewGroup {
 
     public Constraints(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init();
         super.setVisibility(View.GONE);
     }
 
     public Constraints(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init();
         super.setVisibility(View.GONE);
     }
 
@@ -133,7 +133,7 @@ public class Constraints extends ViewGroup {
         return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init() {
         Log.v(TAG, " ################# init");
     }
 

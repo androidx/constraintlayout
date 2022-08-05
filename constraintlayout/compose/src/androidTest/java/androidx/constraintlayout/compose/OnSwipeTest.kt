@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMotionApi::class)
+
 package androidx.constraintlayout.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
@@ -26,32 +30,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertPositionInRootIsEqualTo
-import androidx.compose.ui.test.centerY
-import androidx.compose.ui.test.down
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.move
-import androidx.compose.ui.test.movePointerTo
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performGesture
-import androidx.compose.ui.test.right
-import androidx.compose.ui.test.up
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import kotlin.math.roundToInt
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.math.roundToInt
 
-/**
- * Run with Pixel 3 API 30.
- */
-@Ignore("Swipe doesn't seem to animate when touch is up, not reproducible")
-@OptIn(ExperimentalMotionApi::class)
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 class OnSwipeTest {
@@ -69,19 +61,72 @@ class OnSwipeTest {
     }
 
     @Test
-    fun simpleCornerToCornerRightSwipe() {
-        rule.setContent {
-            MotionLayout(
-                modifier = Modifier
-                    .testTag("MyMotion")
-                    .fillMaxSize(),
-                motionScene = MotionScene(
-                    content = """
+    fun simpleCornerToCornerRightSwipe_Json() {
+        testMotionLayoutSwipe { OnSwipeTestJson() }
+    }
+
+    @Test
+    fun simpleCornerToCornerRightSwipe_Dsl() {
+        testMotionLayoutSwipe { OnSwipeTestDsl() }
+    }
+
+    private fun testMotionLayoutSwipe(content: @Composable () -> Unit) {
+        rule.setContent(content)
+        rule.waitForIdle()
+        val motionSemantic = rule.onNodeWithTag("MyMotion")
+        motionSemantic
+            .assertExists()
+            .performTouchInput {
+                // Do a periodic swipe between two points that lasts 500ms
+                val start = Offset(right * 0.25f, centerY)
+                val end = Offset(right * 0.5f, centerY)
+                val durationMillis = 500L
+                val durationMillisFloat = durationMillis.toFloat()
+
+                // Start touch input
+                down(0, start)
+
+                val steps = (durationMillisFloat / eventPeriodMillis.toFloat()).roundToInt()
+                var step = 0
+
+                val getPositionAt: (Long) -> Offset = {
+                    lerp(start, end, it.toFloat() / durationMillis)
+                }
+
+                var tP = 0L
+                while (step++ < steps) {
+                    val progress = step / steps.toFloat()
+                    val tn = lerp(0, durationMillis, progress)
+                    updatePointerTo(0, getPositionAt(tn))
+                    move(tn - tP)
+                    tP = tn
+                }
+            }
+        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(51.6.dp, 128.3.dp)
+        motionSemantic
+            .performTouchInput {
+                up()
+            }
+        // Wait a frame for the Touch Up animation to start
+        rule.mainClock.advanceTimeByFrame()
+        rule.waitForIdle()
+        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(170.dp, 10.dp)
+    }
+}
+
+@Composable
+private fun OnSwipeTestJson() {
+    MotionLayout(
+        modifier = Modifier
+            .testTag("MyMotion")
+            .size(200.dp),
+        motionScene = MotionScene(
+            content = """
        {
          ConstraintSets: {
            start: {
              box: {
-               width: 50, height: 50,
+               width: 20, height: 20,
                bottom: ['parent', 'bottom', 10],
                start: ['parent', 'start', 10]
              }
@@ -104,87 +149,69 @@ class OnSwipeTest {
                 direction: 'end',
                 side: 'end',
                 mode: 'spring',
-                springStiffness: 300
+                touchUp: 'neverCompleteStart',
+                stopThreshold: 0.0001
               }
            }
          }
        }
         """.trimIndent()
-                ),
-                progress = 0.0f
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                        .layoutId("box")
-                        .testTag("box")
-                )
+        ),
+        progress = 0.0f
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color.Red)
+                .layoutId("box")
+                .testTag("box")
+        )
+    }
+}
+
+@Composable
+private fun OnSwipeTestDsl() {
+    val start = remember {
+        ConstraintSet {
+            constrain(createRefFor("box")) {
+                width = Dimension.value(20.dp)
+                height = Dimension.value(20.dp)
+                bottom.linkTo(parent.bottom, 10.dp)
+                start.linkTo(parent.start, 10.dp)
             }
         }
-        rule.waitForIdle()
-        val motionSemantic = rule.onNodeWithTag("MyMotion")
-        motionSemantic
-            .assertExists()
-            .performGesture {
-                val start = Offset(right * 0.25f, centerY)
-                val end = Offset(right * 0.5f, centerY)
-                val durationMillis = 500L
-                val durationMillisFloat = durationMillis.toFloat()
-
-                // Start touch input
-                down(0, start)
-
-                val steps = (durationMillisFloat / 10.toFloat()).roundToInt()
-                var step = 0
-
-                val getPositionAt: (Long) -> Offset = {
-                    lerp(start, end, it.toFloat() / durationMillis)
-                }
-
-                while (step++ < steps) {
-                    val progress = step / steps.toFloat()
-                    val tn = lerp(0, durationMillis, progress)
-
-                    movePointerTo(0, getPositionAt(tn))
-                    move()
-                }
+    }
+    val end = remember {
+        ConstraintSet(start) {
+            constrain(createRefFor("box")) {
+                clearConstraints()
+                top.linkTo(parent.top, 10.dp)
+                end.linkTo(parent.end, 10.dp)
             }
-        // TODO: Uncomment once we can use 1.1.0
-//            .performTouchInput {
-//                val start = Offset(right * 0.25f, centerY)
-//                val end = Offset(right * 0.5f, centerY)
-//                val durationMillis = 500L
-//                val durationMillisFloat = durationMillis.toFloat()
-//
-//                // Start touch input
-//                down(0, start)
-//
-//                val steps = (durationMillisFloat / eventPeriodMillis.toFloat()).roundToInt()
-//                var step = 0
-//
-//                val getPositionAt: (Long) -> Offset = {
-//                    lerp(start, end, it.toFloat() / durationMillis)
-//                }
-//
-//                var tP = 0L
-//                while (step++ < steps) {
-//                    val progress = step / steps.toFloat()
-//                    val tn = lerp(0, durationMillis, progress)
-//                    updatePointerTo(0, getPositionAt(tn))
-//                    move(tn - tP)
-//                    tP = tn
-//                }
-//            }
-        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(67.dp, 493.dp)
-        motionSemantic
-            .performGesture {
-                up(0)
-            }
-        // TODO: Uncomment once we can use 1.1.0
-//            .performTouchInput {
-//                up()
-//            }
-        rule.waitForIdle()
-        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(332.dp, 10.dp)
+        }
+    }
+    MotionLayout(
+        modifier = Modifier
+            .testTag("MyMotion")
+            .size(200.dp),
+        start = start,
+        end = end,
+        transition = Transition {
+            onSwipe = OnSwipe(
+                anchor = "box",
+                direction = SwipeDirection.End,
+                side = SwipeSide.Right,
+                mode = SwipeMode.Spring,
+                onTouchUp = SwipeTouchUp.NeverCompleteStart,
+                springThreshold = 0.0001f
+            )
+        },
+        progress = 0.0f
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color.Red)
+                .layoutId("box")
+                .testTag("box")
+        )
     }
 }

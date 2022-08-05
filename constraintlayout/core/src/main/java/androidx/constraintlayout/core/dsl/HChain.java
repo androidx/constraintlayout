@@ -18,11 +18,8 @@ package androidx.constraintlayout.core.dsl;
 
 public class HChain extends Chain {
     public class HAnchor extends Anchor {
-        final Constraint.HSide mSide;
-
         HAnchor(Constraint.HSide side) {
             super(Constraint.Side.valueOf(side.name()));
-            mSide = side;
         }
     }
 

@@ -71,10 +71,10 @@ public class MotionKeyPosition extends MotionKey {
             float endX, float endY) {
         float pathVectorX = endX - startX;
         float pathVectorY = endY - startY;
-        float dxdx = (Float.isNaN(mPercentX)) ? 0 : mPercentX;
-        float dydx = (Float.isNaN(mAltPercentY)) ? 0 : mAltPercentY;
-        float dydy = (Float.isNaN(mPercentY)) ? 0 : mPercentY;
-        float dxdy = (Float.isNaN(mAltPercentX)) ? 0 : mAltPercentX;
+        float dxdx = Float.isNaN(mPercentX) ? 0 : mPercentX;
+        float dydx = Float.isNaN(mAltPercentY) ? 0 : mAltPercentY;
+        float dydy = Float.isNaN(mPercentY) ? 0 : mPercentY;
+        float dxdy = Float.isNaN(mAltPercentX) ? 0 : mAltPercentX;
         mCalculatedPositionX = (int) (startX + pathVectorX * dxdx + pathVectorY * dxdy);
         mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
@@ -161,8 +161,8 @@ public class MotionKeyPosition extends MotionKey {
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
         float endCenterY = end.centerY();
-        float pathVectorX = endCenterX - startCenterX;
-        float pathVectorY = endCenterY - startCenterY;
+        @SuppressWarnings("unused") float pathVectorX = endCenterX - startCenterX;
+        @SuppressWarnings("unused") float pathVectorY = endCenterY - startCenterY;
         MotionWidget viewGroup = ((MotionWidget) view.getParent());
         int width = viewGroup.getWidth();
         int height = viewGroup.getHeight();
@@ -232,6 +232,7 @@ public class MotionKeyPosition extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKey copy(MotionKey src) {
         super.copy(src);
         MotionKeyPosition k = (MotionKeyPosition) src;
@@ -252,6 +253,7 @@ public class MotionKeyPosition extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public MotionKey clone() {
         return new MotionKeyPosition().copy(this);
     }
@@ -286,6 +288,7 @@ public class MotionKeyPosition extends MotionKey {
      * @param splines splines to write values to
      * @TODO: add description
      */
+    @Override
     public void addValues(HashMap<String, SplineSet> splines) {
     }
 

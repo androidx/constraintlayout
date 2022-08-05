@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.motion.utils;
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
     float mRotate;
-    private static String sTag = "VelocityMatrix";
+    @SuppressWarnings("unused") private static String sTag = "VelocityMatrix";
 
     /**
      * @TODO: add description

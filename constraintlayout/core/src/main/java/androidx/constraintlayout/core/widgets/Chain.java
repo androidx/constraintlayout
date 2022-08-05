@@ -69,7 +69,7 @@ public class Chain {
             // otherwise the values we use may not be correctly initialized
             // (as we initialize them in the ConstraintWidget.addToSolver())
             first.define();
-            if (widgets == null || widgets != null && widgets.contains(first.mFirst)) {
+            if (widgets == null || widgets.contains(first.mFirst)) {
                 applyChainConstraints(constraintWidgetContainer,
                         system, orientation, offset, first);
             }
@@ -99,8 +99,10 @@ public class Chain {
         boolean done = false;
 
         float totalWeights = chainHead.mTotalWeight;
-        ConstraintWidget firstMatchConstraintsWidget = chainHead.mFirstMatchConstraintWidget;
-        ConstraintWidget previousMatchConstraintsWidget = chainHead.mLastMatchConstraintWidget;
+        @SuppressWarnings("unused") ConstraintWidget firstMatchConstraintsWidget =
+                chainHead.mFirstMatchConstraintWidget;
+        @SuppressWarnings("unused") ConstraintWidget previousMatchConstraintsWidget =
+                chainHead.mLastMatchConstraintWidget;
 
         boolean isWrapContent = container.mListDimensionBehaviors[orientation]
                 == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
@@ -344,7 +346,7 @@ public class Chain {
 
                     ConstraintAnchor beginNextAnchor = null;
                     SolverVariable beginNext = null;
-                    SolverVariable beginNextTarget = null;
+                    @SuppressWarnings("unused") SolverVariable beginNextTarget = null;
                     int beginMargin = beginAnchor.getMargin();
                     int nextMargin = widget.mListAnchors[offset + 1].getMargin();
 
@@ -404,7 +406,8 @@ public class Chain {
                     }
                     ConstraintAnchor beginAnchor = widget.mListAnchors[offset];
                     SolverVariable begin = beginAnchor.mSolverVariable;
-                    SolverVariable beginTarget = beginAnchor.mTarget != null
+                    @SuppressWarnings("unused") SolverVariable beginTarget =
+                            beginAnchor.mTarget != null
                             ? beginAnchor.mTarget.mSolverVariable : null;
                     beginTarget = previousVisibleWidget.mListAnchors[offset + 1].mSolverVariable;
                     ConstraintAnchor beginNextAnchor = null;

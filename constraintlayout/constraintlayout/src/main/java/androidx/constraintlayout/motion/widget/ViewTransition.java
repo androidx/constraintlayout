@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * For asynchronous it will create and drive a MotionController.
  */
 public class ViewTransition {
-    private static String sTAG = "ViewTransition";
+    private static final String TAG = "ViewTransition";
     ConstraintSet mSet;
     public static final String VIEW_TRANSITION_TAG = "ViewTransition";
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
@@ -178,6 +178,7 @@ public class ViewTransition {
      * debug string for a ViewTransition
      * @return
      */
+    @Override
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
     }
@@ -215,17 +216,16 @@ public class ViewTransition {
 
     ViewTransition(Context context, XmlPullParser parser) {
         mContext = context;
-        String tagName = null;
         try {
-            Key key = null;
             for (int eventType = parser.getEventType();
                     eventType != XmlResourceParser.END_DOCUMENT;
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         switch (tagName) {
                             case VIEW_TRANSITION_TAG:
                                 parseViewTransitionTags(context, parser);
@@ -242,8 +242,8 @@ public class ViewTransition {
                                         mConstraintDelta.mCustomConstraints);
                                 break;
                             default:
-                                Log.e(sTAG, Debug.getLoc() + " unknown tag " + tagName);
-                                Log.e(sTAG, ".xml:" + parser.getLineNumber());
+                                Log.e(TAG, Debug.getLoc() + " unknown tag " + tagName);
+                                Log.e(TAG, ".xml:" + parser.getLineNumber());
                         }
 
                         break;
@@ -252,14 +252,12 @@ public class ViewTransition {
                             return;
                         }
                         break;
-                    case XmlResourceParser.TEXT:
-                        break;
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 
@@ -586,7 +584,7 @@ public class ViewTransition {
         }
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp instanceof ConstraintLayout.LayoutParams) {
-            String tag = ((ConstraintLayout.LayoutParams) (view.getLayoutParams())).constraintTag;
+            String tag = ((ConstraintLayout.LayoutParams) view.getLayoutParams()).constraintTag;
             if (tag != null && tag.matches(mTargetString)) {
                 return true;
             }

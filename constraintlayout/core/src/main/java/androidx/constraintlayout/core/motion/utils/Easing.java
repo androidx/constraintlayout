@@ -151,11 +151,13 @@ public class Easing {
             return mY1 * f1 + mY2 * f2 + f3;
         }
 
+        @SuppressWarnings("unused")
         private double getDiffX(double t) {
             double t1 = 1 - t;
             return 3 * t1 * t1 * mX1 + 6 * t1 * t * (mX2 - mX1) + 3 * t * t * (1 - mX2);
         }
 
+        @SuppressWarnings("unused")
         private double getDiffY(double t) {
             double t1 = 1 - t;
             return 3 * t1 * t1 * mY1 + 6 * t1 * t * (mY2 - mY1) + 3 * t * t * (1 - mY2);

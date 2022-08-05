@@ -270,7 +270,6 @@ public class Motion implements TypedValues {
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
         double[] velocity = new double[4];
-        int[] temp = new int[4];
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel, 0);
@@ -376,13 +375,13 @@ public class Motion implements TypedValues {
      */
     void buildBounds(float[] bounds, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
-        SplineSet trans_x =
+        @SuppressWarnings("unused") SplineSet trans_x =
                 (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
-        SplineSet trans_y =
+        @SuppressWarnings("unused") SplineSet trans_y =
                 (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
-        KeyCycleOscillator osc_x =
+        @SuppressWarnings("unused") KeyCycleOscillator osc_x =
                 (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
-        KeyCycleOscillator osc_y =
+        @SuppressWarnings("unused") KeyCycleOscillator osc_y =
                 (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
@@ -475,7 +474,7 @@ public class Motion implements TypedValues {
             mSpline[0].getPos(p, mInterpolateData);
             mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, 0);
             if (i > 0) {
-                sum += Math.hypot(y - points[1], x - points[0]);
+                sum += (float) Math.hypot(y - points[1], x - points[0]);
             }
             x = points[0];
             y = points[1];
@@ -560,7 +559,7 @@ public class Motion implements TypedValues {
     String[] mAttributeTable;
 
     int getAttributeValues(String attributeType, float[] points, int pointCount) {
-        float mils = 1.0f / (pointCount - 1);
+        @SuppressWarnings("unused") float mils = 1.0f / (pointCount - 1);
         SplineSet spline = mAttributesMap.get(attributeType);
         if (spline == null) {
             return -1;
@@ -674,7 +673,9 @@ public class Motion implements TypedValues {
             int parentHeight,
             float transitionDuration,
             long currentTime) {
-        HashSet<String> springAttributes = new HashSet<>(); // attributes we need to interpolate
+        @SuppressWarnings({"unused", "ModifiedButNotUsed"})
+        HashSet<String> springAttributes = new HashSet<>();
+        // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> cycleAttributes = new HashSet<>(); // attributes we need to oscillate
@@ -912,7 +913,8 @@ public class Motion implements TypedValues {
         for (int j = 0; j < mInterpolateVariables.length; j++) {
             int interpolateVariable = mInterpolateVariables[j];
             if (interpolateVariable < MotionPaths.sNames.length) {
-                String s = MotionPaths.sNames[mInterpolateVariables[j]] + " [";
+                @SuppressWarnings("unused") String s =
+                        MotionPaths.sNames[mInterpolateVariables[j]] + " [";
                 for (int i = 0; i < points.length; i++) {
                     s += splineData[i][j];
                 }
@@ -1008,6 +1010,7 @@ public class Motion implements TypedValues {
     /**
      * Debug string
      */
+    @Override
     public String toString() {
         return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
                 + " end: x: " + mEndMotionPath.mX + " y: " + mEndMotionPath.mY;
@@ -1158,12 +1161,12 @@ public class Motion implements TypedValues {
     static final int BOUNCE = 4;
     static final int OVERSHOOT = 5;
     private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFERENCE_ID = -2;
-    private static final int INTERPOLATOR_UNDEFINED = -3;
+    @SuppressWarnings("unused") private static final int INTERPOLATOR_REFERENCE_ID = -2;
+    @SuppressWarnings("unused") private static final int INTERPOLATOR_UNDEFINED = -3;
 
     private static DifferentialInterpolator getInterpolator(int type,
             String interpolatorString,
-            int id) {
+            @SuppressWarnings("unused") int id) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1288,11 +1291,11 @@ public class Motion implements TypedValues {
             float globalPosition,
             long time,
             KeyCache keyCache) {
-        boolean timeAnimation = false;
+        @SuppressWarnings("unused")  boolean timeAnimation = false;
         float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
-            float pin = position;
+            @SuppressWarnings("unused") float pin = position;
             float steps = 1.0f / mQuantizeMotionSteps; // the length of a step
             float jump = (float) Math.floor(position / steps) * steps; // step jumps
             float section = (position % steps) / steps; // float from 0 to 1 in a step
@@ -1487,8 +1490,8 @@ public class Motion implements TypedValues {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
     }
 
     /**
@@ -1570,8 +1573,8 @@ public class Motion implements TypedValues {
         float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
-        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
-        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * (locationY);
+        mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * locationX;
+        mAnchorDpDt[1] = dTop * (1 - locationY) + dBottom * locationY;
 
         vmat.clear();
         vmat.setRotationVelocity(rotation, position);

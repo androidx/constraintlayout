@@ -301,8 +301,6 @@ public class ConstraintLayoutStates {
         }
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
-        String document = null;
-        String tagName = null;
         try {
             Variant match;
             State state = null;
@@ -311,13 +309,13 @@ public class ConstraintLayoutStates {
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
-                        document = parser.getName();
+                    case XmlResourceParser.END_TAG:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         switch (tagName) {
                             case "layoutDescription":
-                                break;
                             case "StateSet":
                                 break;
                             case "State":
@@ -338,12 +336,6 @@ public class ConstraintLayoutStates {
                                     Log.v(TAG, "unknown tag " + tagName);
                                 }
                         }
-
-                        break;
-                    case XmlResourceParser.END_TAG:
-                        tagName = null;
-                        break;
-                    case XmlResourceParser.TEXT:
                         break;
                 }
             }
@@ -356,9 +348,9 @@ public class ConstraintLayoutStates {
 //                }
 //            }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 

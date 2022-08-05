@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.motion.utils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Utils {
     /**
@@ -44,7 +45,11 @@ public class Utils {
             out.write(str.getBytes());
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //TODO replace with something not equal to printStackTrace();
+            System.err.println(e.toString()+"\n"+ Arrays.toString(e.getStackTrace())
+                    .replace("[","   at ")
+                    .replace(",","\n   at")
+                    .replace("]",""));
         }
     }
 
@@ -103,8 +108,8 @@ public class Utils {
         n = Math.min(n, st.length - 1);
         for (int i = 1; i <= n; i++) {
             StackTraceElement ste = st[i];
-            String stack = ".(" + st[i].getFileName() + ":"
-                    + st[i].getLineNumber() + ") " + st[i].getMethodName();
+            String stack = ".(" + ste.getFileName() + ":"
+                    + ste.getLineNumber() + ") " + ste.getMethodName();
             s += " ";
             System.out.println(msg + s + stack + s);
         }

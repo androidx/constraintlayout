@@ -419,10 +419,10 @@ public class MotionScene {
         int count = 0;
 
         for (int i = 0; i < ids.length; i++) {
-            ConstraintSet set  = mConstraintSetMap.valueAt(i);
+            ConstraintSet set = mConstraintSetMap.valueAt(i);
             int id = mConstraintSetMap.keyAt(i);
             if (set.matchesLabels(types)) {
-                String []s = set.getStateLabels();
+                @SuppressWarnings("unused") String[] s = set.getStateLabels();
                 ids[count++] = id;
             }
         }
@@ -1199,11 +1199,8 @@ public class MotionScene {
      * @param resourceId id of xml file in res/xml/
      */
     private void load(Context context, int resourceId) {
-
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
-        String document = null;
-        String tagName = null;
         try {
             Transition transition = null;
             for (int eventType = parser.getEventType();
@@ -1211,10 +1208,11 @@ public class MotionScene {
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
-                        document = parser.getName();
+                    case XmlResourceParser.END_TAG:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         if (DEBUG_DESKTOP) {
                             System.out.println("parsing = " + tagName);
                         }
@@ -1292,23 +1290,18 @@ public class MotionScene {
                         }
 
                         break;
-                    case XmlResourceParser.END_TAG:
-                        tagName = null;
-                        break;
-                    case XmlResourceParser.TEXT:
-                        break;
                 }
             }
         } catch (XmlPullParserException e) {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 
@@ -1381,13 +1374,13 @@ public class MotionScene {
                 Log.v(TAG, getLine(context, resourceId, includeParser)
                         + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
             if (DEBUG) {
                 Log.v(TAG, getLine(context, resourceId, includeParser)
                         + " " + e.getMessage());
             }
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
         return UNSET;
     }
@@ -1747,7 +1740,7 @@ public class MotionScene {
                         region = mCurrentTransition
                                 .mTouchResponse.getTouchRegion(mMotionLayout, cache);
                         mMotionOutsideRegion = region != null
-                                && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()));
+                                && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY());
                         mCurrentTransition.mTouchResponse.setUpTouchEvent(mLastTouchX, mLastTouchY);
                     }
             }

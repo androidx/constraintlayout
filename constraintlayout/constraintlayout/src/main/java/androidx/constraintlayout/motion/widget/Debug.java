@@ -48,7 +48,7 @@ public class Debug {
         String s = " ";
         n = Math.min(n, st.length - 1);
         for (int i = 1; i <= n; i++) {
-            StackTraceElement ste = st[i];
+            @SuppressWarnings("unused") StackTraceElement ste = st[i];
             String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber()
                     + ") " + st[i].getMethodName();
             s += " ";
@@ -68,7 +68,7 @@ public class Debug {
         String s = " ";
         n = Math.min(n, st.length - 1);
         for (int i = 1; i <= n; i++) {
-            StackTraceElement ste = st[i];
+            @SuppressWarnings("unused") StackTraceElement ste = st[i];
             String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") ";
             s += " ";
             System.out.println(msg + s + stack + s);
@@ -310,7 +310,7 @@ public class Debug {
                 try {
                     Object value = declaredField.get(param);
                     String name = declaredField.getName();
-                    if (!(name.contains("To"))) {
+                    if (!name.contains("To")) {
                         continue;
                     }
                     if (value.toString().equals("-1")) {

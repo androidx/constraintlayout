@@ -24,11 +24,11 @@ package androidx.constraintlayout.core.motion.utils;
  */
 public class SpringStopEngine implements StopEngine {
     double mDamping = 0.5f;
-    private static final double UNSET = Double.MAX_VALUE;
-    private boolean mInitialized = false;
+    @SuppressWarnings("unused") private static final double UNSET = Double.MAX_VALUE;
+    @SuppressWarnings("unused") private boolean mInitialized = false;
     private double mStiffness;
     private double mTargetPos;
-    private double mLastVelocity;
+    @SuppressWarnings("unused") private double mLastVelocity;
     private float mLastTime;
     private float mPos;
     private float mV;
@@ -80,7 +80,7 @@ public class SpringStopEngine implements StopEngine {
     public float getInterpolation(float time) {
         compute(time - mLastTime);
         mLastTime = time;
-        return (float) (mPos);
+        return (float) mPos;
     }
 
     /**
@@ -126,13 +126,13 @@ public class SpringStopEngine implements StopEngine {
             double a = (-k * x - c * mV) / mMass;
             // This refinement of a simple coding of the acceleration increases accuracy
             double avgV = mV + a * dt / 2; // pass 1 calculate the average velocity
-            double avgX = mPos + dt * (avgV) / 2 - mTargetPos; // pass 1 calculate the average pos
+            double avgX = mPos + dt * avgV / 2 - mTargetPos; // pass 1 calculate the average pos
             a = (-avgX * k - avgV * c) / mMass; //  calculate acceleration over that average pos
 
             double dv = a * dt; //  calculate change in velocity
             avgV = mV + dv / 2; //  average  velocity is current + half change
-            mV += dv;
-            mPos += avgV * dt;
+            mV += (float) dv;
+            mPos += (float) (avgV * dt);
             if (mBoundaryMode > 0) {
                 if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
                     mPos = -mPos;

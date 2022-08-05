@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * This is the base Key for all the key (KeyCycle, KeyPosition, etc.) Objects
  */
-class Keys {
+public class Keys {
 
     protected String unpack(String[] str) {
         StringBuilder ret = new StringBuilder("[");

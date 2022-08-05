@@ -129,9 +129,10 @@ public class Ref {
         float val = Float.NaN;
         try {
             val = Float.parseFloat(obj.toString());
-        }  finally {
-            return val;
+        } catch (Exception e) {
+            // ignore
         }
+        return val;
     }
 
     static public Ref parseStringToRef(String str) {

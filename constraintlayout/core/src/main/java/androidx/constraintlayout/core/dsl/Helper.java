@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Helper {
-    enum Type {
+    public enum Type {
         VERTICAL_GUIDELINE,
         HORIZONTAL_GUIDELINE,
         VERTICAL_CHAIN,
@@ -32,17 +32,18 @@ public class Helper {
     protected HelperType type = null;
     protected String config;
     protected Map<String, String> configMap = new HashMap<>();
-    protected Map<Constraint.Side, String> sideMap = new HashMap<Constraint.Side, String>() {{
-        put(Constraint.Side.LEFT, "'left'");
-        put(Constraint.Side.RIGHT, "'right'");
-        put(Constraint.Side.TOP, "'top'");
-        put(Constraint.Side.BOTTOM, "'bottom'");
-        put(Constraint.Side.START, "'start'");
-        put(Constraint.Side.END, "'end'");
-        put(Constraint.Side.BASELINE, "'baseline'");
-    }};
+    final static protected Map<Constraint.Side, String> sideMap = new HashMap<>();
+    static {
+        sideMap.put(Constraint.Side.LEFT, "'left'");
+        sideMap.put(Constraint.Side.RIGHT, "'right'");
+        sideMap.put(Constraint.Side.TOP, "'top'");
+        sideMap.put(Constraint.Side.BOTTOM, "'bottom'");
+        sideMap.put(Constraint.Side.START, "'start'");
+        sideMap.put(Constraint.Side.END, "'end'");
+        sideMap.put(Constraint.Side.BASELINE, "'baseline'");
+    }
 
-    static Map<Helper.Type, String> typeMap = new HashMap<>();
+    final static protected Map<Helper.Type, String> typeMap = new HashMap<>();
     static {
         typeMap.put(Type.VERTICAL_GUIDELINE, "vGuideline");
         typeMap.put(Type.HORIZONTAL_GUIDELINE, "hGuideline");
@@ -151,7 +152,7 @@ public class Helper {
         System.out.println(b.toString());
     }
 
-    static final class HelperType {
+    public static final class HelperType {
         final String mName;
 
         public HelperType(String str) {

@@ -39,7 +39,7 @@ fun Transition(
     transitionContent: TransitionScope.() -> Unit
 ): Transition {
     val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
-    val transitionScope = remember(from, to) { TransitionScope(from = from, to = to) }
+    val transitionScope = remember(from, to) { TransitionScope() }
     val snapshotObserver = remember {
         // We use a Snapshot observer to know when state within the DSL has changed and recompose
         // the transition object
@@ -79,7 +79,7 @@ fun Transition(
     }
 }
 
-class TransitionScope internal constructor(name: String = "default", from: String, to: String) {
+class TransitionScope internal constructor() {
     private val containerObject = CLObject(charArrayOf())
 
     private val keyFramesObject = CLObject(charArrayOf())
@@ -145,6 +145,7 @@ class TransitionScope internal constructor(name: String = "default", from: Strin
             onSwipeObject.putString("anchor", it.anchor.toString())
             onSwipeObject.putString("side", it.side.propName)
             onSwipeObject.putString("touchUp", it.onTouchUp.propName)
+            onSwipeObject.putNumber("stopThreshold", it.springThreshold)
         }
         return containerObject
     }
@@ -327,9 +328,10 @@ data class OnSwipe(
     val side: SwipeSide,
     val direction: SwipeDirection,
     val mode: SwipeMode = SwipeMode.Velocity,
-    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete
+    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete,
+    // TODO: Consider using proper default + consider making this part of SwipeModes
+    val springThreshold: Float = Float.NaN
 )
-
 
 class SwipeMode internal constructor(internal val propName: String) {
     companion object {
@@ -341,6 +343,7 @@ class SwipeMode internal constructor(internal val propName: String) {
 class SwipeTouchUp internal constructor(internal val propName: String) {
     companion object {
         val AutoComplete: SwipeTouchUp = SwipeTouchUp("autocomplete")
+        val NeverCompleteStart: SwipeTouchUp = SwipeTouchUp("neverCompleteStart")
     }
 }
 

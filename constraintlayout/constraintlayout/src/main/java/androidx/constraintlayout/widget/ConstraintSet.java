@@ -1809,15 +1809,11 @@ public class ConstraintSet {
                             stringBuilder.append(" = \"");
                             stringBuilder.append(fValue);
                             stringBuilder.append("\"\n");
-
                         }
                     }
-
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error accessing ConstraintSet field", e);
                 }
-
-
             }
         }
     }
@@ -2290,6 +2286,7 @@ public class ConstraintSet {
          * Return a copy of the Constraint
          * @return
          */
+        @Override
         public Constraint clone() {
             Constraint clone = new Constraint();
             clone.layout.copyFrom(layout);
@@ -4541,19 +4538,17 @@ public class ConstraintSet {
     public void load(Context context, int resourceId) {
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
-        String document = null;
-        String tagName = null;
         try {
-
             for (int eventType = parser.getEventType();
                     eventType != XmlResourceParser.END_DOCUMENT;
                     eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
-                        document = parser.getName();
+                    case XmlResourceParser.END_TAG:
+                    case XmlResourceParser.TEXT:
                         break;
                     case XmlResourceParser.START_TAG:
-                        tagName = parser.getName();
+                        String tagName = parser.getName();
                         Constraint constraint = fillFromAttributeList(context,
                                 Xml.asAttributeSet(parser), false);
                         if (tagName.equalsIgnoreCase("Guideline")) {
@@ -4566,17 +4561,12 @@ public class ConstraintSet {
                         }
                         mConstraints.put(constraint.mViewId, constraint);
                         break;
-                    case XmlResourceParser.END_TAG:
-                        tagName = null;
-                        break;
-                    case XmlResourceParser.TEXT:
-                        break;
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing resource: " + resourceId, e);
         }
     }
 
@@ -4694,9 +4684,9 @@ public class ConstraintSet {
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 
@@ -4714,7 +4704,7 @@ public class ConstraintSet {
         Constraint c = new Constraint();
         TypedArray a = context.obtainStyledAttributes(attrs,
                 override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
-        populateConstraint(context, c, a, override);
+        populateConstraint(c, a, override);
         a.recycle();
         return c;
     }
@@ -5365,7 +5355,7 @@ public class ConstraintSet {
         }
     }
 
-    private void populateConstraint(Context ctx, Constraint c, TypedArray a, boolean override) {
+    private void populateConstraint(Constraint c, TypedArray a, boolean override) {
         if (override) {
             populateOverride(c, a);
             return;
@@ -5868,7 +5858,7 @@ public class ConstraintSet {
      * If true perform validation checks when parsing ConstraintSets
      * This will slow down parsing and should only be used for debugging
      *
-     * @param validate
+     * @return validate
      */
     public boolean isValidateOnParse() {
         return mValidate;
@@ -5937,7 +5927,7 @@ public class ConstraintSet {
                         return field.getName();
                     }
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error accessing ConstraintSet field", e);
                 }
 
             }
@@ -6163,10 +6153,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + (++mUnknownCount);
+                    return "unknown" + ++mUnknownCount;
                 }
             } catch (Exception ex) {
-                return "unknown" + (++mUnknownCount);
+                return "unknown" + ++mUnknownCount;
             }
         }
 
@@ -6360,7 +6350,7 @@ public class ConstraintSet {
                                     float dimPercent,
                                     int dimMin,
                                     int dimMax,
-                                    boolean constrainedDim) throws IOException {
+                                    boolean unusedConstrainedDim) throws IOException {
             if (dim == 0) {
                 if (dimMax != UNSET || dimMin != UNSET) {
                     switch (dimDefault) {
@@ -6419,10 +6409,10 @@ public class ConstraintSet {
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
                 } else {
-                    return "unknown" + (++mUnknownCount);
+                    return "unknown" + ++mUnknownCount;
                 }
             } catch (Exception ex) {
-                return "unknown" + (++mUnknownCount);
+                return "unknown" + ++mUnknownCount;
             }
         }
 

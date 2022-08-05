@@ -17,6 +17,7 @@
 package androidx.constraintlayout.core.dsl;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Provides the API for creating a KeyAttribute Object for use in the Core
@@ -44,12 +45,12 @@ public class KeyAttributes extends Keys {
     private float[] mTranslationY = null;
     private float[] mTranslationZ = null;
 
-    enum Fit {
-        spline,
-        linear,
+    public enum Fit {
+        SPLINE,
+        LINEAR,
     }
 
-    enum Visibility {
+    public enum Visibility {
         VISIBLE,
         INVISIBLE,
         GONE
@@ -207,14 +208,15 @@ public class KeyAttributes extends Keys {
 
     protected void attributesToString(StringBuilder builder) {
         append(builder, "target", mTarget);
-        builder.append("frame:").append(Arrays.asList(mFrames)).append(",\n");
+        builder.append("frame:").append(Arrays.stream(mFrames).boxed().collect(Collectors.toList()))
+                .append(",\n");
 
         append(builder, "easing", mTransitionEasing);
         if (mCurveFit != null) {
             builder.append("fit:'").append(mCurveFit).append("',\n");
         }
         if (mVisibility != null) {
-            builder.append("visibility:'").append(mVisibility).append("',\n");
+            builder.append("visibility:'").append(Arrays.toString(mVisibility)).append("',\n");
         }
         append(builder, "alpha", mAlpha);
         append(builder, "rotationX", mRotationX);

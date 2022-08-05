@@ -78,7 +78,7 @@ internal class TransitionImpl(
     /**
      * Applies all Transition properties to [transition].
      */
-    fun applyAllTo(transition: androidx.constraintlayout.core.state.Transition, type: Int) {
+    fun applyAllTo(transition: androidx.constraintlayout.core.state.Transition) {
         try {
             TransitionParser.parse(parsedTransition, transition, pixelDp)
         } catch (e: CLParsingException) {

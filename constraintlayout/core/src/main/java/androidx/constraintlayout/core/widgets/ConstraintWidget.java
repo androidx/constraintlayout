@@ -3839,10 +3839,11 @@ public class ConstraintWidget {
     }
 
     private void getSceneString(StringBuilder ret, String type, int size,
-            int min, int max, int override,
+            int min, int max,
+            @SuppressWarnings("unused") int override,
             int matchConstraintMin, int matchConstraintDefault,
             float matchConstraintPercent,
-            float weight) {
+            @SuppressWarnings("unused") float weight) {
         ret.append(type);
         ret.append(" :  {\n");
         serializeAttribute(ret, "      size", size, 0);

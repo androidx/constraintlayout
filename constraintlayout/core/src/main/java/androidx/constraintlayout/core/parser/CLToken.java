@@ -59,6 +59,7 @@ public class CLToken extends CLElement {
         return new CLToken(content);
     }
 
+    @Override
     protected String toJSON() {
         if (CLParser.sDebug) {
             return "<" + content() + ">";
@@ -67,6 +68,7 @@ public class CLToken extends CLElement {
         }
     }
 
+    @Override
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder();
         addIndent(json, indent);

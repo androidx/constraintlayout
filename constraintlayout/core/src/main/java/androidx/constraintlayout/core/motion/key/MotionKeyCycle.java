@@ -40,8 +40,8 @@ public class MotionKeyCycle extends MotionKey {
     public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
     public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
 
-    private String mTransitionEasing = null;
-    private int mCurveFit = 0;
+    @SuppressWarnings("unused") private String mTransitionEasing = null;
+    @SuppressWarnings("unused") private int mCurveFit = 0;
     private int mWaveShape = -1;
     private String mCustomWaveShape = null;
     private float mWavePeriod = Float.NaN;
@@ -116,6 +116,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
         switch (type) {
             case CycleType.TYPE_CURVE_FIT:
@@ -136,6 +137,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case CycleType.TYPE_EASING:
@@ -153,6 +155,7 @@ public class MotionKeyCycle extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case CycleType.TYPE_ALPHA:
@@ -366,7 +369,6 @@ public class MotionKeyCycle extends MotionKey {
                 + '}');
         String[] names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
-            int id = AttributesType.getId(names[i]);
             Utils.log(names[i] + ":" + getValue(names[i]));
         }
     }

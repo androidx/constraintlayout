@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Chain extends Helper {
-    enum Style {
+    public enum Style {
         PACKED,
         SPREAD,
         SPREAD_INSIDE
@@ -29,11 +29,12 @@ public abstract class Chain extends Helper {
 
     private Style mStyle = null;
     protected ArrayList<Ref> references = new ArrayList<>();
-    protected Map<Style, String> styleMap = new HashMap<Style, String>() {{
-        put(Style.SPREAD, "'spread'");
-        put(Style.SPREAD_INSIDE, "'spread_inside'");
-        put(Style.PACKED, "'packed'");
-    }};
+    final static protected Map<Style, String> styleMap = new HashMap<>();
+    static {
+        styleMap.put(Style.SPREAD, "'spread'");
+        styleMap.put(Style.SPREAD_INSIDE, "'spread_inside'");
+        styleMap.put(Style.PACKED, "'packed'");
+    }
 
     public Chain(String name) {
         super(name, new HelperType(""));

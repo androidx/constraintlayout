@@ -86,7 +86,7 @@ internal class MotionMeasurer : Measurer() {
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
-        transition: TransitionImpl?,
+        @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -513,13 +513,13 @@ internal class MotionMeasurer : Measurer() {
     fun initWith(
         start: ConstraintSet,
         end: ConstraintSet,
-        transition: TransitionImpl?,
+        @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
         progress: Float
     ) {
         clearConstraintSets()
         start.applyTo(this.transition, Transition.START)
         end.applyTo(this.transition, Transition.END)
         this.transition.interpolate(0, 0, progress)
-        transition?.applyAllTo(this.transition, 0)
+        transition?.applyAllTo(this.transition)
     }
 }

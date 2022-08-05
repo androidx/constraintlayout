@@ -204,6 +204,7 @@ public abstract class SplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
@@ -253,7 +254,7 @@ public abstract class SplineSet {
 
     private static class CoreSpline extends SplineSet {
         String mType;
-        long mStart;
+        @SuppressWarnings("unused") long mStart;
 
         CoreSpline(String str, long currentTime) {
             mType = str;

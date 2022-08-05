@@ -45,12 +45,12 @@ public class KeyAttribute extends Keys {
         mFrame = frame;
     }
 
-    enum Fit {
-        spline,
-        linear,
+    public enum Fit {
+        SPLINE,
+        LINEAR,
     }
 
-    enum Visibility {
+    public enum Visibility {
         VISIBLE,
         INVISIBLE,
         GONE

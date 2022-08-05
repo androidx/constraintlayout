@@ -124,9 +124,9 @@ public class KeyFrames {
                 }
             }
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error parsing XML resource", e);
         }
     }
 
@@ -156,7 +156,7 @@ public class KeyFrames {
             for (Key key : list) {
                 String tag =
                         ((ConstraintLayout.LayoutParams)
-                                (motionController.mView.getLayoutParams())).constraintTag;
+                                motionController.mView.getLayoutParams()).constraintTag;
                 if (key.matches(tag)) {
                     motionController.addKey(key);
                 }

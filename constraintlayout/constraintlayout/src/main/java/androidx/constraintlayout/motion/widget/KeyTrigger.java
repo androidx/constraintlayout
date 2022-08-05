@@ -342,6 +342,7 @@ public class KeyTrigger extends Key {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyTrigger k = (KeyTrigger) src;
@@ -371,6 +372,7 @@ public class KeyTrigger extends Key {
      *
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyTrigger().copy(this);
     }
@@ -410,7 +412,8 @@ public class KeyTrigger extends Key {
                     VT_POSITIVE_CROSS);
         }
 
-        public static void read(KeyTrigger c, TypedArray a, Context context) {
+        public static void read(KeyTrigger c, TypedArray a,
+                @SuppressWarnings("unused") Context context) {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);

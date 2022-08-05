@@ -87,10 +87,12 @@ public class Barrier extends HelperWidget {
         return mAllowsGoneWidget;
     }
 
+    @Override
     public boolean isResolvedHorizontally() {
         return mResolved;
     }
 
+    @Override
     public boolean isResolvedVertically() {
         return mResolved;
     }

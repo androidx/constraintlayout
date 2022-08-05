@@ -3,15 +3,13 @@ plugins {
     id 'com.android.library'
 }
 
-def latestSdkVersion = 30
-
 android {
-    compileSdkVersion latestSdkVersion
-    buildToolsVersion "30.0.2"
+    compileSdkVersion sdk_latest_version
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion latestSdkVersion
+        targetSdkVersion sdk_latest_version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

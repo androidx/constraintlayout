@@ -107,7 +107,7 @@ public abstract class TimeCycleSplineSet {
         KeyFrameArray.CustomArray mConstraintAttributeList;
         KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
-        float[] mCache;
+        float[] mCustomCache;
 
         public CustomSet(String attribute, KeyFrameArray.CustomArray attrList) {
             mAttributeName = attribute.split(",")[1];
@@ -117,12 +117,13 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality + 2];
-            mCache = new float[dimensionality];
+            mCustomCache = new float[dimensionality];
             double[][] values = new double[size][dimensionality + 2];
             for (int i = 0; i < size; i++) {
                 int key = mConstraintAttributeList.keyAt(i);
@@ -142,6 +143,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");
@@ -180,11 +182,11 @@ public abstract class TimeCycleSplineSet {
             mLastTime = time;
             float wave = calcWave(mLastCycle);
             mContinue = false;
-            for (int i = 0; i < mCache.length; i++) {
+            for (int i = 0; i < mCustomCache.length; i++) {
                 mContinue |= mTempValues[i] != 0.0;
-                mCache[i] = mTempValues[i] * wave + offset;
+                mCustomCache[i] = mTempValues[i] * wave + offset;
             }
-            view.setInterpolatedValue(mConstraintAttributeList.valueAt(0), mCache);
+            view.setInterpolatedValue(mConstraintAttributeList.valueAt(0), mCustomCache);
             if (period != 0.0f) {
                 mContinue = true;
             }
@@ -275,7 +277,7 @@ public abstract class TimeCycleSplineSet {
         KeyFrameArray.CustomVar mConstraintAttributeList;
         KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
-        float[] mCache;
+        float[] mCustomCache;
 
         public CustomVarSet(String attribute, KeyFrameArray.CustomVar attrList) {
             mAttributeName = attribute.split(",")[1];
@@ -285,12 +287,13 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality + 2];
-            mCache = new float[dimensionality];
+            mCustomCache = new float[dimensionality];
             double[][] values = new double[size][dimensionality + 2];
             for (int i = 0; i < size; i++) {
                 int key = mConstraintAttributeList.keyAt(i);
@@ -310,6 +313,7 @@ public abstract class TimeCycleSplineSet {
         /**
          * @TODO: add description
          */
+        @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");
@@ -348,11 +352,11 @@ public abstract class TimeCycleSplineSet {
             mLastTime = time;
             float wave = calcWave(mLastCycle);
             mContinue = false;
-            for (int i = 0; i < mCache.length; i++) {
+            for (int i = 0; i < mCustomCache.length; i++) {
                 mContinue |= mTempValues[i] != 0.0;
-                mCache[i] = mTempValues[i] * wave + offset;
+                mCustomCache[i] = mTempValues[i] * wave + offset;
             }
-            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mCache);
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mCustomCache);
             if (period != 0.0f) {
                 mContinue = true;
             }

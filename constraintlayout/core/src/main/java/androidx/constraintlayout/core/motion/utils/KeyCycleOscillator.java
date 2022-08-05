@@ -58,6 +58,7 @@ public abstract class KeyCycleOscillator {
             mTypeId = TypedValues.CycleType.getId(mType);
         }
 
+        @Override
         public void setProperty(MotionWidget widget, float t) {
             widget.setValue(mTypeId, get(t));
         }
@@ -231,7 +232,7 @@ public abstract class KeyCycleOscillator {
     static class CycleOscillator {
         static final int UNSET = -1; // -1 is typically used through out android to the UNSET value
         private static final String TAG = "CycleOscillator";
-        private final int mVariesBy;
+        @SuppressWarnings("unused") private final int mVariesBy;
         Oscillator mOscillator = new Oscillator();
         private final int mOffst = 0;
         private final int mPhase = 1;

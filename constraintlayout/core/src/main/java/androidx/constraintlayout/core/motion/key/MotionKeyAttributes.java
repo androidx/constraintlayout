@@ -25,10 +25,10 @@ import java.util.HashSet;
 public class MotionKeyAttributes extends MotionKey {
     static final String NAME = "KeyAttribute";
     private static final String TAG = "KeyAttributes";
-    private static final boolean DEBUG = false;
-    private String mTransitionEasing;
+    @SuppressWarnings("unused") private static final boolean DEBUG = false;
+    @SuppressWarnings("unused") private String mTransitionEasing;
     private int mCurveFit = -1;
-    private int mVisibility = 0;
+    @SuppressWarnings("unused") private int mVisibility = 0;
     private float mAlpha = Float.NaN;
     private float mElevation = Float.NaN;
     private float mRotation = Float.NaN;
@@ -204,6 +204,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -227,6 +228,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         switch (type) {
             case AttributesType.TYPE_ALPHA:
@@ -283,6 +285,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (!Float.isNaN(mAlpha)) {
             interpolation.put(AttributesType.S_ALPHA, mCurveFit);
@@ -336,6 +339,7 @@ public class MotionKeyAttributes extends MotionKey {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case AttributesType.TYPE_EASING:

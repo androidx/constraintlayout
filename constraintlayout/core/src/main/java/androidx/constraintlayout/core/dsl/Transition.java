@@ -28,9 +28,9 @@ public class Transition {
     private String mId = null;
     private String mConstraintSetEnd = null;
     private String mConstraintSetStart = null;
-    private int mDefaultInterpolator = 0;
-    private String mDefaultInterpolatorString = null;
-    private int mDefaultInterpolatorID = -1;
+    @SuppressWarnings("unused") private int mDefaultInterpolator = 0;
+    @SuppressWarnings("unused") private String mDefaultInterpolatorString = null;
+    @SuppressWarnings("unused") private int mDefaultInterpolatorID = -1;
     private int mDuration = DEFAULT_DURATION;
     private float mStagger = DEFAULT_STAGGER;
 
@@ -40,7 +40,7 @@ public class Transition {
         mOnSwipe = onSwipe;
     }
 
-    public void setKeyFrames(Keys keyFrames) {
+    public void setKeyFrames(@SuppressWarnings("HiddenTypeParameter") Keys keyFrames) {
         mKeyFrames.add(keyFrames);
     }
 

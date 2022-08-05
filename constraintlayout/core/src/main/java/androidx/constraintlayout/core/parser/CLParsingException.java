@@ -15,6 +15,7 @@
  */
 package androidx.constraintlayout.core.parser;
 
+@SuppressWarnings("OverrideThrowableToString")
 public class CLParsingException extends Exception {
     private final String mReason;
     private final int mLineNumber;
@@ -37,6 +38,7 @@ public class CLParsingException extends Exception {
     public String reason() {
         return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";
     }
+
 
     @Override
     public String toString() {
