@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#59EAE16E">
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#59EA6EC7"
+        android:layout_margin="32dp"
+        app:grid_horizontalGaps="32dp"
+        app:grid_verticalGaps="32dp"
+        app:grid_rows="2"
+        app:grid_columns="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:constraint_referenced_ids="g1,g2,g3,g4"
+        />
+    <View
+        android:id="@+id/grid2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#27C343FA"
+        android:layout_margin="32dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+    <View
+        android:id="@+id/g1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="#FDFA7E"
+        />
+    <View
+        android:id="@+id/g2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#B5FF80"
+        />
+    <View
+        android:id="@+id/g3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#817DF8"
+        />
+    <View
+        android:id="@+id/g4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FD7FB1"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
