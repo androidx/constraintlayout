@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> list = new ArrayList<>();
         Field[] f = R.layout.class.getDeclaredFields();
         Set<String> layouts = new HashSet<>(Arrays.asList("activity_main",
-                "column_in_row", "row_in_column"));
+                "column_in_row", "row_in_column", "view_only"));
 
         int []ret = new int[f.length];
          int count = 0;
