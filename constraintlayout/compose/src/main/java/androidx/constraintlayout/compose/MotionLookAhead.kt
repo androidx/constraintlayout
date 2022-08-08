@@ -94,9 +94,10 @@ class MovableMotionLayoutScope(
     }
     private var lastId: Int = nextId
 
+    @Suppress("NOTHING_TO_INLINE")
     @SuppressLint("ComposableNaming") // it's easier to understand as a regular extension function
     @Composable
-    fun List<@Composable MovableMotionLayoutScope.(index: Int) -> Unit>.emit() {
+    inline fun List<@Composable MovableMotionLayoutScope.(index: Int) -> Unit>.emit() {
         forEachIndexed { index, content ->
             content(index)
         }
