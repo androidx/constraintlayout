@@ -1498,7 +1498,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 }
 
-fun Placeable.PlacementScope.placeWithFrameTransform(placeable: Placeable, frame: WidgetFrame, offset: IntOffset = IntOffset.Zero) {
+internal fun Placeable.PlacementScope.placeWithFrameTransform(placeable: Placeable, frame: WidgetFrame, offset: IntOffset = IntOffset.Zero) {
     if (frame.isDefaultTransform) {
         val x = frame.left - offset.x
         val y = frame.top - offset.y

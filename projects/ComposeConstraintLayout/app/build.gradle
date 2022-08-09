@@ -87,6 +87,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += "-Xopt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
         freeCompilerArgs += "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
+        freeCompilerArgs += "-Xcontext-receivers"
     }
 }
 //configurations.configureEach {

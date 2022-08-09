@@ -373,7 +373,7 @@ private val itemConstraintSet = ConstraintSet {
     }
 }
 
-private const val USE_CL = false
+private const val USE_CL = true
 
 @SuppressLint("SimpleDateFormat")
 @Composable
@@ -383,7 +383,10 @@ private fun MyListItem(modifier: Modifier = Modifier, count: Int) {
     val dateText =
         remember { SimpleDateFormat("hh:mma").format(Date.from(Instant.ofEpochSecond(time + timeOffset))) }
     if (USE_CL) {
-        ConstraintLayout(modifier = modifier, constraintSet = itemConstraintSet) {
+        ConstraintLayout(
+            modifier = modifier,
+            constraintSet = itemConstraintSet
+        ) {
             Image(
                 modifier = Modifier.layoutId("image"),
                 imageVector = Icons.Default.Person,
