@@ -1014,10 +1014,7 @@ public class Grid extends VirtualLayout {
     @SuppressLint("WrongCall")
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        ConstraintLayout.LayoutParams params = params(this);
-        setMeasuredDimension(mContainer.getMeasuredWidth()
-                        - params.leftMargin - params.rightMargin
-                , mContainer.getMeasuredHeight()
-                        - params.topMargin - params.bottomMargin);
+        mUseViewMeasure = true;
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.helper.widget.Grid
         android:id="@+id/grid"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#59EA6EC7"
         android:layout_margin="32dp"
         app:grid_horizontalGaps="32dp"
@@ -42,7 +42,6 @@
         android:id="@+id/g1"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:background="#FDFA7E"
         />
     <View
