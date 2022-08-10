@@ -194,6 +194,7 @@ public class Grid extends VirtualLayout {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
+        mUseViewMeasure = true;
 
         // Parse the relevant attributes from layout xml
         if (attrs != null) {
@@ -1009,12 +1010,5 @@ public class Grid extends VirtualLayout {
         mVerticalGaps = verticalGaps;
         generateGrid(true);
         invalidate();
-    }
-
-    @SuppressLint("WrongCall")
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mUseViewMeasure = true;
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
