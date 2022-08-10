@@ -37,23 +37,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,25 +60,24 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.Transition
+import androidx.constraintlayout.compose.layoutId
 import androidx.constraintlayout.compose.rememberMotionMovableListItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import kotlin.math.roundToInt
 
-@Preview(group = "collapsed")
+@OptIn(ExperimentalComposeUiApi::class)
+@Preview
 @Composable
 private fun ExpandableListPreview() {
-    val itemProvider = rememberItemProvider()
-    val itemsData = List(6) { itemProvider() }
+    val itemsData = createItemDataList(count = 6)
     var collapsedOrExpanded by remember { mutableStateOf(true) }
-    val items = rememberMotionMovableListItems(count = 6) { index ->
+    val items = rememberMotionMovableListItems(count = itemsData.size) { index ->
         val itemModifier = if (collapsedOrExpanded) {
-            // ConstraintLayout needs LayoutId
             // TODO: Consider setting the width and height here instead of the ConstraintSet
             Modifier
-        }
-        else {
+        } else {
             Modifier
                 .fillMaxWidth()
                 .height(100.dp)
@@ -92,7 +86,7 @@ private fun ExpandableListPreview() {
             modifier = Modifier
                 .layoutId(index.toString())
                 .motionId(index)
-                .zIndex((6 - index).toFloat())
+                .zIndex((itemsData.size - index).toFloat())
                 .then(itemModifier),
             item = itemsData[index]
         )
@@ -112,15 +106,11 @@ private fun ExpandableListPreview() {
                 transition = Transition {
                 }) {
                 if (collapsedOrExpanded) {
-//                CollapsedCartList(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(300.dp),
-//                    dataSize = items.size
-//                ) {
-//                    items.emit()
-//                }
-                    CollapsedCartListCustom {
+                    CollapsedCartList(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        dataSize = items.size
+                    ) {
                         items.emit()
                     }
                 } else {
@@ -140,14 +130,13 @@ private fun ExpandableListPreview() {
                 .fillMaxWidth()
                 .weight(1.0f, true)
         ) {
-            Text(text = "Hello, World!")
+            Text(text = "Layout: " + if (collapsedOrExpanded) "ConstraintLayout" else "Column")
         }
         Button(onClick = { collapsedOrExpanded = !collapsedOrExpanded }) {
             Text(text = "Toggle")
         }
     }
 }
-
 
 @Composable
 private fun CartItem(modifier: Modifier = Modifier, item: ItemData) {
@@ -204,7 +193,7 @@ private fun CartItem(modifier: Modifier = Modifier, item: ItemData) {
     }
 }
 
-
+@Stable
 private data class ItemData(
     val id: Int,
     val thumbnailUri: Uri,
@@ -213,24 +202,19 @@ private data class ItemData(
 )
 
 @Composable
-private fun rememberItemProvider(): ItemProvider {
+private fun createItemDataList(count: Int): List<ItemData> {
     val context = LocalContext.current
-    return remember {
-        var providedCount = 0
-        object : () -> ItemData {
-            override fun invoke(): ItemData {
-                return ItemData(
-                    id = providedCount++,
-                    thumbnailUri = context.drawableUri(R.drawable.pepper),
-                    name = itemNames.random(),
-                    cost = IntRange(5, 50).random().toFloat() + (IntRange(0, 99).random() / 100f)
-                )
-            }
+    return remember(count) {
+        List(count) { index ->
+            ItemData(
+                id = index,
+                thumbnailUri = context.drawableUri(R.drawable.pepper),
+                name = itemNames.random(),
+                cost = IntRange(5, 50).random().toFloat() + (IntRange(0, 99).random() / 100f)
+            )
         }
     }
 }
-
-private typealias ItemProvider = () -> ItemData
 
 @Preview
 @Composable
@@ -268,8 +252,7 @@ private fun ExpandedCartList(modifier: Modifier = Modifier, itemsData: List<Item
 @Preview
 @Composable
 private fun ExpandedCartListPreview() {
-    val itemDataProvider = rememberItemProvider()
-    val itemsData = (0..5).toList().map { itemDataProvider() }
+    val itemsData = createItemDataList(count = 5)
     ExpandedCartList(
         modifier = Modifier
             .fillMaxSize()
@@ -278,14 +261,13 @@ private fun ExpandedCartListPreview() {
     )
 }
 
-// Version compatible with LookaheadLayout, receives the content instead of the data
 @Composable
-private inline fun CollapsedCartList(
+private fun CollapsedCartList(
     modifier: Modifier = Modifier,
     dataSize: Int,
-    crossinline content: @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
-    val itemIds = List(dataSize) { index -> index }
+    val itemIds = remember { List(dataSize) { index -> index } }
     val cSet = remember {
         ConstraintSet {
             val itemRefsById = itemIds.associateWith { createRefFor(it.toString()) }
@@ -321,52 +303,6 @@ private inline fun CollapsedCartList(
         constraintSet = cSet
     ) {
         content()
-    }
-}
-
-@Composable
-private fun CollapsedCartList(modifier: Modifier = Modifier, itemsData: List<ItemData>) {
-    val itemIds = List(itemsData.size) { index -> index }
-    val cSet = remember {
-        ConstraintSet {
-            val itemRefsById = itemIds.associateWith { createRefFor(it.toString()) }
-            itemRefsById.forEach { (id, ref) ->
-                when (id) {
-                    0, 1, 2 -> { // Stack the first three items below each other
-                        constrain(ref) {
-                            val lastRef = itemRefsById[id - 1] ?: parent
-                            width = Dimension.fillToConstraints
-                            height = Dimension.value(100.dp)
-                            start.linkTo(lastRef.start, 8.dp)
-                            end.linkTo(lastRef.end, 8.dp)
-                            top.linkTo(lastRef.top, 16.dp)
-                            translationZ = (6 - (2 * id)).coerceAtLeast(0).dp
-                        }
-                    }
-                    else -> { // Stack/hide together all other items
-                        if (id > 0) {
-                            val lastRef = itemRefsById[2]!!
-                            constrain(ref) {
-                                width = Dimension.fillToConstraints
-                                height = Dimension.value(100.dp)
-                                centerTo(lastRef)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    ConstraintLayout(
-        modifier = modifier,
-        constraintSet = cSet
-    ) {
-        itemsData.forEachIndexed { id, itemData ->
-            CartItem(
-                modifier = Modifier.layoutId(id.toString()),
-                item = itemData
-            )
-        }
     }
 }
 
@@ -429,20 +365,34 @@ private fun CollapsedCartListCustom(
     )
 }
 
-@Preview(group = "collapsed")
+@Preview
 @Composable
 private fun CollapsedCartListPreview() {
-    val itemDataProvider = rememberItemProvider()
-    val itemIds = remember {
-        (0..5).toList()
+    val itemsData = createItemDataList(count = 5)
+    Column(Modifier.fillMaxWidth()) {
+        Column(Modifier.background(Color.LightGray)) {
+            Text(text = "ConstraintLayout")
+            CollapsedCartList(
+                modifier = Modifier.fillMaxWidth(),
+                dataSize = itemsData.size
+            ) {
+                itemsData.forEachIndexed { index, itemData ->
+                    CartItem(
+                        modifier = Modifier.layoutId(index.toString()),
+                        item = itemData
+                    )
+                }
+            }
+        }
+        Column(Modifier.background(Color.Gray)) {
+            Text(text = "Custom Layout")
+            CollapsedCartListCustom(modifier = Modifier.fillMaxWidth()) {
+                itemsData.forEachIndexed { index, itemData ->
+                    CartItem(item = itemData)
+                }
+            }
+        }
     }
-    val itemData = itemIds.map { itemDataProvider() }
-    CollapsedCartList(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.LightGray),
-        itemsData = itemData
-    )
 }
 
 internal fun Context.drawableUri(@DrawableRes resourceId: Int): Uri =
@@ -455,7 +405,7 @@ internal fun Context.drawableUri(@DrawableRes resourceId: Int): Uri =
             .build()
     }
 
-private val itemNames = listOf<String>(
+private val itemNames = listOf(
     "Fruit",
     "Vegetables",
     "Bread",

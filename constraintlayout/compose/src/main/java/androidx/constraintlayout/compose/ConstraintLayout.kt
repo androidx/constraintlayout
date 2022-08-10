@@ -1363,9 +1363,25 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         }
         measurables.fastForEach { measurable ->
-            val frame = frameCache[measurable] ?: return
-            val placeable = placeables[measurable] ?: return
-            placeWithFrameTransform(placeable, frame)
+            val matchedMeasurable: Measurable = if (!frameCache.containsKey(measurable)) {
+                // TODO: Workaround for lookaheadLayout, the measurable is a different instance
+                frameCache.keys.firstOrNull {
+                    it.layoutId != null && it.layoutId == measurable.layoutId
+                } ?: return@fastForEach
+            }
+            else {
+                measurable
+            }
+            val frame = frameCache[matchedMeasurable] ?: return
+            val placeable = placeables[matchedMeasurable] ?: return
+            if (!frameCache.containsKey(measurable)) {
+                // TODO: Workaround for lookaheadLayout, the measurable is a different instance and
+                //   the placeable should be a result of the given measurable
+                placeWithFrameTransform(measurable.measure(Constraints.fixed(placeable.width, placeable.height)), frame)
+            }
+            else {
+                placeWithFrameTransform(placeable, frame)
+            }
         }
         if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
             computeLayoutResult()
