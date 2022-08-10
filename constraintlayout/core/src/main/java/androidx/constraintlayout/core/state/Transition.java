@@ -49,7 +49,8 @@ public class Transition implements TypedValues {
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
     private static final int SPLINE_STRING = -1;
-    @SuppressWarnings("unused") private static final int INTERPOLATOR_REFERENCE_ID = -2;
+    @SuppressWarnings("unused")
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
     private HashMap<String, WidgetState> mState = new HashMap<>();
     private TypedBundle mBundle = new TypedBundle();
@@ -97,9 +98,12 @@ public class Transition implements TypedValues {
                 {1.0f, 0.5f}, // end  TODO (dynamically updated)
         };
 
-        @SuppressWarnings("unused") private String mRotationCenterId;
-        @SuppressWarnings("unused") private String mLimitBoundsTo;
-        @SuppressWarnings("unused") private boolean mDragVertical = true;
+        @SuppressWarnings("unused")
+        private String mRotationCenterId;
+        @SuppressWarnings("unused")
+        private String mLimitBoundsTo;
+        @SuppressWarnings("unused")
+        private boolean mDragVertical = true;
         private int mDragDirection = 0;
         public static final int DRAG_UP = 0;
         public static final int DRAG_DOWN = 1;
@@ -113,7 +117,8 @@ public class Transition implements TypedValues {
                 "end", "clockwise", "anticlockwise"};
 
         private float mDragScale = 1;
-        @SuppressWarnings("unused") private float mDragThreshold = 10;
+        @SuppressWarnings("unused")
+        private float mDragThreshold = 10;
         private int mAutoCompleteMode = 0;
         public static final int MODE_CONTINUOUS_VELOCITY = 0;
         public static final int MODE_SPRING = 1;
@@ -139,6 +144,7 @@ public class Transition implements TypedValues {
         private float mSpringStiffness = 400;
         private float mSpringDamping = 10;
         private float mSpringStopThreshold = 0.01f;
+        private float mDestination = 0.0f;
 
         // In spring mode what happens at the boundary
         private int mSpringBoundary = 0;
@@ -261,6 +267,7 @@ public class Transition implements TypedValues {
         }
 
         float getDestinationPosition(float currentPosition, float velocity, float duration) {
+            float rest = currentPosition + 0.5f * Math.abs(velocity) * velocity / mMaxAcceleration;
             switch (mOnTouchUp) {
                 case ON_UP_AUTOCOMPLETE_TO_START:
                 case ON_UP_NEVER_COMPLETE_TO_END:
@@ -270,26 +277,42 @@ public class Transition implements TypedValues {
                     return 1;
                 case ON_UP_STOP:
                     return Float.NaN;
-                case ON_UP_AUTOCOMPLETE:
                 case ON_UP_DECELERATE:
+                    return Math.max(0, Math.min(1, rest));
                 case ON_UP_DECELERATE_AND_COMPLETE:
+                   if (rest > 0.2f && rest < 0.8f){
+                       return rest;
+                } else {
+                       return rest > .5 ? 1 : 0;
+                   }
+                case ON_UP_AUTOCOMPLETE:
             }
-            float peek = currentPosition + velocity * duration / 3;
-            if (velocity < 0) {
-                peek = currentPosition - velocity * velocity / (2 * mMaxAcceleration);
-            }
+
             if (DEBUG) {
                 Utils.log(" currentPosition = " + currentPosition);
                 Utils.log("        velocity = " + velocity);
-                Utils.log("            peek = " + peek);
+                Utils.log("            peek = " + rest);
                 Utils.log("mMaxAcceleration = " + mMaxAcceleration);
             }
-            return peek > .5 ? 1 : 0;
+            return rest > .5 ? 1 : 0;
         }
 
         void config(float position, float velocity, long start, float duration) {
             mStart = start;
-            float destination = getDestinationPosition(position, velocity, duration);
+            mDestination = getDestinationPosition(position, velocity, duration);
+            if (mOnTouchUp == ON_UP_DECELERATE) {
+                if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
+                    StopLogicEngine.Decelerate sld;
+                    if (mEngine instanceof StopLogicEngine.Decelerate) {
+                        sld = (StopLogicEngine.Decelerate) mEngine;
+                    } else {
+                        mEngine = sld = new StopLogicEngine.Decelerate();
+                    }
+                    sld.config(position, mDestination, velocity);
+                    return;
+                }
+            }
+
             if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
                 StopLogicEngine sl;
                 if (mEngine instanceof StopLogicEngine) {
@@ -298,24 +321,23 @@ public class Transition implements TypedValues {
                     mEngine = sl = new StopLogicEngine();
                 }
 
-                sl.config(position, destination, velocity,
+                sl.config(position, mDestination, velocity,
                         duration, mMaxAcceleration,
                         mMaxVelocity);
-            } else {
-                SpringStopEngine sl;
-                if (mEngine instanceof SpringStopEngine) {
-                    sl = (SpringStopEngine) mEngine;
-                } else {
-                    mEngine = sl = new SpringStopEngine();
-                }
-
-                sl.springConfig(position, destination, velocity,
-                        mSpringMass,
-                        mSpringStiffness,
-                        mSpringDamping,
-                        mSpringStopThreshold, mSpringBoundary);
-
+                return;
             }
+            SpringStopEngine sl;
+            if (mEngine instanceof SpringStopEngine) {
+                sl = (SpringStopEngine) mEngine;
+            } else {
+                mEngine = sl = new SpringStopEngine();
+            }
+
+            sl.springConfig(position, mDestination, velocity,
+                    mSpringMass,
+                    mSpringStiffness,
+                    mSpringDamping,
+                    mSpringStopThreshold, mSpringBoundary);
         }
 
         /**
@@ -324,7 +346,11 @@ public class Transition implements TypedValues {
          */
         public float getTouchUpProgress(long currentTime) {
             float time = (currentTime - mStart) * 1E-9f;
-            return mEngine.getInterpolation(time);
+            float pos = mEngine.getInterpolation(time);
+            if (mEngine.isStopped()) {
+                pos = mDestination;
+            }
+            return pos;
         }
 
         public void printInfo() {
@@ -345,10 +371,7 @@ public class Transition implements TypedValues {
             if (mOnTouchUp == ON_UP_STOP) {
                 return false;
             }
-            if (mEngine instanceof SpringStopEngine) {
-                return !mEngine.isStopped();
-            }
-            return (0 < progress && progress < 1f);
+            return !mEngine.isStopped();
         }
     }
 
@@ -672,8 +695,9 @@ public class Transition implements TypedValues {
 
     /**
      * Update container of parameters for the state
+     *
      * @param container contains all the widget parameters
-     * @param state starting or ending
+     * @param state     starting or ending
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
         final ArrayList<ConstraintWidget> children = container.getChildren();
@@ -863,9 +887,10 @@ public class Transition implements TypedValues {
 
         /**
          * Return the id of the widget to animate relative to
+         *
          * @return id of widget or null
          */
-       String getPathRelativeId() {
+        String getPathRelativeId() {
             return mMotionControl.getAnimateRelativeTo();
         }
 
@@ -897,7 +922,7 @@ public class Transition implements TypedValues {
         }
 
         public void setPathRelative(WidgetState widgetState) {
-            mMotionControl.setupRelative( widgetState.mMotionControl);
+            mMotionControl.setupRelative(widgetState.mMotionControl);
         }
     }
 

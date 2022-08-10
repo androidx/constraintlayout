@@ -78,6 +78,9 @@ public class SpringStopEngine implements StopEngine {
     public float getInterpolation(float time) {
         compute(time - mLastTime);
         mLastTime = time;
+        if (isStopped()) {
+            mPos = (float) mTargetPos;
+        }
         return (float) mPos;
     }
 

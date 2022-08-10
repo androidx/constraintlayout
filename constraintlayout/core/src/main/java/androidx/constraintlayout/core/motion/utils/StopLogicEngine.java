@@ -34,7 +34,8 @@ public class StopLogicEngine implements StopEngine {
     private boolean mBackwards = false;
     private float mStartPosition;
     private float mLastPosition;
-    @SuppressWarnings("unused") private boolean mDone = false;
+    @SuppressWarnings("unused")
+    private boolean mDone = false;
     private static final float EPSILON = 0.00001f;
 
     /**
@@ -279,5 +280,66 @@ public class StopLogicEngine implements StopEngine {
         this.mStage1EndPosition = accDist;
         this.mStage2EndPosition = (distance - decDist);
         this.mStage3EndPosition = distance;
+    }
+
+    // Support the simple Decelerate use case
+    public static class Decelerate implements StopEngine {
+        private float mDestination;
+        private float mInitialVelocity;
+        private float mAcceleration;
+        private float mLastVelocity;
+        private float mDuration;
+        private float mInitialPos;
+        private boolean mDone = false;
+
+        @Override
+        public String debug(String desc, float time) {
+            return mDuration + " " + mLastVelocity;
+        }
+
+        @Override
+        public float getVelocity(float time) {
+            if (time > mDuration) {
+                return 0;
+            }
+            return mLastVelocity = mInitialVelocity + mAcceleration * time;
+        }
+
+        @Override
+        public float getInterpolation(float time) {
+            if (time > mDuration) {
+                mDone = true;
+                return mDestination;
+            }
+            getVelocity(time);
+            return mInitialPos + (mInitialVelocity + mAcceleration * time / 2) * time;
+        }
+
+        @Override
+        public float getVelocity() {
+            return mLastVelocity;
+        }
+
+        @Override
+        public boolean isStopped() {
+            return mDone;
+        }
+
+        /**
+         * Configure simple deceleration controller
+         *
+         * @param currentPos      the current position
+         * @param destination     the destination position
+         * @param currentVelocity the currentVelocity change in pos / second
+         */
+        public void config(float currentPos, float destination, float currentVelocity) {
+            mDone = false;
+            mDestination = destination;
+            mInitialVelocity = currentVelocity;
+            mInitialPos = currentPos;
+            float distance = mDestination - currentPos;
+            mDuration = distance / (currentVelocity / 2);
+            mAcceleration = -currentVelocity / mDuration;
+        }
     }
 }
