@@ -33,7 +33,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -71,7 +73,7 @@ import kotlin.math.roundToInt
 @Preview
 @Composable
 private fun ExpandableListPreview() {
-    val itemsData = createItemDataList(count = 6)
+    val itemsData = createItemDataList(count = 10)
     var collapsedOrExpanded by remember { mutableStateOf(true) }
     val items = rememberMotionMovableListItems(count = itemsData.size) { index ->
         val itemModifier = if (collapsedOrExpanded) {
@@ -85,7 +87,7 @@ private fun ExpandableListPreview() {
         CartItem(
             modifier = Modifier
                 .layoutId(index.toString())
-                .motionId(index)
+                .motionId(index, ignoreAxisChanges = true)
                 .zIndex((itemsData.size - index).toFloat())
                 .then(itemModifier),
             item = itemsData[index]
@@ -96,44 +98,45 @@ private fun ExpandableListPreview() {
             .fillMaxSize()
             .background(Color.LightGray)
     ) {
-        StandardLookAheadLayout {
-            MotionLayout(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .padding(bottom = 8.dp)
-                    .animateBounds(Modifier.wrapContentHeight(), tween(2000)),
-                transition = Transition {
-                }) {
-                if (collapsedOrExpanded) {
-                    CollapsedCartList(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        dataSize = items.size
-                    ) {
-                        items.emit()
-                    }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items.emit()
+        val scrollableState = rememberScrollState()
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollableState)
+        ) {
+            StandardLookAheadLayout {
+                MotionLayout(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Gray)
+                        .padding(bottom = 8.dp)
+                        .animateBounds(Modifier.wrapContentHeight(), tween(2000)),
+                    transition = Transition {
+                    }) {
+                    if (collapsedOrExpanded) {
+                        CollapsedCartList(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            dataSize = items.size
+                        ) {
+                            items.emit()
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items.emit()
+                        }
                     }
                 }
             }
-        }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .weight(1.0f, true)
-        ) {
             Text(text = "Layout: " + if (collapsedOrExpanded) "ConstraintLayout" else "Column")
-        }
-        Button(onClick = { collapsedOrExpanded = !collapsedOrExpanded }) {
-            Text(text = "Toggle")
+            Button(onClick = { collapsedOrExpanded = !collapsedOrExpanded }) {
+                Text(text = "Toggle")
+            }
         }
     }
 }

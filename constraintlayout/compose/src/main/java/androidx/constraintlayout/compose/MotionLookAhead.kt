@@ -111,12 +111,7 @@ class MovableMotionLayoutScope(
      */
     fun Modifier.motionItem(): Modifier = motionId(layoutId = nextId++, ignoreAxisChanges = true)
 
-    fun Modifier.motionId(layoutId: Any): Modifier = motionId(
-        layoutId = layoutId,
-        ignoreAxisChanges = false
-    )
-
-    private fun Modifier.motionId(layoutId: Any, ignoreAxisChanges: Boolean = false): Modifier =
+    fun Modifier.motionId(layoutId: Any, ignoreAxisChanges: Boolean = false): Modifier =
         composed {
             val startWidget =
                 remember { ConstraintWidget().apply { stringId = layoutId.toString() } }
