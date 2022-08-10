@@ -372,7 +372,7 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * [ConstraintLayout] as part of [Modifier.constrainAs]. To create more references at the
      * same time, see [createRefs].
      */
-    fun createRef() = childrenRefs.getOrNull(childId++)
+    fun createRef(): ConstrainedLayoutReference = childrenRefs.getOrNull(childId++)
         ?: ConstrainedLayoutReference(childId).also { childrenRefs.add(it) }
 
     /**
@@ -381,7 +381,7 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * one reference, see [createRef].
      */
     @Stable
-    fun createRefs() =
+    fun createRefs(): ConstraintLayoutScope.ConstrainedLayoutReferences =
         referencesObject ?: ConstrainedLayoutReferences().also { referencesObject = it }
 
     private var referencesObject: ConstrainedLayoutReferences? = null
@@ -398,22 +398,22 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * Convenience API for creating multiple [ConstrainedLayoutReference] via [createRefs].
      */
     inner class ConstrainedLayoutReferences internal constructor() {
-        operator fun component1() = createRef()
-        operator fun component2() = createRef()
-        operator fun component3() = createRef()
-        operator fun component4() = createRef()
-        operator fun component5() = createRef()
-        operator fun component6() = createRef()
-        operator fun component7() = createRef()
-        operator fun component8() = createRef()
-        operator fun component9() = createRef()
-        operator fun component10() = createRef()
-        operator fun component11() = createRef()
-        operator fun component12() = createRef()
-        operator fun component13() = createRef()
-        operator fun component14() = createRef()
-        operator fun component15() = createRef()
-        operator fun component16() = createRef()
+        operator fun component1(): ConstrainedLayoutReference = createRef()
+        operator fun component2(): ConstrainedLayoutReference = createRef()
+        operator fun component3(): ConstrainedLayoutReference = createRef()
+        operator fun component4(): ConstrainedLayoutReference = createRef()
+        operator fun component5(): ConstrainedLayoutReference = createRef()
+        operator fun component6(): ConstrainedLayoutReference = createRef()
+        operator fun component7(): ConstrainedLayoutReference = createRef()
+        operator fun component8(): ConstrainedLayoutReference = createRef()
+        operator fun component9(): ConstrainedLayoutReference = createRef()
+        operator fun component10(): ConstrainedLayoutReference = createRef()
+        operator fun component11(): ConstrainedLayoutReference = createRef()
+        operator fun component12(): ConstrainedLayoutReference = createRef()
+        operator fun component13(): ConstrainedLayoutReference = createRef()
+        operator fun component14(): ConstrainedLayoutReference = createRef()
+        operator fun component15(): ConstrainedLayoutReference = createRef()
+        operator fun component16(): ConstrainedLayoutReference = createRef()
     }
 
     /**
@@ -456,7 +456,7 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
      * Creates one [ConstrainedLayoutReference] corresponding to the [ConstraintLayout] element
      * with [id].
      */
-    fun createRefFor(id: Any) = ConstrainedLayoutReference(id)
+    fun createRefFor(id: Any): ConstrainedLayoutReference = ConstrainedLayoutReference(id)
 
     /**
      * Specifies the constraints associated to the layout identified with [ref].
@@ -464,7 +464,7 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
     fun constrain(
         ref: ConstrainedLayoutReference,
         constrainBlock: ConstrainScope.() -> Unit
-    ) = ConstrainScope(ref.id).apply {
+    ): ConstrainScope = ConstrainScope(ref.id).apply {
         constrainBlock()
         this@ConstraintSetScope.tasks.addAll(this.tasks)
     }
@@ -1545,7 +1545,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
 
 object DesignElements {
     var map = HashMap<String, @Composable (String, HashMap<String, String>) -> Unit>()
-    fun define(name: String, function: @Composable (String, HashMap<String, String>) -> Unit) {
+    fun define(
+        name: String,
+        function: @Composable (String, HashMap<String, String>) -> Unit
+    ): Unit {
         map[name] = function
     }
 }

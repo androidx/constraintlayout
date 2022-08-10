@@ -31,7 +31,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget
 abstract class ConstraintLayoutBaseScope {
     protected val tasks = mutableListOf<(State) -> Unit>()
 
-    fun applyTo(state: State) = tasks.forEach { it(state) }
+    fun applyTo(state: State): Unit = tasks.forEach { it(state) }
 
     open fun reset() {
         tasks.clear()
@@ -95,7 +95,7 @@ abstract class ConstraintLayoutBaseScope {
     fun constrain(
         ref: HorizontalChainReference,
         constrainBlock: HorizontalChainScope.() -> Unit
-    ) = HorizontalChainScope(ref.id).apply {
+    ): HorizontalChainScope = HorizontalChainScope(ref.id).apply {
         constrainBlock()
         this@ConstraintLayoutBaseScope.tasks.addAll(this.tasks)
     }
@@ -106,7 +106,7 @@ abstract class ConstraintLayoutBaseScope {
     fun constrain(
         ref: VerticalChainReference,
         constrainBlock: VerticalChainScope.() -> Unit
-    ) = VerticalChainScope(ref.id).apply {
+    ): VerticalChainScope = VerticalChainScope(ref.id).apply {
         constrainBlock()
         this@ConstraintLayoutBaseScope.tasks.addAll(this.tasks)
     }
