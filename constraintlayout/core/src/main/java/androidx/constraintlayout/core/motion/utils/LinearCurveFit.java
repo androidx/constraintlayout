@@ -19,7 +19,7 @@ package androidx.constraintlayout.core.motion.utils;
 /**
  * This performs a simple linear interpolation in multiple dimensions
  *
- * @DoNotShow
+ *
  */
 public class LinearCurveFit extends CurveFit {
     private static final String TAG = "LinearCurveFit";
@@ -100,9 +100,7 @@ public class LinearCurveFit extends CurveFit {
         return 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void getPos(double t, double[] v) {
         final int n = mT.length;
@@ -157,9 +155,7 @@ public class LinearCurveFit extends CurveFit {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void getPos(double t, float[] v) {
         final int n = mT.length;
@@ -214,9 +210,7 @@ public class LinearCurveFit extends CurveFit {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public double getPos(double t, int j) {
         final int n = mT.length;
@@ -252,9 +246,7 @@ public class LinearCurveFit extends CurveFit {
         return 0; // should never reach here
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void getSlope(double t, double[] v) {
         final int n = mT.length;
@@ -280,9 +272,7 @@ public class LinearCurveFit extends CurveFit {
         return;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public double getSlope(double t, int j) {
         final int n = mT.length;

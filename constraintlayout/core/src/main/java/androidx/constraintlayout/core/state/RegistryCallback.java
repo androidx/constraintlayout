@@ -16,43 +16,27 @@
 package androidx.constraintlayout.core.state;
 
 public interface RegistryCallback {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void onNewMotionScene(String content);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void onProgress(float progress);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void onDimensions(int width, int height);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     String currentMotionScene();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void setDrawDebug(int debugMode);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     String currentLayoutInformation();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void setLayoutInformationMode(int layoutInformationMode);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     long getLastModified();
 }

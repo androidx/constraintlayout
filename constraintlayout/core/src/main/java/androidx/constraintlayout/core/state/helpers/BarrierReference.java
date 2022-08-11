@@ -42,9 +42,7 @@ public class BarrierReference extends HelperReference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public ConstraintReference margin(int value) {
         mMargin = value;
@@ -59,9 +57,7 @@ public class BarrierReference extends HelperReference {
         return mBarrierWidget;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void apply() {
         getHelperWidget();

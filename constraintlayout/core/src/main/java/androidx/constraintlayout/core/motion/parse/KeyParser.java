@@ -79,16 +79,12 @@ public class KeyParser {
         return bundle;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static TypedBundle parseAttributes(String str) {
         return parse(str, TypedValues.AttributesType::getId, TypedValues.AttributesType::getType);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void main(String[] args) {
         String str = "{"
                 + "frame:22,\n"

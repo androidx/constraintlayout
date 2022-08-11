@@ -69,9 +69,7 @@ public class Guideline extends ConstraintWidget {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getRelativeBehaviour() {
         if (mRelativePercent != -1) {
             return RELATIVE_PERCENT;
@@ -85,9 +83,7 @@ public class Guideline extends ConstraintWidget {
         return RELATIVE_UNKNOWN;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setOrientation(int orientation) {
         if (mOrientation == orientation) {
             return;
@@ -169,16 +165,12 @@ public class Guideline extends ConstraintWidget {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setGuidePercent(int value) {
         setGuidePercent(value / 100f);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setGuidePercent(float value) {
         if (value > -1) {
             mRelativePercent = value;
@@ -187,9 +179,7 @@ public class Guideline extends ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setGuideBegin(int value) {
         if (value > -1) {
             mRelativePercent = -1;
@@ -198,9 +188,7 @@ public class Guideline extends ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setGuideEnd(int value) {
         if (value > -1) {
             mRelativePercent = -1;
@@ -221,9 +209,7 @@ public class Guideline extends ConstraintWidget {
         return mRelativeEnd;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalValue(int position) {
         if (LinearSystem.FULL_DEBUG) {
             System.out.println("*** SET FINAL GUIDELINE VALUE "
@@ -357,9 +343,7 @@ public class Guideline extends ConstraintWidget {
         setGuideEnd(position);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void cyclePosition() {
         if (mRelativeBegin != -1) {
             // cycle to percent-based position

@@ -91,7 +91,7 @@ import java.util.Set;
  *          ConstraintLayout mConstraintLayout; // cache the ConstraintLayout
  *          boolean mOld = true;
  *
- *          @Override
+ *
  *          protected void onCreate(Bundle savedInstanceState) {
  *              super.onCreate(savedInstanceState);
  *              Context context = this;
@@ -726,8 +726,10 @@ public class ConstraintSet {
         return mSavedAttributes;
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param mId
      * @return
      */
@@ -1206,7 +1208,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public static class Layout {
         public boolean mIsGuideline = false;
@@ -1819,7 +1821,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public static class Transform {
         public boolean mApply = false;
@@ -1946,7 +1948,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public static class PropertySet {
         public boolean mApply = false;
@@ -1955,8 +1957,10 @@ public class ConstraintSet {
         public float alpha = 1;
         public float mProgress = Float.NaN;
 
+        // @TODO: add description
+
         /**
-         * @TODO: add description
+         *
          * @param src
          */
         public void copyFrom(PropertySet src) {
@@ -1990,7 +1994,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public static class Motion {
         public boolean mApply = false;
@@ -2011,8 +2015,10 @@ public class ConstraintSet {
         private static final int SPLINE_STRING = -1;
         private static final int INTERPOLATOR_UNDEFINED = -3;
 
+        // @TODO: add description
+
         /**
-         * @TODO: add description
+         *
          * @param src
          */
         public void copyFrom(Motion src) {
@@ -2121,7 +2127,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public static class Constraint {
         int mViewId;
@@ -3831,14 +3837,14 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public void setEditorAbsoluteX(int viewId, int position) {
         get(viewId).layout.editorAbsoluteX = position;
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public void setEditorAbsoluteY(int viewId, int position) {
         get(viewId).layout.editorAbsoluteY = position;
@@ -5805,7 +5811,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public Constraint getConstraint(int id) {
         if (mConstraints.containsKey(id)) {
@@ -5815,7 +5821,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public int[] getKnownIds() {
         Integer[] arr = mConstraints.keySet().toArray(new Integer[0]);

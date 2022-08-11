@@ -86,9 +86,7 @@ public class ConstraintWidget {
 
     public String stringId;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetRun getRun(int orientation) {
         if (orientation == HORIZONTAL) {
             return mHorizontalRun;
@@ -104,9 +102,7 @@ public class ConstraintWidget {
     private boolean mHorizontalSolvingPass = false;
     private boolean mVerticalSolvingPass = false;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalFrame(int left,
             int top,
             int right,
@@ -130,25 +126,19 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalLeft(int x1) {
         mLeft.setFinalValue(x1);
         mX = x1;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalTop(int y1) {
         mTop.setFinalValue(y1);
         mY = y1;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void resetSolvingPassFlag() {
         mHorizontalSolvingPass = false;
         mVerticalSolvingPass = false;
@@ -162,23 +152,17 @@ public class ConstraintWidget {
         return mVerticalSolvingPass;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void markHorizontalSolvingPassDone() {
         mHorizontalSolvingPass = true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void markVerticalSolvingPassDone() {
         mVerticalSolvingPass = true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalHorizontal(int x1, int x2) {
         if (mResolvedHorizontal) {
             return;
@@ -194,9 +178,7 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalVertical(int y1, int y2) {
         if (mResolvedVertical) {
             return;
@@ -215,9 +197,7 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalBaseline(int baselineValue) {
         if (!mHasBaseline) {
             return;
@@ -239,9 +219,7 @@ public class ConstraintWidget {
         return mResolvedVertical || (mTop.hasFinalValue() && mBottom.hasFinalValue());
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void resetFinalResolution() {
         mResolvedHorizontal = false;
         mResolvedVertical = false;
@@ -253,16 +231,12 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void ensureMeasureRequested() {
         mMeasureRequested = true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasDependencies() {
         for (int i = 0, mAnchorsSize = mAnchors.size(); i < mAnchorsSize; i++) {
             final ConstraintAnchor anchor = mAnchors.get(i);
@@ -273,9 +247,7 @@ public class ConstraintWidget {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasDanglingDimension(int orientation) {
         if (orientation == HORIZONTAL) {
             int horizontalTargets =
@@ -288,9 +260,7 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasResolvedTargets(int orientation, int size) {
         if (orientation == HORIZONTAL) {
             if (mLeft.mTarget != null && mLeft.mTarget.hasFinalValue()
@@ -427,9 +397,7 @@ public class ConstraintWidget {
         mIsInBarrier[orientation] = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean isInBarrier(int orientation) {
         return mIsInBarrier[orientation];
     }
@@ -442,9 +410,7 @@ public class ConstraintWidget {
         return mMeasureRequested && mVisibility != GONE;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setWrapBehaviorInParent(int behavior) {
         if (behavior >= 0 && behavior <= WRAP_BEHAVIOR_SKIPPED) {
             mWrapBehaviorInParent = behavior;
@@ -470,9 +436,7 @@ public class ConstraintWidget {
         return mLastVerticalMeasureSpec;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setLastMeasureSpec(int horizontal, int vertical) {
         mLastHorizontalMeasureSpec = horizontal;
         mLastVerticalMeasureSpec = vertical;
@@ -589,9 +553,7 @@ public class ConstraintWidget {
 
     // TODO: see if we can make this simpler
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void reset() {
         mLeft.reset();
         mTop.reset();
@@ -795,9 +757,7 @@ public class ConstraintWidget {
     public int horizontalGroup = -1;
     public int verticalGroup = -1;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean oppositeDimensionDependsOn(int orientation) {
         int oppositeOrientation = (orientation == HORIZONTAL) ? VERTICAL : HORIZONTAL;
         DimensionBehaviour dimensionBehaviour = mListDimensionBehaviors[orientation];
@@ -808,18 +768,14 @@ public class ConstraintWidget {
         //&& mDimensionRatio != 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean oppositeDimensionsTied() {
         return /* isInHorizontalChain() || isInVerticalChain() || */
                 (mListDimensionBehaviors[HORIZONTAL] == MATCH_CONSTRAINT
                         && mListDimensionBehaviors[VERTICAL] == MATCH_CONSTRAINT);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasDimensionOverride() {
         return mWidthOverride != -1 || mHeightOverride != -1;
     }
@@ -871,9 +827,7 @@ public class ConstraintWidget {
         this(0, 0, width, height);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void ensureWidgetRuns() {
         if (mHorizontalRun == null) {
             mHorizontalRun = new HorizontalWidgetRun(this);
@@ -1087,7 +1041,7 @@ public class ConstraintWidget {
     /**
      * Create all the system variables for this widget
      *
-     * @DoNotShow
+     *
      */
     public void createObjectVariables(LinearSystem system) {
         system.createObjectVariable(mLeft);
@@ -1157,9 +1111,7 @@ public class ConstraintWidget {
         return mWidth;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getOptimizerWrapWidth() {
         int w = mWidth;
         if (mListDimensionBehaviors[DIMENSION_HORIZONTAL] == MATCH_CONSTRAINT) {
@@ -1178,9 +1130,7 @@ public class ConstraintWidget {
         return w;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getOptimizerWrapHeight() {
         int h = mHeight;
         if (mListDimensionBehaviors[DIMENSION_VERTICAL] == MATCH_CONSTRAINT) {
@@ -3562,9 +3512,7 @@ public class ConstraintWidget {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void copy(ConstraintWidget src, HashMap<ConstraintWidget, ConstraintWidget> map) {
         // Support for direct resolution
         mHorizontalResolution = src.mHorizontalResolution;
@@ -3666,9 +3614,7 @@ public class ConstraintWidget {
                 ? null : map.get(src.mVerticalNextWidget);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateFromRuns(boolean updateHorizontal, boolean updateVertical) {
         updateHorizontal &= mHorizontalRun.isResolved();
         updateVertical &= mVerticalRun.isResolved();
@@ -3730,9 +3676,7 @@ public class ConstraintWidget {
 
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addChildrenToSolverByDependency(ConstraintWidgetContainer container,
             LinearSystem system,
             HashSet<ConstraintWidget> widgets,
@@ -3787,9 +3731,7 @@ public class ConstraintWidget {
         // horizontal
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getSceneString(StringBuilder ret) {
 
         ret.append("  " + stringId + ":{\n");

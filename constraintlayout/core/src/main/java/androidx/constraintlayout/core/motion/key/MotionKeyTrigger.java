@@ -119,9 +119,7 @@ public class MotionKeyTrigger extends MotionKey {
         return -1;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKeyTrigger copy(MotionKey src) {
         super.copy(src);
@@ -146,9 +144,7 @@ public class MotionKeyTrigger extends MotionKey {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKey clone() {
         return new MotionKeyTrigger().copy(this);
@@ -171,15 +167,11 @@ public class MotionKeyTrigger extends MotionKey {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void conditionallyFire(float position, MotionWidget child) {
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, int value) {
         switch (type) {
@@ -208,9 +200,7 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -223,9 +213,7 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -250,9 +238,7 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, boolean value) {
         switch (type) {

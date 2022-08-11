@@ -33,18 +33,14 @@ public class KeyFrameArray {
             clear();
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void clear() {
             Arrays.fill(mKeys, EMPTY);
             Arrays.fill(mValues, null);
             mCount = 0;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void dump() {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(mKeys, mCount)));
             System.out.print("K: [");
@@ -54,30 +50,22 @@ public class KeyFrameArray {
             System.out.println("]");
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public int size() {
             return mCount;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public CustomAttribute valueAt(int i) {
             return mValues[mKeys[i]];
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public int keyAt(int i) {
             return mKeys[i];
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void append(int position, CustomAttribute value) {
             if (mValues[position] != null) {
                 remove(position);
@@ -87,9 +75,7 @@ public class KeyFrameArray {
             Arrays.sort(mKeys);
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void remove(int position) {
             mValues[position] = null;
             for (int j = 0, i = 0; i < mCount; i++) {
@@ -118,18 +104,14 @@ public class KeyFrameArray {
             clear();
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void clear() {
             Arrays.fill(mKeys, EMPTY);
             Arrays.fill(mValues, null);
             mCount = 0;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void dump() {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(mKeys, mCount)));
             System.out.print("K: [");
@@ -139,30 +121,22 @@ public class KeyFrameArray {
             System.out.println("]");
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public int size() {
             return mCount;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public CustomVariable valueAt(int i) {
             return mValues[mKeys[i]];
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public int keyAt(int i) {
             return mKeys[i];
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void append(int position, CustomVariable value) {
             if (mValues[position] != null) {
                 remove(position);
@@ -172,9 +146,7 @@ public class KeyFrameArray {
             Arrays.sort(mKeys);
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void remove(int position) {
             mValues[position] = null;
             for (int j = 0, i = 0; i < mCount; i++) {

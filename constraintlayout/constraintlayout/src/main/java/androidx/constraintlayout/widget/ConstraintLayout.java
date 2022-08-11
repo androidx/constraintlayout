@@ -559,7 +559,7 @@ import java.util.HashMap;
  */
 public class ConstraintLayout extends ViewGroup {
     /**
-     * @DoNotShow
+     *
      */
     public static final String VERSION = "ConstraintLayout-2.2.0-alpha03";
     private static final String TAG = "ConstraintLayout";
@@ -601,7 +601,7 @@ public class ConstraintLayout extends ViewGroup {
     private SparseArray<ConstraintWidget> mTempMapIdToWidget = new SparseArray<>();
 
     /**
-     * @DoNotShow
+     *
      */
     public static final int DESIGN_INFO_ID = 0;
    // private ConstraintsChangedListener mConstraintsChangedListener;
@@ -622,7 +622,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public void setDesignInformation(int type, Object value1, Object value2) {
         if (type == DESIGN_INFO_ID
@@ -642,7 +642,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     public Object getDesignInformation(int type, Object value) {
         if (type == DESIGN_INFO_ID && value instanceof String) {
@@ -681,7 +681,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     public void setId(int id) {
@@ -1117,7 +1117,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     public void onViewAdded(View view) {
@@ -1145,7 +1145,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     public void onViewRemoved(View view) {
@@ -1661,7 +1661,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param view
      * @return
-     * @DoNotShow
+     *
      */
     public final ConstraintWidget getViewWidget(View view) {
         if (view == this) {
@@ -1681,7 +1681,7 @@ public class ConstraintLayout extends ViewGroup {
 
     /**
      * @param metrics
-     * @DoNotShow Fills metrics object
+     * Fills metrics object
      */
     public void fillMetrics(Metrics metrics) {
         mMetrics = metrics;
@@ -2112,7 +2112,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
@@ -2156,14 +2156,14 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param id the view id
      * @return the child view, can return null
-     * @DoNotShow Return a direct child view by its id if it exists
+     * Return a direct child view by its id if it exists
      */
     public View getViewById(int id) {
         return mChildrenByIds.get(id);
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -2843,7 +2843,7 @@ public class ConstraintLayout extends ViewGroup {
         ConstraintWidget mWidget = new ConstraintWidget();
 
         /**
-         * @DoNotShow
+         *
          */
         public ConstraintWidget getConstraintWidget() {
             return mWidget;
@@ -2851,7 +2851,7 @@ public class ConstraintLayout extends ViewGroup {
 
         /**
          * @param text
-         * @DoNotShow
+         *
          */
         public void setWidgetDebugName(String text) {
             mWidget.setDebugName(text);
@@ -3949,7 +3949,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @DoNotShow
+     *
      *
      * @return
      */

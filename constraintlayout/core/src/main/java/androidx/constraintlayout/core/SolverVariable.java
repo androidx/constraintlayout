@@ -177,9 +177,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     HashSet<ArrayRow> mInRows = VAR_USE_HASH ? new HashSet<ArrayRow>() : null;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public final void addToRow(ArrayRow row) {
         if (VAR_USE_HASH) {
             mInRows.add(row);
@@ -197,9 +195,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public final void removeFromRow(ArrayRow row) {
         if (VAR_USE_HASH) {
             mInRows.remove(row);
@@ -217,9 +213,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public final void updateReferencesWithNewDefinition(LinearSystem system, ArrayRow definition) {
         if (VAR_USE_HASH) {
             for (ArrayRow row : mInRows) {
@@ -235,9 +229,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalValue(LinearSystem system, float value) {
         if (DO_NOT_USE && INTERNAL_DEBUG) {
             System.out.println("Set final value for " + this + " of " + value);
@@ -255,9 +247,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         mClientEquationsCount = 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setSynonym(LinearSystem system, SolverVariable synonymVariable, float value) {
         if (INTERNAL_DEBUG) {
             System.out.println("Set synonym for " + this + " = " + synonymVariable + " + " + value);
@@ -274,9 +264,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         system.displayReadableRows();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void reset() {
         mName = null;
         mType = Type.UNKNOWN;
@@ -315,9 +303,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         mName = name;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setType(Type type, String prefix) {
         mType = type;
         if (INTERNAL_DEBUG && mName == null) {

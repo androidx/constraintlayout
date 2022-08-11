@@ -60,7 +60,7 @@ import java.util.HashSet;
  * All parameter which affect a views motion are added to MotionController and then setup()
  * builds out the splines that control the view.
  *
- * @DoNotShow
+ *
  */
 public class MotionController {
     public static final int PATH_PERCENT = 0;
@@ -1037,8 +1037,10 @@ public class MotionController {
                 mView.getWidth(), mView.getHeight());
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param view
      */
     public void setView(View view) {

@@ -21,9 +21,7 @@ public class ViewState {
     public float rotation;
     public int left, top, right, bottom;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getState(MotionWidget v) {
         left = (int) v.getLeft();
         top = (int) v.getTop();
@@ -32,16 +30,12 @@ public class ViewState {
         rotation = (int) v.getRotationZ();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int width() {
         return right - left;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int height() {
         return bottom - top;
     }

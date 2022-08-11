@@ -20,7 +20,7 @@ package androidx.constraintlayout.core.motion.utils;
  * This contains the class to provide the logic for an animation to come to a stop using a spring
  * model.
  *
- * @DoNotShow
+ *
  */
 public class SpringStopEngine implements StopEngine {
     double mDamping = 0.5f;
@@ -48,9 +48,7 @@ public class SpringStopEngine implements StopEngine {
         System.out.println(line + str);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void springConfig(float currentPos,
             float target,
             float currentVelocity,
@@ -83,9 +81,7 @@ public class SpringStopEngine implements StopEngine {
         return (float) mPos;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float getAcceleration() {
         double k = mStiffness;
         double c = mDamping;

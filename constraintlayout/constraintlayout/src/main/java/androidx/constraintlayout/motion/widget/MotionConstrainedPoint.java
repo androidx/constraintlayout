@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * All the parameter it extracts from a ConstraintSet/View
  *
- * @DoNotShow
+ *
  */
 class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     public static final String TAG = "MotionPaths";

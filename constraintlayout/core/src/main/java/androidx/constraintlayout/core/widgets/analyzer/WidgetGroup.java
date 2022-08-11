@@ -54,9 +54,7 @@ public class WidgetGroup {
         return mId;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean add(ConstraintWidget widget) {
         if (mWidgets.contains(widget)) {
             return false;
@@ -94,9 +92,7 @@ public class WidgetGroup {
         return ret;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void moveTo(int orientation, WidgetGroup widgetGroup) {
         if (DEBUG) {
             System.out.println("Move all widgets (" + this + ") from "
@@ -115,9 +111,7 @@ public class WidgetGroup {
         mMoveTo = widgetGroup.mId;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void clear() {
         mWidgets.clear();
     }
@@ -138,9 +132,7 @@ public class WidgetGroup {
         return -1;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int measureWrap(LinearSystem system, int orientation) {
         int count = mWidgets.size();
         if (count == 0) {
@@ -208,9 +200,7 @@ public class WidgetGroup {
         this.mOrientation = orientation;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void apply() {
         if (mResults == null) {
             return;
@@ -224,9 +214,7 @@ public class WidgetGroup {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean intersectWith(WidgetGroup group) {
         for (int i = 0; i < mWidgets.size(); i++) {
             ConstraintWidget widget = mWidgets.get(i);
@@ -241,16 +229,12 @@ public class WidgetGroup {
         return mWidgets.contains(widget);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int size() {
         return mWidgets.size();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void cleanup(ArrayList<WidgetGroup> dependencyLists) {
         final int count = mWidgets.size();
         if (mMoveTo != -1 && count > 0) {

@@ -243,9 +243,7 @@ public class ChainHead {
         return mTotalWeight;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void define() {
         if (!mDefined) {
             defineChainProperties();

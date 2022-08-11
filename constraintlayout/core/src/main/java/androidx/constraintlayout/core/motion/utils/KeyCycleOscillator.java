@@ -26,7 +26,7 @@ import java.util.Comparator;
  * Provide the engine for executing cycles.
  * KeyCycleOscillator
  *
- * @DoNotShow
+ *
  */
 public abstract class KeyCycleOscillator {
     private static final String TAG = "KeyCycleOscillator";
@@ -39,9 +39,7 @@ public abstract class KeyCycleOscillator {
     public int mVariesBy = 0; // 0 = position, 2=path
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static KeyCycleOscillator makeWidgetCycle(String attribute) {
         if (attribute.equals(TypedValues.AttributesType.S_PATH_ROTATE)) {
             return new PathRotateSet(attribute);
@@ -78,17 +76,13 @@ public abstract class KeyCycleOscillator {
             widget.setValue(mTypeId, get(t));
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void setPathRotate(MotionWidget view, float t, double dx, double dy) {
             view.setRotationZ(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean variesByPath() {
         return mVariesBy == 1;
     }
@@ -123,16 +117,12 @@ public abstract class KeyCycleOscillator {
         mType = type;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float getSlope(float position) {
         return (float) mCycleOscillator.getSlope(position);
     }
@@ -198,9 +188,7 @@ public abstract class KeyCycleOscillator {
         mWaveString = waveString;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setup(float pathLength) {
         int count = mWavePoints.size();
         if (count == 0) {
@@ -343,9 +331,7 @@ public abstract class KeyCycleOscillator {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setProperty(MotionWidget widget, float t) {
 
     }

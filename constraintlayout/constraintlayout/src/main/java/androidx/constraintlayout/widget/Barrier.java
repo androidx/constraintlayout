@@ -196,7 +196,7 @@ public class Barrier extends ConstraintHelper {
 
     /**
      * @param attrs
-     * @DoNotShow
+     *
      */
     @Override
     protected void init(AttributeSet attrs) {

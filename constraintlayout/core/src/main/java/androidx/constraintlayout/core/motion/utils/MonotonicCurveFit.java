@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * This performs a spline interpolation in multiple dimensions
  *
- * @DoNotShow
+ *
  */
 public class MonotonicCurveFit extends CurveFit {
     private static final String TAG = "MonotonicCurveFit";

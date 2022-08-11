@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
 /**
  * This engine allows manipulation of attributes by wave shapes oscillating in time
  *
- * @DoNotShow
+ *
  */
 public abstract class ViewTimeCycle extends TimeCycleSplineSet {
     private static final String TAG = "ViewTimeCycle";
@@ -296,8 +296,9 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
+        // @TODO: add description
+
         /**
-         * @TODO: add description
          * @param position
          * @param value
          * @param period

@@ -28,7 +28,7 @@ import java.util.HashSet;
 /**
  * Base class in an element in a KeyFrame
  *
- * @DoNotShow
+ *
  */
 
 public abstract class Key {
@@ -80,7 +80,7 @@ public abstract class Key {
      * The values are written to the spline
      *
      * @param splines splines to write values to
-     * @DoNotShow
+     *
      */
     public abstract void addValues(HashMap<String, ViewSpline> splines);
 
@@ -89,7 +89,7 @@ public abstract class Key {
      *
      * @param tag
      * @param value
-     * @DoNotShow
+     *
      */
     public abstract void setValue(String tag, Object value);
 
@@ -98,7 +98,7 @@ public abstract class Key {
      *
      * @param value
      * @return
-     * @DoNotShow
+     *
      */
     float toFloat(Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());
@@ -109,7 +109,7 @@ public abstract class Key {
      *
      * @param value
      * @return
-     * @DoNotShow
+     *
      */
     int toInt(Object value) {
         return (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
@@ -120,7 +120,7 @@ public abstract class Key {
      *
      * @param value
      * @return
-     * @DoNotShow
+     *
      */
     boolean toBoolean(Object value) {
         return (value instanceof Boolean) ? (Boolean) value :

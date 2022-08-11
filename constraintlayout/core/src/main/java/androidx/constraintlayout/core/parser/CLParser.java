@@ -25,9 +25,7 @@ public class CLParser {
 
     enum TYPE {UNKNOWN, OBJECT, ARRAY, NUMBER, STRING, KEY, TOKEN}
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CLObject parse(String string) throws CLParsingException {
         return new CLParser(string).parse();
     }
@@ -36,9 +34,7 @@ public class CLParser {
         mContent = content;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public CLObject parse() throws CLParsingException {
         @SuppressWarnings("unused") CLObject root = null;
 

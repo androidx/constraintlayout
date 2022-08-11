@@ -30,9 +30,7 @@ public class CLElement {
         mContent = content;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean notStarted() {
         return mStart == -1;
     }
@@ -68,9 +66,7 @@ public class CLElement {
         return this.mEnd;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setEnd(long end) {
         if (this.mEnd != Long.MAX_VALUE) {
             return;
@@ -113,9 +109,7 @@ public class CLElement {
         return "";
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public String content() {
         String content = new String(mContent);
         if (mEnd == Long.MAX_VALUE || mEnd < mStart) {
@@ -148,9 +142,7 @@ public class CLElement {
         return "";
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getInt() {
         if (this instanceof CLNumber) {
             return ((CLNumber) this).getInt();
@@ -158,9 +150,7 @@ public class CLElement {
         return 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float getFloat() {
         if (this instanceof CLNumber) {
             return ((CLNumber) this).getFloat();

@@ -18,7 +18,7 @@ package androidx.constraintlayout.core;
 import java.util.ArrayList;
 
 /**
- * @DoNotShow Utility class to track metrics during the system resolution
+ * Utility class to track metrics during the system resolution
  */
 public class Metrics {
     public long measuresWidgetsDuration;
@@ -65,9 +65,7 @@ public class Metrics {
     public long layouts;
     public long grouping;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public String toString() {
         return "\n*** Metrics ***\n"
@@ -114,9 +112,7 @@ public class Metrics {
                 ;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void reset() {
         measures = 0;
         widgets = 0;

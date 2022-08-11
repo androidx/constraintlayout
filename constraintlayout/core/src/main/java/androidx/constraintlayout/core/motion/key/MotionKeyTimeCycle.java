@@ -56,9 +56,7 @@ public class MotionKeyTimeCycle extends MotionKey {
         mCustom = new HashMap<>();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
         for (String s : splines.keySet()) {
             TimeCycleSplineSet splineSet = splines.get(s);
@@ -159,9 +157,7 @@ public class MotionKeyTimeCycle extends MotionKey {
     public void addValues(HashMap<String, SplineSet> splines) {
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, int value) {
 
@@ -178,9 +174,7 @@ public class MotionKeyTimeCycle extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -235,9 +229,7 @@ public class MotionKeyTimeCycle extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -254,17 +246,13 @@ public class MotionKeyTimeCycle extends MotionKey {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, boolean value) {
         return super.setValue(type, value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKeyTimeCycle copy(MotionKey src) {
         super.copy(src);
@@ -331,9 +319,7 @@ public class MotionKeyTimeCycle extends MotionKey {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKey clone() {
         return new MotionKeyTimeCycle().copy(this);

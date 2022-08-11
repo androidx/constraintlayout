@@ -51,9 +51,7 @@ public class DependencyNode implements Dependency {
                 + mTargets.size() + ":d=" + mDependencies.size() + ">";
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void resolve(int value) {
         if (resolved) {
             return;
@@ -66,9 +64,7 @@ public class DependencyNode implements Dependency {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void update(Dependency node) {
         for (DependencyNode target : mTargets) {
@@ -108,9 +104,7 @@ public class DependencyNode implements Dependency {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addDependency(Dependency dependency) {
         mDependencies.add(dependency);
         if (resolved) {
@@ -118,9 +112,7 @@ public class DependencyNode implements Dependency {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public String name() {
         String definition = mRun.mWidget.getDebugName();
         if (mType == Type.LEFT
@@ -133,9 +125,7 @@ public class DependencyNode implements Dependency {
         return definition;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void clear() {
         mTargets.clear();
         mDependencies.clear();

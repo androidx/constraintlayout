@@ -35,7 +35,7 @@ package androidx.constraintlayout.core.motion;
 /**
  * Defines non standard Attributes
  *
- * @DoNotShow
+ *
  */
 public class CustomAttribute {
     private static final String TAG = "TransitionLayout";
@@ -134,9 +134,7 @@ public class CustomAttribute {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
             case INT_TYPE:
@@ -172,9 +170,7 @@ public class CustomAttribute {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setValue(float[] value) {
         switch (mType) {
             case REFERENCE_TYPE:
@@ -202,9 +198,7 @@ public class CustomAttribute {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
         float f = hue * 6 - h;
@@ -276,9 +270,7 @@ public class CustomAttribute {
 
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setValue(Object value) {
         switch (mType) {
             case REFERENCE_TYPE:

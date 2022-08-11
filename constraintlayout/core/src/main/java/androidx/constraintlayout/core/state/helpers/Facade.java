@@ -19,13 +19,9 @@ package androidx.constraintlayout.core.state.helpers;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public interface Facade {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     ConstraintWidget getConstraintWidget();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void apply();
 }

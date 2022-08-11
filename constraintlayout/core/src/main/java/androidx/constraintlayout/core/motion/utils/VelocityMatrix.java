@@ -19,23 +19,19 @@ package androidx.constraintlayout.core.motion.utils;
 /**
  * This is used to calculate the related velocity matrix for a post layout matrix
  *
- * @DoNotShow
+ *
  */
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
     float mRotate;
     @SuppressWarnings("unused") private static String sTag = "VelocityMatrix";
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void clear() {
         mDScaleX = mDScaleY = mDTranslateX = mDTranslateY = mDRotate = 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setRotationVelocity(SplineSet rot, float position) {
         if (rot != null) {
             mDRotate = rot.getSlope(position);
@@ -43,9 +39,7 @@ public class VelocityMatrix {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setTranslationVelocity(SplineSet transX, SplineSet transY, float position) {
 
         if (transX != null) {
@@ -56,9 +50,7 @@ public class VelocityMatrix {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setScaleVelocity(SplineSet scaleX, SplineSet scaleY, float position) {
 
         if (scaleX != null) {
@@ -69,18 +61,14 @@ public class VelocityMatrix {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setRotationVelocity(KeyCycleOscillator oscR, float position) {
         if (oscR != null) {
             mDRotate = oscR.getSlope(position);
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setTranslationVelocity(KeyCycleOscillator oscX,
             KeyCycleOscillator oscY,
             float position) {
@@ -94,9 +82,7 @@ public class VelocityMatrix {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setScaleVelocity(KeyCycleOscillator oscSx,
             KeyCycleOscillator oscSy,
             float position) {
@@ -111,7 +97,7 @@ public class VelocityMatrix {
     /**
      * Apply the transform a velocity vector
      *
-     * @DoNotShow
+     *
      */
     public void applyTransform(float locationX,
             float locationY,

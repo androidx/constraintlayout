@@ -40,9 +40,7 @@ public class ChainReference extends HelperReference {
         return State.Chain.SPREAD;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ChainReference style(State.Chain style) {
         mStyle = style;
         return this;
@@ -98,9 +96,7 @@ public class ChainReference extends HelperReference {
         return mBias;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public ChainReference bias(float bias) {
         mBias = bias;

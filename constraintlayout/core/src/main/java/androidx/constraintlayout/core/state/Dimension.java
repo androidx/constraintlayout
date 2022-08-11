@@ -70,92 +70,70 @@ public class Dimension {
         mInitialValue = type;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createSuggested(int value) {
         Dimension dimension = new Dimension();
         dimension.suggested(value);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createSuggested(Object startValue) {
         Dimension dimension = new Dimension();
         dimension.suggested(startValue);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createFixed(int value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
         dimension.fixed(value);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createFixed(Object value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
         dimension.fixed(value);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createPercent(Object key, float value) {
         Dimension dimension = new Dimension(PERCENT_DIMENSION);
         dimension.percent(key, value);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createParent() {
         return new Dimension(PARENT_DIMENSION);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createWrap() {
         return new Dimension(WRAP_DIMENSION);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createSpread() {
         return new Dimension(SPREAD_DIMENSION);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static Dimension createRatio(String ratio) {
         Dimension dimension = new Dimension(RATIO_DIMENSION);
         dimension.ratio(ratio);
         return dimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension percent(Object key, float value) {
         mPercent = value;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension min(int value) {
         if (value >= 0) {
             mMin = value;
@@ -163,9 +141,7 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension min(Object value) {
         if (value == WRAP_DIMENSION) {
             mMin = mWrapContent;
@@ -173,9 +149,7 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension max(int value) {
         if (mMax >= 0) {
             mMax = value;
@@ -183,9 +157,7 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension max(Object value) {
         if (value == WRAP_DIMENSION && mIsSuggested) {
             mInitialValue = WRAP_DIMENSION;
@@ -194,9 +166,7 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension suggested(int value) {
         mIsSuggested = true;
         if (value >= 0) {
@@ -205,18 +175,14 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension suggested(Object value) {
         mInitialValue = value;
         mIsSuggested = true;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension fixed(Object value) {
         mInitialValue = value;
         if (value instanceof Integer) {
@@ -226,18 +192,14 @@ public class Dimension {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension fixed(int value) {
         mInitialValue = null;
         mValue = value;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Dimension ratio(String ratio) { // WxH ratio
         mRatioString = ratio;
         return this;

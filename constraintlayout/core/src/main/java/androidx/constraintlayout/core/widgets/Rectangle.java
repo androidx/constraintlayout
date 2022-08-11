@@ -24,9 +24,7 @@ public class Rectangle {
     public int width;
     public int height;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setBounds(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -46,9 +44,7 @@ public class Rectangle {
                 && y >= bounds.y && y < bounds.y + bounds.height;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean contains(int x, int y) {
         return x >= this.x && x < this.x + this.width
                 && y >= this.y && y < this.y + this.height;

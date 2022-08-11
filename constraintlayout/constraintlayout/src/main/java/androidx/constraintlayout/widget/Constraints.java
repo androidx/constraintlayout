@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * @DoNotShow
+ *
  * This defines the internally defined Constraint set
  * It allows you to have a group of References which point to other views and provide them with
  * constraint attributes
@@ -126,7 +126,7 @@ public class Constraints extends ViewGroup {
     }
 
     /**
-     * @DoNotShow {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     protected LayoutParams generateDefaultLayoutParams() {

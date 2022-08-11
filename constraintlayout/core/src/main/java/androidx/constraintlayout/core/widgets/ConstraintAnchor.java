@@ -37,9 +37,7 @@ public class ConstraintAnchor {
     private int mFinalValue;
     private boolean mHasFinalValue;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void findDependents(int orientation, ArrayList<WidgetGroup> list, WidgetGroup group) {
         if (mDependents != null) {
             for (ConstraintAnchor anchor : mDependents) {
@@ -52,9 +50,7 @@ public class ConstraintAnchor {
         return mDependents;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasDependents() {
         if (mDependents == null) {
             return false;
@@ -62,9 +58,7 @@ public class ConstraintAnchor {
         return mDependents.size() > 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasCenteredDependents() {
         if (mDependents == null) {
             return false;
@@ -78,17 +72,13 @@ public class ConstraintAnchor {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFinalValue(int finalValue) {
         this.mFinalValue = finalValue;
         this.mHasFinalValue = true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getFinalValue() {
         if (!mHasFinalValue) {
             return 0;
@@ -96,17 +86,13 @@ public class ConstraintAnchor {
         return mFinalValue;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void resetFinalResolution() {
         mHasFinalValue = false;
         mFinalValue = 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasFinalValue() {
         return mHasFinalValue;
     }
@@ -126,9 +112,7 @@ public class ConstraintAnchor {
 
     SolverVariable mSolverVariable;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void copyFrom(ConstraintAnchor source, HashMap<ConstraintWidget, ConstraintWidget> map) {
         if (mTarget != null) {
             if (mTarget.mDependents != null) {

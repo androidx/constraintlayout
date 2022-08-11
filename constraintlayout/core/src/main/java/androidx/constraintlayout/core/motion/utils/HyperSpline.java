@@ -21,7 +21,7 @@ package androidx.constraintlayout.core.motion.utils;
  * Currently not used but it is anticipated that we will be using it in the
  * KeyMotion
  *
- * @DoNotShow
+ *
  */
 
 public class HyperSpline {
@@ -44,9 +44,7 @@ public class HyperSpline {
     public HyperSpline() {
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setup(double[][] points) {
         mDimensionality = points[0].length;
         mPoints = points.length;
@@ -75,9 +73,7 @@ public class HyperSpline {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getVelocity(double p, double[] v) {
         double pos = p * mTotalLength;
         int k = 0;
@@ -89,9 +85,7 @@ public class HyperSpline {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getPos(double p, double[] x) {
         double pos = p * mTotalLength;
         int k = 0;
@@ -103,9 +97,7 @@ public class HyperSpline {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void getPos(double p, float[] x) {
         double pos = p * mTotalLength;
         int k = 0;
@@ -117,9 +109,7 @@ public class HyperSpline {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public double getPos(double p, int splineNumber) {
         double pos = p * mTotalLength;
         int k = 0;
@@ -129,9 +119,7 @@ public class HyperSpline {
         return mCurve[splineNumber][k].eval(pos / mCurveLength[k]);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public double approxLength(Cubic[] curve) {
         double sum = 0;
 
@@ -200,16 +188,12 @@ public class HyperSpline {
             mD = d;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public double eval(double u) {
             return (((mD * u) + mC) * u + mB) * u + mA;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public double vel(double v) {
             //  (((mD * u) + mC) * u + mB) * u + mA
             //  =  "mA + u*mB + u*u*mC+u*u*u*mD" a cubic expression

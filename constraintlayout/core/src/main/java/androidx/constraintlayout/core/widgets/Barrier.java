@@ -290,9 +290,7 @@ public class Barrier extends HelperWidget {
         return mMargin;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getOrientation() {
         switch (mBarrierType) {
             case LEFT:
@@ -305,9 +303,7 @@ public class Barrier extends HelperWidget {
         return UNKNOWN;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean allSolved() {
         if (!USE_RESOLUTION) {
             return false;

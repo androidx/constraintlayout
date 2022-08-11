@@ -34,7 +34,7 @@ import java.util.Set;
  * This is used to capture and play back path of the layout.
  * It is used to set the bounds of the view (view.layout(l, t, r, b))
  *
- * @DoNotShow
+ *
  */
 class MotionPaths implements Comparable<MotionPaths> {
     public static final String TAG = "MotionPaths";
