@@ -471,7 +471,7 @@ public class GridEngine {
 
     /**
      * Set new NumWidgets value
-     * @param num how man widgets to be arranged in Grid
+     * @param num how many widgets to be arranged in Grid
      */
     public void setNumWidgets(int num) {
         if (num > mRows * mColumns) {

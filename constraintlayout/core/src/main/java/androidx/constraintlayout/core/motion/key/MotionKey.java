@@ -25,9 +25,7 @@ import java.util.HashSet;
 /**
  * Base class in an element in a KeyFrame
  *
- 
  */
-
 public abstract class MotionKey implements TypedValues {
     public static int UNSET = -1;
     public int mFramePosition = UNSET;
@@ -66,14 +64,12 @@ public abstract class MotionKey implements TypedValues {
      * The values are written to the spline
      *
      * @param splines splines to write values to
-     
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
      *
-     
      */
     float toFloat(Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());

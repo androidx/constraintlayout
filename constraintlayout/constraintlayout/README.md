@@ -2,7 +2,7 @@
 
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-<img src="https://img.shields.io/badge/stable-2.1.1-blue"/><img src="https://img.shields.io/badge/compose-1.0.0--rc01-blue"/> 
+<img src="https://img.shields.io/badge/stable-2.1.1-blue"/><img src="https://img.shields.io/badge/compose-1.0.0--rc01-blue"/>
 
 
 ConstraintLayout is a layout manager for Android which allows you to position and size widgets in a flexible way. It's available for both the Android view system and Jetpack Compose.
