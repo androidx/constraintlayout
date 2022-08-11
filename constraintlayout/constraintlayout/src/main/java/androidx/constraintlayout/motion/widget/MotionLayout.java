@@ -17,7 +17,6 @@
 package androidx.constraintlayout.motion.widget;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -2211,6 +2210,18 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
+     * Animate to the starting position of the current transition.
+     * This will not work during on create as there is no transition
+     * Transitions are only set up during onAttach
+     *
+     * @param onComplete callback when task is done
+     */
+    public void transitionToStart(Runnable onComplete) {
+        animateTo(0.0f);
+        mOnComplete = onComplete;
+    }
+
+    /**
      * Animate to the ending position of the current transition.
      * This will not work during on create as there is no transition
      * Transitions are only set up during onAttach
@@ -2225,7 +2236,7 @@ public class MotionLayout extends ConstraintLayout implements
      * This will not work during on create as there is no transition
      * Transitions are only set up during onAttach
      *
-     * @param onComplete callback when task is don
+     * @param onComplete callback when task is done
      */
     public void transitionToEnd(Runnable onComplete) {
         animateTo(1.0f);
@@ -4624,6 +4635,7 @@ public class MotionLayout extends ConstraintLayout implements
         processTransitionCompleted();
         if (mOnComplete != null) {
             mOnComplete.run();
+            mOnComplete = null;
         }
 
         if (mScheduledTransitionTo != null && mScheduledTransitions > 0) {
