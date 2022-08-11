@@ -196,7 +196,6 @@ class MotionRenderDebug {
             mPath.lineTo(x, y - mDiamondSize);
             mPath.lineTo(x - mDiamondSize, y);
             mPath.close();
-            
             float dx = 0; //framePoint.translationX
             float dy = 0; //framePoint.translationY
             if (mode == Motion.DRAW_PATH_AS_CONFIGURED) {

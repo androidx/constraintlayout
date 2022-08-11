@@ -1793,7 +1793,8 @@ public class ConstraintLayout extends ViewGroup {
         }
         mDirtyHierarchy |= dynamicUpdateConstraints(widthMeasureSpec,  heightMeasureSpec);
 
-        @SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions", "ComplexBooleanConstant"})  // TODO re-enable
+        @SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions",
+                "ComplexBooleanConstant"})  // TODO re-enable
         boolean sameSpecsAsPreviousMeasure =
                 false && (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);

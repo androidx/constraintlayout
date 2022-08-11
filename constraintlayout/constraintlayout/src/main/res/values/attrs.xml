@@ -8,7 +8,8 @@
     <attr name="layout_constraintGuide_begin" format="dimension" />
     <!-- The space from the ending edge of the parent to this  guideline. -->
     <attr name="layout_constraintGuide_end" format="dimension" />
-    <!-- The percent of total space from the beginning of the parent to this guideline. (e.g. 0.50 = middle)-->
+    <!-- The percent of total space from the beginning of the parent to this guideline.
+        (e.g. 0.50 = middle)-->
     <attr name="layout_constraintGuide_percent" format="float" />
     <!-- Let a chain helper be rtl or not default is true -->
     <attr name="guidelineUseRtl" format="boolean" />
@@ -145,9 +146,11 @@
         <enum name="skipped" value="3" />
     </attr>
 
-    <!-- Fraction of excess space to distribute on the left when constrained on left & right edges (e.g. .5 = middle)-->
+    <!-- Fraction of excess space to distribute on the left when constrained on left & right edges
+        (e.g. .5 = middle)-->
     <attr name="layout_constraintHorizontal_bias" format="float" />
-    <!-- Fraction of excess space to distribute on the top when constrained on top & bottom edges (e.g. .5 = middle)-->
+    <!-- Fraction of excess space to distribute on the top when constrained on top & bottom edges
+        (e.g. .5 = middle)-->
     <attr name="layout_constraintVertical_bias" format="float" />
 
     <!-- Used at design time to define who created the constraint -->
@@ -164,21 +167,25 @@
     Note it only works if one of the dimensions is set to 0dp.-->
     <attr name="layout_constraintDimensionRatio" format="string" />
 
-    <!-- In a Chain, the amount of weight used to spread available horizontal space if the widget is set to MATCH_CONSTRAINT -->
+    <!-- In a Chain, the amount of weight used to spread available horizontal space
+        if the widget is set to MATCH_CONSTRAINT -->
     <attr name="layout_constraintHorizontal_weight" format="float" />
-    <!-- In a Chain, the amount of weight used to spread available vertical space if the widget is set to MATCH_CONSTRAINT -->
+    <!-- In a Chain, the amount of weight used to spread available vertical space
+        if the widget is set to MATCH_CONSTRAINT -->
     <attr name="layout_constraintVertical_weight" format="float" />
 
-    <!-- Set a chain to be packed or not. If true and the widget is the first element of a chain, the chain will not spread,
-    and the bias will affect the position of the chain elements. It will only work if all elements have a set size (i.e. not MATCH_CONSTRAINT) -->
+    <!-- Set a chain to be packed or not. If true and the widget is the first element of a chain,
+        the chain will not spread, and the bias will affect the position of the chain elements.
+        It will only work if all elements have a set size (i.e. not MATCH_CONSTRAINT) -->
     <attr name="layout_constraintHorizontal_chainStyle" format="enum">
         <enum name="spread" value="0" />
         <enum name="spread_inside" value="1" />
         <enum name="packed" value="2" />
     </attr>
 
-    <!-- Set a chain to be packed or not. If true and the widget is the first element of a chain, the chain will not spread,
-    and the bias will affect the position of the chain elements. It will only work if all elements have a set size (i.e. not MATCH_CONSTRAINT) -->
+    <!-- Set a chain to be packed or not. If true and the widget is the first element of a chain,
+        the chain will not spread, and the bias will affect the position of the chain elements.
+        It will only work if all elements have a set size (i.e. not MATCH_CONSTRAINT) -->
     <attr name="layout_constraintVertical_chainStyle" format="enum">
         <enum name="spread" value="0" />
         <enum name="spread_inside" value="1" />
@@ -338,7 +345,7 @@
             <enum name="west" value="3" />
         </attr>
         <attr name="motionEffect_strict" format="boolean" />
-    </declare-styleable>    <!-- =============================== End FadeMove =============================== -->
+    </declare-styleable>    <!-- ========================= End FadeMove ====================== -->
 
     <!-- Used at design time to define to position the view -->
     <attr name="layout_editor_absoluteX" format="dimension" />
@@ -994,8 +1001,9 @@
         <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
-    <!--    This is used in ConstraintSet to allow a more compact expression of changes to the original-->
-    <!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
+    <!--   This is used in ConstraintSet to allow a more compact expression of changes
+        to the original-->
+    <!--   Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
     <declare-styleable name="ConstraintOverride">
         <attr name="android:orientation" />
         <attr name="android:id" />
@@ -1425,10 +1433,12 @@
              or perpendicular to the path in pathRelative. -->
         <attr name="percentY" format="float" />
 
-        <!-- Percent of change in the width. Note if the width does not change this has no effect.This overrides sizePercent. -->
+        <!-- Percent of change in the width. Note if the width does not change this has no effect.
+            This overrides sizePercent. -->
         <attr name="percentWidth" format="float" />
 
-        <!-- Percent of change in the width. Note if the width does not change this has no effect.This overrides sizePercent. -->
+        <!-- Percent of change in the width. Note if the width does not change this has no effect.
+            This overrides sizePercent. -->
         <attr name="percentHeight" format="float" />
         <attr name="framePosition" />
         <attr name="motionTarget" />
@@ -1780,7 +1790,7 @@
     <declare-styleable name="include">
         <attr name="constraintSet" />
     </declare-styleable>
-    <!-- ======================================ViewTransitions===================================== -->
+    <!-- ===================================ViewTransitions================================== -->
 
     <attr name="onStateTransition" format="enum">
         <enum name="actionDown" value="1" />
