@@ -23,8 +23,9 @@
 
     <TextView android:id="@+id/textView4" android:layout_width="0dp"
         android:layout_height="wrap_content" android:tag="48,48,984,204"
-        android:text="12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678
-            12345678 12345678 12345678 12345678 12345678 12345678"
+
+        android:text= "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678
+12345678 12345678 12345678 12345678 12345678 12345678"
         tools:layout_constraintTop_creator="1" tools:layout_constraintRight_creator="1"
         android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
         app:layout_constraintRight_toRightOf="parent" android:layout_marginTop="16dp"
