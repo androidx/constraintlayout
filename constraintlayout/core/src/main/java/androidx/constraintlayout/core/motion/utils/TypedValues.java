@@ -54,9 +54,7 @@ public interface TypedValues {
      */
     boolean setValue(int id, boolean value);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     int getId(String name);
 
     int TYPE_FRAME_POSITION = 100;

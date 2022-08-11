@@ -32,8 +32,10 @@ import java.lang.reflect.Method;
 public abstract class ViewSpline extends SplineSet {
     private static final String TAG = "ViewSpline";
 
+
+    // @TODO: add description
+
     /**
-     * @TODO: add description
      * @param str
      * @param attrList
      * @return
@@ -43,8 +45,9 @@ public abstract class ViewSpline extends SplineSet {
         return new CustomSet(str, attrList);
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
      * @param str
      * @return
      */
@@ -211,8 +214,9 @@ public abstract class ViewSpline extends SplineSet {
             mConstraintAttributeList = attrList;
         }
 
+        // @TODO: add description
+
         /**
-         * @TODO: add description
          * @param curveType
          */
         @Override

@@ -90,8 +90,10 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
         return mAttributeId;
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param id
      */
     public void setAttributeId(int id) {
@@ -122,14 +124,14 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     public void setVisibility(int visibility) {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @SuppressLint("MissingSuperCall")
     @Override
@@ -137,7 +139,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

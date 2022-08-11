@@ -40,7 +40,7 @@ import java.util.Objects;
 /**
  * Utility class to manipulate MotionLayout from the layout editor
  *
- * @DoNotShow
+ *
  */
 public class DesignTool {
 
@@ -246,7 +246,7 @@ public class DesignTool {
 
     /**
      * @param position
-     * @DoNotShow
+     *
      */
     public void setToolPosition(float position) {
         if (mMotionLayout.mScene == null) {
@@ -258,8 +258,10 @@ public class DesignTool {
         mMotionLayout.invalidate();
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @return
      */
     public String getStartState() {
@@ -276,8 +278,10 @@ public class DesignTool {
         return mMotionLayout.getConstraintSetNames(startId);
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @return
      */
     public String getEndState() {
@@ -459,7 +463,7 @@ public class DesignTool {
      * @param x
      * @param y
      * @return
-     * @DoNotShow
+     *
      */
     public float getKeyFramePosition(Object view, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -479,7 +483,7 @@ public class DesignTool {
      * @param position
      * @param name
      * @param value
-     * @DoNotShow
+     *
      */
     public void setKeyFrame(Object view, int position, String name, Object value) {
         if (DEBUG) {
@@ -503,7 +507,7 @@ public class DesignTool {
      * @param x
      * @param y
      * @return
-     * @DoNotShow
+     *
      */
     public boolean setKeyFramePosition(Object view, int position, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -534,7 +538,7 @@ public class DesignTool {
     /**
      * @param view
      * @param debugMode
-     * @DoNotShow
+     *
      */
     public void setViewDebug(Object view, int debugMode) {
         if (!(view instanceof View)) {
@@ -620,8 +624,10 @@ public class DesignTool {
         }
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param type
      * @param target
      * @param position
@@ -634,8 +640,10 @@ public class DesignTool {
         return mMotionLayout.mScene.getKeyFrame(mMotionLayout.getContext(), type, target, position);
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param viewObject
      * @param x
      * @param y
@@ -661,8 +669,10 @@ public class DesignTool {
         return motionController.getPositionKeyframe(layoutWidth, layoutHeight, x, y);
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param keyFrame
      * @param view
      * @param x
@@ -688,8 +698,10 @@ public class DesignTool {
         return false;
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param view
      * @param type
      * @param position
@@ -703,8 +715,10 @@ public class DesignTool {
         return mMotionLayout.mScene.getKeyFrame(mMotionLayout.getContext(), type, target, position);
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param keyFrame
      * @param tag
      * @param value
@@ -775,8 +789,10 @@ public class DesignTool {
         mMotionLayout.requestLayout();
     }
 
+    // @TODO: add description
+
     /**
-     * @TODO: add description
+     *
      * @param set
      */
     public void dumpConstraintSet(String set) {

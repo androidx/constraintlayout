@@ -20,7 +20,7 @@ package androidx.constraintlayout.core.motion.utils;
  * Base class for curve fitting / interpolation
  * Curve fits must be capable of being differentiable and extend beyond the points (extrapolate)
  *
- * @DoNotShow
+ *
  */
 
 public abstract class CurveFit {
@@ -28,9 +28,7 @@ public abstract class CurveFit {
     public static final int LINEAR = 1;
     public static final int CONSTANT = 2;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CurveFit get(int type, double[] time, double[][] y) {
         if (time.length == 1) {
             type = CONSTANT;
@@ -45,41 +43,27 @@ public abstract class CurveFit {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CurveFit getArc(int[] arcModes, double[] time, double[][] y) {
         return new ArcCurveFit(arcModes, time, y);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract void getPos(double t, double[] v);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract void getPos(double t, float[] v);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract double getPos(double t, int j);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract void getSlope(double t, double[] v);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract double getSlope(double t, int j);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract double[] getTimePoints();
 
     static class Constant extends CurveFit {

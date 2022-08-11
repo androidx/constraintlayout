@@ -87,9 +87,7 @@ public class MotionKeyPosition extends MotionKey {
         return mCalculatedPositionY;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void positionAttributes(MotionWidget view,
             FloatRect start,
             FloatRect end,
@@ -211,9 +209,7 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean intersects(int layoutWidth,
             int layoutHeight,
             FloatRect start,
@@ -229,9 +225,7 @@ public class MotionKeyPosition extends MotionKey {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKey copy(MotionKey src) {
         super.copy(src);
@@ -250,9 +244,7 @@ public class MotionKeyPosition extends MotionKey {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public MotionKey clone() {
         return new MotionKeyPosition().copy(this);
@@ -284,9 +276,10 @@ public class MotionKeyPosition extends MotionKey {
 
     }
 
+    // @TODO: add description
+
     /**
      * @param splines splines to write values to
-     * @TODO: add description
      */
     @Override
     public void addValues(HashMap<String, SplineSet> splines) {

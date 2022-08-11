@@ -98,9 +98,7 @@ public class Optimizer {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static final boolean enabled(int optimizationLevel, int optimization) {
         return (optimizationLevel & optimization) == optimization;
     }

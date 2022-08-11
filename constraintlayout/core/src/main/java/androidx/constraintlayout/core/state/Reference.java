@@ -20,33 +20,21 @@ import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public interface Reference {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     ConstraintWidget getConstraintWidget();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void setConstraintWidget(ConstraintWidget widget);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void setKey(Object key);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     Object getKey();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void apply();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     Facade getFacade();
 }

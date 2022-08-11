@@ -37,9 +37,7 @@ public class TypedBundle {
     boolean[] mValueBoolean = new boolean[INITIAL_BOOLEAN];
     int mCountBoolean = 0;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getInteger(int type) {
         for (int i = 0; i < mCountInt; i++) {
             if (mTypeInt[i] == type) {
@@ -49,9 +47,7 @@ public class TypedBundle {
         return -1;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void add(int type, int value) {
         if (mCountInt >= mTypeInt.length) {
             mTypeInt = Arrays.copyOf(mTypeInt, mTypeInt.length * 2);
@@ -61,9 +57,7 @@ public class TypedBundle {
         mValueInt[mCountInt++] = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void add(int type, float value) {
         if (mCountFloat >= mTypeFloat.length) {
             mTypeFloat = Arrays.copyOf(mTypeFloat, mTypeFloat.length * 2);
@@ -73,18 +67,14 @@ public class TypedBundle {
         mValueFloat[mCountFloat++] = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addIfNotNull(int type, String value) {
         if (value != null) {
             add(type, value);
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void add(int type, String value) {
         if (mCountString >= mTypeString.length) {
             mTypeString = Arrays.copyOf(mTypeString, mTypeString.length * 2);
@@ -94,9 +84,7 @@ public class TypedBundle {
         mValueString[mCountString++] = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void add(int type, boolean value) {
         if (mCountBoolean >= mTypeBoolean.length) {
             mTypeBoolean = Arrays.copyOf(mTypeBoolean, mTypeBoolean.length * 2);
@@ -106,9 +94,7 @@ public class TypedBundle {
         mValueBoolean[mCountBoolean++] = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void applyDelta(TypedValues values) {
         for (int i = 0; i < mCountInt; i++) {
             values.setValue(mTypeInt[i], mValueInt[i]);
@@ -124,9 +110,7 @@ public class TypedBundle {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void applyDelta(TypedBundle values) {
         for (int i = 0; i < mCountInt; i++) {
             values.add(mTypeInt[i], mValueInt[i]);
@@ -142,9 +126,7 @@ public class TypedBundle {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void clear() {
         mCountBoolean = 0;
         mCountString = 0;

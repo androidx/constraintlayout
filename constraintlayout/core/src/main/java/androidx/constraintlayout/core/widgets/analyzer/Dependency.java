@@ -17,8 +17,6 @@
 package androidx.constraintlayout.core.widgets.analyzer;
 
 public interface Dependency {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void update(Dependency node);
 }

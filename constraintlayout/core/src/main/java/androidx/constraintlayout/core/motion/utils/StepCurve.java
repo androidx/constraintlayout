@@ -93,17 +93,13 @@ public class StepCurve extends Easing {
         return ms;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public double getDiff(double x) {
         return mCurveFit.getSlope(x, 0);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public double get(double x) {
         return mCurveFit.getPos(x, 0);

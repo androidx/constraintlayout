@@ -36,16 +36,12 @@ public class CLKey extends CLContainer {
         super(content);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CLElement allocate(char[] content) {
         return new CLKey(content);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CLElement allocate(String name, CLElement value) {
         CLKey key = new CLKey(name.toCharArray());
         key.setStart(0);
@@ -92,9 +88,7 @@ public class CLKey extends CLContainer {
         return content + ": <> ";
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void set(CLElement value) {
         if (mElements.size() > 0) {
             mElements.set(0, value);
@@ -103,9 +97,7 @@ public class CLKey extends CLContainer {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public CLElement getValue() {
         if (mElements.size() > 0) {
             return mElements.get(0);

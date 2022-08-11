@@ -606,9 +606,7 @@ public class HorizontalWidgetRun extends WidgetRun {
         end.resolve(start.value + mDimension.value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void applyToWidget() {
         if (start.resolved) {

@@ -475,9 +475,7 @@ public class VerticalWidgetRun extends WidgetRun {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void applyToWidget() {
         if (start.resolved) {

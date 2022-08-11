@@ -28,9 +28,7 @@ public class CLNumber extends CLElement {
         this.mValue = value;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CLElement allocate(char[] content) {
         return new CLNumber(content);
     }
@@ -59,9 +57,7 @@ public class CLNumber extends CLElement {
         return json.toString();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean isInt() {
         float value = getFloat();
         int intValue = (int) value;
@@ -84,9 +80,7 @@ public class CLNumber extends CLElement {
         return mValue;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void putValue(float value) {
         this.mValue = value;
     }

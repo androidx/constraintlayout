@@ -1548,7 +1548,7 @@ object DesignElements {
     fun define(
         name: String,
         function: @Composable (String, HashMap<String, String>) -> Unit
-    ): Unit {
+    ) {
         map[name] = function
     }
 }

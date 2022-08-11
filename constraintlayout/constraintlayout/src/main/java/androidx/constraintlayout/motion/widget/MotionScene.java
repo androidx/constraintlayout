@@ -436,7 +436,7 @@ public class MotionScene {
      * @param motionLayout
      * @param currentState
      * @return
-     * @DoNotShow
+     *
      */
     boolean autoTransition(MotionLayout motionLayout, int currentState) {
         if (isProcessingTouch()) {

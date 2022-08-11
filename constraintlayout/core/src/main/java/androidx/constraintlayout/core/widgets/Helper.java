@@ -20,18 +20,12 @@ package androidx.constraintlayout.core.widgets;
  */
 
 public interface Helper {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void updateConstraints(ConstraintWidgetContainer container);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void add(ConstraintWidget widget);
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     void removeAllIds();
 }

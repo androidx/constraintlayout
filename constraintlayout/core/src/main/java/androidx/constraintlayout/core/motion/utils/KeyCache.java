@@ -27,9 +27,7 @@ public class KeyCache {
 
     HashMap<Object, HashMap<String, float[]>> mMap = new HashMap<>();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFloatValue(Object view, String type, int element, float value) {
         if (!mMap.containsKey(view)) {
             HashMap<String, float[]> array = new HashMap<>();
@@ -62,9 +60,7 @@ public class KeyCache {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float getFloatValue(Object view, String type, int element) {
         if (!mMap.containsKey(view)) {
             return Float.NaN;

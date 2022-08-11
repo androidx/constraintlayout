@@ -28,23 +28,17 @@ public class Registry {
 
     private HashMap<String, RegistryCallback> mCallbacks = new HashMap<>();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void register(String name, RegistryCallback callback) {
         mCallbacks.put(name, callback);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void unregister(String name, RegistryCallback callback) {
         mCallbacks.remove(name);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateContent(String name, String content) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -52,9 +46,7 @@ public class Registry {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateProgress(String name, float progress) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -62,9 +54,7 @@ public class Registry {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public String currentContent(String name) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -73,9 +63,7 @@ public class Registry {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public String currentLayoutInformation(String name) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -84,9 +72,7 @@ public class Registry {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setDrawDebug(String name, int debugMode) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -94,9 +80,7 @@ public class Registry {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setLayoutInformationMode(String name, int mode) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -108,9 +92,7 @@ public class Registry {
         return mCallbacks.keySet();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public long getLastModified(String name) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
@@ -119,9 +101,7 @@ public class Registry {
         return Long.MAX_VALUE;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateDimensions(String name, int width, int height) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {

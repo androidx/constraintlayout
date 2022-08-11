@@ -256,7 +256,7 @@ public class ConstraintSetParser {
      *
      * @param content    JSON string to parse
      * @param transition The Transition to be populated
-     * @param state      @TODO what is this
+     * @param state
      */
     public static void parseJSON(String content, Transition transition, int state) {
         try {
@@ -301,7 +301,7 @@ public class ConstraintSetParser {
     /**
      * Parse and build a motionScene
      *
-     * @Todo this should be in a MotionScene / MotionSceneParser
+     * this should be in a MotionScene / MotionSceneParser
      */
     public static void parseMotionSceneJSON(CoreMotionScene scene, String content) {
         try {

@@ -52,9 +52,7 @@ public class ConstraintReference implements Reference {
     }
 
     public interface ConstraintReferenceFactory {
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         ConstraintReference create(State state);
     }
 
@@ -140,9 +138,7 @@ public class ConstraintReference implements Reference {
 
     TypedBundle mMotionProperties = null;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setView(Object view) {
         mView = view;
         if (mConstraintWidget != null) {
@@ -154,9 +150,7 @@ public class ConstraintReference implements Reference {
         return mView;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setFacade(Facade facade) {
         mFacade = facade;
         if (facade != null) {
@@ -169,9 +163,7 @@ public class ConstraintReference implements Reference {
         return mFacade;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
@@ -190,9 +182,7 @@ public class ConstraintReference implements Reference {
         return mConstraintWidget;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintWidget createConstraintWidget() {
         return new ConstraintWidget(
                 getWidth().getValue(),
@@ -274,9 +264,7 @@ public class ConstraintReference implements Reference {
         mVerticalChainStyle = chainStyle;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getVerticalChainStyle(int chainStyle) {
         return mVerticalChainStyle;
     }
@@ -297,9 +285,7 @@ public class ConstraintReference implements Reference {
         mVerticalChainWeight = weight;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference clearVertical() {
         top().clear();
         baseline().clear();
@@ -307,9 +293,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference clearHorizontal() {
         start().clear();
         end().clear();
@@ -362,105 +346,79 @@ public class ConstraintReference implements Reference {
         return mRotationZ;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference pivotX(float x) {
         mPivotX = x;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference pivotY(float y) {
         mPivotY = y;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference rotationX(float x) {
         mRotationX = x;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference rotationY(float y) {
         mRotationY = y;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference rotationZ(float z) {
         mRotationZ = z;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference translationX(float x) {
         mTranslationX = x;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference translationY(float y) {
         mTranslationY = y;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference translationZ(float z) {
         mTranslationZ = z;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference scaleX(float x) {
         mScaleX = x;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference scaleY(float y) {
         mScaleY = y;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference alpha(float alpha) {
         mAlpha = alpha;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference visibility(int visibility) {
         mVisibility = visibility;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference left() {
         if (mLeftToLeft != null) {
             mLast = State.Constraint.LEFT_TO_LEFT;
@@ -470,9 +428,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference right() {
         if (mRightToLeft != null) {
             mLast = State.Constraint.RIGHT_TO_LEFT;
@@ -482,9 +438,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference start() {
         if (mStartToStart != null) {
             mLast = State.Constraint.START_TO_START;
@@ -494,9 +448,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference end() {
         if (mEndToStart != null) {
             mLast = State.Constraint.END_TO_START;
@@ -506,9 +458,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference top() {
         if (mTopToTop != null) {
             mLast = State.Constraint.TOP_TO_TOP;
@@ -518,9 +468,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference bottom() {
         if (mBottomToTop != null) {
             mLast = State.Constraint.BOTTOM_TO_TOP;
@@ -530,24 +478,18 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference baseline() {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomColor(String name, int color) {
         mCustomColors.put(name, color);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomFloat(String name, float value) {
         if (mCustomFloats == null) {
             mCustomFloats = new HashMap<>();
@@ -573,144 +515,112 @@ public class ConstraintReference implements Reference {
         mBaselineToBottom = get(mBaselineToBottom);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference leftToLeft(Object reference) {
         mLast = State.Constraint.LEFT_TO_LEFT;
         mLeftToLeft = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference leftToRight(Object reference) {
         mLast = State.Constraint.LEFT_TO_RIGHT;
         mLeftToRight = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference rightToLeft(Object reference) {
         mLast = State.Constraint.RIGHT_TO_LEFT;
         mRightToLeft = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference rightToRight(Object reference) {
         mLast = State.Constraint.RIGHT_TO_RIGHT;
         mRightToRight = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference startToStart(Object reference) {
         mLast = State.Constraint.START_TO_START;
         mStartToStart = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference startToEnd(Object reference) {
         mLast = State.Constraint.START_TO_END;
         mStartToEnd = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference endToStart(Object reference) {
         mLast = State.Constraint.END_TO_START;
         mEndToStart = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference endToEnd(Object reference) {
         mLast = State.Constraint.END_TO_END;
         mEndToEnd = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference topToTop(Object reference) {
         mLast = State.Constraint.TOP_TO_TOP;
         mTopToTop = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference topToBottom(Object reference) {
         mLast = State.Constraint.TOP_TO_BOTTOM;
         mTopToBottom = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference bottomToTop(Object reference) {
         mLast = State.Constraint.BOTTOM_TO_TOP;
         mBottomToTop = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference bottomToBottom(Object reference) {
         mLast = State.Constraint.BOTTOM_TO_BOTTOM;
         mBottomToBottom = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference baselineToBaseline(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
         mBaselineToBaseline = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference baselineToTop(Object reference) {
         mLast = State.Constraint.BASELINE_TO_TOP;
         mBaselineToTop = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference baselineToBottom(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BOTTOM;
         mBaselineToBottom = reference;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference centerHorizontally(Object reference) {
         Object ref = get(reference);
         mStartToStart = ref;
@@ -720,9 +630,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference centerVertically(Object reference) {
         Object ref = get(reference);
         mTopToTop = ref;
@@ -732,9 +640,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference circularConstraint(Object reference, float angle, float distance) {
         Object ref = get(reference);
         mCircularConstraint = ref;
@@ -744,16 +650,12 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference width(Dimension dimension) {
         return setWidth(dimension);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference height(Dimension dimension) {
         return setHeight(dimension);
     }
@@ -762,9 +664,7 @@ public class ConstraintReference implements Reference {
         return mHorizontalDimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference setWidth(Dimension dimension) {
         mHorizontalDimension = dimension;
         return this;
@@ -774,31 +674,23 @@ public class ConstraintReference implements Reference {
         return mVerticalDimension;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference setHeight(Dimension dimension) {
         mVerticalDimension = dimension;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference margin(Object marginValue) {
         return margin(mState.convertDimension(marginValue));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference marginGone(Object marginGoneValue) {
         return marginGone(mState.convertDimension(marginGoneValue));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference margin(int value) {
         if (mLast != null) {
             switch (mLast) {
@@ -856,9 +748,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference marginGone(int value) {
         if (mLast != null) {
             switch (mLast) {
@@ -912,25 +802,19 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference horizontalBias(float value) {
         mHorizontalBias = value;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference verticalBias(float value) {
         mVerticalBias = value;
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference bias(float value) {
         if (mLast == null) {
             return this;
@@ -997,9 +881,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ConstraintReference clear() {
         if (mLast != null) {
             switch (mLast) {
@@ -1173,9 +1055,7 @@ public class ConstraintReference implements Reference {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void apply() {
         if (mConstraintWidget == null) {

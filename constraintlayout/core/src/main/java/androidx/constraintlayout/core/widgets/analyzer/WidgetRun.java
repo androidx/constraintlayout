@@ -64,9 +64,7 @@ public abstract class WidgetRun implements Dependency {
         return mDimension.resolved;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean isCenterConnection() {
         int connections = 0;
         int count = start.mTargets.size();
@@ -86,9 +84,7 @@ public abstract class WidgetRun implements Dependency {
         return connections >= 2;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public long wrapSize(int direction) {
         if (mDimension.resolved) {
             long size = mDimension.value;
@@ -257,9 +253,7 @@ public abstract class WidgetRun implements Dependency {
 
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void update(Dependency dependency) {
     }
@@ -336,9 +330,7 @@ public abstract class WidgetRun implements Dependency {
         dimensionDependency.mDependencies.add(node);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public long getWrapDimension() {
         if (mDimension.resolved) {
             return mDimension.value;

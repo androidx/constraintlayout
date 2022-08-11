@@ -20,7 +20,7 @@ import java.util.Arrays;
 /**
  * This generates variable frequency oscillation curves
  *
- * @DoNotShow
+ *
  */
 public class Oscillator {
     public static String TAG = "Oscillator";
@@ -49,9 +49,7 @@ public class Oscillator {
         return "pos =" + Arrays.toString(mPosition) + " period=" + Arrays.toString(mPeriod);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setType(int type, String customType) {
         mType = type;
         mCustomType = customType;
@@ -60,9 +58,7 @@ public class Oscillator {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addPoint(double position, float period) {
         int len = mPeriod.length + 1;
         int j = Arrays.binarySearch(mPosition, position);
@@ -127,9 +123,7 @@ public class Oscillator {
         return p;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public double getValue(double time, double phase) {
         double angle = phase + getP(time); // angle is / by 360
         switch (mType) {
@@ -175,9 +169,7 @@ public class Oscillator {
         return p;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public double getSlope(double time, double phase, double dphase) {
         double angle = phase + getP(time);
 

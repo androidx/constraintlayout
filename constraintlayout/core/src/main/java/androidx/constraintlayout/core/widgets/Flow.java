@@ -251,9 +251,7 @@ public class Flow extends VirtualLayout {
     // Measure
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void measure(int widthMode, int widthSize, int heightMode, int heightSize) {
         if (mWidgetsCount > 0 && !measureChildren()) {

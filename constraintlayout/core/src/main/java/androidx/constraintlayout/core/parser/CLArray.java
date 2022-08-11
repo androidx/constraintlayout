@@ -20,9 +20,7 @@ public class CLArray extends CLContainer {
         super(content);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static CLElement allocate(char[] content) {
         return new CLArray(content);
     }

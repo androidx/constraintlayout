@@ -38,79 +38,49 @@ public class ArrayRow implements LinearSystem.Row {
 
     public interface ArrayRowVariables {
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         int getCurrentSize();
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         SolverVariable getVariable(int index);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         float getVariableValue(int index);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         float get(SolverVariable variable);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         int indexOf(SolverVariable variable);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void display();
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void clear();
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         boolean contains(SolverVariable variable);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void put(SolverVariable variable, float value);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         int sizeInBytes();
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void invert();
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         float remove(SolverVariable v, boolean removeFromDefinition);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void divideByAmount(float amount);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void add(SolverVariable v, float value, boolean removeFromDefinition);
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         float use(ArrayRow definition, boolean removeFromDefinition);
     }
 
@@ -132,9 +102,7 @@ public class ArrayRow implements LinearSystem.Row {
         );
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public String toString() {
         return toReadableString();
@@ -193,9 +161,7 @@ public class ArrayRow implements LinearSystem.Row {
         return s;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void reset() {
         mVariable = null;
         variables.clear();
@@ -215,9 +181,7 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowEquals(SolverVariable variable, int value) {
         if (value < 0) {
             mConstantValue = -1 * value;
@@ -229,9 +193,7 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowEquals(SolverVariable variableA,
             SolverVariable variableB,
             int margin) {
@@ -254,17 +216,13 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     ArrayRow addSingleError(SolverVariable error, int sign) {
         variables.put(error, (float) sign);
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowGreaterThan(SolverVariable variableA,
             SolverVariable variableB, SolverVariable slack,
             int margin) {
@@ -289,18 +247,14 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowGreaterThan(SolverVariable a, int b, SolverVariable slack) {
         mConstantValue = b;
         variables.put(a, -1);
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowLowerThan(SolverVariable variableA, SolverVariable variableB,
             SolverVariable slack, int margin) {
         boolean inverse = false;
@@ -324,9 +278,7 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowEqualMatchDimensions(float currentWeight,
             float totalWeights, float nextWeight,
             SolverVariable variableStartA,
@@ -364,9 +316,7 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRowEqualDimension(float currentWeight,
             float totalWeights, float nextWeight,
             SolverVariable variableStartA, int marginStartA,
@@ -452,9 +402,7 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow addError(LinearSystem system, int strength) {
         variables.put(system.createErrorVariable(strength, "ep"), 1);
         variables.put(system.createErrorVariable(strength, "em"), -1);
@@ -680,9 +628,7 @@ public class ArrayRow implements LinearSystem.Row {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void updateFromFinalVariable(LinearSystem system,
             SolverVariable variable,
@@ -703,9 +649,7 @@ public class ArrayRow implements LinearSystem.Row {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateFromSynonymVariable(LinearSystem system,
             SolverVariable variable,
             boolean removeFromDefinition) {
@@ -772,9 +716,7 @@ public class ArrayRow implements LinearSystem.Row {
         return pivot != null ? pivot : pivotSlack;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public SolverVariable pickPivot(SolverVariable exclude) {
         return pickPivotInVariables(null, exclude);
     }

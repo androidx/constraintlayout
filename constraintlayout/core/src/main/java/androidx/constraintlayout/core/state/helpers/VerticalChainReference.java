@@ -28,9 +28,7 @@ public class VerticalChainReference extends ChainReference {
         super(state, State.Helper.VERTICAL_CHAIN);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void apply() {
         ConstraintReference first = null;

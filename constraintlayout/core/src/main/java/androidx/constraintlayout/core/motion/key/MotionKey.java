@@ -25,7 +25,7 @@ import java.util.HashSet;
 /**
  * Base class in an element in a KeyFrame
  *
- * @DoNotShow
+ 
  */
 
 public abstract class MotionKey implements TypedValues {
@@ -36,9 +36,7 @@ public abstract class MotionKey implements TypedValues {
     public int mType;
     public HashMap<String, CustomVariable> mCustom;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public abstract void getAttributeNames(HashSet<String> attributes);
 
     public static final String ALPHA = "alpha";
@@ -68,14 +66,14 @@ public abstract class MotionKey implements TypedValues {
      * The values are written to the spline
      *
      * @param splines splines to write values to
-     * @DoNotShow
+     
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
      *
-     * @DoNotShow
+     
      */
     float toFloat(Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());
@@ -84,7 +82,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Return the int version of an object if the value is an Integer object it is casted.
      *
-     * @DoNotShow
+     *
      */
     int toInt(Object value) {
         return (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
@@ -93,7 +91,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Return the boolean version this object if the object is a Boolean it is casted.
      *
-     * @DoNotShow
+     *
      */
     boolean toBoolean(Object value) {
         return (value instanceof Boolean)
@@ -107,9 +105,7 @@ public abstract class MotionKey implements TypedValues {
     public void setInterpolation(HashMap<String, Integer> interpolation) {
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public MotionKey copy(MotionKey src) {
         mFramePosition = src.mFramePosition;
         mTargetId = src.mTargetId;
@@ -118,15 +114,11 @@ public abstract class MotionKey implements TypedValues {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public abstract MotionKey clone();
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public MotionKey setViewId(int id) {
         mTargetId = id;
         return this;
@@ -146,9 +138,7 @@ public abstract class MotionKey implements TypedValues {
         return mFramePosition;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, int value) {
 
@@ -160,17 +150,13 @@ public abstract class MotionKey implements TypedValues {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, float value) {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -181,38 +167,28 @@ public abstract class MotionKey implements TypedValues {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public boolean setValue(int type, boolean value) {
         return false;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, float value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, int value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, boolean value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, String value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }

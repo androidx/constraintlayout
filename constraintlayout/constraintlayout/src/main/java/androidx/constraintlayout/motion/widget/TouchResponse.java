@@ -36,7 +36,7 @@ import java.util.Arrays;
 /**
  * This class is used to manage Touch behaviour
  *
- * @DoNotShow
+ *
  */
 
 class TouchResponse {

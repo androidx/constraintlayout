@@ -30,7 +30,7 @@ import androidx.constraintlayout.widget.R;
 import java.util.HashMap;
 
 /**
- * @DoNotShow
+ *
  */
 public class MotionHelper extends ConstraintHelper implements MotionHelperInterface {
 
@@ -54,7 +54,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     }
 
     /**
-     * @DoNotShow
+     *
      */
     @Override
     protected void init(AttributeSet attrs) {
@@ -77,7 +77,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     /**
      *
      * @return
-     * @DoNotShow
+     *
      */
     @Override
     public boolean isUsedOnShow() {
@@ -87,7 +87,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     /**
      *
      * @return
-     * @DoNotShow
+     *
      */
     @Override
     public boolean isUseOnHide() {
@@ -127,7 +127,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
      *
      * @param view
      * @param progress
-     * @DoNotShow
+     *
      */
     public void setProgress(View view, float progress) {
 

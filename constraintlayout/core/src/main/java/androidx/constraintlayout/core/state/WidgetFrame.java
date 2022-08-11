@@ -69,16 +69,12 @@ public class WidgetFrame {
 
     TypedBundle mMotionProperties;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int width() {
         return Math.max(0, right - left);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int height() {
         return Math.max(0, bottom - top);
     }
@@ -99,9 +95,7 @@ public class WidgetFrame {
         updateAttributes(frame);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
@@ -136,9 +130,7 @@ public class WidgetFrame {
                 && Float.isNaN(alpha);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void interpolate(int parentWidth,
             int parentHeight,
             WidgetFrame frame,
@@ -293,23 +285,17 @@ public class WidgetFrame {
         return (start + progress * (end - start));
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float centerX() {
         return left + (right - left) / 2f;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float centerY() {
         return top + (bottom - top) / 2f;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetFrame update() {
         if (widget != null) {
             left = widget.getLeft();
@@ -322,9 +308,7 @@ public class WidgetFrame {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetFrame update(ConstraintWidget widget) {
         if (widget == null) {
             return this;
@@ -335,16 +319,12 @@ public class WidgetFrame {
         return this;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomColor(String name, int color) {
         setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, color);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getCustomColor(String name) {
         if (mCustom.containsKey(name)) {
             return mCustom.get(name).getColorValue();
@@ -352,16 +332,12 @@ public class WidgetFrame {
         return 0xFFFFAA88;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomFloat(String name, float value) {
         setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float getCustomFloat(String name) {
         if (mCustom.containsKey(name)) {
             return mCustom.get(name).getFloatValue();
@@ -369,9 +345,7 @@ public class WidgetFrame {
         return Float.NaN;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, float value) {
         if (mCustom.containsKey(name)) {
             mCustom.get(name).setFloatValue(value);
@@ -380,9 +354,7 @@ public class WidgetFrame {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, int value) {
         if (mCustom.containsKey(name)) {
             mCustom.get(name).setIntValue(value);
@@ -391,9 +363,7 @@ public class WidgetFrame {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, boolean value) {
         if (mCustom.containsKey(name)) {
             mCustom.get(name).setBooleanValue(value);
@@ -402,9 +372,7 @@ public class WidgetFrame {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomAttribute(String name, int type, String value) {
         if (mCustom.containsKey(name)) {
             mCustom.get(name).setStringValue(value);
@@ -413,9 +381,7 @@ public class WidgetFrame {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public CustomVariable getCustomAttribute(String name) {
         return mCustom.get(name);
     }
@@ -424,9 +390,7 @@ public class WidgetFrame {
         return mCustom.keySet();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean setValue(String key, CLElement value) throws CLParsingException {
         switch (key) {
             case "pivotX":
@@ -490,9 +454,7 @@ public class WidgetFrame {
         return true;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public String getId() {
         if (widget == null) {
             return "unknown";
@@ -520,9 +482,7 @@ public class WidgetFrame {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public StringBuilder serialize(StringBuilder ret) {
         return serialize(ret, false);
     }
@@ -672,9 +632,7 @@ public class WidgetFrame {
         System.out.println(ss + " " + str);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setCustomValue(CustomAttribute valueAt, float[] mTempValues) {
     }
 

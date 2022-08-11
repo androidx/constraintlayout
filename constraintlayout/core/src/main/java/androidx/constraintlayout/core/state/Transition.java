@@ -63,17 +63,13 @@ public class Transition implements TypedValues {
     private OnSwipe mOnSwipe = null;
     CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
     OnSwipe createOnSwipe() {
         return mOnSwipe = new OnSwipe();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasOnSwipe() {
         return mOnSwipe != null;
     }
@@ -498,9 +494,7 @@ public class Transition implements TypedValues {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -516,9 +510,7 @@ public class Transition implements TypedValues {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
     public KeyPosition findNextPosition(String target, int frameNumber) {
         while (frameNumber <= 100) {
@@ -534,9 +526,7 @@ public class Transition implements TypedValues {
         return null;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getNumberKeyPositions(WidgetFrame frame) {
         int numKeyPositions = 0;
         int frameNumber = 0;
@@ -553,16 +543,12 @@ public class Transition implements TypedValues {
         return numKeyPositions;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public Motion getMotion(String id) {
         return getWidgetState(id, null, 0).mMotionControl;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
         int numKeyPositions = 0;
         int frameNumber = 0;
@@ -581,16 +567,12 @@ public class Transition implements TypedValues {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean hasPositionKeyframes() {
         return mKeyPositions.size() > 0;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setTransitionProperties(TypedBundle bundle) {
         bundle.applyDelta(mBundle);
         bundle.applyDelta(this);
@@ -631,44 +613,32 @@ public class Transition implements TypedValues {
         return mState.isEmpty();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void clear() {
         mState.clear();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public boolean contains(String key) {
         return mState.containsKey(key);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addKeyPosition(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addKeyAttribute(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addKeyCycle(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyCycle(bundle);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
         bundle.add(TypedValues.PositionType.TYPE_POSITION_TYPE, 2);
@@ -686,18 +656,14 @@ public class Transition implements TypedValues {
         map.put(target, keyPosition);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomFloat(int state, String widgetId, String property, float value) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
         frame.addCustomFloat(property, value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addCustomColor(int state, String widgetId, String property, int color) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
@@ -728,9 +694,7 @@ public class Transition implements TypedValues {
         calcStagger();
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void interpolate(int parentWidth, int parentHeight, float progress) {
         if (mEasing != null) {
             progress = (float) mEasing.get(progress);
@@ -741,9 +705,7 @@ public class Transition implements TypedValues {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetFrame getStart(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -752,9 +714,7 @@ public class Transition implements TypedValues {
         return widgetState.mStart;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetFrame getEnd(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -763,9 +723,7 @@ public class Transition implements TypedValues {
         return widgetState.mEnd;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public WidgetFrame getInterpolated(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -774,9 +732,7 @@ public class Transition implements TypedValues {
         return widgetState.mInterpolated;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public float[] getPath(String id) {
         WidgetState widgetState = mState.get(id);
         int duration = 1000;
@@ -786,9 +742,7 @@ public class Transition implements TypedValues {
         return mPoints;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
         WidgetState widgetState = mState.get(id);
         return widgetState.mMotionControl.buildKeyFrames(rectangles, pathMode, position);

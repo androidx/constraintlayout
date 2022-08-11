@@ -21,23 +21,17 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class Utils {
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void log(String tag, String value) {
         System.out.println(tag + " : " + value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void loge(String tag, String value) {
         System.err.println(tag + " : " + value);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void socketSend(String str) {
         try {
             Socket socket = new Socket("127.0.0.1", 5327);
@@ -62,9 +56,7 @@ public class Utils {
         return c;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
         int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
@@ -74,9 +66,7 @@ public class Utils {
         return color;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static int rgbaTocColor(float r, float g, float b, float a) {
         int ir = clamp((int) (r * 255f));
         int ig = clamp((int) (g * 255f));
@@ -87,9 +77,7 @@ public class Utils {
     }
 
     public interface DebugHandle {
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         void message(String str);
     }
 
@@ -99,9 +87,7 @@ public class Utils {
         sOurHandle = handle;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void logStack(String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
         String s = " ";
@@ -115,9 +101,7 @@ public class Utils {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public static void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String methodName = s.getMethodName();

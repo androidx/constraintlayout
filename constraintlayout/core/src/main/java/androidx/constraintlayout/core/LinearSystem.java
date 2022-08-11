@@ -104,9 +104,7 @@ public class LinearSystem {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void fillMetrics(Metrics metrics) {
         sMetrics = metrics;
     }
@@ -230,9 +228,7 @@ public class LinearSystem {
     // Creation of rows / variables / errors
     /*--------------------------------------------------------------------------------------------*/
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public SolverVariable createObjectVariable(Object anchor) {
         if (anchor == null) {
             return null;
@@ -266,9 +262,7 @@ public class LinearSystem {
     public static long ARRAY_ROW_CREATION = 0;
     public static long OPTIMIZED_ARRAY_ROW_CREATION = 0;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public ArrayRow createRow() {
         ArrayRow row;
         if (OPTIMIZED_ENGINE) {
@@ -292,9 +286,7 @@ public class LinearSystem {
         return row;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public SolverVariable createSlackVariable() {
         if (sMetrics != null) {
             sMetrics.slackvariables++;
@@ -310,9 +302,7 @@ public class LinearSystem {
         return variable;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public SolverVariable createExtraVariable() {
         if (sMetrics != null) {
             sMetrics.extravariables++;
@@ -370,9 +360,7 @@ public class LinearSystem {
         return variable;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public SolverVariable createErrorVariable(int strength, String prefix) {
         if (sMetrics != null) {
             sMetrics.errors++;
@@ -438,9 +426,7 @@ public class LinearSystem {
         return v.computedValue;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public int getObjectVariableValue(Object object) {
         ConstraintAnchor anchor = (ConstraintAnchor) object;
         if (Chain.USE_CHAIN_OPTIMIZATION) {
@@ -721,9 +707,7 @@ public class LinearSystem {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void removeRow(ArrayRow row) {
         if (row.mIsSimpleDefinition && row.mVariable != null) {
             if (row.mVariable.mDefinitionId != -1) {
@@ -1101,9 +1085,7 @@ public class LinearSystem {
         System.out.println(s);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void displayReadableRows() {
         displaySolverVariables();
         String s = " num vars " + mVariablesID + "\n";
@@ -1133,9 +1115,7 @@ public class LinearSystem {
         System.out.println(s);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @SuppressWarnings("unused")
     public void displayVariablesReadableRows() {
         displaySolverVariables();
@@ -1151,9 +1131,7 @@ public class LinearSystem {
     }
 
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @SuppressWarnings("unused")
     public int getMemoryUsed() {
         int actualRowSize = 0;
@@ -1286,9 +1264,7 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addGreaterBarrier(SolverVariable a,
             SolverVariable b,
             int margin,
@@ -1327,9 +1303,7 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addLowerBarrier(SolverVariable a,
             SolverVariable b,
             int margin,
@@ -1372,9 +1346,7 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addRatio(SolverVariable a,
             SolverVariable b,
             SolverVariable c,
@@ -1393,9 +1365,7 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void addSynonym(SolverVariable a, SolverVariable b, int margin) {
         if (a.mDefinitionId == -1 && margin == 0) {
             if (DEBUG_CONSTRAINTS) {

@@ -28,9 +28,7 @@ public class AlignHorizontallyReference extends HelperReference {
         super(state, State.Helper.ALIGN_VERTICALLY);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     @Override
     public void apply() {
         for (Object key : mReferences) {

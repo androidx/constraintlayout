@@ -21,16 +21,12 @@ public class FloatRect {
     public float right;
     public float top;
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public final float centerX() {
         return (left + right) * 0.5f;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public final float centerY() {
         return (top + bottom) * 0.5f;
     }

@@ -123,7 +123,7 @@ public class Placeholder extends View {
      * are fine to suppress and ignore.
      *
      * @param canvas
-     * @DoNotShow
+     *
      */
     @Override
     public void onDraw(Canvas canvas) {
@@ -153,7 +153,7 @@ public class Placeholder extends View {
 
     /**
      * @param container
-     * @DoNotShow
+     *
      */
     public void updatePreLayout(ConstraintLayout container) {
         if (mContentId == -1) {
@@ -200,7 +200,7 @@ public class Placeholder extends View {
 
     /**
      * @param container
-     * @DoNotShow
+     *
      */
     public void updatePostMeasure(ConstraintLayout container) {
         if (mContent == null) {

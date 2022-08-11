@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 /**
  * This engine allows manipulation of attributes by wave shapes oscillating in time
  *
- * @DoNotShow
+ *
  */
 public abstract class TimeCycleSplineSet {
     private static final String TAG = "SplineSet";
@@ -90,9 +90,7 @@ public abstract class TimeCycleSplineSet {
         mLastTime = currentTime;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setPoint(int position, float value, float period, int shape, float offset) {
         mTimePoints[mCount] = position;
         mValues[mCount][CURVE_VALUE] = value;
@@ -114,9 +112,7 @@ public abstract class TimeCycleSplineSet {
             mConstraintAttributeList = attrList;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -140,18 +136,14 @@ public abstract class TimeCycleSplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void setPoint(int position,
                 CustomAttribute value,
                 float period,
@@ -162,9 +154,7 @@ public abstract class TimeCycleSplineSet {
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public boolean setProperty(MotionWidget view, float t, long time, KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];
@@ -194,9 +184,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setup(int curveType) {
         if (mCount == 0) {
             System.err.println("Error no points added to " + mType);
@@ -284,9 +272,7 @@ public abstract class TimeCycleSplineSet {
             mConstraintAttributeList = attrList;
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -310,18 +296,14 @@ public abstract class TimeCycleSplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
                     + "call setPoint(pos, ConstraintAttribute,...)");
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public void setPoint(int position,
                 CustomVariable value,
                 float period,
@@ -332,9 +314,7 @@ public abstract class TimeCycleSplineSet {
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
         }
 
-        /**
-         * @TODO: add description
-         */
+        // @TODO: add description
         public boolean setProperty(MotionWidget view, float t, long time, KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];

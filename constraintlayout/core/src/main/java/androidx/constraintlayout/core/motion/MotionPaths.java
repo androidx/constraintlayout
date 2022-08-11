@@ -29,7 +29,7 @@ import java.util.Set;
  * This is used to capture and play back path of the layout.
  * It is used to set the bounds of the view (view.layout(l, t, r, b))
  *
- * @DoNotShow
+ *
  */
 public class MotionPaths implements Comparable<MotionPaths> {
     public static final String TAG = "MotionPaths";
@@ -187,9 +187,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         this.mPathMotionArc = c.mPathMotionArc;
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void setupRelative(Motion mc, MotionPaths relative) {
         double dx = mX + mWidth / 2 - relative.mX - relative.mWidth / 2;
         double dy = mY + mHeight / 2 - relative.mY - relative.mHeight / 2;
@@ -913,9 +911,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         return Float.compare(mPosition, o.mPosition);
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void applyParameters(MotionWidget c) {
         MotionPaths point = this;
         point.mKeyFrameEasing = Easing.getInterpolator(c.mMotion.mTransitionEasing);
@@ -938,9 +934,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         }
     }
 
-    /**
-     * @TODO: add description
-     */
+    // @TODO: add description
     public void configureRelativeTo(Motion toOrbit) {
         @SuppressWarnings("unused") double[] p = toOrbit.getPos(mProgress); // get the position
         // in the orbit

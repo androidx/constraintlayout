@@ -73,42 +73,42 @@ public class CircularFlow extends VirtualLayout {
     private static int sDefaultRadius = 0;
     private static float sDefaultAngle = 0F;
     /**
-     * @DoNotShow
+     *
      */
     private float[] mAngles;
 
     /**
-     * @DoNotShow
+     *
      */
     private int[] mRadius;
 
     /**
-     * @DoNotShow
+     *
      */
     private int mCountRadius;
 
     /**
-     * @DoNotShow
+     *
      */
     private int mCountAngle;
 
     /**
-     * @DoNotShow
+     *
      */
     private String mReferenceAngles;
 
     /**
-     * @DoNotShow
+     *
      */
     private String mReferenceRadius;
 
     /**
-     * @DoNotShow
+     *
      */
     private Float mReferenceDefaultAngle;
 
     /**
-     * @DoNotShow
+     *
      */
     private Integer mReferenceDefaultRadius;
 
@@ -376,7 +376,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private float[] removeAngle(float[] angles, int index) {
         if (angles == null
@@ -389,7 +389,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private int[] removeRadius(int[] radius, int index) {
         if (radius == null
@@ -402,7 +402,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private void setAngles(String idList) {
         if (idList == null) {
@@ -422,7 +422,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private void setRadius(String idList) {
         if (idList == null) {
@@ -442,7 +442,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private void addAngle(String angleString) {
         if (angleString == null || angleString.length() == 0) {
@@ -463,7 +463,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @DoNotShow
+     *
      */
     private void addRadius(String radiusString) {
         if (radiusString == null || radiusString.length() == 0) {
