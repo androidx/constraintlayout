@@ -18,12 +18,23 @@ package com.example.constraintlayout.motion.dsl.transition
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.compose.OnSwipe
+import androidx.constraintlayout.compose.SwipeDirection
+import androidx.constraintlayout.compose.SwipeMode
+import androidx.constraintlayout.compose.SwipeSide
 import androidx.constraintlayout.compose.Transition
+import androidx.constraintlayout.compose.TransitionScope
 
 @Preview
 @Composable
 fun KeyCyclesSimpleDslExample() {
     TwoItemLayout(transition = Transition {
+        onSwipe = OnSwipe(
+            anchor = "img1",
+            side = SwipeSide.Right,
+            direction = SwipeDirection.Right,
+            mode = SwipeMode.Spring
+        )
         keyCycles("img1") {
             // TODO: Consider supporting common/base values declared at this level, eg: offset = 1
             frame(0f) {

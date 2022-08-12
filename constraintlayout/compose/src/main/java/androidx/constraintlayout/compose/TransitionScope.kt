@@ -32,6 +32,7 @@ import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
 
+@ExperimentalMotionApi
 @Composable
 fun Transition(
     from: String = "start",
@@ -151,7 +152,7 @@ class TransitionScope internal constructor() {
     }
 }
 
-open class BaseKeyFrameScope internal constructor(vararg targets: Any) {
+open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
     internal val keyFramePropsObject = CLObject(charArrayOf()).apply {
         clear()
     }
@@ -159,7 +160,7 @@ open class BaseKeyFrameScope internal constructor(vararg targets: Any) {
     private val targetsContainer = CLArray(charArrayOf())
     protected val framesContainer = CLArray(charArrayOf())
 
-    var easing: Easing by addOnPropertyChange(Easing.Standard)
+    var easing: Easing by addNameOnPropertyChange(Easing.Standard, "transitionEasing")
 
     init {
         with(keyFramePropsObject) {
@@ -175,17 +176,21 @@ open class BaseKeyFrameScope internal constructor(vararg targets: Any) {
         }
     }
 
-    private fun addOnPropertyChange(initialValue: Easing) =
-        object : ObservableProperty<Easing>(initialValue) {
-            override fun afterChange(property: KProperty<*>, oldValue: Easing, newValue: Easing) {
-                with(keyFramePropsObject) {
-                    putString("transitionEasing", easing.propName)
+    protected fun <E : NamedPropertyOrValue?> addNameOnPropertyChange(
+        initialValue: E,
+        nameOverride: String? = null
+    ) =
+        object : ObservableProperty<E>(initialValue) {
+            override fun afterChange(property: KProperty<*>, oldValue: E, newValue: E) {
+                val name = nameOverride ?: property.name
+                if (newValue != null) {
+                    keyFramePropsObject.putString(name, newValue.propName)
                 }
             }
         }
 }
 
-class KeyAttributesScope(vararg targets: Any) : BaseKeyFrameScope(*targets) {
+class KeyAttributesScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(*targets) {
     fun frame(frame: Float, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
         keyFrameContent(scope)
@@ -194,8 +199,8 @@ class KeyAttributesScope(vararg targets: Any) : BaseKeyFrameScope(*targets) {
     }
 }
 
-class KeyPositionsScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
-    // TODO: Move `type` here
+class KeyPositionsScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(* targets) {
+    var type by addNameOnPropertyChange(RelativePosition.Parent)
 
     fun frame(frame: Float, keyFrameContent: KeyPositionScope.() -> Unit) {
         val scope = KeyPositionScope()
@@ -205,7 +210,7 @@ class KeyPositionsScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     }
 }
 
-class KeyCyclesScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
+class KeyCyclesScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(* targets) {
     fun frame(frame: Float, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
         keyFrameContent(scope)
@@ -214,7 +219,7 @@ class KeyCyclesScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     }
 }
 
-abstract class KeyFrameModifierScope internal constructor() {
+abstract class BaseKeyFrameScope internal constructor() {
     protected val userAttributes = mutableMapOf<String, Any>()
 
     protected fun <T> addOnPropertyChange(initialValue: T, nameOverride: String? = null) =
@@ -259,7 +264,7 @@ abstract class KeyFrameModifierScope internal constructor() {
     }
 }
 
-class KeyAttributeScope : KeyFrameModifierScope() {
+class KeyAttributeScope internal constructor(): BaseKeyFrameScope() {
     var alpha by addOnPropertyChange(1f, "alpha")
     var scaleX by addOnPropertyChange(1f, "scaleX")
     var scaleY by addOnPropertyChange(1f, "scaleY")
@@ -271,16 +276,15 @@ class KeyAttributeScope : KeyFrameModifierScope() {
     var translationZ by addOnPropertyChange(0f, "translationZ")
 }
 
-class KeyPositionScope : KeyFrameModifierScope() {
+class KeyPositionScope internal constructor(): BaseKeyFrameScope() {
     var percentX by addOnPropertyChange(1f)
     var percentY by addOnPropertyChange(1f)
     var percentWidth by addOnPropertyChange(1f)
     var percentHeight by addOnPropertyChange(0f)
     var curveFit: CurveFit? by addNameOnPropertyChange(null)
-    var type: RelativePosition? by addNameOnPropertyChange(null)
 }
 
-class KeyCycleScope : KeyFrameModifierScope() {
+class KeyCycleScope internal constructor(): BaseKeyFrameScope() {
     var alpha by addOnPropertyChange(1f)
     var scaleX by addOnPropertyChange(1f)
     var scaleY by addOnPropertyChange(1f)
@@ -300,6 +304,17 @@ class KeyCycleScope : KeyFrameModifierScope() {
 internal interface NamedPropertyOrValue {
     val propName: String
 }
+
+data class OnSwipe (
+    val anchor: Any,
+    val side: SwipeSide,
+    val direction: SwipeDirection,
+    val mode: SwipeMode = SwipeMode.Velocity,
+    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete,
+    // TODO: Consider using proper default & consider making this part of SwipeModes
+    //   eg: SwipeModes.Spring(mass: Float, stiffness: Float, stopThreshold: Float, ...)
+    val springThreshold: Float = 0.01f
+)
 
 class Easing internal constructor(override val propName: String) : NamedPropertyOrValue {
     companion object {
@@ -322,16 +337,6 @@ class Arc internal constructor(internal val propName: String) {
         val Flip = Arc("flip")
     }
 }
-
-data class OnSwipe(
-    val anchor: Any,
-    val side: SwipeSide,
-    val direction: SwipeDirection,
-    val mode: SwipeMode = SwipeMode.Velocity,
-    val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete,
-    // TODO: Consider using proper default + consider making this part of SwipeModes
-    val springThreshold: Float = Float.NaN
-)
 
 class SwipeMode internal constructor(internal val propName: String) {
     companion object {
