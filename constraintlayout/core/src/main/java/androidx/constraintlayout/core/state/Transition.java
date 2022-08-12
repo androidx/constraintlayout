@@ -283,12 +283,12 @@ public class Transition implements TypedValues {
                     return Float.NaN;
                 case ON_UP_DECELERATE:
                     return Math.max(0, Math.min(1, rest));
-                case ON_UP_DECELERATE_AND_COMPLETE:
-                   if (rest > 0.2f && rest < 0.8f){
-                       return rest;
-                } else {
-                       return rest > .5 ? 1 : 0;
-                   }
+                case ON_UP_DECELERATE_AND_COMPLETE: // complete if within 20% of edge #todo improve
+                    if (rest > 0.2f && rest < 0.8f) {
+                        return rest;
+                    } else {
+                        return rest > .5f ? 1 : 0;
+                    }
                 case ON_UP_AUTOCOMPLETE:
             }
 
@@ -304,18 +304,18 @@ public class Transition implements TypedValues {
         void config(float position, float velocity, long start, float duration) {
             mStart = start;
             mDestination = getDestinationPosition(position, velocity, duration);
-            if (mOnTouchUp == ON_UP_DECELERATE) {
-                if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
-                    StopLogicEngine.Decelerate sld;
-                    if (mEngine instanceof StopLogicEngine.Decelerate) {
-                        sld = (StopLogicEngine.Decelerate) mEngine;
-                    } else {
-                        mEngine = sld = new StopLogicEngine.Decelerate();
-                    }
-                    sld.config(position, mDestination, velocity);
-                    return;
+            if ((mOnTouchUp == ON_UP_DECELERATE)
+                    && (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY)) {
+                StopLogicEngine.Decelerate sld;
+                if (mEngine instanceof StopLogicEngine.Decelerate) {
+                    sld = (StopLogicEngine.Decelerate) mEngine;
+                } else {
+                    mEngine = sld = new StopLogicEngine.Decelerate();
                 }
+                sld.config(position, mDestination, velocity);
+                return;
             }
+
 
             if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
                 StopLogicEngine sl;
