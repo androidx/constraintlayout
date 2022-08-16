@@ -32,6 +32,7 @@ import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
 
+@ExperimentalMotionApi
 @Composable
 fun Transition(
     from: String = "start",
@@ -79,6 +80,7 @@ fun Transition(
     }
 }
 
+@ExperimentalMotionApi
 class TransitionScope internal constructor() {
     private val containerObject = CLObject(charArrayOf())
 
@@ -151,6 +153,7 @@ class TransitionScope internal constructor() {
     }
 }
 
+@ExperimentalMotionApi
 open class BaseKeyFrameScope internal constructor(vararg targets: Any) {
     internal val keyFramePropsObject = CLObject(charArrayOf()).apply {
         clear()
@@ -185,6 +188,7 @@ open class BaseKeyFrameScope internal constructor(vararg targets: Any) {
         }
 }
 
+@ExperimentalMotionApi
 class KeyAttributesScope(vararg targets: Any) : BaseKeyFrameScope(*targets) {
     fun frame(frame: Float, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
@@ -194,6 +198,7 @@ class KeyAttributesScope(vararg targets: Any) : BaseKeyFrameScope(*targets) {
     }
 }
 
+@ExperimentalMotionApi
 class KeyPositionsScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     // TODO: Move `type` here
 
@@ -205,6 +210,7 @@ class KeyPositionsScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     }
 }
 
+@ExperimentalMotionApi
 class KeyCyclesScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     fun frame(frame: Float, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
@@ -214,6 +220,7 @@ class KeyCyclesScope(vararg targets: Any) : BaseKeyFrameScope(* targets) {
     }
 }
 
+@ExperimentalMotionApi
 abstract class KeyFrameModifierScope internal constructor() {
     protected val userAttributes = mutableMapOf<String, Any>()
 
@@ -259,6 +266,7 @@ abstract class KeyFrameModifierScope internal constructor() {
     }
 }
 
+@ExperimentalMotionApi
 class KeyAttributeScope : KeyFrameModifierScope() {
     var alpha by addOnPropertyChange(1f, "alpha")
     var scaleX by addOnPropertyChange(1f, "scaleX")
@@ -271,6 +279,7 @@ class KeyAttributeScope : KeyFrameModifierScope() {
     var translationZ by addOnPropertyChange(0f, "translationZ")
 }
 
+@ExperimentalMotionApi
 class KeyPositionScope : KeyFrameModifierScope() {
     var percentX by addOnPropertyChange(1f)
     var percentY by addOnPropertyChange(1f)
@@ -280,6 +289,7 @@ class KeyPositionScope : KeyFrameModifierScope() {
     var type: RelativePosition? by addNameOnPropertyChange(null)
 }
 
+@ExperimentalMotionApi
 class KeyCycleScope : KeyFrameModifierScope() {
     var alpha by addOnPropertyChange(1f)
     var scaleX by addOnPropertyChange(1f)
@@ -301,6 +311,7 @@ internal interface NamedPropertyOrValue {
     val propName: String
 }
 
+@ExperimentalMotionApi
 class Easing internal constructor(override val propName: String) : NamedPropertyOrValue {
     companion object {
         val Standard = Easing("standard")
@@ -314,6 +325,7 @@ class Easing internal constructor(override val propName: String) : NamedProperty
     }
 }
 
+@ExperimentalMotionApi
 class Arc internal constructor(internal val propName: String) {
     companion object {
         val None = Arc("none")
@@ -323,6 +335,7 @@ class Arc internal constructor(internal val propName: String) {
     }
 }
 
+@ExperimentalMotionApi
 data class OnSwipe(
     val anchor: Any,
     val side: SwipeSide,
@@ -333,6 +346,7 @@ data class OnSwipe(
     val springThreshold: Float = Float.NaN
 )
 
+@ExperimentalMotionApi
 class SwipeMode internal constructor(internal val propName: String) {
     companion object {
         val Velocity = SwipeMode("velocity")
@@ -340,6 +354,7 @@ class SwipeMode internal constructor(internal val propName: String) {
     }
 }
 
+@ExperimentalMotionApi
 class SwipeTouchUp internal constructor(internal val propName: String) {
     companion object {
         val AutoComplete: SwipeTouchUp = SwipeTouchUp("autocomplete")
@@ -347,6 +362,7 @@ class SwipeTouchUp internal constructor(internal val propName: String) {
     }
 }
 
+@ExperimentalMotionApi
 class SwipeDirection internal constructor(internal val propName: String) {
     companion object {
         val Up: SwipeDirection = SwipeDirection("up")
@@ -360,6 +376,7 @@ class SwipeDirection internal constructor(internal val propName: String) {
     }
 }
 
+@ExperimentalMotionApi
 class SwipeSide internal constructor(internal val propName: String) {
     companion object {
         val Top: SwipeSide = SwipeSide("top")
@@ -370,6 +387,7 @@ class SwipeSide internal constructor(internal val propName: String) {
     }
 }
 
+@ExperimentalMotionApi
 class CurveFit internal constructor(override val propName: String) : NamedPropertyOrValue {
     companion object {
         val Spline: CurveFit = CurveFit("spline")
@@ -377,6 +395,7 @@ class CurveFit internal constructor(override val propName: String) : NamedProper
     }
 }
 
+@ExperimentalMotionApi
 class RelativePosition internal constructor(override val propName: String) : NamedPropertyOrValue {
     companion object {
         val Delta: RelativePosition = RelativePosition("deltaRelative")
