@@ -59,6 +59,7 @@ public class TransitionParser {
             }
 
         }
+        // TODO: Add duration
         String interpolator = json.getStringOrNull("interpolator");
         if (interpolator != null) {
             setBundle = true;

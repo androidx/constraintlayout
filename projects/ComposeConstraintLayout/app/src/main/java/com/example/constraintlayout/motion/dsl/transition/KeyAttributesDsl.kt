@@ -45,6 +45,9 @@ fun KeyAttributesSimpleDslExample() {
             frame(25f) {
                 rotationZ = -45f
             }
+            frame(50f) {
+                // Do nothing
+            }
             frame(75f) {
                 rotationZ = 45f
             }

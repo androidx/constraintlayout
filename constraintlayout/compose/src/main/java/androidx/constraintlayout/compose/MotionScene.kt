@@ -17,11 +17,17 @@
 package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.core.parser.CLParser
+import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.CoreMotionScene
+import androidx.constraintlayout.core.state.CorePixelDp
 import org.intellij.lang.annotations.Language
 
 /**
@@ -29,7 +35,11 @@ import org.intellij.lang.annotations.Language
  */
 @Immutable
 @ExperimentalMotionApi
-interface MotionScene : CoreMotionScene
+interface MotionScene : CoreMotionScene {
+    fun getConstraintSetInstance(name: String): ConstraintSet?
+
+    fun getTransitionInstance(name: String): Transition?
+}
 
 /**
  * Parses the given JSON5 into a [MotionScene].
@@ -40,14 +50,17 @@ interface MotionScene : CoreMotionScene
 @ExperimentalMotionApi
 @Composable
 fun MotionScene(@Language("json5") content: String): MotionScene {
+    val density = LocalDensity.current
     return remember(content) {
-        JSONMotionScene(content)
+        JSONMotionScene(content, CorePixelDp { with(density) { 1.dp.toPx() } })
     }
 }
 
 @ExperimentalMotionApi
-internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
-    MotionScene {
+internal class JSONMotionScene(
+    @Language("json5") content: String,
+    private val dpToPx: CorePixelDp
+) : EditableJSONLayout(content), MotionScene {
 
     private val constraintSetsContent = HashMap<String, String>()
     private val transitionsContent = HashMap<String, String>()
@@ -86,6 +99,23 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
     override fun resetForcedProgress() {
         forcedProgress = Float.NaN
     }
+
+    override fun getConstraintSetInstance(name: String): ConstraintSet? {
+        return getConstraintSet(name)?.let { ConstraintSet(jsonContent = it) }
+    }
+
+    override fun getTransitionInstance(name: String): Transition? {
+        val parsed = getTransition(name)?.let {
+            try {
+                CLParser.parse(it)
+            } catch (e: CLParsingException) {
+                Log.e("CML", "Error parsing JSON $e")
+                null
+            }
+        } ?: return null
+        return TransitionImpl(parsed, dpToPx)
+    }
+
     // endregion
 
     // region On Update Methods

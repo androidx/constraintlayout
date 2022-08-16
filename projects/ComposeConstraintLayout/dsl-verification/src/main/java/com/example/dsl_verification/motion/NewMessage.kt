@@ -60,16 +60,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
+import androidx.constraintlayout.compose.Visibility
 
 @Preview
 @Composable
 fun Test2() {
     val scene = messageMotionScene()
-    val start = remember { ConstraintSet(scene.getConstraintSet("fab")!!) }
-    val end = remember { ConstraintSet(scene.getConstraintSet("full")!!) }
+    val start = remember { scene.getConstraintSetInstance("fab")!! }
+    val end = remember { scene.getConstraintSetInstance("full")!! }
     MotionTestWrapper(
         modifier = Modifier.fillMaxSize(),
         start = start,
@@ -100,10 +102,196 @@ fun NewMotionMessagePreview() {
         }
         NewMotionMessage(
             modifier = Modifier.fillMaxSize(),
+            motionScene = messageMotionScene(),
             currentState = currentState,
             onFull = { currentState = "full" },
             onMin = { currentState = "minimize" },
             onClose = { currentState = "fab" },
+        )
+    }
+}
+
+@Preview
+@Composable
+fun NewMotionMessagePreviewWithDsl() {
+    var currentState by remember { mutableStateOf("full") }
+    Column {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Button(onClick = { currentState = "fab" }) {
+                Text("Fab")
+            }
+            Button(onClick = { currentState = "full" }) {
+                Text("Full")
+            }
+            Button(onClick = { currentState = "minimize" }) {
+                Text("Mini")
+            }
+        }
+        NewMotionMessage(
+            modifier = Modifier.fillMaxSize(),
+            motionScene = messageMotionSceneDsl(),
+            currentState = currentState,
+            onFull = { currentState = "full" },
+            onMin = { currentState = "minimize" },
+            onClose = { currentState = "fab" },
+        )
+    }
+}
+
+@Composable
+private fun messageMotionSceneDsl(): MotionScene {
+    val primary = MaterialTheme.colors.primary
+    val primaryVariant = MaterialTheme.colors.primaryVariant
+    val onPrimary = MaterialTheme.colors.onPrimary
+    val surface = MaterialTheme.colors.surface
+    val onSurface = MaterialTheme.colors.onSurface
+    return MotionScene {
+        val box = createRefFor("box")
+        val minIcon = createRefFor("minIcon")
+        val editClose = createRefFor("editClose")
+        val title = createRefFor("title")
+        val content = createRefFor("content")
+
+        val fab = constraintSet("fab") {
+            constrain(box) {
+                width = Dimension.value(50.dp)
+                height = Dimension.value(50.dp)
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+                customColor("background", primary)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+                customColor("content", onPrimary)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                centerTo(box)
+
+                customColor("content", onPrimary)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onPrimary)
+
+                visibility = Visibility.Gone
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+
+                visibility = Visibility.Gone
+            }
+        }
+        val full = constraintSet("full") {
+            constrain(box) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(parent.start, 12.dp)
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+                top.linkTo(parent.top, 40.dp)
+                customColor("background", surface)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+                customColor("content", onSurface)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(box.end, 4.dp)
+                top.linkTo(box.top, 4.dp)
+                customColor("content", onSurface)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onSurface)
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+            }
+        }
+        constraintSet("minimize") {
+            constrain(box) {
+                width = Dimension.value(220.dp)
+                height = Dimension.value(50.dp)
+
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+
+                customColor("background", primaryVariant)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+
+                rotationZ = 180f
+
+                customColor("content", onPrimary)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(box.end, 4.dp)
+                top.linkTo(box.top, 4.dp)
+                customColor("content", onPrimary)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onPrimary)
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+
+                visibility = Visibility.Gone
+            }
+        }
+        defaultTransition(
+            from = full,
+            to = fab
         )
     }
 }
@@ -116,8 +304,8 @@ private fun messageMotionScene(): MotionScene {
     val surface = MaterialTheme.colors.surface.toHexString()
     val onSurface = MaterialTheme.colors.onSurface.toHexString()
 
-    return MotionScene(
-        content =
+    val sceneContent = remember(primary, primaryVariant, onPrimary, surface, onSurface) {
+        //language=json5
         """
         {
           ConstraintSets: {
@@ -272,7 +460,9 @@ private fun messageMotionScene(): MotionScene {
           }
         }
     """.trimIndent()
-    )
+    }
+
+    return MotionScene(content = sceneContent)
 }
 
 @Composable
@@ -331,12 +521,13 @@ internal inline fun MotionLayoutScope.MotionMessageContent(
 @Composable
 fun NewMotionMessage(
     modifier: Modifier = Modifier,
+    motionScene: MotionScene,
     currentState: String,
     onFull: () -> Unit = {},
     onMin: () -> Unit = {},
     onClose: () -> Unit = {}
 ) {
-    MotionLayout(motionScene = messageMotionScene(),
+    MotionLayout(motionScene = motionScene,
         animationSpec = tween(700),
         constraintSetName = currentState,
         modifier = modifier

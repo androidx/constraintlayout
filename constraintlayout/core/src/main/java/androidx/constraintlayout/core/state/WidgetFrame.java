@@ -63,7 +63,7 @@ public class WidgetFrame {
 
     public int visibility = ConstraintWidget.VISIBLE;
 
-    public final HashMap<String, CustomVariable> mCustom = new HashMap<>();
+    private final HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
     public String name = null;
 
@@ -97,6 +97,9 @@ public class WidgetFrame {
 
     // @TODO: add description
     public void updateAttributes(WidgetFrame frame) {
+        if (frame == null) {
+            return;
+        }
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -111,10 +114,8 @@ public class WidgetFrame {
         visibility = frame.visibility;
         setMotionAttributes(frame.mMotionProperties);
         mCustom.clear();
-        if (frame != null) {
-            for (CustomVariable c : frame.mCustom.values()) {
-                mCustom.put(c.getName(), c.copy());
-            }
+        for (CustomVariable c : frame.mCustom.values()) {
+            mCustom.put(c.getName(), c.copy());
         }
     }
 

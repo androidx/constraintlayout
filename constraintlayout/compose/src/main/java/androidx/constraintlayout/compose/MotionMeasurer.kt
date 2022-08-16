@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.fastAny
@@ -527,12 +528,25 @@ internal class MotionMeasurer : Measurer() {
     fun initWith(
         start: ConstraintSet,
         end: ConstraintSet,
+        density: Density,
+        layoutDirection: LayoutDirection,
         @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
         progress: Float
     ) {
         clearConstraintSets()
+
+        // FIXME: tempState is a hack to populate initial custom properties with DSL
+        val tempState = State(density).apply { this.layoutDirection = layoutDirection }
+        start.applyTo(tempState, emptyList())
         start.applyTo(this.transition, Transition.START)
+        tempState.apply(root)
+        this.transition.updateFrom(root, Transition.START)
+
+        start.applyTo(tempState, emptyList())
         end.applyTo(this.transition, Transition.END)
+        tempState.apply(root)
+        this.transition.updateFrom(root, Transition.END)
+
         this.transition.interpolate(0, 0, progress)
         transition?.applyAllTo(this.transition)
     }

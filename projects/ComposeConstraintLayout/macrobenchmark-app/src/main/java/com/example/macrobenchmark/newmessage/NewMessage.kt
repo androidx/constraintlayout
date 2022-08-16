@@ -59,9 +59,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
+import androidx.constraintlayout.compose.Visibility
 import com.example.macrobenchmark.testutils.components.TestableButton
 
 // Copied from ComposeMail project
@@ -128,164 +130,162 @@ private fun messageMotionSceneDsl(initialState: NewMessageLayout): MotionScene {
     val surface = MaterialTheme.colors.surface
     val onSurface = MaterialTheme.colors.onSurface
 
-    return MotionScene("")
-    // TODO: Uncomment once MotionScene DSL is available
-//    return MotionScene {
-//        val box = createRefFor("box")
-//        val minIcon = createRefFor("minIcon")
-//        val editClose = createRefFor("editClose")
-//        val title = createRefFor("title")
-//        val content = createRefFor("content")
-//
-//        val fab = constraintSet(NewMessageLayout.Fab.name) {
-//            constrain(box) {
-//                width = Dimension.value(50.dp)
-//                height = Dimension.value(50.dp)
-//                end.linkTo(parent.end, 12.dp)
-//                bottom.linkTo(parent.bottom, 12.dp)
-//                customColor("background", primary)
-//            }
-//            constrain(minIcon) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                end.linkTo(editClose.start, 8.dp)
-//                top.linkTo(editClose.top)
-//                customColor("content", onPrimary)
-//            }
-//            constrain(editClose) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                centerTo(box)
-//
-//                customColor("content", onPrimary)
-//            }
-//            constrain(title) {
-//                width = Dimension.fillToConstraints
-//                top.linkTo(box.top)
-//                bottom.linkTo(editClose.bottom)
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(minIcon.start, 8.dp)
-//                customColor("content", onPrimary)
-//
-//                visibility = Visibility.Gone
-//            }
-//            constrain(content) {
-//                width = Dimension.fillToConstraints
-//                height = Dimension.fillToConstraints
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(box.end, 8.dp)
-//
-//                top.linkTo(editClose.bottom, 8.dp)
-//                bottom.linkTo(box.bottom, 8.dp)
-//
-//                visibility = Visibility.Gone
-//            }
-//        }
-//        val full = constraintSet(NewMessageLayout.Full.name) {
-//            constrain(box) {
-//                width = Dimension.fillToConstraints
-//                height = Dimension.fillToConstraints
-//                start.linkTo(parent.start, 12.dp)
-//                end.linkTo(parent.end, 12.dp)
-//                bottom.linkTo(parent.bottom, 12.dp)
-//                top.linkTo(parent.top, 40.dp)
-//                customColor("background", surface)
-//            }
-//            constrain(minIcon) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                end.linkTo(editClose.start, 8.dp)
-//                top.linkTo(editClose.top)
-//                customColor("content", onSurface)
-//            }
-//            constrain(editClose) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                end.linkTo(box.end, 4.dp)
-//                top.linkTo(box.top, 4.dp)
-//                customColor("content", onSurface)
-//            }
-//            constrain(title) {
-//                width = Dimension.fillToConstraints
-//                top.linkTo(box.top)
-//                bottom.linkTo(editClose.bottom)
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(minIcon.start, 8.dp)
-//                customColor("content", onSurface)
-//            }
-//            constrain(content) {
-//                width = Dimension.fillToConstraints
-//                height = Dimension.fillToConstraints
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(box.end, 8.dp)
-//                top.linkTo(editClose.bottom, 8.dp)
-//                bottom.linkTo(box.bottom, 8.dp)
-//            }
-//        }
-//        val mini = constraintSet(NewMessageLayout.Mini.name) {
-//            constrain(box) {
-//                width = Dimension.value(220.dp)
-//                height = Dimension.value(50.dp)
-//
-//                end.linkTo(parent.end, 12.dp)
-//                bottom.linkTo(parent.bottom, 12.dp)
-//
-//                customColor("background", primaryVariant)
-//            }
-//            constrain(minIcon) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                end.linkTo(editClose.start, 8.dp)
-//                top.linkTo(editClose.top)
-//
-//                rotationZ = 180f
-//
-//                customColor("content", onPrimary)
-//            }
-//            constrain(editClose) {
-//                width = Dimension.value(40.dp)
-//                height = Dimension.value(40.dp)
-//
-//                end.linkTo(box.end, 4.dp)
-//                top.linkTo(box.top, 4.dp)
-//                customColor("content", onPrimary)
-//            }
-//            constrain(title) {
-//                width = Dimension.fillToConstraints
-//                top.linkTo(box.top)
-//                bottom.linkTo(editClose.bottom)
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(minIcon.start, 8.dp)
-//                customColor("content", onPrimary)
-//            }
-//            constrain(content) {
-//                width = Dimension.fillToConstraints
-//                start.linkTo(box.start, 8.dp)
-//                end.linkTo(box.end, 8.dp)
-//
-//                top.linkTo(editClose.bottom, 8.dp)
-//                bottom.linkTo(box.bottom, 8.dp)
-//
-//                visibility = Visibility.Gone
-//            }
-//        }
-//
-//        fun constraintSetFor(layoutState: NewMessageLayout) =
-//            when (layoutState) {
-//                NewMessageLayout.Full -> full
-//                NewMessageLayout.Mini -> mini
-//                NewMessageLayout.Fab -> fab
-//            }
-//        defaultTransition(
-//            from = constraintSetFor(startState),
-//            to = constraintSetFor(endState)
-//        )
-//    }
+    return MotionScene {
+        val box = createRefFor("box")
+        val minIcon = createRefFor("minIcon")
+        val editClose = createRefFor("editClose")
+        val title = createRefFor("title")
+        val content = createRefFor("content")
+
+        val fab = constraintSet(NewMessageLayout.Fab.name) {
+            constrain(box) {
+                width = Dimension.value(50.dp)
+                height = Dimension.value(50.dp)
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+                customColor("background", primary)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+                customColor("content", onPrimary)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                centerTo(box)
+
+                customColor("content", onPrimary)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onPrimary)
+
+                visibility = Visibility.Gone
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+
+                visibility = Visibility.Gone
+            }
+        }
+        val full = constraintSet(NewMessageLayout.Full.name) {
+            constrain(box) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(parent.start, 12.dp)
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+                top.linkTo(parent.top, 40.dp)
+                customColor("background", surface)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+                customColor("content", onSurface)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(box.end, 4.dp)
+                top.linkTo(box.top, 4.dp)
+                customColor("content", onSurface)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onSurface)
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+            }
+        }
+        val mini = constraintSet(NewMessageLayout.Mini.name) {
+            constrain(box) {
+                width = Dimension.value(220.dp)
+                height = Dimension.value(50.dp)
+
+                end.linkTo(parent.end, 12.dp)
+                bottom.linkTo(parent.bottom, 12.dp)
+
+                customColor("background", primaryVariant)
+            }
+            constrain(minIcon) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(editClose.start, 8.dp)
+                top.linkTo(editClose.top)
+
+                rotationZ = 180f
+
+                customColor("content", onPrimary)
+            }
+            constrain(editClose) {
+                width = Dimension.value(40.dp)
+                height = Dimension.value(40.dp)
+
+                end.linkTo(box.end, 4.dp)
+                top.linkTo(box.top, 4.dp)
+                customColor("content", onPrimary)
+            }
+            constrain(title) {
+                width = Dimension.fillToConstraints
+                top.linkTo(box.top)
+                bottom.linkTo(editClose.bottom)
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(minIcon.start, 8.dp)
+                customColor("content", onPrimary)
+            }
+            constrain(content) {
+                width = Dimension.fillToConstraints
+                start.linkTo(box.start, 8.dp)
+                end.linkTo(box.end, 8.dp)
+
+                top.linkTo(editClose.bottom, 8.dp)
+                bottom.linkTo(box.bottom, 8.dp)
+
+                visibility = Visibility.Gone
+            }
+        }
+
+        fun constraintSetFor(layoutState: NewMessageLayout) =
+            when (layoutState) {
+                NewMessageLayout.Full -> full
+                NewMessageLayout.Mini -> mini
+                NewMessageLayout.Fab -> fab
+            }
+        defaultTransition(
+            from = constraintSetFor(startState),
+            to = constraintSetFor(endState)
+        )
+    }
 }
 
 @Composable

@@ -34,9 +34,11 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
+import androidx.constraintlayout.compose.Transition
 import java.util.*
 
 @Preview(group = "test1")
@@ -44,16 +46,78 @@ import java.util.*
 public fun MTest01() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0f) }
+    val progress = remember { Animatable(0f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-        animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
+        val scene2 =
+            MotionScene {
+                // Create ID references at the top level
+                val id1 = createRefFor("id1")
+                val id2 = createRefFor("id2")
 
-        val scene1 = MotionScene("""
+                // Initial start, end states
+                defaultTransition(
+                    from = constraintSet {
+                        constrain(id1) {
+                            width = Dimension.value(40.dp)
+                            height = Dimension.value(40.dp)
+                            start.linkTo(parent.start, 16.dp)
+                            bottom.linkTo(parent.bottom, 16.dp)
+                            customColor("background", Color.Red)
+                        }
+                        constrain(id2) {
+                            centerTo(id1)
+                        }
+                    },
+                    to = constraintSet {
+                        constrain(id1) {
+                            width = Dimension.value(40.dp)
+                            height = Dimension.value(40.dp)
+                            end.linkTo(parent.end, 16.dp)
+                            top.linkTo(parent.top, 16.dp)
+                            customColor("background", Color.Blue)
+                        }
+                    },
+                ) {
+                    keyAttributes(id2) {
+                        // KeyAttribute Content
+                    }
+                }
+
+                // Other ConstraintSets and Transitions
+                val cSetA = constraintSet("A") {
+                    // ConstraintSet content
+                }
+                val cSetB = constraintSet("B") {
+                    // ConstraintSet content
+                }
+
+                transition(name = "aToB", from = cSetA, to = cSetB) {
+                    // Transition content
+                }
+
+                // Could also be declared inline, with no explicit names:
+                transition(
+                    from = constraintSet {
+                        // ConstraintSet content
+                    },
+                    to = constraintSet {
+                        // ConstraintSet content
+                    }
+                ) {
+                    // Transition content
+                }
+            }
+
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest01'},
                 
@@ -81,24 +145,30 @@ public fun MTest01() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   = progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
@@ -109,16 +179,19 @@ public fun MTest01() {
 public fun MTest02() {
     var animateToEnd by remember { mutableStateOf(true) }
 
-    val progress  = remember { Animatable(1f) }
+    val progress = remember { Animatable(1f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest02'},
                 
@@ -147,24 +220,30 @@ public fun MTest02() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   = progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
@@ -176,16 +255,19 @@ public fun MTest02() {
 public fun MTest03() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0.5f) }
+    val progress = remember { Animatable(0.5f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest03'},
                 
@@ -214,29 +296,34 @@ public fun MTest03() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   = 0.5f,//progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = 0.5f,//progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
 }
-
 
 
 @Preview(group = "test4")
@@ -244,16 +331,19 @@ public fun MTest03() {
 public fun MTest04() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0.0f) }
+    val progress = remember { Animatable(0.0f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest04'},
                 
@@ -292,29 +382,34 @@ public fun MTest04() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   =  progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
 }
-
 
 
 @Preview(group = "test5")
@@ -322,16 +417,19 @@ public fun MTest04() {
 public fun MTest05() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0.0f) }
+    val progress = remember { Animatable(0.0f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest05'},
                 
@@ -371,24 +469,30 @@ public fun MTest05() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   =  progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
@@ -400,16 +504,19 @@ public fun MTest05() {
 public fun MTest06() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0.0f) }
+    val progress = remember { Animatable(0.0f) }
 
     LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
+        )
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
             {
                 Header: { exportAs: 'mtest06'},
                 
@@ -448,24 +555,30 @@ public fun MTest06() {
                   }
                 }
             }
-            """)
+            """
+        )
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   =  progress.value,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)) {
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
+            progress = progress.value,
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("id1")
+                    .background(Color.Red)
+            )
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)) {
+                .padding(3.dp)
+        ) {
             Text(text = "Run")
         }
     }
