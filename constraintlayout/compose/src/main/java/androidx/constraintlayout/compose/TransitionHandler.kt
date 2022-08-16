@@ -28,6 +28,7 @@ import kotlin.coroutines.coroutineContext
  */
 @OptIn(ExperimentalComposeApi::class)
 @PublishedApi
+@ExperimentalMotionApi
 internal class TransitionHandler(
     private val motionMeasurer: MotionMeasurer,
     private val motionProgress: MotionProgress
