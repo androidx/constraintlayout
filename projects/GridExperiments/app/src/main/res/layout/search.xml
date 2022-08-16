@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#192734"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:background="@drawable/black_background"
+        android:alpha="1"
+        app:constraint_referenced_ids="search_view,may_like,inner_grid,top_result,see_more,dog1,dog2"
+        app:grid_columns="2"
+        app:grid_rows="6"
+        app:grid_spans="2:1x2,8:1x2,10:1x2"
+        app:grid_skips="0:1x2"
+        app:grid_rowWeights="1,1,1,4,1,6"
+        app:grid_orientation="horizontal"/>
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/inner_grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:constraint_referenced_ids="cat1,cat2,cat3,cat4,cat5,cat6,btn8"
+        app:grid_columns="3"
+        app:grid_rows="2"
+        app:grid_horizontalGaps="10dp"
+        app:grid_orientation="horizontal"/>
+
+    <include
+        android:id="@+id/dog1"
+        layout="@layout/dog_card" />
+    <include
+        android:id="@+id/dog2"
+        layout="@layout/dog_card" />
+    <include
+        android:id="@+id/cat1"
+        layout="@layout/cat_card" />
+    <include
+        android:id="@+id/cat2"
+        layout="@layout/cat_card" />
+    <include
+        android:id="@+id/cat3"
+        layout="@layout/cat_card" />
+    <include
+        android:id="@+id/cat4"
+        layout="@layout/cat_card" />
+    <include
+        android:id="@+id/cat5"
+        layout="@layout/cat_card" />
+    <include
+        android:id="@+id/cat6"
+        layout="@layout/cat_card" />
+
+
+    <Button
+        android:id="@+id/btn0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <Button
+        android:id="@+id/btn8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:queryHint="Search Here"
+        android:background="@color/white"
+        android:iconifiedByDefault="false"
+        android:layout_alignParentTop="true"
+        />
+
+    <TextView
+        android:id="@+id/top_result"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="Top Result" />
+
+    <TextView
+        android:id="@+id/see_more"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginRight="10dp"
+        android:textSize="15sp"
+        android:gravity="right|center_vertical"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="See More" />
+
+    <TextView
+        android:id="@+id/may_like"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="20sp"
+        android:gravity="left|center_vertical"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="You May Also Like" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

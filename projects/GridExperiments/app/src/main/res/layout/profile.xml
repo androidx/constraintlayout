@@ -1,0 +1,88 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:background="@drawable/background"
+        android:alpha="0.3"
+        app:constraint_referenced_ids="image_view,name,email,contacts,card1,card2,card3,card4,card5,card6"
+        app:grid_columns="2"
+        app:grid_rows="8"
+        app:grid_verticalGaps="5dp"
+        app:grid_skips="0:1x2"
+        app:grid_spans="2:1x2,4:1x2,6:1x2,8:1x2"
+        app:grid_rowWeights="1,2,2,1,1,2,2,2"
+        app:grid_orientation="horizontal"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d4f1f9"
+        app:shapeAppearanceOverlay="@style/round"
+        app:srcCompat="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#555555"
+        android:text="Mike\nTerry" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="example@mail123.com" />
+
+    <TextView
+        android:id="@+id/contacts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textColor="#555555"
+        android:text="Top Contacts" />
+
+    <include
+        android:id="@+id/card1"
+        layout="@layout/profile_card" />
+    <include
+        android:id="@+id/card2"
+        layout="@layout/profile_card" />
+    <include
+        android:id="@+id/card3"
+        layout="@layout/profile_card" />
+    <include
+        android:id="@+id/card4"
+        layout="@layout/profile_card" />
+    <include
+        android:id="@+id/card5"
+        layout="@layout/profile_card" />
+    <include
+        android:id="@+id/card6"
+        layout="@layout/profile_card" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="30sp"
+        android:text="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
