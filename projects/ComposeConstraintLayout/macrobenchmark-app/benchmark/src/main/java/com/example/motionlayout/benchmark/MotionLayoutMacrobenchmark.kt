@@ -37,9 +37,8 @@ class MotionLayoutMacrobenchmark {
     /**
      * Transitions the Layout through its three different ConstraintSets using the MotionScene DSL.
      */
-     // TODO: Uncomment once MotionScene DSL is available
-//    @Test
-//    fun messageDsl() = benchmarkRule.testNewMessage(NewMessageMode.Dsl)
+    @Test
+    fun messageDsl() = benchmarkRule.testNewMessage(NewMessageMode.Dsl)
 
     /**
      * Transitions the Layout through its three different ConstraintSets using the MotionScene JSON.

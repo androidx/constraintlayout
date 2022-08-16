@@ -45,7 +45,6 @@ android {
         kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_compiler_version
     }
-
 }
 
 dependencies {

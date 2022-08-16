@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import androidx.annotation.FloatRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.currentRecomposeScope
@@ -40,7 +41,7 @@ fun Transition(
     transitionContent: TransitionScope.() -> Unit
 ): Transition {
     val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
-    val transitionScope = remember(from, to) { TransitionScope() }
+    val transitionScope = remember(from, to) { TransitionScope(from, to) }
     val snapshotObserver = remember {
         // We use a Snapshot observer to know when state within the DSL has changed and recompose
         // the transition object
@@ -81,7 +82,10 @@ fun Transition(
 }
 
 @ExperimentalMotionApi
-class TransitionScope internal constructor() {
+class TransitionScope internal constructor(
+    private val from: String,
+    private val to: String
+) {
     private val containerObject = CLObject(charArrayOf())
 
     private val keyFramesObject = CLObject(charArrayOf())
@@ -113,8 +117,24 @@ class TransitionScope internal constructor() {
         keyFramesObject.put("KeyCycles", keyCyclesArray)
     }
 
+    /**
+     *
+     */
+    var durationMs: Long = 400L
+
+    /**
+     *
+     */
+    var easing: Easing = Easing.Standard
+
+    /**
+     *
+     */
     var motionArc: Arc = Arc.None
 
+    /**
+     *
+     */
     var onSwipe: OnSwipe? = null
 
     fun keyAttributes(vararg targets: Any, keyAttributesContent: KeyAttributesScope.() -> Unit) {
@@ -139,14 +159,18 @@ class TransitionScope internal constructor() {
     }
 
     internal fun getObject(): CLObject {
-        containerObject.putString("pathMotionArc", motionArc.propName)
+        containerObject.putString("pathMotionArc", motionArc.name)
+        containerObject.putString("from", from)
+        containerObject.putString("to", to)
+        containerObject.putString("interpolator", easing.name)
+        containerObject.putNumber("duration", durationMs.toFloat())
         onSwipe?.let {
             containerObject.put("onSwipe", onSwipeObject)
-            onSwipeObject.putString("direction", it.direction.propName)
-            onSwipeObject.putString("mode", it.mode.propName)
+            onSwipeObject.putString("direction", it.direction.name)
+            onSwipeObject.putString("mode", it.mode.name)
             onSwipeObject.putString("anchor", it.anchor.toString())
-            onSwipeObject.putString("side", it.side.propName)
-            onSwipeObject.putString("touchUp", it.onTouchUp.propName)
+            onSwipeObject.putString("side", it.side.name)
+            onSwipeObject.putString("touchUp", it.onTouchUp.name)
             onSwipeObject.putNumber("stopThreshold", it.springThreshold)
         }
         return containerObject
@@ -165,10 +189,8 @@ open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
     var easing: Easing by addNameOnPropertyChange(Easing.Standard, "transitionEasing")
 
     init {
-        with(keyFramePropsObject) {
-            put("target", targetsContainer)
-            put("frames", framesContainer)
-        }
+        keyFramePropsObject.put("target", targetsContainer)
+        keyFramePropsObject.put("frames", framesContainer)
         targets.forEach {
             val stringChars = it.toString().toCharArray()
             targetsContainer.add(CLString(stringChars).apply {
@@ -186,7 +208,7 @@ open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
             override fun afterChange(property: KProperty<*>, oldValue: E, newValue: E) {
                 val name = nameOverride ?: property.name
                 if (newValue != null) {
-                    keyFramePropsObject.putString(name, newValue.propName)
+                    keyFramePropsObject.putString(name, newValue.name)
                 }
             }
         }
@@ -246,7 +268,7 @@ abstract class BaseKeyFrameScope internal constructor() {
             override fun afterChange(property: KProperty<*>, oldValue: E, newValue: E) {
                 val name = nameOverride ?: property.name
                 if (newValue != null) {
-                    userAttributes[name] = newValue.propName
+                    userAttributes[name] = newValue.name
                 }
             }
         }
@@ -311,7 +333,7 @@ class KeyCycleScope internal constructor(): BaseKeyFrameScope() {
 }
 
 internal interface NamedPropertyOrValue {
-    val propName: String
+    val name: String
 }
 
 @ExperimentalMotionApi
@@ -327,7 +349,7 @@ data class OnSwipe (
 )
 
 @ExperimentalMotionApi
-class Easing internal constructor(override val propName: String) : NamedPropertyOrValue {
+class Easing internal constructor(override val name: String) : NamedPropertyOrValue {
     companion object {
         val Standard = Easing("standard")
         val Accelerate = Easing("accelerate")
@@ -335,13 +357,22 @@ class Easing internal constructor(override val propName: String) : NamedProperty
         val Linear = Easing("linear")
         val Anticipate = Easing("anticipate")
         val Overshoot = Easing("overshoot")
-        fun Cubic(off0: Float, off1: Float, off2: Float, off3: Float) =
-            Easing("cubic($off0, $off1, $off2, $off3)")
+
+        /**
+         * Defines a Cubic-Bezier curve where the points P1 and P2 are at the given coordinate
+         * ratios.
+         */
+        fun Cubic(
+            @FloatRange(from = 0.0, to = 1.0) x1: Float,
+            @FloatRange(from = 0.0, to = 1.0) y1: Float,
+            @FloatRange(from = 0.0, to = 1.0) x2: Float,
+            @FloatRange(from = 0.0, to = 1.0) y2: Float
+        ) = Easing("cubic($x1, $y1, $x2, $y2)")
     }
 }
 
 @ExperimentalMotionApi
-class Arc internal constructor(internal val propName: String) {
+class Arc internal constructor(val name: String) {
     companion object {
         val None = Arc("none")
         val StartVertical = Arc("startVertical")
@@ -351,7 +382,7 @@ class Arc internal constructor(internal val propName: String) {
 }
 
 @ExperimentalMotionApi
-class SwipeMode internal constructor(internal val propName: String) {
+class SwipeMode internal constructor(val name: String) {
     companion object {
         val Velocity = SwipeMode("velocity")
         val Spring = SwipeMode("spring")
@@ -359,15 +390,20 @@ class SwipeMode internal constructor(internal val propName: String) {
 }
 
 @ExperimentalMotionApi
-class SwipeTouchUp internal constructor(internal val propName: String) {
+class SwipeTouchUp internal constructor(val name: String) {
     companion object {
         val AutoComplete: SwipeTouchUp = SwipeTouchUp("autocomplete")
+        val ToStart: SwipeTouchUp = SwipeTouchUp("toStart")
+        val ToEnd: SwipeTouchUp = SwipeTouchUp("toEnd")
+        val Stop: SwipeTouchUp = SwipeTouchUp("stop")
+        val Decelerate: SwipeTouchUp = SwipeTouchUp("decelerate")
         val NeverCompleteStart: SwipeTouchUp = SwipeTouchUp("neverCompleteStart")
+        val NeverCompleteEnd: SwipeTouchUp = SwipeTouchUp("neverCompleteEnd")
     }
 }
 
 @ExperimentalMotionApi
-class SwipeDirection internal constructor(internal val propName: String) {
+class SwipeDirection internal constructor(val name: String) {
     companion object {
         val Up: SwipeDirection = SwipeDirection("up")
         val Down: SwipeDirection = SwipeDirection("down")
@@ -381,7 +417,7 @@ class SwipeDirection internal constructor(internal val propName: String) {
 }
 
 @ExperimentalMotionApi
-class SwipeSide internal constructor(internal val propName: String) {
+class SwipeSide internal constructor(val name: String) {
     companion object {
         val Top: SwipeSide = SwipeSide("top")
         val Right: SwipeSide = SwipeSide("right")
@@ -392,7 +428,7 @@ class SwipeSide internal constructor(internal val propName: String) {
 }
 
 @ExperimentalMotionApi
-class CurveFit internal constructor(override val propName: String) : NamedPropertyOrValue {
+class CurveFit internal constructor(override val name: String) : NamedPropertyOrValue {
     companion object {
         val Spline: CurveFit = CurveFit("spline")
         val Linear: CurveFit = CurveFit("linear")
@@ -400,7 +436,7 @@ class CurveFit internal constructor(override val propName: String) : NamedProper
 }
 
 @ExperimentalMotionApi
-class RelativePosition internal constructor(override val propName: String) : NamedPropertyOrValue {
+class RelativePosition internal constructor(override val name: String) : NamedPropertyOrValue {
     companion object {
         val Delta: RelativePosition = RelativePosition("deltaRelative")
         val Path: RelativePosition = RelativePosition("pathRelative")
