@@ -308,9 +308,6 @@ public class Grid extends VirtualLayout {
             }
         }
         isSuccess &= arrangeWidgets();
-
-        mContainer.requestLayout();
-        applyLayoutFeatures();
         return isSuccess || !mValidateInputs;
     }
 
@@ -368,6 +365,7 @@ public class Grid extends VirtualLayout {
         params.topToTop = mBoxViewIds[row];
         params.rightToRight = mBoxViewIds[column + columnSpan - 1];
         params.bottomToBottom = mBoxViewIds[row + rowSpan - 1];
+        view.setLayoutParams(params);
     }
 
     /**
@@ -407,10 +405,8 @@ public class Grid extends VirtualLayout {
     private int getRowByIndex(int index) {
         if (mOrientation == 1) {
             return index % mRows;
-
         } else {
             return index / mColumns;
-
         }
     }
 
@@ -619,6 +615,7 @@ public class Grid extends VirtualLayout {
         if (mColumns == 1) {
             params.leftToLeft = gridId;
             params.rightToRight = gridId;
+            mBoxViews[0].setLayoutParams(params);
             return;
         }
 
@@ -643,6 +640,7 @@ public class Grid extends VirtualLayout {
             if (i > 0) {
                 params.leftMargin = (int) mHorizontalGaps;
             }
+            mBoxViews[i].setLayoutParams(params);
         }
         // excess boxes are connected to grid those sides are not use
         // for efficiency they should be connected to parent
@@ -650,6 +648,7 @@ public class Grid extends VirtualLayout {
             params = params(mBoxViews[i]);
             params.leftToLeft = gridId;
             params.rightToRight = gridId;
+            mBoxViews[i].setLayoutParams(params);
         }
     }
 
@@ -667,6 +666,7 @@ public class Grid extends VirtualLayout {
             params = params(mBoxViews[0]);
             params.topToTop = gridId;
             params.bottomToBottom = gridId;
+            mBoxViews[0].setLayoutParams(params);
             return;
         }
         // chains are constrained like this: grid <- box <-> box <-> box -> grid
@@ -688,6 +688,7 @@ public class Grid extends VirtualLayout {
             if (i > 0) {
                 params.topMargin = (int) mHorizontalGaps;
             }
+            mBoxViews[i].setLayoutParams(params);
         }
 
         // excess boxes are connected to grid those sides are not use
@@ -696,6 +697,7 @@ public class Grid extends VirtualLayout {
             params = params(mBoxViews[i]);
             params.topToTop = gridId;
             params.bottomToBottom = gridId;
+            mBoxViews[i].setLayoutParams(params);
         }
     }
 
