@@ -40,6 +40,7 @@ import kotlinx.coroutines.isActive
 @SuppressLint("UnnecessaryComposedModifier")
 @Suppress("NOTHING_TO_INLINE")
 @PublishedApi
+@ExperimentalMotionApi
 internal inline fun Modifier.motionPointerInput(
     key: Any = Unit,
     motionProgress: MotionProgress,

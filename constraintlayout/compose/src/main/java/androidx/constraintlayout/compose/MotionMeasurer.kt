@@ -40,6 +40,7 @@ import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 
+@ExperimentalMotionApi
 @PublishedApi
 internal class MotionMeasurer : Measurer() {
     private val DEBUG = false

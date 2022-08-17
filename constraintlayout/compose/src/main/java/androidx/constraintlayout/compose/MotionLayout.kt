@@ -451,11 +451,13 @@ internal inline fun MotionLayoutCore(
 
 @Suppress("unused")
 @LayoutScopeMarker
+@ExperimentalMotionApi
 class MotionLayoutScope @PublishedApi internal constructor(
     private val measurer: MotionMeasurer,
     private val motionProgress: MotionProgress
 ) {
 
+    @ExperimentalMotionApi
     inner class MotionProperties internal constructor(
         id: String,
         tag: String?
@@ -533,6 +535,7 @@ enum class MotionLayoutDebugFlags {
 
 @Composable
 @PublishedApi
+@ExperimentalMotionApi
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     debug: EnumSet<MotionLayoutDebugFlags>,
