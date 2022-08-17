@@ -115,7 +115,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:queryHint="Search Here"
-        android:background="@color/white"
+
+        android:background="#AAA"
         android:iconifiedByDefault="false"
         android:layout_alignParentTop="true"
         />
