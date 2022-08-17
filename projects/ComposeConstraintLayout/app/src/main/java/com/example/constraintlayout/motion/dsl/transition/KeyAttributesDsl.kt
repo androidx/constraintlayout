@@ -18,12 +18,23 @@ package com.example.constraintlayout.motion.dsl.transition
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.compose.OnSwipe
+import androidx.constraintlayout.compose.SwipeDirection
+import androidx.constraintlayout.compose.SwipeMode
+import androidx.constraintlayout.compose.SwipeSide
 import androidx.constraintlayout.compose.Transition
+import androidx.constraintlayout.compose.TransitionScope
 
 @Preview
 @Composable
 fun KeyAttributesSimpleDslExample() {
     TwoItemLayout(transition = Transition {
+        onSwipe = OnSwipe(
+            anchor = "img1",
+            side = SwipeSide.Right,
+            direction = SwipeDirection.Right,
+            mode = SwipeMode.Spring
+        )
         keyAttributes("img1") {
             frame(50f) {
                 scaleX = 1.5f
