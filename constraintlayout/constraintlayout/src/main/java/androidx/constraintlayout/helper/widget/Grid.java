@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
 
@@ -613,6 +614,7 @@ public class Grid extends VirtualLayout {
         ConstraintLayout.LayoutParams params = params(mBoxViews[0]);
         // chain all the views on the longer side (either horizontal or vertical)
         if (mColumns == 1) {
+            clearHParams(mBoxViews[0]);
             params.leftToLeft = gridId;
             params.rightToRight = gridId;
             mBoxViews[0].setLayoutParams(params);
@@ -624,6 +626,7 @@ public class Grid extends VirtualLayout {
 
         for (int i = 0; i < mColumns; i++) {
             params = params(mBoxViews[i]);
+            clearHParams(mBoxViews[i]);
             if (columnWeights != null) {
                 params.horizontalWeight = columnWeights[i];
             }
@@ -646,6 +649,7 @@ public class Grid extends VirtualLayout {
         // for efficiency they should be connected to parent
         for (int i = mColumns; i < maxVal; i++) {
             params = params(mBoxViews[i]);
+            clearHParams(mBoxViews[i]);
             params.leftToLeft = gridId;
             params.rightToRight = gridId;
             mBoxViews[i].setLayoutParams(params);
@@ -664,6 +668,7 @@ public class Grid extends VirtualLayout {
         // chain all the views on the longer side (either horizontal or vertical)
         if (mRows == 1) {
             params = params(mBoxViews[0]);
+            clearVParams(mBoxViews[0]);
             params.topToTop = gridId;
             params.bottomToBottom = gridId;
             mBoxViews[0].setLayoutParams(params);
@@ -672,6 +677,7 @@ public class Grid extends VirtualLayout {
         // chains are constrained like this: grid <- box <-> box <-> box -> grid
         for (int i = 0; i < mRows; i++) {
             params = params(mBoxViews[i]);
+            clearVParams(mBoxViews[i]);
             if (rowWeights != null) {
                 params.verticalWeight = rowWeights[i];
             }
@@ -695,12 +701,17 @@ public class Grid extends VirtualLayout {
         // for efficiency they should be connected to parent
         for (int i = mRows; i < maxVal; i++) {
             params = params(mBoxViews[i]);
+            clearVParams(mBoxViews[i]);
             params.topToTop = gridId;
             params.bottomToBottom = gridId;
             mBoxViews[i].setLayoutParams(params);
         }
     }
 
+    /**
+     * Create a new boxView
+     * @return boxView
+     */
     private View makeNewView() {
         View v = new View(getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -716,6 +727,40 @@ public class Grid extends VirtualLayout {
 
         mContainer.addView(v, params);
         return v;
+    }
+
+    /**
+     * Clear vertical related layout params
+     * @param view view that has the layout params to be cleared
+     */
+    private void clearVParams(View view) {
+        ConstraintLayout.LayoutParams params = params(view);
+
+        params.verticalWeight  = ConstraintSet.UNSET;
+        params.topToBottom = ConstraintSet.UNSET;
+        params.topToTop = ConstraintSet.UNSET;
+        params.bottomToTop = ConstraintSet.UNSET;
+        params.bottomToBottom  = ConstraintSet.UNSET;
+        params.topMargin = ConstraintSet.UNSET;
+
+        view.setLayoutParams(params);
+    }
+
+    /**
+     * Clear horizontal related layout params
+     * @param view view that has the layout params to be cleared
+     */
+    private void clearHParams(View view) {
+        ConstraintLayout.LayoutParams params = params(view);
+
+        params.horizontalWeight = ConstraintSet.UNSET;
+        params.leftToRight = ConstraintSet.UNSET;
+        params.leftToLeft = ConstraintSet.UNSET;
+        params.rightToLeft  = ConstraintSet.UNSET;
+        params.rightToRight = ConstraintSet.UNSET;
+        params.leftMargin  = ConstraintSet.UNSET;
+
+        view.setLayoutParams(params);
     }
 
     /**
