@@ -23,9 +23,11 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:background="#d4f1f9"
+        android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/round"
         app:srcCompat="@drawable/avatar" />
 
