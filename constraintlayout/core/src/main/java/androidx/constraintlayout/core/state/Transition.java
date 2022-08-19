@@ -692,7 +692,25 @@ public class Transition implements TypedValues {
         WidgetFrame frame = widgetState.getFrame(state);
         frame.addCustomColor(property, color);
     }
+    int mParentStartWidth, mParentStartHeight;
+    int mParentEmdWidth, mParentEmdHeight;
+    int mParentInterpolatedWidth, mParentInterpolateHeight;
+    boolean mWrap;
 
+    private void calculateParentDimensions(float progress) {
+        mParentInterpolatedWidth = (int) (0.5 +
+                mParentStartWidth + (mParentEmdWidth - mParentStartWidth) * progress);
+        mParentInterpolateHeight =(int) (0.5 +
+                mParentStartHeight + (mParentEmdHeight - mParentStartHeight) * progress);
+    }
+
+    public int getInterpolatedWidth() {
+        return mParentInterpolatedWidth;
+    }
+
+    public int getInterpolatedHeight() {
+        return mParentInterpolateHeight;
+    }
     /**
      * Update container of parameters for the state
      *
@@ -700,6 +718,23 @@ public class Transition implements TypedValues {
      * @param state     starting or ending
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
+        Utils.log("  w = " + container.getWidth() + " (" + container.mListDimensionBehaviors[0]
+                + ")");
+        Utils.log("  h = " + container.getHeight() + " (" + container.mListDimensionBehaviors[1]
+                + ")");
+        mWrap = container.mListDimensionBehaviors[0]
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+        mWrap |= container.mListDimensionBehaviors[1]
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+        if (state == START) {
+            Utils.log("START");
+            mParentInterpolatedWidth = mParentStartWidth = container.getWidth();
+            mParentInterpolateHeight = mParentStartHeight = container.getHeight();
+        } else {
+            Utils.log("END");
+            mParentEmdWidth = container.getWidth();
+            mParentEmdHeight = container.getHeight();
+        }
         final ArrayList<ConstraintWidget> children = container.getChildren();
         final int count = children.size();
         WidgetState[] states = new WidgetState[count];
@@ -720,6 +755,10 @@ public class Transition implements TypedValues {
 
     // @TODO: add description
     public void interpolate(int parentWidth, int parentHeight, float progress) {
+        if (mWrap) {
+            calculateParentDimensions(progress);
+        }
+
         if (mEasing != null) {
             progress = (float) mEasing.get(progress);
         }

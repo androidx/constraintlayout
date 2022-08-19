@@ -207,7 +207,8 @@ internal class MotionMeasurer : Measurer() {
         }
 
         this.transition.interpolate(root.width, root.height, progress)
-
+        root.width = this.transition.interpolatedWidth
+        root.height = this.transition.interpolatedHeight
         root.children.fastForEach { child ->
             // Update measurables to the interpolated dimensions
             val measurable = (child.companionWidget as? Measurable) ?: return@fastForEach
