@@ -50,9 +50,10 @@ public fun MotionDemo() {
         targetValue = if (animateToEnd) 1f else 0f,
         animationSpec = tween(6000)
     )
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
-        val scene1 = MotionScene("""
+        val scene1 = MotionScene(
+            """
 {
   Header: {
     name: 'motion26'
@@ -132,21 +133,24 @@ public fun MotionDemo() {
     }
   }
 }
-            """)
-
+"""
+        )
         MotionLayout(
-            modifier    = Modifier.fillMaxWidth().height(400.dp),
+            modifier = Modifier.fillMaxWidth().height(400.dp),
             motionScene = scene1,
-            debug       = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress    = progress) {
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress
+        ) {
 
             Box(modifier = Modifier.layoutId("id1").background(Color.Red))
             Box(modifier = Modifier.layoutId("id2").background(Color.Blue))
             Box(modifier = Modifier.layoutId("id3").background(Color.Green))
         }
 
-        Button(onClick = { animateToEnd = !animateToEnd },
-            modifier = Modifier.fillMaxWidth().padding(3.dp)) {
+        Button(
+            onClick = { animateToEnd = !animateToEnd },
+            modifier = Modifier.fillMaxWidth().padding(3.dp)
+        ) {
 
             Text(text = "Run")
 
