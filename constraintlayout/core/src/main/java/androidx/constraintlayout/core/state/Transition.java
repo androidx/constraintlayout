@@ -718,20 +718,14 @@ public class Transition implements TypedValues {
      * @param state     starting or ending
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
-        Utils.log("  w = " + container.getWidth() + " (" + container.mListDimensionBehaviors[0]
-                + ")");
-        Utils.log("  h = " + container.getHeight() + " (" + container.mListDimensionBehaviors[1]
-                + ")");
         mWrap = container.mListDimensionBehaviors[0]
                 == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
         mWrap |= container.mListDimensionBehaviors[1]
                 == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
         if (state == START) {
-            Utils.log("START");
             mParentInterpolatedWidth = mParentStartWidth = container.getWidth();
             mParentInterpolateHeight = mParentStartHeight = container.getHeight();
         } else {
-            Utils.log("END");
             mParentEmdWidth = container.getWidth();
             mParentEmdHeight = container.getHeight();
         }
