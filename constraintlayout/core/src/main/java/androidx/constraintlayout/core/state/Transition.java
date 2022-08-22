@@ -63,6 +63,10 @@ public class Transition implements TypedValues {
     private float mStagger = 0.0f;
     private OnSwipe mOnSwipe = null;
     CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
+    int mParentStartWidth, mParentStartHeight;
+    int mParentEndWidth, mParentEndHeight;
+    int mParentInterpolatedWidth, mParentInterpolateHeight;
+    boolean mWrap;
 
     // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
@@ -692,16 +696,12 @@ public class Transition implements TypedValues {
         WidgetFrame frame = widgetState.getFrame(state);
         frame.addCustomColor(property, color);
     }
-    int mParentStartWidth, mParentStartHeight;
-    int mParentEmdWidth, mParentEmdHeight;
-    int mParentInterpolatedWidth, mParentInterpolateHeight;
-    boolean mWrap;
 
     private void calculateParentDimensions(float progress) {
-        mParentInterpolatedWidth = (int) (0.5 +
-                mParentStartWidth + (mParentEmdWidth - mParentStartWidth) * progress);
-        mParentInterpolateHeight =(int) (0.5 +
-                mParentStartHeight + (mParentEmdHeight - mParentStartHeight) * progress);
+        mParentInterpolatedWidth = (int) (0.5f +
+                mParentStartWidth + (mParentEndWidth - mParentStartWidth) * progress);
+        mParentInterpolateHeight = (int) (0.5f +
+                mParentStartHeight + (mParentEndHeight - mParentStartHeight) * progress);
     }
 
     public int getInterpolatedWidth() {
@@ -726,8 +726,8 @@ public class Transition implements TypedValues {
             mParentInterpolatedWidth = mParentStartWidth = container.getWidth();
             mParentInterpolateHeight = mParentStartHeight = container.getHeight();
         } else {
-            mParentEmdWidth = container.getWidth();
-            mParentEmdHeight = container.getHeight();
+            mParentEndWidth = container.getWidth();
+            mParentEndHeight = container.getHeight();
         }
         final ArrayList<ConstraintWidget> children = container.getChildren();
         final int count = children.size();
