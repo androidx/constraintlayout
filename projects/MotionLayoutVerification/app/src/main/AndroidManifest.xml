@@ -46,6 +46,7 @@
         <activity android:name=".CheckDumpJson" />
         <activity android:name=".CheckCLPlugin"/>
         <activity android:name=".CheckCSTypes"/>
+        <activity android:name=".CheckPerformanceMetric" />
     </application>
 
 </manifest>

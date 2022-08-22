@@ -49,11 +49,11 @@ public class Metrics {
     public long minimizeGoal;
     public long maxVariables;
     public long maxRows;
-    public long centerConnectionResolved;
-    public long matchConnectionResolved;
-    public long chainConnectionResolved;
-    public long barrierConnectionResolved;
-    public long oldresolvedWidgets;
+//    public long centerConnectionResolved;
+//    public long matchConnectionResolved;
+//    public long chainConnectionResolved;
+//    public long barrierConnectionResolved;
+//    public long oldresolvedWidgets;
     public long nonresolvedWidgets;
     public ArrayList<String> problematicLayouts = new ArrayList<>();
     public long lastTableSize;
@@ -139,12 +139,7 @@ public class Metrics {
         graphOptimizer = 0;
         graphSolved = 0;
         resolvedWidgets = 0;
-        oldresolvedWidgets = 0;
         nonresolvedWidgets = 0;
-        centerConnectionResolved = 0;
-        matchConnectionResolved = 0;
-        chainConnectionResolved = 0;
-        barrierConnectionResolved = 0;
         problematicLayouts.clear();
     }
 }
