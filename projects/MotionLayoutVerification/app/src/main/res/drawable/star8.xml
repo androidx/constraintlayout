@@ -7,5 +7,5 @@
   <path
       android:fillColor="@android:color/white"
       android:pathData="M175,75 l0,100-100,0 100,100-100,100 100,0 0,100 100,-100 100,100 0,-100 100,0-100,-100 100,-100-100,0 0,-100-100,100-100,-100 z"/>
-  octagram
+
 </vector>

@@ -567,7 +567,6 @@ public class ConstraintLayout extends ViewGroup {
     private static final boolean USE_CONSTRAINTS_HELPER = true;
     private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean DEBUG_DRAW_CONSTRAINTS = false;
-    private static final boolean MEASURE = false;
     private static final boolean OPTIMIZE_HEIGHT_CHANGE = false;
 
     SparseArray<View> mChildrenByIds = new SparseArray<>();
@@ -741,10 +740,10 @@ public class ConstraintLayout extends ViewGroup {
                 return;
             }
 
-            long startMeasure;
+            long startMeasure = 0;
             long endMeasure;
 
-            if (MEASURE) {
+            if (mMetrics != null) {
                 startMeasure = System.nanoTime();
             }
 
@@ -1008,11 +1007,9 @@ public class ConstraintLayout extends ViewGroup {
             measure.measuredHeight = height;
             measure.measuredHasBaseline = hasBaseline;
             measure.measuredBaseline = baseline;
-            if (MEASURE) {
+            if (mMetrics != null) {
                 endMeasure = System.nanoTime();
-                if (mMetrics != null) {
-                    mMetrics.measuresWidgetsDuration += (endMeasure - startMeasure);
-                }
+                mMetrics.measuresWidgetsDuration += (endMeasure - startMeasure);
             }
         }
 
@@ -1736,6 +1733,7 @@ public class ConstraintLayout extends ViewGroup {
         heightSize -= paddingHeight;
 
         setSelfDimensionBehaviour(layout, widthMode, widthSize, heightMode, heightSize);
+
         layout.measure(optimizationLevel, widthMode, widthSize, heightMode, heightSize,
                 mLastMeasureWidth, mLastMeasureHeight, paddingX, paddingY);
     }
@@ -1869,6 +1867,7 @@ public class ConstraintLayout extends ViewGroup {
                 mLayoutWidget.updateHierarchy();
             }
         }
+        mLayoutWidget.fillMetrics(mMetrics);
 
         resolveSystem(mLayoutWidget, mOptimizationLevel, widthMeasureSpec, heightMeasureSpec);
         resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec,

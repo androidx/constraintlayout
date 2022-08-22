@@ -31,7 +31,7 @@ public class LinearSystem {
     public static final boolean FULL_DEBUG = false;
     public static final boolean DEBUG = false;
     private static final boolean DO_NOT_USE = false;
-    public static final boolean MEASURE = false;
+   // public static final boolean MEASURE = false;
 
     private static final boolean DEBUG_CONSTRAINTS = FULL_DEBUG;
 

@@ -150,8 +150,8 @@ public class BasicMeasure {
             int pass,
             int w,
             int h) {
-        long startLayout;
-        if (LinearSystem.MEASURE) {
+        long startLayout = 0;
+        if (layout.mMetrics != null) {
             startLayout = System.nanoTime();
         }
 
@@ -168,7 +168,7 @@ public class BasicMeasure {
         }
         mConstraintWidgetContainer.setPass(pass);
         mConstraintWidgetContainer.layout();
-        if (LinearSystem.MEASURE && layout.mMetrics != null) {
+        if (layout.mMetrics != null) {
             long endLayout = System.nanoTime();
             layout.mMetrics.measuresLayoutDuration += (endLayout - startLayout);
         }
@@ -283,7 +283,7 @@ public class BasicMeasure {
             if (childCount > 0) {
                 measureChildren(layout);
             }
-            if (LinearSystem.MEASURE) {
+            if (layout.mMetrics != null) {
                 layoutTime = System.nanoTime();
             }
 
@@ -445,7 +445,7 @@ public class BasicMeasure {
             }
             layout.setOptimizationLevel(optimizations);
         }
-        if (LinearSystem.MEASURE) {
+        if (layout.mMetrics != null) {
             layoutTime = (System.nanoTime() - layoutTime);
         }
         return layoutTime;
