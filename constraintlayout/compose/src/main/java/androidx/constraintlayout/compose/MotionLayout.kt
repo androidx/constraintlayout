@@ -623,6 +623,7 @@ internal inline fun createAndUpdateMotionProgress(progress: Float): MotionProgre
     val last = remember { Ref<Float>().apply { value = progress } }
     if (last.value != progress) {
         // Update on progress change
+        last.value = progress
         motionProgress.updateProgress(progress)
     }
     return motionProgress
