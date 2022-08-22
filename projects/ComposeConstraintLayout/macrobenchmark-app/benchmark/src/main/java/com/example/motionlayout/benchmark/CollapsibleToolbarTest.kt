@@ -25,11 +25,18 @@ internal fun MacrobenchmarkRule.testCollapsibleToolbar() =
     motionBenchmark("CollapsibleToolbar") {
         val column = device.findObject(By.res("LazyColumn"))
         val bounds = column.visibleBounds
-        val vMargin = (bounds.height() * 0.1f).roundToInt()
+
+        // Margin to reduce the amount of pixels scrolled
+        val vMargin = (bounds.height() * 0.2f).roundToInt()
         val x = (bounds.width() * 0.5f).roundToInt()
         val y1 = bounds.bottom - vMargin
         val y2 = bounds.top + vMargin
 
+        // Swipe down
         device.swipe(x, y1, x, y2, 50)
+        device.waitForIdle()
+
+        // Swipe up
+        device.swipe(x, y2, x, y1, 50)
         device.waitForIdle()
     }
