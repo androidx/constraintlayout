@@ -744,6 +744,7 @@ public class ConstraintLayout extends ViewGroup {
             long endMeasure;
 
             if (mMetrics != null) {
+                mMetrics.mNumberOfMeasures++;
                 startMeasure = System.nanoTime();
             }
 
@@ -1786,8 +1787,10 @@ public class ConstraintLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         long time = 0;
-        if (DEBUG) {
-            time = System.currentTimeMillis();
+        if (mMetrics != null) {
+            time = System.nanoTime();
+            mMetrics.mChildCount = getChildCount();
+            mMetrics.mMeasureCalls ++;
         }
         mDirtyHierarchy |= dynamicUpdateConstraints(widthMeasureSpec,  heightMeasureSpec);
 
@@ -1825,6 +1828,9 @@ public class ConstraintLayout extends ViewGroup {
                         mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                         mLayoutWidget.isWidthMeasuredTooSmall(),
                         mLayoutWidget.isHeightMeasuredTooSmall());
+                if (mMetrics != null) {
+                    mMetrics.mMeasureDuration +=  System.nanoTime() - time;
+                }
                 return;
             }
             if (OPTIMIZE_HEIGHT_CHANGE
@@ -1845,6 +1851,9 @@ public class ConstraintLayout extends ViewGroup {
                             mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                             mLayoutWidget.isWidthMeasuredTooSmall(),
                             mLayoutWidget.isHeightMeasuredTooSmall());
+                    if (mMetrics != null) {
+                        mMetrics.mMeasureDuration +=  System.nanoTime() - time;
+                    }
                     return;
                 }
             }
@@ -1874,8 +1883,11 @@ public class ConstraintLayout extends ViewGroup {
                 mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                 mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
 
+        if (mMetrics != null) {
+            mMetrics.mMeasureDuration +=  System.nanoTime() - time;
+        }
         if (DEBUG) {
-            time = System.currentTimeMillis() - time;
+            time = System.nanoTime() - time;
             System.out.println(mLayoutWidget.getDebugName() + " (" + getChildCount()
                     + ") DONE onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
                     + " height: " + MeasureSpec.toString(heightMeasureSpec) + " => "
@@ -2007,6 +2019,9 @@ public class ConstraintLayout extends ViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if (mMetrics != null) {
+            mMetrics.mNumberOfLayouts++;
+        }
         if (DEBUG) {
             System.out.println(mLayoutWidget.getDebugName() + " onLayout changed: "
                     + changed + " left: " + left + " top: " + top

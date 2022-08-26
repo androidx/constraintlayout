@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_optimizationLevel="standard"
     android:background="#FFFFFF">
     <!--    android:padding="24dp"
     android:layout_margin="24dp"-->
@@ -18,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/view9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/text"
+        app:layout_constraintStart_toEndOf="@+id/view5"
         app:layout_constraintTop_toBottomOf="@+id/view3"
         app:layout_constraintVertical_bias="0.5" />
 
@@ -28,7 +27,7 @@
         android:layout_height="50dp"
         android:background="@android:color/holo_blue_dark"
         app:layout_constraintBottom_toTopOf="@+id/view7"
-        app:layout_constraintEnd_toStartOf="@+id/text"
+        app:layout_constraintEnd_toStartOf="@+id/view5"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view1"
@@ -39,7 +38,7 @@
         android:layout_width="45dp"
         android:layout_height="50dp"
         android:background="@android:color/holo_blue_dark"
-        app:layout_constraintBottom_toTopOf="@+id/text"
+        app:layout_constraintBottom_toTopOf="@+id/view5"
         app:layout_constraintEnd_toStartOf="@+id/view3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/view1"
@@ -70,11 +69,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Hello"
+    <View
+        android:id="@+id/view5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:background="@android:color/holo_blue_dark"
         app:layout_constraintBottom_toTopOf="@+id/view8"
         app:layout_constraintEnd_toStartOf="@+id/view6"
@@ -92,7 +91,7 @@
         app:layout_constraintEnd_toStartOf="@+id/view9"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/view7"
-        app:layout_constraintTop_toBottomOf="@+id/text"
+        app:layout_constraintTop_toBottomOf="@+id/view5"
         app:layout_constraintVertical_bias="0.5" />
 
     <View

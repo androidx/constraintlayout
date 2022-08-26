@@ -81,6 +81,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private static final boolean DEBUG = false;
     String layout_name;
     HashMap<String, Class<? extends Activity>> activity_map = new HashMap<>();
+    HashMap<String, Class<? extends Activity>> activity_class = new HashMap<>();
 
     {
         activity_map.put("verification_400", CheckSharedValues.class);
@@ -103,6 +104,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         activity_map.put("perf_010", CheckPerformanceMetric.class);
         activity_map.put("perf_020", CheckPerformanceMetric.class);
         activity_map.put("perf_030", CheckPerformanceMetric.class);
+        activity_map.put("perf_040", CheckPerformanceMetric.class);
+        activity_class.put("perf_",CheckPerformanceMetric.class);
         //  activity_map.put("check_cl01", CheckCLPlugin.class);
         //  activity_map.put("verification_037", RotationToolbar.class);
         //  activity_map.put("verification_038", RotationRotateToToolbar.class);
@@ -691,9 +694,15 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     public void launch(String id) {
         Intent intent;
-        if (activity_map.containsKey(id)) {
-            Log.v(TAG, Debug.getLoc() + " launch in activity " + activity_map.get(id).getSimpleName());
-            intent = new Intent(this, activity_map.get(id));
+        Class<? extends Activity> to_run = activity_map.get(id);
+        for (String s1 : activity_class.keySet()) {
+            if (id.startsWith(s1)) {
+               to_run = activity_class.get(s1);
+            }
+        }
+        if (to_run != null) {
+            Log.v(TAG, Debug.getLoc() + " launch in activity " + to_run.getSimpleName());
+            intent = new Intent(this, to_run);
         } else {
             intent = new Intent(this, VerificationActivity.class);
         }

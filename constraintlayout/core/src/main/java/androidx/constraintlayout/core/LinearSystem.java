@@ -1395,6 +1395,9 @@ public class LinearSystem {
      * @param strength strength used
      */
     public ArrayRow addEquality(SolverVariable a, SolverVariable b, int margin, int strength) {
+        if (sMetrics != null) {
+            sMetrics.mSimpleEquations++;
+        }
         if (USE_BASIC_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
                 && b.isFinalValue && a.mDefinitionId == -1) {
             if (DEBUG_CONSTRAINTS) {
@@ -1442,6 +1445,9 @@ public class LinearSystem {
      * @param value the value we set
      */
     public void addEquality(SolverVariable a, int value) {
+        if (sMetrics != null) {
+            sMetrics.mSimpleEquations++;
+        }
         if (USE_BASIC_SYNONYMS && a.mDefinitionId == -1) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("=> " + a + " = " + value + " (Synonym)");
