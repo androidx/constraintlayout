@@ -170,6 +170,7 @@ public class BasicMeasure {
         mConstraintWidgetContainer.layout();
         if (layout.mMetrics != null) {
             long endLayout = System.nanoTime();
+            layout.mMetrics.mSolverPasses++;
             layout.mMetrics.measuresLayoutDuration += (endLayout - startLayout);
         }
     }

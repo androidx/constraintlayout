@@ -18,16 +18,14 @@ package android.support.constraint.app;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.Debug;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintLayoutPerformance;
+import androidx.constraintlayout.widget.ConstraintLayoutStatistics;
 
 /**
  * Test transitionToState bug
@@ -36,7 +34,10 @@ public class CheckPerformanceMetric extends AppCompatActivity {
     private static final String TAG = "CheckPerformanceMetric";
     String layout_name;
     ConstraintLayout mConstraintLayout;
-    ConstraintLayoutPerformance performance;
+    ConstraintLayoutStatistics performance;
+    ConstraintLayoutStatistics prePerformance;
+    int loop;
+
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +48,31 @@ public class CheckPerformanceMetric extends AppCompatActivity {
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
         setContentView(id);
         mConstraintLayout = Utils.findConstraintLayout(this);
-        performance = new ConstraintLayoutPerformance(mConstraintLayout);
+        performance = new ConstraintLayoutStatistics(mConstraintLayout);
         mConstraintLayout.addOnLayoutChangeListener(this::foo);
-        mConstraintLayout.postDelayed(this::log, 1000);
+        mConstraintLayout.postDelayed(this::relayout, 1000);
     }
-   public void foo(View v, int left, int top, int right, int bottom,
-                   int oldLeft, int oldTop, int oldRight, int oldBottom) {
-     log();
-   }
-   void log(){
-       performance.logSummary("CheckPerformanceMetric");
-   }
+
+    void relayout() {
+        TextView tv = findViewById(R.id.text);
+        if (tv != null) {
+            tv.setText("loop " + (loop++));
+        } else {
+            mConstraintLayout.requestLayout();
+        }
+        mConstraintLayout.postDelayed(this::relayout, 1000);
+    }
+
+    public void foo(View v, int left, int top, int right, int bottom,
+                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        log();
+    }
+
+    void log() {
+        Debug.logStack("TAG" ,"CL Perf:", 5);
+        performance.logSummary("CheckPerformanceMetric", prePerformance);
+        performance.logSummary("CheckPerformanceMetric");
+        prePerformance = performance.clone();
+        performance.reset();
+    }
 }

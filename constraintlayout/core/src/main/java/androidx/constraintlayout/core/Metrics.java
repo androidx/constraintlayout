@@ -21,8 +21,8 @@ import java.util.ArrayList;
  * Utility class to track metrics during the system resolution
  */
 public class Metrics {
-    public long measuresWidgetsDuration;
-    public long measuresLayoutDuration;
+    public long measuresWidgetsDuration; // time spent in child measures in nanoseconds
+    public long measuresLayoutDuration; // time spent in child measures in nanoseconds
     public long measuredWidgets;
     public long measuredMatchWidgets;
     public long measures;
@@ -49,11 +49,6 @@ public class Metrics {
     public long minimizeGoal;
     public long maxVariables;
     public long maxRows;
-//    public long centerConnectionResolved;
-//    public long matchConnectionResolved;
-//    public long chainConnectionResolved;
-//    public long barrierConnectionResolved;
-//    public long oldresolvedWidgets;
     public long nonresolvedWidgets;
     public ArrayList<String> problematicLayouts = new ArrayList<>();
     public long lastTableSize;
@@ -64,6 +59,15 @@ public class Metrics {
     public long determineGroups;
     public long layouts;
     public long grouping;
+    public int mNumberOfLayouts; // the number of times ConstraintLayout onLayout gets called
+    public int mNumberOfMeasures; // the number of times child measures gets called
+    public long mMeasureDuration; // time spent in measure in nanoseconds
+    public long mChildCount; // number of child Views of ConstraintLayout
+    public long mMeasureCalls; // number of time CL onMeasure is called
+    public long  mSolverPasses;
+    public long  mEquations;
+    public long  mVariables;
+    public long mSimpleEquations;
 
     // @TODO: add description
     @Override
@@ -77,39 +81,7 @@ public class Metrics {
                 + "graphOptimizer: " + graphOptimizer + "\n"
                 + "widgets: " + widgets + "\n"
                 + "graphSolved: " + graphSolved + "\n"
-                + "linearSolved: " + linearSolved + "\n"
-/*
-                + "measures: " + measures + "\n"
-                + "additionalMeasures: " + additionalMeasures + "\n"
-                + "resolutions passes: " + resolutions + "\n"
-                + "table increases: " + tableSizeIncrease + "\n"
-                + "maxTableSize: " + maxTableSize + "\n"
-                + "maxVariables: " + maxVariables + "\n"
-                + "maxRows: " + maxRows + "\n\n"
-                + "minimize: " + minimize + "\n"
-                + "minimizeGoal: " + minimizeGoal + "\n"
-                + "constraints: " + constraints + "\n"
-                + "simpleconstraints: " + simpleconstraints + "\n"
-                + "optimize: " + optimize + "\n"
-                + "iterations: " + iterations + "\n"
-                + "pivots: " + pivots + "\n"
-                + "bfs: " + bfs + "\n"
-                + "variables: " + variables + "\n"
-                + "errors: " + errors + "\n"
-                + "slackvariables: " + slackvariables + "\n"
-                + "extravariables: " + extravariables + "\n"
-                + "fullySolved: " + fullySolved + "\n"
-                + "graphOptimizer: " + graphOptimizer + "\n"
-                + "resolvedWidgets: " + resolvedWidgets + "\n"
-                + "oldresolvedWidgets: " + oldresolvedWidgets + "\n"
-                + "nonresolvedWidgets: " + nonresolvedWidgets + "\n"
-                + "centerConnectionResolved: " + centerConnectionResolved + "\n"
-                + "matchConnectionResolved: " + matchConnectionResolved + "\n"
-                + "chainConnectionResolved: " + chainConnectionResolved + "\n"
-                + "barrierConnectionResolved: " + barrierConnectionResolved + "\n"
-                + "problematicsLayouts: " + problematicLayouts + "\n"
-                */
-                ;
+                + "linearSolved: " + linearSolved + "\n";
     }
 
     // @TODO: add description
@@ -140,6 +112,60 @@ public class Metrics {
         graphSolved = 0;
         resolvedWidgets = 0;
         nonresolvedWidgets = 0;
+        linearSolved = 0;
         problematicLayouts.clear();
+        mNumberOfMeasures = 0;
+        mNumberOfLayouts = 0;
+        measuresWidgetsDuration = 0;
+        measuresLayoutDuration = 0;
+        mChildCount = 0;
+        mMeasureDuration = 0;
+        mMeasureCalls = 0;
+        mSolverPasses = 0;
+        mVariables = 0;
+        mEquations = 0;
+        mSimpleEquations = 0;
     }
+    
+    public void copy(Metrics metrics) {
+        mVariables = metrics.mVariables;
+        mEquations = metrics.mEquations;
+        mSimpleEquations = metrics.mSimpleEquations;
+        mNumberOfMeasures = metrics.mNumberOfMeasures;
+        mNumberOfLayouts = metrics.mNumberOfLayouts;
+        mMeasureDuration = metrics.mMeasureDuration;
+        mChildCount =  metrics.mChildCount;
+        mMeasureCalls = metrics.mMeasureCalls;
+        measuresWidgetsDuration = metrics.measuresWidgetsDuration;
+        mSolverPasses = metrics.mSolverPasses;
+
+        measuresLayoutDuration = metrics.measuresLayoutDuration;
+        measures = metrics.measures;
+        widgets = metrics.widgets;
+        additionalMeasures = metrics.additionalMeasures;
+        resolutions = metrics.resolutions;
+        tableSizeIncrease = metrics.tableSizeIncrease;
+        maxTableSize = metrics.maxTableSize;
+        lastTableSize = metrics.lastTableSize;
+        maxVariables = metrics.maxVariables;
+        maxRows = metrics.maxRows;
+        minimize = metrics.minimize;
+        minimizeGoal = metrics.minimizeGoal;
+        constraints = metrics.constraints;
+        simpleconstraints = metrics.simpleconstraints;
+        optimize = metrics.optimize;
+        iterations = metrics.iterations;
+        pivots = metrics.pivots;
+        bfs = metrics.bfs;
+        variables = metrics.variables;
+        errors = metrics.errors;
+        slackvariables = metrics.slackvariables;
+        extravariables = metrics.extravariables;
+        fullySolved = metrics.fullySolved;
+        graphOptimizer = metrics.graphOptimizer;
+        graphSolved = metrics.graphSolved;
+        resolvedWidgets = metrics.resolvedWidgets;
+        nonresolvedWidgets = metrics.nonresolvedWidgets;
+    }
+    
 }

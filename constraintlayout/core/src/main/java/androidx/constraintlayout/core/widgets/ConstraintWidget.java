@@ -2865,6 +2865,11 @@ public class ConstraintWidget {
         }
         mResolvedHorizontal = false;
         mResolvedVertical = false;
+        if (LinearSystem.sMetrics != null) {
+            LinearSystem.sMetrics.mEquations = system.getNumEquations();
+            LinearSystem.sMetrics.mVariables = system.getNumVariables();
+        }
+
     }
 
     /**
