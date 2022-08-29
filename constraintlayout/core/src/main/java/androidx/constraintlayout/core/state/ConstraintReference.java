@@ -1055,19 +1055,7 @@ public class ConstraintReference implements Reference {
         }
     }
 
-    // @TODO: add description
-    @Override
-    public void apply() {
-        if (mConstraintWidget == null) {
-            return;
-        }
-        if (mFacade != null) {
-            mFacade.apply();
-        }
-        mHorizontalDimension.apply(mState, mConstraintWidget, HORIZONTAL);
-        mVerticalDimension.apply(mState, mConstraintWidget, VERTICAL);
-        dereference();
-
+    public void applyWidgetConstraints() {
         applyConnection(mConstraintWidget, mLeftToLeft, State.Constraint.LEFT_TO_LEFT);
         applyConnection(mConstraintWidget, mLeftToRight, State.Constraint.LEFT_TO_RIGHT);
         applyConnection(mConstraintWidget, mRightToLeft, State.Constraint.RIGHT_TO_LEFT);
@@ -1086,6 +1074,22 @@ public class ConstraintReference implements Reference {
         applyConnection(mConstraintWidget, mBaselineToBottom, State.Constraint.BASELINE_TO_BOTTOM);
         applyConnection(mConstraintWidget, mCircularConstraint,
                 State.Constraint.CIRCULAR_CONSTRAINT);
+    }
+
+    // @TODO: add description
+    @Override
+    public void apply() {
+        if (mConstraintWidget == null) {
+            return;
+        }
+        if (mFacade != null) {
+            mFacade.apply();
+        }
+        mHorizontalDimension.apply(mState, mConstraintWidget, HORIZONTAL);
+        mVerticalDimension.apply(mState, mConstraintWidget, VERTICAL);
+        dereference();
+
+        applyWidgetConstraints();
 
         if (mHorizontalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
             mConstraintWidget.setHorizontalChainStyle(mHorizontalChainStyle);
