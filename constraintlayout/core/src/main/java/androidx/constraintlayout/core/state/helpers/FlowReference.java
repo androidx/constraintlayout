@@ -535,6 +535,7 @@ abstract public class FlowReference extends HelperReference {
     @Override
     public void apply() {
         getHelperWidget();
+        this.setConstraintWidget(mFlow);
         mFlow.setOrientation(mOrientation);
         mFlow.setWrapMode(mWrapMode);
 
@@ -602,38 +603,7 @@ abstract public class FlowReference extends HelperReference {
         }
 
         // Constraint
-        if (mStartToStart != null) {mFlow.connect(ConstraintAnchor.Type.LEFT,
-                ((ConstraintReference) mStartToStart).getConstraintWidget(),
-                ConstraintAnchor.Type.LEFT);
-        }
-        if (mStartToEnd != null) {mFlow.connect(ConstraintAnchor.Type.LEFT,
-                ((ConstraintReference) mStartToEnd).getConstraintWidget(),
-                ConstraintAnchor.Type.RIGHT);
-        }
-        if (mEndToStart != null) {mFlow.connect(ConstraintAnchor.Type.RIGHT,
-                ((ConstraintReference) mEndToStart).getConstraintWidget(),
-                ConstraintAnchor.Type.LEFT);
-        }
-        if (mEndToEnd != null) {mFlow.connect(ConstraintAnchor.Type.RIGHT,
-                ((ConstraintReference) mEndToEnd).getConstraintWidget(),
-                ConstraintAnchor.Type.RIGHT);
-        }
-        if (mTopToTop != null) { mFlow.connect(ConstraintAnchor.Type.TOP,
-                ((ConstraintReference) mTopToTop).getConstraintWidget(),
-                ConstraintAnchor.Type.TOP);
-        }
-        if (mTopToBottom != null) {mFlow.connect(ConstraintAnchor.Type.TOP,
-                ((ConstraintReference) mTopToBottom).getConstraintWidget(),
-                ConstraintAnchor.Type.BOTTOM);
-        }
-        if (mBottomToTop != null) {mFlow.connect(ConstraintAnchor.Type.BOTTOM,
-                ((ConstraintReference) mBottomToTop).getConstraintWidget(),
-                ConstraintAnchor.Type.TOP);
-        }
-        if (mBottomToBottom != null) {mFlow.connect(ConstraintAnchor.Type.BOTTOM,
-                ((ConstraintReference) mBottomToBottom).getConstraintWidget(),
-                ConstraintAnchor.Type.BOTTOM);
-        }
+        applyWidgetConstraints();
 
         // TODO - Need to figure out how to set these values properly.
         mFlow.measure(AT_MOST, 1000, AT_MOST,1000);
