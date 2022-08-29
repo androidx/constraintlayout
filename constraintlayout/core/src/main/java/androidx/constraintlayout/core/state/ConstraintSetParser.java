@@ -32,8 +32,10 @@ import androidx.constraintlayout.core.parser.CLParsingException;
 import androidx.constraintlayout.core.parser.CLString;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.ChainReference;
+import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.Flow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -524,6 +526,16 @@ public class ConstraintSetParser {
                                                 (CLObject) element
                                         );
                                         break;
+                                    case "vFlow":
+                                    case "hFlow":
+                                        parseFlowType(
+                                                type,
+                                                state,
+                                                elementName,
+                                                layoutVariables,
+                                                (CLObject) element
+                                        );
+                                        break;
                                 }
                             } else {
                                 parseWidget(state, layoutVariables,
@@ -840,6 +852,250 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * It's used to parse the Flow type of Helper - either vFlow or hFlow
+     * @param orientation orientation of the Flow Helper
+     * @param state ConstraintLayout State
+     * @param flowName the name of the Flow Helper
+     * @param layoutVariables layout margins
+     * @param element the element to be parsed
+     * @throws CLParsingException
+     */
+    private static void parseFlowType(String orientation,
+                                       State state,
+                                       String flowName,
+                                       LayoutVariables layoutVariables,
+                                       CLObject element) throws CLParsingException {
+
+        FlowReference flow = (orientation.charAt(0) == 'h')
+                ? state.horizontalFlow() : state.verticalFlow();
+        flow.setKey(flowName);
+
+        for (String params : element.names()) {
+            switch (params) {
+                case "contains":
+                    CLElement refs = element.get(params);
+                    if (!(refs instanceof CLArray) || ((CLArray) refs).size() < 1) {
+                        System.err.println(
+                                flowName + " contains should be an array \"" + refs.content()
+                                        + "\"");
+                        return;
+                    }
+                    for (int i = 0; i < ((CLArray) refs).size(); i++) {
+                        CLElement chainElement = ((CLArray) refs).get(i);
+                        if (chainElement instanceof CLArray) {
+                            CLArray array = (CLArray) chainElement;
+                            if (array.size() > 0) {
+                                String id = array.get(0).content();
+                                float weight = Float.NaN;
+                                float preMargin = Float.NaN;
+                                float postMargin = Float.NaN;
+                                switch (array.size()) {
+                                    case 2: // sets only the weight
+                                        weight = array.getFloat(1);
+                                        break;
+                                    case 3: // sets the pre and post margin to the 2 arg
+                                        weight = array.getFloat(1);
+                                        postMargin = preMargin = toPix(state, array.getFloat(2));
+                                        break;
+                                    case 4: // sets the pre and post margin
+                                        weight = array.getFloat(1);
+                                        preMargin = toPix(state, array.getFloat(2));
+                                        postMargin = toPix(state, array.getFloat(3));
+                                        break;
+                                }
+                                flow.addFlowElement(id, weight, preMargin, postMargin);
+                            }
+                        } else {
+                            flow.add(chainElement.content());
+                        }
+                    }
+                    break;
+                case "wrap":
+                    String wrapValue = element.get(params).content();
+                    flow.wrapMode(State.Wrap.getValueByString(wrapValue));
+                    break;
+                case "vGap":
+                    String vGapValue = element.get(params).content();
+                    try {
+                        int value = Integer.parseInt(vGapValue);
+                        flow.verticalGap(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "hGap":
+                    String hGapValue = element.get(params).content();
+                    try {
+                        int value = Integer.parseInt(hGapValue);
+                        flow.horizontalGap(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "maxElement":
+                    String maxElementValue = element.get(params).content();
+                    try {
+                        int value = Integer.parseInt(maxElementValue);
+                        flow.maxElementsWrap(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "padding":
+                    String paddingValue = element.get(params).content();
+                    try {
+                        int value = Integer.parseInt(paddingValue);
+                        flow.padding(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "vAlign":
+                    String vAlignValue = element.get(params).content();
+                    switch (vAlignValue) {
+                        case "top":
+                            flow.verticalAlign(Flow.VERTICAL_ALIGN_TOP);
+                            break;
+                        case "bottom":
+                            flow.verticalAlign(Flow.VERTICAL_ALIGN_BOTTOM);
+                            break;
+                        case "baseline":
+                            flow.verticalAlign(Flow.VERTICAL_ALIGN_BASELINE);
+                            break;
+                        default:
+                            flow.verticalAlign(Flow.VERTICAL_ALIGN_CENTER);
+                            break;
+                    }
+                    break;
+                case "hAlign":
+                    String hAlignValue = element.get(params).content();
+                    switch (hAlignValue) {
+                        case "start":
+                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_START);
+                            break;
+                        case "end":
+                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_END);
+                            break;
+                        default:
+                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_CENTER);
+                            break;
+                    }
+                    break;
+                case "vFlowBias":
+                    CLElement vBiasObject = element.get(params);
+                    String vBiasValueStr = "";
+                    String vFirstBiasValueStr = "";
+                    String vLastBiasValueStr = "";
+                    if (vBiasObject instanceof CLArray && ((CLArray) vBiasObject).size() > 1) {
+                        vFirstBiasValueStr = ((CLArray) vBiasObject).getString(0);
+                        vBiasValueStr = ((CLArray) vBiasObject).getString(1);
+                        if (((CLArray) vBiasObject).size() > 2) {
+                            vLastBiasValueStr = ((CLArray) vBiasObject).getString(2);
+                        }
+                    } else {
+                        vBiasValueStr = vBiasObject.content();
+                    }
+                    try {
+                        float value = Float.parseFloat(vBiasValueStr);
+                        flow.verticalBias(value);
+                        if (vFirstBiasValueStr != "") {
+                            float firstValue = Float.parseFloat(vFirstBiasValueStr);
+                            flow.firstVerticalBias(firstValue);
+                        }
+                        if (vLastBiasValueStr != "") {
+                            float lastValue = Float.parseFloat(vLastBiasValueStr);
+                            flow.lastVerticalBias(lastValue);
+                        }
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "hFlowBias":
+                    CLElement hBiasObject = element.get(params);
+                    String hBiasValueStr = "";
+                    String hFirstBiasValueStr = "";
+                    String hLastBiasValueStr = "";
+                    if (hBiasObject instanceof CLArray && ((CLArray) hBiasObject).size() > 1) {
+                        hFirstBiasValueStr = ((CLArray) hBiasObject).getString(0);
+                        hBiasValueStr = ((CLArray) hBiasObject).getString(1);
+                        if (((CLArray) hBiasObject).size() > 2) {
+                            hLastBiasValueStr = ((CLArray) hBiasObject).getString(2);
+                        }
+                    } else {
+                        hBiasValueStr = hBiasObject.content();
+                    }
+                    try {
+                        float value = Float.parseFloat(hBiasValueStr);
+                        flow.horizontalBias(value);
+                        if (hFirstBiasValueStr != "") {
+                            float firstValue = Float.parseFloat(hFirstBiasValueStr);
+                            flow.firstHorizontalBias(firstValue);
+                        }
+                        if (hLastBiasValueStr != "") {
+                            float lastValue = Float.parseFloat(hLastBiasValueStr);
+                            flow.lastHorizontalBias(lastValue);
+                        }
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "vStyle":
+                    CLElement vStyleObject = element.get(params);
+                    String vStyleValueStr = "";
+                    String vFirstStyleValueStr = "";
+                    String vLastStyleValueStr = "";
+                    if (vStyleObject instanceof CLArray && ((CLArray) vStyleObject).size() > 1) {
+                        vFirstStyleValueStr = ((CLArray) vStyleObject).getString(0);
+                        vStyleValueStr = ((CLArray) vStyleObject).getString(1);
+                        if (((CLArray) vStyleObject).size() > 2) {
+                            vLastStyleValueStr = ((CLArray) vStyleObject).getString(2);
+                        }
+                    } else {
+                        vStyleValueStr = vStyleObject.content();
+                    }
+
+                    if (vStyleValueStr != "") {
+                        flow.verticalStyle(State.Chain.getValueByString(vStyleValueStr));
+                    }
+                    if (vFirstStyleValueStr != "") {
+                        flow.firstVerticalStyle(State.Chain.getValueByString(vFirstStyleValueStr));
+                    }
+                    if (vLastStyleValueStr != "") {
+                        flow.lastVerticalStyle(State.Chain.getValueByString(vLastStyleValueStr));
+                    }
+                    break;
+                case "hStyle":
+                    CLElement hStyleObject = element.get(params);
+                    String hStyleValueStr = "";
+                    String hFirstStyleValueStr = "";
+                    String hLastStyleValueStr = "";
+                    if (hStyleObject instanceof CLArray && ((CLArray) hStyleObject).size() > 1) {
+                        hFirstStyleValueStr = ((CLArray) hStyleObject).getString(0);
+                        hStyleValueStr = ((CLArray) hStyleObject).getString(1);
+                        if (((CLArray) hStyleObject).size() > 2) {
+                            hLastStyleValueStr = ((CLArray) hStyleObject).getString(2);
+                        }
+                    } else {
+                        hStyleValueStr = hStyleObject.content();
+                    }
+
+                    if (hStyleValueStr != "") {
+                        flow.horizontalStyle(State.Chain.getValueByString(hStyleValueStr));
+                    }
+                    if (hFirstStyleValueStr != "") {
+                        flow.firstHorizontalStyle(State.Chain.getValueByString(hFirstStyleValueStr));
+                    }
+                    if (hLastStyleValueStr != "") {
+                        flow.lastHorizontalStyle(State.Chain.getValueByString(hLastStyleValueStr));
+                    }
+                    break;
+        default:
+                    parseWidget(state, layoutVariables, flow, (CLObject) element);
+            }
+        }
+    }
+
     static void parseGuideline(int orientation,
             State state, CLArray helper) throws CLParsingException {
         CLElement params = helper.get(1);
@@ -954,8 +1210,17 @@ public class ConstraintSetParser {
             String elementName,
             CLObject element
     ) throws CLParsingException {
-        float value;
         ConstraintReference reference = state.constraints(elementName);
+        parseWidget(state, layoutVariables, reference, element);
+    }
+
+    static void parseWidget(
+            State state,
+            LayoutVariables layoutVariables,
+            ConstraintReference reference,
+            CLObject element
+    ) throws CLParsingException {
+        float value;
         if (reference.getWidth() == null) {
             // Default to Wrap when the Dimension has not been assigned
             reference.setWidth(Dimension.createWrap());

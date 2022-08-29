@@ -16,18 +16,25 @@
 
 package androidx.constraintlayout.core.state;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_PACKED;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD_INSIDE;
+
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
+import androidx.constraintlayout.core.state.helpers.HorizontalFlowReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
+import androidx.constraintlayout.core.state.helpers.VerticalFlowReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a full state of a ConstraintLayout
@@ -84,13 +91,93 @@ public class State {
         ALIGN_VERTICALLY,
         BARRIER,
         LAYER,
+        HORIZONTAL_FLOW,
+        VERTICAL_FLOW,
         FLOW
     }
 
     public enum Chain {
         SPREAD,
         SPREAD_INSIDE,
-        PACKED
+        PACKED;
+
+        public static Map<String, Chain> chainMap = new HashMap<>();
+        public static Map<String, Integer> valueMap = new HashMap<>();
+        static {
+            chainMap.put("packed", PACKED);
+            chainMap.put("spread_inside", SPREAD_INSIDE);
+            chainMap.put("spread", SPREAD);
+
+            valueMap.put("packed", CHAIN_PACKED);
+            valueMap.put("spread_inside", CHAIN_SPREAD_INSIDE);
+            valueMap.put("spread", CHAIN_SPREAD);
+        }
+
+        /**
+         * Get the Enum value with a String
+         * @param str a String representation of a Enum value
+         * @return a Enum value
+         */
+        public static int getValueByString(String str) {
+            if (valueMap.containsKey(str)) {
+                return valueMap.get(str);
+            }
+            return UNKNOWN;
+        }
+
+        /**
+         * Get the actual int value with a String
+         * @param str a String representation of a Enum value
+         * @return an actual int value
+         */
+        public static Chain getChainByString(String str) {
+            if (chainMap.containsKey(str)) {
+                return chainMap.get(str);
+            }
+            return null;
+        }
+
+    }
+
+    public enum Wrap {
+        NONE,
+        CHAIN,
+        ALIGNED;
+        public static Map<String, Wrap> wrapMap = new HashMap<>();
+        public static Map<String, Integer> valueMap = new HashMap<>();
+        static {
+            wrapMap.put("none", NONE);
+            wrapMap.put("chain", CHAIN);
+            wrapMap.put("aligned", ALIGNED);
+
+            valueMap.put("none", 0);
+            valueMap.put("chain", 1);
+            valueMap.put("aligned", 2);
+        }
+
+        /**
+         * Get the actual int value with a String
+         * @param str a String representation of a Enum value
+         * @return a actual int value
+         */
+        public static int getValueByString(String str) {
+            if (valueMap.containsKey(str)) {
+                return valueMap.get(str);
+            }
+            return UNKNOWN;
+        }
+
+        /**
+         * Get the Enum value with a String
+         * @param str a String representation of a Enum value
+         * @return a Enum value
+         */
+        public static Wrap getChainByString(String str) {
+            if (wrapMap.containsKey(str)) {
+                return wrapMap.get(str);
+            }
+            return null;
+        }
     }
 
     public State() {
@@ -231,6 +318,14 @@ public class State {
                     reference = new BarrierReference(this);
                 }
                 break;
+                case HORIZONTAL_FLOW: {
+                    reference = new HorizontalFlowReference(this);
+                }
+                break;
+                case VERTICAL_FLOW: {
+                    reference = new VerticalFlowReference(this);
+                }
+                break;
                 default: {
                     reference = new HelperReference(this, type);
                 }
@@ -297,6 +392,46 @@ public class State {
     public HorizontalChainReference horizontalChain(Object... references) {
         HorizontalChainReference reference =
                 (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
+        reference.add(references);
+        return reference;
+    }
+
+    /**
+     * Get a VerticalFlowReference
+     * @return a VerticalFlowReference
+     */
+    public VerticalFlowReference verticalFlow() {
+        return (VerticalFlowReference) helper(null, Helper.VERTICAL_FLOW);
+    }
+
+    /**
+     * Get a VerticalFlowReference and add it to references
+     * @param references where we add the VerticalFlowReference
+     * @return a VerticalFlowReference
+     */
+    public VerticalFlowReference verticalFlow(Object... references) {
+        VerticalFlowReference reference =
+                (VerticalFlowReference) helper(null, State.Helper.VERTICAL_FLOW);
+        reference.add(references);
+        return reference;
+    }
+
+    /**
+     * Get a HorizontalFlowReference
+     * @return a HorizontalFlowReference
+     */
+    public HorizontalFlowReference horizontalFlow() {
+        return (HorizontalFlowReference) helper(null, Helper.HORIZONTAL_FLOW);
+    }
+
+    /**
+     * Get a HorizontalFlowReference and add it to references
+     * @param references references where we the HorizontalFlowReference
+     * @return a HorizontalFlowReference
+     */
+    public HorizontalFlowReference horizontalFlow(Object... references) {
+        HorizontalFlowReference reference =
+                (HorizontalFlowReference) helper(null, Helper.HORIZONTAL_FLOW);
         reference.add(references);
         return reference;
     }
