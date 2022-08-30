@@ -113,6 +113,17 @@ abstract class ConstraintLayoutBaseScope {
     }
 
     /**
+     * Specifies the constraints associated to the layout identified with [ref].
+     */
+    fun constrain(
+        ref: ConstrainedLayoutReference,
+        constrainBlock: ConstrainScope.() -> Unit
+    ): ConstrainScope = ConstrainScope(ref.id).apply {
+        constrainBlock()
+        this@ConstraintLayoutBaseScope.tasks.addAll(this.tasks)
+    }
+
+    /**
      * Creates a guideline at a specific offset from the start of the [ConstraintLayout].
      */
     fun createGuidelineFromStart(offset: Dp): VerticalAnchor {
@@ -392,11 +403,12 @@ abstract class ConstraintLayoutBaseScope {
     class Wrap private constructor(
         internal val mode: Int) {
         companion object {
-            val None = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
-            val WrapChain = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
-            val WrapAligned = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
-            val WrapChainNew = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN_NEW)
-
+            val None =
+                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
+            val Chain =
+                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
+            val Aligned =
+                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
         }
     }
 
@@ -444,7 +456,7 @@ abstract class ConstraintLayoutBaseScope {
      */
     fun createFlow(
         vararg elements: LayoutReference?,
-        vertical: Boolean = false,
+        flowVertically: Boolean = false,
         vGap:  Dp = 0.dp,
         hGap:  Dp = 0.dp,
         maxElement: Int = 0,
@@ -459,7 +471,7 @@ abstract class ConstraintLayoutBaseScope {
     ): ConstrainedLayoutReference {
         val id = createHelperId()
         tasks.add { state ->
-            state.getFlow(id, vertical).apply {
+            state.getFlow(id, flowVertically).apply {
                 add(*(elements.map { it?.id }.toTypedArray()))
                 horizontalChainStyle = hStyle.style
                 setVerticalChainStyle(vStyle.style)
@@ -472,7 +484,6 @@ abstract class ConstraintLayoutBaseScope {
                 maxElementsWrap(maxElement)
                 horizontalGap(state.convertDimension(hGap))
                 verticalGap(state.convertDimension(vGap))
-
             }
         }
         updateHelpersHashCode(15)

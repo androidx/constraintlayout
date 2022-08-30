@@ -457,17 +457,6 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
      * with [id].
      */
     fun createRefFor(id: Any): ConstrainedLayoutReference = ConstrainedLayoutReference(id)
-
-    /**
-     * Specifies the constraints associated to the layout identified with [ref].
-     */
-    fun constrain(
-        ref: ConstrainedLayoutReference,
-        constrainBlock: ConstrainScope.() -> Unit
-    ): ConstrainScope = ConstrainScope(ref.id).apply {
-        constrainBlock()
-        this@ConstraintSetScope.tasks.addAll(this.tasks)
-    }
 }
 
 /**
