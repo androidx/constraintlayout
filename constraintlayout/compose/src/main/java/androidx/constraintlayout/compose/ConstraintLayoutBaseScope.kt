@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.core.state.State.Wrap
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 
 /**
@@ -382,6 +383,102 @@ abstract class ConstraintLayoutBaseScope {
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(margin.hashCode())
         return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
+    }
+
+
+    /**
+     * Wrap defines the type of chain
+     */
+    class Wrap private constructor(
+        internal val mode: Int) {
+        companion object {
+            val None = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
+            val WrapChain = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
+            val WrapAligned = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
+            val WrapChainNew = Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN_NEW)
+
+        }
+    }
+
+    /**
+     * Defines how objects align vertically within the chain
+     */
+    class VerticalAlign private constructor(
+        internal val mode: Int) {
+        companion object {
+            val Top =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
+            val Bottom =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM)
+            val Center =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER)
+            val Baseline =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE)
+        }
+    }
+
+    /**
+     * Defines how objects align horizontally in the chain
+     */
+    class HorizontalAlign private constructor(
+        internal val mode: Int) {
+        companion object {
+            val Start =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
+            val End =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END)
+            val Center =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER)
+         }
+    }
+
+    /**
+     * Defines how widgets are spaced in a chain
+     */
+    class FlowStyle private constructor(
+        internal val style: Int) {
+        companion object {
+            val Spread =  FlowStyle(0)
+            val SpreadInside =  FlowStyle(1)
+            val Packed =  FlowStyle(2)
+        }
+    }
+
+    /**
+     * This creates a flow helper
+     * Flow helpers allows a long sequence of Composable widgets to wrap onto
+     * multiple rows or columns.
+     */
+    fun createFlow(
+        vararg elements: LayoutReference?,
+        vertical: Boolean = false,
+        vGap:  Dp = 0.dp,
+        hGap:  Dp = 0.dp,
+        maxElement: Int = 0,
+        padding: Dp = 0.dp,
+        wrap: Wrap = Wrap.None,
+        vAlign: VerticalAlign = VerticalAlign.Center,
+        hAlign: HorizontalAlign = HorizontalAlign.Center,
+        hFlowBias: Float = 0.0f,
+        vFlowBias: Float = 0.0f,
+        vStyle: FlowStyle = FlowStyle.Packed,
+        hStyle: FlowStyle = FlowStyle.Packed,
+    ): ConstrainedLayoutReference {
+        val id = createHelperId()
+        tasks.add { state ->
+            state.getFlow(id, vertical).apply {
+                add(*(elements.map { it?.id }.toTypedArray()))
+                horizontalChainStyle = hStyle.style
+                setVerticalChainStyle(vStyle.style)
+                verticalBias(vFlowBias)
+                horizontalBias(hFlowBias)
+                horizontalAlign(hAlign.mode)
+                verticalAlign(vAlign.mode)
+                wrapMode(wrap.mode)
+                padding(state.convertDimension(padding))
+                maxElementsWrap(maxElement)
+                horizontalGap(state.convertDimension(hGap))
+                verticalGap(state.convertDimension(vGap))
+
+            }
+        }
+        updateHelpersHashCode(15)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+         return ConstrainedLayoutReference(id)
     }
 
     /**

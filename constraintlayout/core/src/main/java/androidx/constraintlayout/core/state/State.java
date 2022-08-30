@@ -23,6 +23,7 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPRE
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
+import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalFlowReference;
@@ -368,6 +369,24 @@ public class State {
             reference.setFacade(barrierReference);
         }
         return (BarrierReference) reference.getFacade();
+    }
+
+    /**
+     * Gets a reference to a Flow object. Creating it if needed.
+     * @param key id of the reference
+     * @param vertical is it a vertical or horizontal flow
+     * @return a FlowReference
+     */
+    public FlowReference getFlow(Object key, boolean vertical) {
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
+            FlowReference barrierReference =
+                    (vertical)? new VerticalFlowReference(this)
+                            :new HorizontalFlowReference(this);
+
+            reference.setFacade(barrierReference);
+        }
+        return (FlowReference) reference.getFacade();
     }
 
     // @TODO: add description
