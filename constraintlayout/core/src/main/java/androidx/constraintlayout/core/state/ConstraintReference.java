@@ -1055,6 +1055,9 @@ public class ConstraintReference implements Reference {
         }
     }
 
+    /**
+     * apply all the constraints attributes of the mConstraintWidget
+     */
     public void applyWidgetConstraints() {
         applyConnection(mConstraintWidget, mLeftToLeft, State.Constraint.LEFT_TO_LEFT);
         applyConnection(mConstraintWidget, mLeftToRight, State.Constraint.LEFT_TO_RIGHT);

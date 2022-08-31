@@ -17,12 +17,13 @@ package androidx.constraintlayout.core.state.helpers;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
+import static androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER;
+import static androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER;
+import static androidx.constraintlayout.core.widgets.Flow.WRAP_NONE;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.AT_MOST;
 
-import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 
@@ -33,22 +34,7 @@ import java.util.HashMap;
  * when parsing the Flow Helper information in a JSON representation.
  *
  */
-abstract public class FlowReference extends HelperReference {
-
-    public static final int HORIZONTAL_ALIGN_START = 0;
-    public static final int HORIZONTAL_ALIGN_END = 1;
-    public static final int HORIZONTAL_ALIGN_CENTER = 2;
-
-    public static final int VERTICAL_ALIGN_TOP = 0;
-    public static final int VERTICAL_ALIGN_BOTTOM = 1;
-    public static final int VERTICAL_ALIGN_CENTER = 2;
-    public static final int VERTICAL_ALIGN_BASELINE = 3;
-
-    public static final int WRAP_NONE = 0;
-    public static final int WRAP_CHAIN = 1;
-    public static final int WRAP_ALIGNED = 2;
-    public static final int WRAP_CHAIN_NEW = 3;
-
+public class FlowReference extends HelperReference {
     protected Flow mFlow;
 
     protected HashMap<String, Float> mMapWeights;
@@ -89,6 +75,7 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Relate widgets to the FlowReference
+     *
      * @param id id of a widget
      * @param weight weight of a widget
      * @param preMargin preMargin of a widget
@@ -118,6 +105,7 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Get the weight of a widget
+     *
      * @param id id of a widget
      * @return the weight of a widget
      */
@@ -133,6 +121,7 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Get the post margin of a widget
+     *
      * @param id id id of a widget
      * @return the post margin of a widget
      */
@@ -145,6 +134,7 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Get the pre margin of a widget
+     *
      * @param id id id of a widget
      * @return the pre margin of a widget
      */
@@ -157,6 +147,7 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Get wrap mode
+     *
      * @return wrap mode
      */
     public int getWrapMode() {
@@ -165,16 +156,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set wrap Mode
+     *
      * @param wrap wrap Mode
-     * @return FlowReference (this)
      */
-    public FlowReference wrapMode(int wrap) {
+    public void setWrapMode(int wrap) {
         this.mWrapMode = wrap;
-        return this;
     }
 
     /**
      * Get padding
+     *
      * @return padding value
      */
     public int getPadding() {
@@ -183,16 +174,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set padding
+     *
      * @param padding padding value
-     * @return FlowReference (this)
      */
-    public FlowReference padding(int padding) {
+    public void setPadding(int padding) {
         this.mPadding = padding;
-        return this;
     }
 
     /**
      * Get vertical style
+     *
      * @return vertical style
      */
     public int getVerticalStyle() {
@@ -200,17 +191,17 @@ abstract public class FlowReference extends HelperReference {
     }
 
     /**
-     * set vertical sytle
+     * set vertical style
+     *
      * @param verticalStyle Flow vertical style
-     * @return FlowReference (this)
      */
-    public FlowReference verticalStyle(int verticalStyle) {
+    public void setVerticalStyle(int verticalStyle) {
         this.mVerticalStyle = verticalStyle;
-        return this;
     }
 
     /**
      * Get first vertical style
+     *
      * @return first vertical style
      */
     public int getFirstVerticalStyle() {
@@ -219,16 +210,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set first vertical style
+     *
      * @param firstVerticalStyle Flow first vertical style
-     * @return FlowReference (this)
      */
-    public FlowReference firstVerticalStyle(int firstVerticalStyle) {
+    public void setFirstVerticalStyle(int firstVerticalStyle) {
         this.mFirstVerticalStyle = firstVerticalStyle;
-        return this;
     }
 
     /**
      * Get last vertical style
+     *
      * @return last vertical style
      */
     public int getLastVerticalStyle() {
@@ -237,16 +228,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set last vertical style
+     *
      * @param lastVerticalStyle Flow last vertical style
-     * @return FlowReference (this)
      */
-    public FlowReference lastVerticalStyle(int lastVerticalStyle) {
+    public void setLastVerticalStyle(int lastVerticalStyle) {
         this.mLastVerticalStyle = lastVerticalStyle;
-        return this;
     }
 
     /**
      * Get horizontal style
+     *
      * @return horizontal style
      */
     public int getHorizontalStyle() {
@@ -255,16 +246,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set horizontal style
+     *
      * @param horizontalStyle Flow horizontal style
-     * @return FlowReference (this)
      */
-    public FlowReference horizontalStyle(int horizontalStyle) {
+    public void setHorizontalStyle(int horizontalStyle) {
         this.mHorizontalStyle = horizontalStyle;
-        return this;
     }
 
     /**
      * Get first horizontal style
+     *
      * @return first horizontal style
      */
     public int getFirstHorizontalStyle() {
@@ -273,16 +264,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set first horizontal style
+     *
      * @param firstHorizontalStyle Flow first horizontal style
-     * @return FlowReference (this)
      */
-    public FlowReference firstHorizontalStyle(int firstHorizontalStyle) {
+    public void setFirstHorizontalStyle(int firstHorizontalStyle) {
         this.mFirstHorizontalStyle = firstHorizontalStyle;
-        return this;
     }
 
     /**
      * Get last horizontal style
+     *
      * @return last horizontal style
      */
     public int getLastHorizontalStyle() {
@@ -291,12 +282,11 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set last horizontal style
+     *
      * @param lastHorizontalStyle Flow last horizontal style
-     * @return FlowReference (this)
      */
-    public FlowReference lastHorizontalStyle(int lastHorizontalStyle) {
+    public void setLastHorizontalStyle(int lastHorizontalStyle) {
         this.mLastHorizontalStyle = lastHorizontalStyle;
-        return this;
     }
 
     /**
@@ -309,16 +299,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set vertical align
+     *
      * @param verticalAlign vertical align value
-     * @return FlowReference (this)
      */
-    public FlowReference verticalAlign(int verticalAlign) {
+    public void setVerticalAlign(int verticalAlign) {
         this.mVerticalAlign = verticalAlign;
-        return this;
     }
 
     /**
      * Get horizontal align
+     *
      * @return horizontal align value
      */
     public int getHorizontalAlign() {
@@ -327,16 +317,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set horizontal align
+     *
      * @param horizontalAlign horizontal align value
-     * @return FlowReference (this)
      */
-    public FlowReference horizontalAlign(int horizontalAlign) {
+    public void setHorizontalAlign(int horizontalAlign) {
         this.mHorizontalAlign = horizontalAlign;
-        return this;
     }
 
     /**
      * Get vertical gap
+     *
      * @return vertical gap value
      */
     public int getVerticalGap() {
@@ -345,16 +335,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set vertical gap
+     *
      * @param verticalGap vertical gap value
-     * @return FlowReference (this)
      */
-    public FlowReference verticalGap(int verticalGap) {
+    public void setVerticalGap(int verticalGap) {
         this.mVerticalGap = verticalGap;
-        return this;
     }
 
     /**
      * Get horizontal gap
+     *
      * @return horizontal gap value
      */
     public int getHorizontalGap() {
@@ -363,16 +353,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set horizontal gap
+     *
      * @param horizontalGap horizontal gap value
-     * @return FlowReference (this)
      */
-    public FlowReference horizontalGap(int horizontalGap) {
+    public void setHorizontalGap(int horizontalGap) {
         mHorizontalGap = horizontalGap;
-        return this;
     }
 
     /**
      * Get max element wrap
+     *
      * @return max element wrap value
      */
     public int getMaxElementsWrap() {
@@ -381,16 +371,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set max element wrap
+     *
      * @param maxElementsWrap max element wrap value
-     * @return FlowReference (this)
      */
-    public FlowReference maxElementsWrap(int maxElementsWrap) {
+    public void setMaxElementsWrap(int maxElementsWrap) {
         this.mMaxElementsWrap = maxElementsWrap;
-        return this;
     }
 
     /**
      * Get the orientation of a Flow
+     *
      * @return orientation value
      */
     public int getOrientation() {
@@ -399,16 +389,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set the orientation of a Flow
+     *
      * @param mOrientation orientation value
-     * @return FlowReference (this)
      */
-    public FlowReference orientation(int mOrientation) {
+    public void setOrientation(int mOrientation) {
         this.mOrientation = mOrientation;
-        return this;
     }
 
     /**
      * Get vertical bias
+     *
      * @return vertical bias value
      */
     public float getVerticalBias() {
@@ -417,16 +407,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set vertical bias value
+     *
      * @param verticalBias vertical bias value
-     * @return FlowReference (this)
      */
-    public FlowReference verticalBias(float verticalBias) {
+    public void setVerticalBias(float verticalBias) {
         this.mVerticalBias = verticalBias;
-        return this;
     }
 
     /**
      * Get first vertical bias
+     *
      * @return first vertical bias value
      */
     public float getFirstVerticalBias() {
@@ -435,16 +425,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set first vertical bias
+     *
      * @param firstVerticalBias first vertical bias value
-     * @return FlowReference (this)
      */
-    public FlowReference firstVerticalBias(float firstVerticalBias) {
+    public void setFirstVerticalBias(float firstVerticalBias) {
         this.mFirstVerticalBias = firstVerticalBias;
-        return this;
     }
 
     /**
      * Get last vertical bias
+     *
      * @return last vertical bias
      */
     public float getLastVerticalBias() {
@@ -453,12 +443,11 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set last vertical bias
+     *
      * @param lastVerticalBias last vertical bias value
-     * @return FlowReference (this)
      */
-    public FlowReference lastVerticalBias(float lastVerticalBias) {
+    public void setLastVerticalBias(float lastVerticalBias) {
         this.mLastVerticalBias = lastVerticalBias;
-        return this;
     }
 
     /**
@@ -471,16 +460,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set horizontal bias
+     *
      * @param horizontalBias horizontal bias value
-     * @return FlowReference (this)
      */
-    public FlowReference horizontalBias(float horizontalBias) {
+    public void setHorizontalBias(float horizontalBias) {
         this.mHorizontalBias = horizontalBias;
-        return this;
     }
 
     /**
      * Get first horizontal bias
+     *
      * @return first horizontal bias
      */
     public float getFirstHorizontalBias() {
@@ -489,16 +478,16 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set first horizontal bias
+     *
      * @param firstHorizontalBias first horizontal bias value
-     * @return FlowReference (this)
      */
-    public FlowReference firstHorizontalBias(float firstHorizontalBias) {
+    public void setFirstHorizontalBias(float firstHorizontalBias) {
         this.mFirstHorizontalBias = firstHorizontalBias;
-        return this;
     }
 
     /**
      * Get last horizontal bias
+     *
      * @return last horizontal bias value
      */
     public float getLastHorizontalBias() {
@@ -507,12 +496,11 @@ abstract public class FlowReference extends HelperReference {
 
     /**
      * Set last horizontal bias
+     *
      * @param lastHorizontalBias last horizontal bias value
-     * @return FlowReference (this)
      */
-    public FlowReference lastHorizontalBias(float lastHorizontalBias) {
+    public void setLastHorizontalBias(float lastHorizontalBias) {
         this.mLastHorizontalBias = lastHorizontalBias;
-        return this;
     }
 
     @Override
@@ -596,10 +584,10 @@ abstract public class FlowReference extends HelperReference {
             mFlow.setHorizontalStyle(mHorizontalStyle);
         }
         if (mFirstHorizontalStyle != UNKNOWN) {
-            mFlow.setFirstVerticalStyle(mFirstHorizontalStyle);
+            mFlow.setFirstHorizontalStyle(mFirstHorizontalStyle);
         }
-        if (mLastVerticalStyle != UNKNOWN) {
-            mFlow.setLastVerticalStyle(mLastVerticalStyle);
+        if (mLastHorizontalStyle!= UNKNOWN) {
+            mFlow.setLastHorizontalStyle(mLastVerticalStyle);
         }
 
         // Constraint

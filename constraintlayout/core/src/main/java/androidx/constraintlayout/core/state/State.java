@@ -26,9 +26,7 @@ import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
-import androidx.constraintlayout.core.state.helpers.HorizontalFlowReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
-import androidx.constraintlayout.core.state.helpers.VerticalFlowReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.HelperWidget;
@@ -320,11 +318,11 @@ public class State {
                 }
                 break;
                 case HORIZONTAL_FLOW: {
-                    reference = new HorizontalFlowReference(this);
+                    reference = new FlowReference(this, Helper.HORIZONTAL_FLOW);
                 }
                 break;
                 case VERTICAL_FLOW: {
-                    reference = new VerticalFlowReference(this);
+                    reference = new FlowReference(this, Helper.VERTICAL_FLOW);
                 }
                 break;
                 default: {
@@ -417,40 +415,44 @@ public class State {
 
     /**
      * Get a VerticalFlowReference
+     *
      * @return a VerticalFlowReference
      */
-    public VerticalFlowReference verticalFlow() {
-        return (VerticalFlowReference) helper(null, Helper.VERTICAL_FLOW);
+    public FlowReference getVerticalFlow() {
+        return (FlowReference) helper(null, Helper.VERTICAL_FLOW);
     }
 
     /**
      * Get a VerticalFlowReference and add it to references
+     *
      * @param references where we add the VerticalFlowReference
      * @return a VerticalFlowReference
      */
-    public VerticalFlowReference verticalFlow(Object... references) {
-        VerticalFlowReference reference =
-                (VerticalFlowReference) helper(null, State.Helper.VERTICAL_FLOW);
+    public FlowReference getVerticalFlow(Object... references) {
+        FlowReference reference =
+                (FlowReference) helper(null, State.Helper.VERTICAL_FLOW);
         reference.add(references);
         return reference;
     }
 
     /**
      * Get a HorizontalFlowReference
+     *
      * @return a HorizontalFlowReference
      */
-    public HorizontalFlowReference horizontalFlow() {
-        return (HorizontalFlowReference) helper(null, Helper.HORIZONTAL_FLOW);
+    public FlowReference getHorizontalFlow() {
+        return (FlowReference) helper(null, Helper.HORIZONTAL_FLOW);
     }
 
     /**
      * Get a HorizontalFlowReference and add it to references
+     *
      * @param references references where we the HorizontalFlowReference
      * @return a HorizontalFlowReference
      */
-    public HorizontalFlowReference horizontalFlow(Object... references) {
-        HorizontalFlowReference reference =
-                (HorizontalFlowReference) helper(null, Helper.HORIZONTAL_FLOW);
+    public FlowReference getHorizontalFlow(Object... references) {
+        FlowReference reference =
+                (FlowReference) helper(null, Helper.HORIZONTAL_FLOW);
         reference.add(references);
         return reference;
     }
