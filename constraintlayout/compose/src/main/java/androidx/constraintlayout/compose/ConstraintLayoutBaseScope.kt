@@ -447,7 +447,7 @@ abstract class ConstraintLayoutBaseScope {
                 verticalGap(state.convertDimension(verticalGap))
             }
         }
-        updateHelpersHashCode(15)
+        updateHelpersHashCode(16)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
 
          return ConstrainedLayoutReference(id)
