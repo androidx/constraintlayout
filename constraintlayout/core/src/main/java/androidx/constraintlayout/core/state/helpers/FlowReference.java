@@ -17,6 +17,7 @@ package androidx.constraintlayout.core.state.helpers;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 import static androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER;
 import static androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER;
 import static androidx.constraintlayout.core.widgets.Flow.WRAP_NONE;
@@ -71,6 +72,9 @@ public class FlowReference extends HelperReference {
 
     public FlowReference(State state, State.Helper type) {
         super(state, type);
+        if (type == State.Helper.VERTICAL_FLOW) {
+            mOrientation = VERTICAL;
+        }
     }
 
     /**

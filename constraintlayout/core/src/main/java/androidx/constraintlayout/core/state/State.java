@@ -317,12 +317,9 @@ public class State {
                     reference = new BarrierReference(this);
                 }
                 break;
+                case VERTICAL_FLOW:
                 case HORIZONTAL_FLOW: {
-                    reference = new FlowReference(this, Helper.HORIZONTAL_FLOW);
-                }
-                break;
-                case VERTICAL_FLOW: {
-                    reference = new FlowReference(this, Helper.VERTICAL_FLOW);
+                    reference = new FlowReference(this, type);
                 }
                 break;
                 default: {
@@ -379,8 +376,8 @@ public class State {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
             FlowReference barrierReference =
-                    (vertical)? new VerticalFlowReference(this)
-                            :new HorizontalFlowReference(this);
+                    (vertical) ? new FlowReference(this, Helper.VERTICAL_FLOW)
+                            : new FlowReference(this, Helper.HORIZONTAL_FLOW);
 
             reference.setFacade(barrierReference);
         }

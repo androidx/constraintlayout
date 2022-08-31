@@ -438,13 +438,13 @@ abstract class ConstraintLayoutBaseScope {
                 setVerticalChainStyle(verticalStyle.style)
                 verticalBias(verticalFlowBias)
                 horizontalBias(horizontalFlowBias)
-                horizontalAlign(horizontalAlign.mode)
-                verticalAlign(verticalAlign.mode)
-                wrapMode(wrapMode.mode)
-                padding(state.convertDimension(padding))
-                maxElementsWrap(maxElement)
-                horizontalGap(state.convertDimension(horizontalGap))
-                verticalGap(state.convertDimension(verticalGap))
+                setHorizontalAlign(horizontalAlign.mode)
+                setVerticalAlign(verticalAlign.mode)
+                setWrapMode(wrapMode.mode)
+                setPadding(state.convertDimension(padding))
+                maxElementsWrap = maxElement
+                setHorizontalGap(state.convertDimension(horizontalGap))
+                setVerticalGap(state.convertDimension(verticalGap))
             }
         }
         updateHelpersHashCode(16)
@@ -728,11 +728,11 @@ class Wrap internal constructor(
     internal val mode: Int) {
     companion object {
         val None =
-            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
+            Wrap(androidx.constraintlayout.core.widgets.Flow.WRAP_NONE)
         val Chain =
-            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
+            Wrap(androidx.constraintlayout.core.widgets.Flow.WRAP_CHAIN)
         val Aligned =
-            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
+            Wrap(androidx.constraintlayout.core.widgets.Flow.WRAP_ALIGNED)
     }
 }
 
