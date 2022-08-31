@@ -32,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutBaseScope
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.LayoutReference
+import androidx.constraintlayout.compose.Wrap
 import java.util.Arrays
 
 
@@ -120,7 +121,7 @@ public fun FlowDslDemo3() {
                 elements = *elem,
                 flowVertically = true,
                 padding = 30.dp,
-                wrap = ConstraintLayoutBaseScope.Wrap.Chain,
+                wrapMode = Wrap.Chain,
                 verticalFlowBias = 0.1f,
                 horizontalFlowBias = 0.8f,
                 maxElement = 4,
@@ -160,7 +161,7 @@ public fun FlowDslDemo4() {
 
             val g1 = createFlow(
                 elements = * elem,
-                wrap = ConstraintLayoutBaseScope.Wrap.Aligned,
+                wrapMode = Wrap.None,
                 verticalGap = 32.dp,
                 horizontalGap = 32.dp,
                 horizontalFlowBias = 0.8f,
