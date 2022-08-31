@@ -121,8 +121,8 @@ public fun FlowDslDemo3() {
                 flowVertically = true,
                 padding = 30.dp,
                 wrap = ConstraintLayoutBaseScope.Wrap.Chain,
-                vFlowBias = 0.1f,
-                hFlowBias = 0.8f,
+                verticalFlowBias = 0.1f,
+                horizontalFlowBias = 0.8f,
                 maxElement = 4,
             )
 
@@ -159,11 +159,11 @@ public fun FlowDslDemo4() {
             }
 
             val g1 = createFlow(
-                elements = *elem,
+                elements = * elem,
                 wrap = ConstraintLayoutBaseScope.Wrap.Aligned,
-                vGap = 32.dp,
-                hGap = 32.dp,
-                hFlowBias = 0.8f,
+                verticalGap = 32.dp,
+                horizontalGap = 32.dp,
+                horizontalFlowBias = 0.8f,
                 maxElement = 4,
             )
 
@@ -195,7 +195,7 @@ public fun FlowDslDemo5() {
             .fillMaxSize()
     ) {
         val (a, b, c, d) = createRefs()
-        val g1 = createFlow(a, b, c, d, hGap = 20.dp)
+        val g1 = createFlow(a, b, c, d, horizontalGap = 20.dp)
         constrain(g1) {
             centerVerticallyTo(parent)
             centerHorizontallyTo(parent)

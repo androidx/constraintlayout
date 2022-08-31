@@ -400,7 +400,8 @@ abstract class ConstraintLayoutBaseScope {
     /**
      * Wrap defines the type of chain
      */
-    class Wrap private constructor(
+    @Immutable
+    class Wrap internal constructor(
         internal val mode: Int) {
         companion object {
             val None =
@@ -415,7 +416,8 @@ abstract class ConstraintLayoutBaseScope {
     /**
      * Defines how objects align vertically within the chain
      */
-    class VerticalAlign private constructor(
+    @Immutable
+    class VerticalAlign internal constructor(
         internal val mode: Int) {
         companion object {
             val Top =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
@@ -428,7 +430,8 @@ abstract class ConstraintLayoutBaseScope {
     /**
      * Defines how objects align horizontally in the chain
      */
-    class HorizontalAlign private constructor(
+    @Immutable
+    class HorizontalAlign internal constructor(
         internal val mode: Int) {
         companion object {
             val Start =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
@@ -440,7 +443,8 @@ abstract class ConstraintLayoutBaseScope {
     /**
      * Defines how widgets are spaced in a chain
      */
-    class FlowStyle private constructor(
+    @Immutable
+    class FlowStyle internal constructor(
         internal val style: Int) {
         companion object {
             val Spread =  FlowStyle(0)
@@ -457,33 +461,33 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        vGap:  Dp = 0.dp,
-        hGap:  Dp = 0.dp,
+        verticalGap:  Dp = 0.dp,
+        horizontalGap:  Dp = 0.dp,
         maxElement: Int = 0,
         padding: Dp = 0.dp,
         wrap: Wrap = Wrap.None,
-        vAlign: VerticalAlign = VerticalAlign.Center,
-        hAlign: HorizontalAlign = HorizontalAlign.Center,
-        hFlowBias: Float = 0.0f,
-        vFlowBias: Float = 0.0f,
-        vStyle: FlowStyle = FlowStyle.Packed,
-        hStyle: FlowStyle = FlowStyle.Packed,
+        verticalAlign: VerticalAlign = VerticalAlign.Center,
+        horizontalAlign: HorizontalAlign = HorizontalAlign.Center,
+        horizontalFlowBias: Float = 0.0f,
+        verticalFlowBias: Float = 0.0f,
+        verticalStyle: FlowStyle = FlowStyle.Packed,
+        horizontalStyle: FlowStyle = FlowStyle.Packed,
     ): ConstrainedLayoutReference {
         val id = createHelperId()
         tasks.add { state ->
             state.getFlow(id, flowVertically).apply {
                 add(*(elements.map { it?.id }.toTypedArray()))
-                horizontalChainStyle = hStyle.style
-                setVerticalChainStyle(vStyle.style)
-                verticalBias(vFlowBias)
-                horizontalBias(hFlowBias)
-                horizontalAlign(hAlign.mode)
-                verticalAlign(vAlign.mode)
+                horizontalChainStyle = horizontalStyle.style
+                setVerticalChainStyle(verticalStyle.style)
+                verticalBias(verticalFlowBias)
+                horizontalBias(horizontalFlowBias)
+                horizontalAlign(horizontalAlign.mode)
+                verticalAlign(verticalAlign.mode)
                 wrapMode(wrap.mode)
                 padding(state.convertDimension(padding))
                 maxElementsWrap(maxElement)
-                horizontalGap(state.convertDimension(hGap))
-                verticalGap(state.convertDimension(vGap))
+                horizontalGap(state.convertDimension(horizontalGap))
+                verticalGap(state.convertDimension(verticalGap))
             }
         }
         updateHelpersHashCode(15)
