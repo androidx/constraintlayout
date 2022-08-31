@@ -91,16 +91,16 @@ internal class MotionMeasurer : Measurer() {
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
-        measureFlags: MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+        motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
         measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
 
         var needsRemeasure = false
-        if (measureFlags == MotionLayoutMeasureFlags.DEFAULT) {
+        if (motionLayoutFlags == MotionLayoutFlags.Default) {
             needsRemeasure = needsRemeasure(constraints)
-        } else if (measureFlags == MotionLayoutMeasureFlags.FULL_MEASURE) {
+        } else if (motionLayoutFlags == MotionLayoutFlags.FullMeasure) {
             needsRemeasure = true
         }
 
