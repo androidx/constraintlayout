@@ -97,9 +97,46 @@ public fun FlowDemo3() {
                 width: 'match_parent',
                 height: 'match_parent',
                 type: 'hFlow',
+                wrap: 'none',
+                padding: 25,
+                vAlign: 'bottom',
+                hAlign: 'end',
+                vStyle: ['spread', 'packed', 'spread_inside'],
+                hStyle: ['spread', 'packed', 'spread_inside'],
+                vFlowBias: [0.1, 0.2, 0.3],
+                hFlowBias: [0.6, 0.7, 0.8],
+                contains: ['1', '2', '3', '4'],
+                centerVertically: 'parent',
+                centerHorizontally: 'parent',
+              }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("1", "2", "3", "4")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}
+
+@Preview(group = "flow")
+@Composable
+public fun FlowDemo4() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            flow1: { 
+                width: 'match_parent',
+                height: 'match_parent',
+                type: 'hFlow',
                 wrap: 'chain',
-                vFlowBias: 0.1,
-                hFlowBias: 0.8,
+                vBias: 0.1,
+                hBias: 0.8,
                 maxElement: 4,
                 contains: ['1', '2', '3', '4', '5', '6', '7'],
                 start: ['parent', 'start'],
@@ -124,7 +161,7 @@ public fun FlowDemo3() {
 
 @Preview(group = "flow")
 @Composable
-public fun FlowDemo4() {
+public fun FlowDemo5() {
     ConstraintLayout(
         ConstraintSet("""
         {

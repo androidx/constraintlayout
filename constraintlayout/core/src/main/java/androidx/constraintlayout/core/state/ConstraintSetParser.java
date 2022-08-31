@@ -19,6 +19,8 @@ package androidx.constraintlayout.core.state;
 import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE;
 import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS;
 import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTION_PHASE;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
@@ -853,28 +855,49 @@ public class ConstraintSetParser {
     }
 
     /**
-     * It's used to parse the Flow type of Helper - either vFlow or hFlow
-     * @param orientation orientation of the Flow Helper
+     * It's used to parse the Flow type of Helper with the following format:
+     * flowID: {
+     *    type: 'hFlow'|'vFlow’
+     *    wrap: 'chain'|'none'|'aligned',
+     *    contains: ['id1', 'id2', 'id3' ] |
+     *              [['id1', weight, preMargin , postMargin], 'id2', 'id3'],
+     *    vStyle: 'spread'|'spread_inside'|'packed' | ['first', 'middle', 'last'],
+     *    hStyle: 'spread'|'spread_inside'|'packed' | ['first', 'middle', 'last'],
+     *    vAlign: 'top'|'bottom'|'baseline'|'center',
+     *    hAlign: 'start'|'end'|'center',
+     *    vGap: 32,
+     *    hGap: 23,
+     *    padding: 32,
+     *    maxElement: 5,
+     *    vBias: 0.3 | [0.0, 0.5, 0.5],
+     *    hBias: 0.4 | [0.0, 0.5, 0.5],
+     *    start: ['parent', 'start', 0],
+     *    end: ['parent', 'end', 0],
+     *    top: ['parent', 'top', 0],
+     *    bottom: ['parent', 'bottom', 0],
+     * }
+     *
+     * @param flowType orientation of the Flow Helper
      * @param state ConstraintLayout State
      * @param flowName the name of the Flow Helper
      * @param layoutVariables layout margins
      * @param element the element to be parsed
      * @throws CLParsingException
      */
-    private static void parseFlowType(String orientation,
+    private static void parseFlowType(String flowType,
                                        State state,
                                        String flowName,
                                        LayoutVariables layoutVariables,
                                        CLObject element) throws CLParsingException {
 
-        FlowReference flow = (orientation.charAt(0) == 'h')
-                ? state.horizontalFlow() : state.verticalFlow();
+        FlowReference flow = (flowType.charAt(0) == 'h')
+                ? state.getHorizontalFlow() : state.getVerticalFlow();
         flow.setKey(flowName);
 
-        for (String params : element.names()) {
-            switch (params) {
+        for (String param : element.names()) {
+            switch (param) {
                 case "contains":
-                    CLElement refs = element.get(params);
+                    CLElement refs = element.get(param);
                     if (!(refs instanceof CLArray) || ((CLArray) refs).size() < 1) {
                         System.err.println(
                                 flowName + " contains should be an array \"" + refs.content()
@@ -911,137 +934,137 @@ public class ConstraintSetParser {
                         }
                     }
                     break;
+                case "type":
+                    if (element.get(param).content().equals("hFlow")) {
+                        flow.setOrientation(HORIZONTAL);
+                    } else {
+                        flow.setOrientation(VERTICAL);
+                    }
                 case "wrap":
-                    String wrapValue = element.get(params).content();
-                    flow.wrapMode(State.Wrap.getValueByString(wrapValue));
+                    String wrapValue = element.get(param).content();
+                    flow.setWrapMode(State.Wrap.getValueByString(wrapValue));
                     break;
                 case "vGap":
-                    String vGapValue = element.get(params).content();
+                    String vGapValue = element.get(param).content();
                     try {
                         int value = Integer.parseInt(vGapValue);
-                        flow.verticalGap(value);
+                        flow.setVerticalGap(value);
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "hGap":
-                    String hGapValue = element.get(params).content();
+                    String hGapValue = element.get(param).content();
                     try {
                         int value = Integer.parseInt(hGapValue);
-                        flow.horizontalGap(value);
+                        flow.setHorizontalGap(value);
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "maxElement":
-                    String maxElementValue = element.get(params).content();
+                    String maxElementValue = element.get(param).content();
                     try {
                         int value = Integer.parseInt(maxElementValue);
-                        flow.maxElementsWrap(value);
+                        flow.setMaxElementsWrap(value);
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "padding":
-                    String paddingValue = element.get(params).content();
+                    String paddingValue = element.get(param).content();
                     try {
                         int value = Integer.parseInt(paddingValue);
-                        flow.padding(value);
+                        flow.setPadding(value);
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "vAlign":
-                    String vAlignValue = element.get(params).content();
+                    String vAlignValue = element.get(param).content();
                     switch (vAlignValue) {
                         case "top":
-                            flow.verticalAlign(Flow.VERTICAL_ALIGN_TOP);
+                            flow.setVerticalAlign(Flow.VERTICAL_ALIGN_TOP);
                             break;
                         case "bottom":
-                            flow.verticalAlign(Flow.VERTICAL_ALIGN_BOTTOM);
+                            flow.setVerticalAlign(Flow.VERTICAL_ALIGN_BOTTOM);
                             break;
                         case "baseline":
-                            flow.verticalAlign(Flow.VERTICAL_ALIGN_BASELINE);
+                            flow.setVerticalAlign(Flow.VERTICAL_ALIGN_BASELINE);
                             break;
                         default:
-                            flow.verticalAlign(Flow.VERTICAL_ALIGN_CENTER);
+                            flow.setVerticalAlign(Flow.VERTICAL_ALIGN_CENTER);
                             break;
                     }
                     break;
                 case "hAlign":
-                    String hAlignValue = element.get(params).content();
+                    String hAlignValue = element.get(param).content();
                     switch (hAlignValue) {
                         case "start":
-                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_START);
+                            flow.setHorizontalAlign(Flow.HORIZONTAL_ALIGN_START);
                             break;
                         case "end":
-                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_END);
+                            flow.setHorizontalAlign(Flow.HORIZONTAL_ALIGN_END);
                             break;
                         default:
-                            flow.horizontalAlign(Flow.HORIZONTAL_ALIGN_CENTER);
+                            flow.setHorizontalAlign(Flow.HORIZONTAL_ALIGN_CENTER);
                             break;
                     }
                     break;
                 case "vFlowBias":
-                    CLElement vBiasObject = element.get(params);
-                    String vBiasValueStr = "";
-                    String vFirstBiasValueStr = "";
-                    String vLastBiasValueStr = "";
+                    CLElement vBiasObject = element.get(param);
+                    Float vBiasValue = 0.5f;
+                    Float vFirstBiasValue = 0.5f;
+                    Float vLastBiasValue = 0.5f;
                     if (vBiasObject instanceof CLArray && ((CLArray) vBiasObject).size() > 1) {
-                        vFirstBiasValueStr = ((CLArray) vBiasObject).getString(0);
-                        vBiasValueStr = ((CLArray) vBiasObject).getString(1);
+                        vFirstBiasValue = ((CLArray) vBiasObject).getFloat(0);
+                        vBiasValue = ((CLArray) vBiasObject).getFloat(1);
                         if (((CLArray) vBiasObject).size() > 2) {
-                            vLastBiasValueStr = ((CLArray) vBiasObject).getString(2);
+                            vLastBiasValue = ((CLArray) vBiasObject).getFloat(2);
                         }
                     } else {
-                        vBiasValueStr = vBiasObject.content();
+                        vBiasValue = vBiasObject.getFloat();
                     }
                     try {
-                        float value = Float.parseFloat(vBiasValueStr);
-                        flow.verticalBias(value);
-                        if (vFirstBiasValueStr != "") {
-                            float firstValue = Float.parseFloat(vFirstBiasValueStr);
-                            flow.firstVerticalBias(firstValue);
+                        flow.setVerticalBias(vBiasValue);
+                        if (vFirstBiasValue != 0.5f) {
+                            flow.setFirstVerticalBias(vFirstBiasValue);
                         }
-                        if (vLastBiasValueStr != "") {
-                            float lastValue = Float.parseFloat(vLastBiasValueStr);
-                            flow.lastVerticalBias(lastValue);
+                        if (vLastBiasValue != 0.5f) {
+                            flow.setLastVerticalBias(vLastBiasValue);
                         }
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "hFlowBias":
-                    CLElement hBiasObject = element.get(params);
-                    String hBiasValueStr = "";
-                    String hFirstBiasValueStr = "";
-                    String hLastBiasValueStr = "";
+                    CLElement hBiasObject = element.get(param);
+                    Float hBiasValue = 0.5f;
+                    Float hFirstBiasValue = 0.5f;
+                    Float hLastBiasValue = 0.5f;
                     if (hBiasObject instanceof CLArray && ((CLArray) hBiasObject).size() > 1) {
-                        hFirstBiasValueStr = ((CLArray) hBiasObject).getString(0);
-                        hBiasValueStr = ((CLArray) hBiasObject).getString(1);
+                        hFirstBiasValue = ((CLArray) hBiasObject).getFloat(0);
+                        hBiasValue = ((CLArray) hBiasObject).getFloat(1);
                         if (((CLArray) hBiasObject).size() > 2) {
-                            hLastBiasValueStr = ((CLArray) hBiasObject).getString(2);
+                            hLastBiasValue = ((CLArray) hBiasObject).getFloat(2);
                         }
                     } else {
-                        hBiasValueStr = hBiasObject.content();
+                        hBiasValue = hBiasObject.getFloat();
                     }
                     try {
-                        float value = Float.parseFloat(hBiasValueStr);
-                        flow.horizontalBias(value);
-                        if (hFirstBiasValueStr != "") {
-                            float firstValue = Float.parseFloat(hFirstBiasValueStr);
-                            flow.firstHorizontalBias(firstValue);
+                        flow.setHorizontalBias(hBiasValue);
+                        if (hFirstBiasValue != 0.5f) {
+                            flow.setFirstHorizontalBias(hFirstBiasValue);
                         }
-                        if (hLastBiasValueStr != "") {
-                            float lastValue = Float.parseFloat(hLastBiasValueStr);
-                            flow.lastHorizontalBias(lastValue);
+                        if (hLastBiasValue != 0.5f) {
+                            flow.setLastHorizontalBias(hLastBiasValue);
                         }
                     } catch(NumberFormatException e) {
 
                     }
                     break;
                 case "vStyle":
-                    CLElement vStyleObject = element.get(params);
+                    CLElement vStyleObject = element.get(param);
                     String vStyleValueStr = "";
                     String vFirstStyleValueStr = "";
                     String vLastStyleValueStr = "";
@@ -1056,17 +1079,17 @@ public class ConstraintSetParser {
                     }
 
                     if (vStyleValueStr != "") {
-                        flow.verticalStyle(State.Chain.getValueByString(vStyleValueStr));
+                        flow.setVerticalStyle(State.Chain.getValueByString(vStyleValueStr));
                     }
                     if (vFirstStyleValueStr != "") {
-                        flow.firstVerticalStyle(State.Chain.getValueByString(vFirstStyleValueStr));
+                        flow.setFirstVerticalStyle(State.Chain.getValueByString(vFirstStyleValueStr));
                     }
                     if (vLastStyleValueStr != "") {
-                        flow.lastVerticalStyle(State.Chain.getValueByString(vLastStyleValueStr));
+                        flow.setLastVerticalStyle(State.Chain.getValueByString(vLastStyleValueStr));
                     }
                     break;
                 case "hStyle":
-                    CLElement hStyleObject = element.get(params);
+                    CLElement hStyleObject = element.get(param);
                     String hStyleValueStr = "";
                     String hFirstStyleValueStr = "";
                     String hLastStyleValueStr = "";
@@ -1081,17 +1104,17 @@ public class ConstraintSetParser {
                     }
 
                     if (hStyleValueStr != "") {
-                        flow.horizontalStyle(State.Chain.getValueByString(hStyleValueStr));
+                        flow.setHorizontalStyle(State.Chain.getValueByString(hStyleValueStr));
                     }
                     if (hFirstStyleValueStr != "") {
-                        flow.firstHorizontalStyle(State.Chain.getValueByString(hFirstStyleValueStr));
+                        flow.setFirstHorizontalStyle(State.Chain.getValueByString(hFirstStyleValueStr));
                     }
                     if (hLastStyleValueStr != "") {
-                        flow.lastHorizontalStyle(State.Chain.getValueByString(hLastStyleValueStr));
+                        flow.setLastHorizontalStyle(State.Chain.getValueByString(hLastStyleValueStr));
                     }
                     break;
-        default:
-                    parseWidget(state, layoutVariables, flow, (CLObject) element);
+                default:
+                    applyAttribute(state, layoutVariables, flow, element, param);
             }
         }
     }
@@ -1214,6 +1237,147 @@ public class ConstraintSetParser {
         parseWidget(state, layoutVariables, reference, element);
     }
 
+    /**
+     * Set/apply attribute to a widget/helper reference
+     *
+     * @param state Constraint State
+     * @param layoutVariables layout variables
+     * @param reference widget/helper reference
+     * @param element the parsed CLObject
+     * @param attributeName Name of the attribute to be set/applied
+     * @throws CLParsingException
+     */
+    static void applyAttribute(
+            State state,
+            LayoutVariables layoutVariables,
+            ConstraintReference reference,
+            CLObject element,
+            String attributeName) throws CLParsingException {
+
+        float value;
+        switch (attributeName) {
+            case "width":
+                reference.setWidth(parseDimension(element,
+                        attributeName, state, state.getDpToPixel()));
+                break;
+            case "height":
+                reference.setHeight(parseDimension(element,
+                        attributeName, state, state.getDpToPixel()));
+                break;
+            case "center":
+                String target = element.getString(attributeName);
+
+                ConstraintReference targetReference;
+                if (target.equals("parent")) {
+                    targetReference = state.constraints(State.PARENT);
+                } else {
+                    targetReference = state.constraints(target);
+                }
+                reference.startToStart(targetReference);
+                reference.endToEnd(targetReference);
+                reference.topToTop(targetReference);
+                reference.bottomToBottom(targetReference);
+                break;
+            case "centerHorizontally":
+                target = element.getString(attributeName);
+                targetReference = target.equals("parent")
+                        ? state.constraints(State.PARENT) : state.constraints(target);
+
+                reference.startToStart(targetReference);
+                reference.endToEnd(targetReference);
+                break;
+            case "centerVertically":
+                target = element.getString(attributeName);
+                targetReference = target.equals("parent")
+                        ? state.constraints(State.PARENT) : state.constraints(target);
+
+                reference.topToTop(targetReference);
+                reference.bottomToBottom(targetReference);
+                break;
+            case "alpha":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.alpha(value);
+                break;
+            case "scaleX":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.scaleX(value);
+                break;
+            case "scaleY":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.scaleY(value);
+                break;
+            case "translationX":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.translationX(value);
+                break;
+            case "translationY":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.translationY(value);
+                break;
+            case "translationZ":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.translationZ(value);
+                break;
+            case "pivotX":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.pivotX(value);
+                break;
+            case "pivotY":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.pivotY(value);
+                break;
+            case "rotationX":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.rotationX(value);
+                break;
+            case "rotationY":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.rotationY(value);
+                break;
+            case "rotationZ":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.rotationZ(value);
+                break;
+            case "visibility":
+                switch (element.getString(attributeName)) {
+                    case "visible":
+                        reference.visibility(ConstraintWidget.VISIBLE);
+                        break;
+                    case "invisible":
+                        reference.visibility(ConstraintWidget.INVISIBLE);
+                        break;
+                    case "gone":
+                        reference.visibility(ConstraintWidget.GONE);
+                        break;
+                }
+                break;
+            case "vBias":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.verticalBias(value);
+                break;
+            case "hBias":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.horizontalBias(value);
+                break;
+            case "vWeight":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.setVerticalChainWeight(value);
+                break;
+            case "hWeight":
+                value = layoutVariables.get(element.get(attributeName));
+                reference.setHorizontalChainWeight(value);
+                break;
+            case "custom":
+                parseCustomProperties(element, reference, attributeName);
+                break;
+            case "motion":
+                parseMotionProperties(element.get(attributeName), reference);
+                break;
+            default:
+                parseConstraint(state, layoutVariables, element, reference, attributeName);
+        }
+    }
+
     static void parseWidget(
             State state,
             LayoutVariables layoutVariables,
@@ -1234,128 +1398,7 @@ public class ConstraintSetParser {
             return;
         }
         for (String constraintName : constraints) {
-            switch (constraintName) {
-                case "width":
-                    reference.setWidth(parseDimension(element,
-                            constraintName, state, state.getDpToPixel()));
-                    break;
-                case "height":
-                    reference.setHeight(parseDimension(element,
-                            constraintName, state, state.getDpToPixel()));
-                    break;
-                case "center":
-                    String target = element.getString(constraintName);
-
-                    ConstraintReference targetReference;
-                    if (target.equals("parent")) {
-                        targetReference = state.constraints(State.PARENT);
-                    } else {
-                        targetReference = state.constraints(target);
-                    }
-                    reference.startToStart(targetReference);
-                    reference.endToEnd(targetReference);
-                    reference.topToTop(targetReference);
-                    reference.bottomToBottom(targetReference);
-                    break;
-                case "centerHorizontally":
-                    target = element.getString(constraintName);
-                    targetReference = target.equals("parent")
-                            ? state.constraints(State.PARENT) : state.constraints(target);
-
-                    reference.startToStart(targetReference);
-                    reference.endToEnd(targetReference);
-                    break;
-                case "centerVertically":
-                    target = element.getString(constraintName);
-                    targetReference = target.equals("parent")
-                            ? state.constraints(State.PARENT) : state.constraints(target);
-
-                    reference.topToTop(targetReference);
-                    reference.bottomToBottom(targetReference);
-                    break;
-                case "alpha":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.alpha(value);
-                    break;
-                case "scaleX":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.scaleX(value);
-                    break;
-                case "scaleY":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.scaleY(value);
-                    break;
-                case "translationX":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.translationX(value);
-                    break;
-                case "translationY":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.translationY(value);
-                    break;
-                case "translationZ":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.translationZ(value);
-                    break;
-                case "pivotX":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.pivotX(value);
-                    break;
-                case "pivotY":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.pivotY(value);
-                    break;
-                case "rotationX":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.rotationX(value);
-                    break;
-                case "rotationY":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.rotationY(value);
-                    break;
-                case "rotationZ":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.rotationZ(value);
-                    break;
-                case "visibility":
-                    switch (element.getString(constraintName)) {
-                        case "visible":
-                            reference.visibility(ConstraintWidget.VISIBLE);
-                            break;
-                        case "invisible":
-                            reference.visibility(ConstraintWidget.INVISIBLE);
-                            break;
-                        case "gone":
-                            reference.visibility(ConstraintWidget.GONE);
-                            break;
-                    }
-                    break;
-                case "vBias":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.verticalBias(value);
-                    break;
-                case "hBias":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.horizontalBias(value);
-                    break;
-                case "vWeight":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.setVerticalChainWeight(value);
-                    break;
-                case "hWeight":
-                    value = layoutVariables.get(element.get(constraintName));
-                    reference.setHorizontalChainWeight(value);
-                    break;
-                case "custom":
-                    parseCustomProperties(element, reference, constraintName);
-                    break;
-                case "motion":
-                    parseMotionProperties(element.get(constraintName), reference);
-                    break;
-                default:
-                    parseConstraint(state, layoutVariables, element, reference, constraintName);
-
-            }
+            applyAttribute(state, layoutVariables, reference, element, constraintName);
         }
     }
 
