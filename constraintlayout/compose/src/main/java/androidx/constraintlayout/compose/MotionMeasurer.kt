@@ -91,12 +91,18 @@ internal class MotionMeasurer : Measurer() {
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
+        measureFlags: MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
         measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
 
-        val needsRemeasure = needsRemeasure(constraints)
+        var needsRemeasure = false
+        if (measureFlags == MotionLayoutMeasureFlags.DEFAULT) {
+            needsRemeasure = needsRemeasure(constraints)
+        } else if (measureFlags == MotionLayoutMeasureFlags.FULL_MEASURE) {
+            needsRemeasure = true
+        }
 
         if (lastProgressInInterpolation != progress ||
             (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE &&
@@ -502,8 +508,14 @@ internal class MotionMeasurer : Measurer() {
         }
         val startFrame = transition.getStart(id)
         val endFrame = transition.getEnd(id)
-        val startFloat = startFrame.getCustomFloat(name)
-        val endFloat = endFrame.getCustomFloat(name)
+        var startFloat = startFrame.getCustomFloat(name)
+        var endFloat = endFrame.getCustomFloat(name)
+        if (startFloat.isNaN()) {
+            startFloat = 0f
+        }
+        if (endFloat.isNaN()) {
+            endFloat = 0f
+        }
         return (1f - progress) * startFloat + progress * endFloat
     }
 
