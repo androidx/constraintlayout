@@ -99,10 +99,17 @@ public class ConstraintLayoutStatistics {
         return new ConstraintLayoutStatistics(this);
     }
 
-    private String fmt(DecimalFormat df, float val, int sp) {
-        String s = new String(new char[sp]).replace('\0', ' ');
+    /**
+     * Format a float value outputting a string of fixed length
+     * @param df format to use
+     * @param val
+     * @param length
+     * @return
+     */
+    private String fmt(DecimalFormat df, float val, int length) {
+        String s = new String(new char[length]).replace('\0', ' ');
         s = (s + df.format(val));
-        return s.substring(s.length() - sp);
+        return s.substring(s.length() - length);
     }
 
     /**
@@ -134,6 +141,12 @@ public class ConstraintLayoutStatistics {
         Log.v(tag, log( NUMBER_OF_SIMPLE_EQUATIONS));
     }
 
+    /**
+     * Generate a formatted String for the parameter formatting as a float
+     * @param df
+     * @param param
+     * @return
+     */
     private String log(DecimalFormat df, int param) {
         String value = fmt(df, getValue(param) * 1E-6f, 7);
 
@@ -143,6 +156,12 @@ public class ConstraintLayoutStatistics {
         title += " = ";
         return "CL Perf: " + title + value;
     }
+
+    /**
+     * Generate a formatted String for the parameter
+     * @param param
+     * @return
+     */
     private String log(int param) {
         String value = Long.toString(this.getValue(param));
         String title = geName(param);
@@ -152,6 +171,13 @@ public class ConstraintLayoutStatistics {
         return "CL Perf: " + title + value;
     }
 
+    /**
+     * Generate a float formatted String for the parameter comparing current value with value in relative
+     * @param df Format the float using this
+     * @param relative compare against
+     * @param param the parameter to compare
+     * @return
+     */
     private String compare(DecimalFormat df,  ConstraintLayoutStatistics relative, int param) {
         String value = fmt(df, getValue(param) * 1E-6f, 7);
         value += " -> " + fmt(df, relative.getValue(param) * 1E-6f, 7) + "ms";
@@ -162,6 +188,12 @@ public class ConstraintLayoutStatistics {
         return "CL Perf: " + title + value;
     }
 
+    /**
+     * Generate a formatted String for the parameter comparing current value with value in relative
+     * @param relative compare against
+     * @param param the parameter to compare
+     * @return
+     */
     private String compare(ConstraintLayoutStatistics relative, int param) {
         String value = this.getValue(param) + " -> " + relative.getValue(param);
         String title = geName(param);
