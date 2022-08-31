@@ -64,9 +64,9 @@ public class Metrics {
     public long mMeasureDuration; // time spent in measure in nanoseconds
     public long mChildCount; // number of child Views of ConstraintLayout
     public long mMeasureCalls; // number of time CL onMeasure is called
-    public long  mSolverPasses;
-    public long  mEquations;
-    public long  mVariables;
+    public long mSolverPasses;
+    public long mEquations;
+    public long mVariables;
     public long mSimpleEquations;
 
     // @TODO: add description
@@ -126,7 +126,11 @@ public class Metrics {
         mEquations = 0;
         mSimpleEquations = 0;
     }
-    
+
+    /**
+     * Copy the values from and existing Metrics class
+     * @param metrics
+     */
     public void copy(Metrics metrics) {
         mVariables = metrics.mVariables;
         mEquations = metrics.mEquations;
@@ -134,7 +138,7 @@ public class Metrics {
         mNumberOfMeasures = metrics.mNumberOfMeasures;
         mNumberOfLayouts = metrics.mNumberOfLayouts;
         mMeasureDuration = metrics.mMeasureDuration;
-        mChildCount =  metrics.mChildCount;
+        mChildCount = metrics.mChildCount;
         mMeasureCalls = metrics.mMeasureCalls;
         measuresWidgetsDuration = metrics.measuresWidgetsDuration;
         mSolverPasses = metrics.mSolverPasses;

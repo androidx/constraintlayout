@@ -1790,7 +1790,7 @@ public class ConstraintLayout extends ViewGroup {
         if (mMetrics != null) {
             time = System.nanoTime();
             mMetrics.mChildCount = getChildCount();
-            mMetrics.mMeasureCalls ++;
+            mMetrics.mMeasureCalls++;
         }
         mDirtyHierarchy |= dynamicUpdateConstraints(widthMeasureSpec,  heightMeasureSpec);
 

@@ -32,11 +32,11 @@ import androidx.constraintlayout.widget.ConstraintLayoutStatistics;
  */
 public class CheckPerformanceMetric extends AppCompatActivity {
     private static final String TAG = "CheckPerformanceMetric";
-    String layout_name;
-    ConstraintLayout mConstraintLayout;
-    ConstraintLayoutStatistics performance;
-    ConstraintLayoutStatistics prePerformance;
-    int loop;
+    String layout_name = null;
+    ConstraintLayout mConstraintLayout = null;
+    ConstraintLayoutStatistics performance = null;
+    ConstraintLayoutStatistics prePerformance = null;
+    int loop = 0;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
