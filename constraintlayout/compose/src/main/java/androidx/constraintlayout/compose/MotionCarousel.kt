@@ -67,9 +67,9 @@ import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
  * Mechanism overview and MotionScene architecture
  * -----------------------------------------------
  *
- * We use 3 different states to represent the Carousel: "backward", "start", and "forward".
+ * We use 3 different states to represent the Carousel: "previous", "start", and "next".
  * A horizontal swipe gesture will transition from one state to the other, e.g. a right to left swipe
- * will transition from "start" to "forward".
+ * will transition from "start" to "next".
  *
  * We consider a scene containing several "slots" for the elements we want to display in the Carousel.
  * In an horizontal carousel, the easiest way to think of them is as an horizontal list of slots.
@@ -85,24 +85,24 @@ import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
  *
  * start          [0] | [1] | [2]
  *
- * We can setup the backward state in the following way:
+ * We can setup the previous state in the following way:
  *
- * backward           | [0] | [1] [3]
+ * previous           | [0] | [1] [3]
  *
- * And the forward state like:
+ * And the next state like:
  *
- * forward    [0] [1] | [2] |
+ * next       [0] [1] | [2] |
  *
  * All three states together allowing to implement the Carousel motion we are looking for:
  *
- * backward           | [0] | [1] [3]
+ * previous           | [0] | [1] [3]
  * start          [0] | [1] | [2]
- * forward    [0] [1] | [2] |
+ * next       [0] [1] | [2] |
  *
  * At the end of the swipe gesture, we instantly move back to the start state:
  *
  * start          [0] | [1] | [2]       -> gesture starts
- * forward    [0] [1] | [2] |           -> gesture ends
+ * next       [0] [1] | [2] |           -> gesture ends
  * start          [0] | [1] | [2]       -> instant snap back to start state
  *
  * After the instant snap, we update the elements actually displayed in the slots.
@@ -110,13 +110,13 @@ import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
  * to the slots [0], [1] and [2]. After the swipe the slots will be reassigned to {b}, {c} and {d}:
  *
  * start              [0]:{a} | [1]:{b} | [2]:{d}       -> gesture starts
- * forward    [0]:{a} [1]:{b} | [2]:{c} |               -> gesture ends
+ * next       [0]:{a} [1]:{b} | [2]:{c} |               -> gesture ends
  * start              [0]:{a} | [1]:{b} | [2]:{c}       -> instant snap back to start state
  * start              [0]:{b} | [1]:{c} | [2]:{d}       -> repaint with reassigned elements
  *
  * In this manner, the overall effect emulate an horizontal scroll of a list of elements.
  *
- * A similar mechanism is applied the left to right gesture going through the backward state.
+ * A similar mechanism is applied the left to right gesture going through the previous state.
  *
  * Starting slot
  * -------------
@@ -131,9 +131,8 @@ import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
  *
  * @param initialSlotIndex the slot index that holds the current element
  * @param numSlots the number of slots in the scene
- * @param startState the name of the start state (default "start")
- * @param backwardState the name of the backward state (default "backward")
- * @param forwardState the name of the forward state (default "forward")
+ * @param backwardTransition the name of the previous transition (default "previous")
+ * @param forwardTransition the name of the next transition (default "next")
  * @param slotPrefix the prefix used for the slots widgets in the scene (default "card")
  * @param showSlots a debug flag to display the slots in the scene regardless if they are populated
  * @param content the MotionCarouselScope we use to map the elements to the slots
@@ -144,22 +143,21 @@ fun MotionCarousel(
     motionScene: MotionScene,
     initialSlotIndex: Int,
     numSlots: Int,
-    startState: String = "start",
-    backwardState: String = "backward",
-    forwardState: String = "forward",
-    slotPrefix: String = "card",
+    backwardTransition: String = "backward",
+    forwardTransition: String = "forward",
+    slotPrefix: String = "slot",
     showSlots: Boolean = false,
     content: MotionCarouselScope.() -> Unit
 ) {
 
-    val SwipeStateStart = startState
-    val SwipeStateForward = forwardState
-    val SwipeStateBackward = backwardState
+    val swipeStateStart = "start"
+    val swipeStateForward = "next"
+    val swipeStateBackward = "previous"
 
     val provider = rememberStateOfItemsProvider(content)
 
     var componentWidth by remember { mutableStateOf(1000f) }
-    val swipeableState = rememberSwipeableState(SwipeStateStart)
+    val swipeableState = rememberSwipeableState(swipeStateStart)
     var mprogress = (swipeableState.offset.value / componentWidth)
 
     var state by remember {
@@ -176,49 +174,49 @@ fun MotionCarousel(
     var currentIndex = remember { mutableStateOf(0) }
 
     val anchors = if (currentIndex.value == 0) {
-        mapOf(0f to SwipeStateStart, componentWidth to SwipeStateForward)
+        mapOf(0f to swipeStateStart, componentWidth to swipeStateForward)
     } else if (currentIndex.value == provider.value.count() - 1) {
-        mapOf(-componentWidth to SwipeStateBackward, 0f to SwipeStateStart)
+        mapOf(-componentWidth to swipeStateBackward, 0f to swipeStateStart)
     } else {
         mapOf(
-            -componentWidth to SwipeStateBackward,
-            0f to SwipeStateStart,
-            componentWidth to SwipeStateForward
+            -componentWidth to swipeStateBackward,
+            0f to swipeStateStart,
+            componentWidth to swipeStateForward
         )
     }
 
     val transitionName = remember {
-        mutableStateOf(forwardState)
+        mutableStateOf(forwardTransition)
     }
 
     if (mprogress < 0 && state.index > 0) {
         state.direction = MotionCarouselDirection.BACKWARD
-        transitionName.value = backwardState
+        transitionName.value = backwardTransition
         mprogress *= -1
     } else {
         state.direction = MotionCarouselDirection.FORWARD
-        transitionName.value = forwardState
+        transitionName.value = forwardTransition
     }
 
     if (!swipeableState.isAnimationRunning) {
         if (state.direction == MotionCarouselDirection.FORWARD
-            && swipeableState.currentValue.equals(SwipeStateForward)
+            && swipeableState.currentValue.equals(swipeStateForward)
         ) {
             LaunchedEffect(true) {
                 if (state.index + 1 < provider.value.count()) {
                     state.index++
-                    swipeableState.snapTo(SwipeStateStart)
+                    swipeableState.snapTo(swipeStateStart)
                     state.direction = MotionCarouselDirection.FORWARD
                 }
             }
         } else if (state.direction == MotionCarouselDirection.BACKWARD
-            && swipeableState.currentValue.equals(SwipeStateBackward)
+            && swipeableState.currentValue.equals(swipeStateBackward)
         ) {
             LaunchedEffect(true) {
                 if (state.index > 0) {
                     state.index--
                 }
-                swipeableState.snapTo(SwipeStateStart)
+                swipeableState.snapTo(swipeStateStart)
                 state.direction = MotionCarouselDirection.FORWARD
             }
         }
@@ -228,7 +226,7 @@ fun MotionCarousel(
     MotionLayout(motionScene = motionScene,
         transitionName = transitionName.value,
         progress = mprogress,
-        measureFlags = MotionLayoutMeasureFlags.FULL_MEASURE, // TODO: only apply as needed
+        motionLayoutFlags = MotionLayoutFlags.FullMeasure, // TODO: only apply as needed
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -372,7 +370,6 @@ private class MotionCarouselScopeImpl() : MotionCarouselScope, MotionItemsProvid
 
     override fun getContent(index: Int): @Composable () -> Unit {
         return {
-            println("blah getContent $index")
             itemsProvider?.invoke(index)
         }
     }

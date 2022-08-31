@@ -49,9 +49,9 @@ import kotlinx.coroutines.launch
 /**
  * Measure flags for MotionLayout
  */
-enum class MotionLayoutMeasureFlags(value: Long) {
-    DEFAULT(0),
-    FULL_MEASURE(1)
+enum class MotionLayoutFlags(value: Long) {
+    Default(0),
+    FullMeasure(1)
 }
 
 /**
@@ -69,6 +69,7 @@ inline fun MotionLayout(
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val motionProgress = createAndUpdateMotionProgress(progress = progress)
@@ -81,6 +82,7 @@ inline fun MotionLayout(
         informationReceiver = null,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -96,10 +98,10 @@ inline fun MotionLayout(
     motionScene: MotionScene,
     progress: Float,
     modifier: Modifier = Modifier,
+    transitionName: String = "default",
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    transitionName: String = "default",
-    measureFlags: MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
     MotionLayoutCore(
@@ -109,7 +111,7 @@ inline fun MotionLayout(
         modifier = modifier,
         optimizationLevel = optimizationLevel,
         transitionName = transitionName,
-        measureFlags = measureFlags,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -135,6 +137,7 @@ inline fun MotionLayout(
     animationSpec: AnimationSpec<Float> = tween(),
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
@@ -146,6 +149,7 @@ inline fun MotionLayout(
         modifier = modifier,
         optimizationLevel = optimizationLevel,
         finishedAnimationListener = finishedAnimationListener,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -162,7 +166,7 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     informationReceiver: LayoutInformationReceiver? = null,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    measureFlags : MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+    motionLayoutFlags : MotionLayoutFlags = MotionLayoutFlags.Default,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
     val motionProgress = createAndUpdateMotionProgress(progress = progress)
@@ -175,7 +179,7 @@ inline fun MotionLayout(
         informationReceiver = informationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
-        measureFlags = measureFlags,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -190,6 +194,7 @@ internal inline fun MotionLayoutCore(
     animationSpec: AnimationSpec<Float> = tween(),
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    motionLayoutFlags : MotionLayoutFlags = MotionLayoutFlags.Default,
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
@@ -275,6 +280,7 @@ internal inline fun MotionLayoutCore(
         informationReceiver = motionScene as? LayoutInformationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -289,7 +295,7 @@ internal inline fun MotionLayoutCore(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     transitionName: String,
-    measureFlags: MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
     crossinline content: @Composable() (MotionLayoutScope.() -> Unit),
 ) {
     val transitionContent = remember(motionScene, transitionName) {
@@ -322,7 +328,7 @@ internal inline fun MotionLayoutCore(
         informationReceiver = motionScene as? LayoutInformationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
-        measureFlags = measureFlags,
+        motionLayoutFlags = motionLayoutFlags,
         content = content
     )
 }
@@ -339,7 +345,7 @@ internal inline fun MotionLayoutCore(
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     informationReceiver: LayoutInformationReceiver? = null,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    measureFlags : MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+    motionLayoutFlags : MotionLayoutFlags = MotionLayoutFlags.Default,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     // TODO: Merge this snippet with UpdateWithForcedIfNoUserChange
@@ -368,7 +374,7 @@ internal inline fun MotionLayoutCore(
             end,
             transition,
             motionProgress,
-            measureFlags,
+            motionLayoutFlags,
             measurer
         )
 
@@ -562,11 +568,11 @@ internal fun rememberMotionLayoutMeasurePolicy(
     constraintSetEnd: ConstraintSet,
     @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
     motionProgress: MotionProgress,
-    measureFlags: MotionLayoutMeasureFlags = MotionLayoutMeasureFlags.DEFAULT,
+    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
     measurer: MotionMeasurer
 ) = remember(
     optimizationLevel,
-    measureFlags,
+    motionLayoutFlags,
     debug,
     constraintSetStart,
     constraintSetEnd,
@@ -588,7 +594,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
             measurables,
             optimizationLevel,
             motionProgress.currentProgress,
-            measureFlags,
+            motionLayoutFlags,
             this
         )
         layout(layoutSize.width, layoutSize.height) {

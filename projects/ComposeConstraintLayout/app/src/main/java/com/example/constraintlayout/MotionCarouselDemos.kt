@@ -36,8 +36,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.MotionCarousel
 import androidx.constraintlayout.compose.MotionCarouselScope
 import androidx.constraintlayout.compose.MotionLayoutScope
@@ -65,94 +63,398 @@ val cardsExample = arrayListOf<CardInfo>(
     CardInfo(8, "Card 9", colors[8 % colors.size]),
 )
 
+/**
+ * Simple Carousel demo
+ * 
+ * We are using a motionScene with 3 states positioning 3 slots,
+ * slot0, slot1 and slot2, with the "initial" slot being slot1 positioned
+ * in the center of the screen, slot0 on its left, slot2 on its right.
+ * As slot1 is the "initial" slot, initialSlotIndex is 1 and numSlots is 3.
+ *
+ * next        [slot0] [slot1] | [slot2] |
+ * start               [slot0] | [slot1] | [slot2]
+ * previous                    | [slot0] | [slot1] [slot2]
+ *
+ * We are using the above data (cardsExample) that we pass to the
+ * items() function, which leads to the item passed to be a CardInfo.
+ *
+ * We then use the CardInfo to display a colored card.
+ */
+@Preview
+@Composable
+fun CarouselDemo1() {
+    val motionScene = MotionScene(content = """
+{
+  ConstraintSets: {
+    start: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      }
+    },
+    next: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'slot1', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      }
+    },
+    previous: {
+      slot0: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'slot1', 'end', 8 ],
+        centerVertically: 'parent'
+      }
+    }
+  },
+  Transitions: {
+    forward: {
+      from: 'start',
+      to: 'next',
+    },
+    backward: {
+      from: 'start',
+      to: 'previous',
+    }
+  }
+}        
+""")
+    MotionCarousel(motionScene, 1, 3) {
+        items(cardsExample) { card ->
+            val color = card.color
+            val label = card.text
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp)
+                    .background(color)
+                    .padding(4.dp)
+            ) {
+                Column(modifier = Modifier
+                    .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("$label")
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Simple Carousel demo, take 2
+ *
+ * Based on the previous demo, we simply add a transition defining
+ * a couple of keyframes applying a scale factor on the slots. We could
+ * create any kind of keyframes here to make the transition more interesting.
+ */
+@Preview
+@Composable
+fun CarouselDemo2() {
+    val motionScene = MotionScene(content = """
+{
+  ConstraintSets: {
+    start: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      }
+    },
+    next: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'slot1', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      }
+    },
+    previous: {
+      slot0: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'slot1', 'end', 8 ],
+        centerVertically: 'parent'
+      }
+    }
+  },
+  Transitions: {
+    forward: {
+      from: 'start',
+      to: 'next',
+      KeyFrames: {
+        KeyAttributes: [
+          {
+            target: ['slot0', 'slot1', 'slot2'],
+            frames: [50],
+            scaleX: .3,
+            scaleY: .3
+          }
+        ]
+      }
+    },
+    backward: {
+      from: 'start',
+      to: 'previous',
+      KeyFrames: {
+        KeyAttributes: [
+          {
+            target: ['slot0', 'slot1', 'slot2'],
+            frames: [50],
+            scaleX: .3,
+            scaleY: .3
+          }
+        ]
+      }
+    }
+  }
+}        
+""")
+    MotionCarousel(motionScene, 1, 3) {
+        items(cardsExample) { card ->
+            val i = card.index
+            val color = card.color
+            val label = card.text
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp)
+                    .background(color)
+                    .padding(4.dp)
+            ) {
+                Column(modifier = Modifier
+                    .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("$label")
+                }
+            }        }
+    }
+}
+
+/**
+ * The previous examples were all self-contained, but in practice
+ * you likely will want to encapsulate your Carousel in its own
+ * composable, to be able to reuse it more easily.
+ *
+ * We do that here by defining a MySimpleCarousel function that takes
+ * a MotionCarouselScope, and reusing the same motionScene
+ * as in CarouselDemo2.
+ */
 @Composable
 fun MySimpleCarousel(content: MotionCarouselScope.() -> Unit) {
-    val startCs = remember {
-        """
-                    card0: {
-                      width: 100,
-                      height: 200,
-                      end: ['parent','start', 8],
-                      centerVertically: 'parent'
-                    },
-                    card1: {
-                      width: 100,
-                      height: 200,
-                      centerHorizontally: 'parent',
-                      centerVertically: 'parent'
-                    }, 
-                    card2: {
-                      width: 100,
-                      height: 200,
-                      start: ['parent','end', 8],
-                      centerVertically: 'parent'
-                    }                     
-        """
+    val motionScene = MotionScene(content = """
+{
+  ConstraintSets: {
+    start: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      }
+    },
+    next: {
+      slot0: {
+        width: 200,
+        height: 400,
+        end: [ 'slot1', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        end: [ 'parent', 'start', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      }
+    },
+    previous: {
+      slot0: {
+        width: 200,
+        height: 400,
+        center: 'parent'
+      },
+      slot1: {
+        width: 200,
+        height: 400,
+        start: [ 'parent', 'end', 8 ],
+        centerVertically: 'parent'
+      },
+      slot2: {
+        width: 200,
+        height: 400,
+        start: [ 'slot1', 'end', 8 ],
+        centerVertically: 'parent'
+      }
     }
-    val forwardCs = remember {
-        """
-                    card0: {
-                      width: 100,
-                      height: 200,
-                      end: ['card1','start', 8],
-                      centerVertically: 'parent'
-                    },
-                    card1: {
-                      width: 100,
-                      height: 200,
-                      end: ['parent','start', 8],
-                      centerVertically: 'parent'
-                    }, 
-                    card2: {
-                      width: 100,
-                      height: 200,
-                      centerHorizontally: 'parent',
-                      centerVertically: 'parent'
-                    }                     
-        """
+  },
+  Transitions: {
+    forward: {
+      from: 'start',
+      to: 'next',
+      KeyFrames: {
+        KeyAttributes: [
+          {
+            target: ['slot0', 'slot1', 'slot2'],
+            frames: [50],
+            scaleX: .3,
+            scaleY: .3
+          }
+        ]
+      }
+    },
+    backward: {
+      from: 'start',
+      to: 'previous',
+      KeyFrames: {
+        KeyAttributes: [
+          {
+            target: ['slot0', 'slot1', 'slot2'],
+            frames: [50],
+            scaleX: .3,
+            scaleY: .3
+          }
+        ]
+      }
     }
-    val backwardCs = remember {
-        """
-                    card0: {
-                      width: 100,
-                      height: 200,
-                      centerHorizontally: 'parent',
-                      centerVertically: 'parent'
-                    },
-                    card1: {
-                      width: 100,
-                      height: 200,
-                      start: ['parent','end', 8],
-                      centerVertically: 'parent'
-                    }, 
-                    card2: {
-                      width: 100,
-                      height: 200,
-                      start: ['card1','end', 8],
-                      centerVertically: 'parent'
-                    }                     
-        """
-    }
-    val motionScene = MotionScene(content = """{
-                ConstraintSets: {
-                  start: { $startCs },
-                  forward: { $forwardCs },
-                  backward: { $backwardCs }
-                },
-                Transitions: {
-                  forward: {
-                    from: 'start',
-                    to: 'forward',
-                  },
-                  backward: {
-                    from: 'start',
-                    to: 'backward',
-                  }
-                }    
-    }""")
+  }
+}        
+""")
+
     MotionCarousel(motionScene, 1, 3, content = content)
 }
 
+/**
+ * Similarly, we can extract the content that we put in the Carousel
+ * slots to its own composable, MyCard
+ */
+@Composable
+fun MyCard(item: CardInfo) {
+    val i = item.index
+    val color = item.color
+    val label = item.text
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(4.dp)
+            .background(color)
+            .padding(4.dp)
+    ) {
+        Column(modifier = Modifier
+            .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("$label")
+        }
+    }
+}
+
+/**
+ * We now can rewrite CarouselDemo2 by using MySimpleCarousel instead, referencing MyCard,
+ * resulting in a very readable usage.
+ */
+@Preview
+@Composable
+fun CarouselDemo3() {
+    MySimpleCarousel() {
+        items(cardsExample) { card ->
+            MyCard(card)
+        }
+    }
+}
+
+
+/**
+ * Let's do another example with a more complex MotionScene using 5 slots,
+ * encapsulated in its own MyCarousel function as well
+ */
 @Composable
 fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
     val startCs = remember {
@@ -161,7 +463,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                       start: ['parent', 'start', 8],
                       top: ['parent', 'top', 8],
                     },
-                    card0: {
+                    slot0: {
                       width: 100,
                       height: 200,
                       end: ['parent','start', 8],
@@ -170,7 +472,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     }, 
-                    card1: {
+                    slot1: {
                       width: 100,
                       height: 200,
                       start: ['parent','start', 8],
@@ -179,7 +481,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card2: {
+                    slot2: {
                       width: 150,
                       height: 250,
                       centerHorizontally: 'parent',
@@ -191,7 +493,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                           main: 1.0
                       }
                     },
-                    card3: {
+                    slot3: {
                       width: 100,
                       height: 200,
                       end: ['parent','end', 8],
@@ -200,7 +502,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card4: {
+                    slot4: {
                       width: 100,
                       height: 200,
                       start: ['parent','end', 8],
@@ -212,21 +514,21 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
         """
 
     }
-    val forwardCs = remember {"""
+    val nextCs = remember {"""
                     label: {
                       start: ['parent', 'start', 8],
                       top: ['parent', 'top', 8]
                     },
-                    card0: {
+                    slot0: {
                       width: 100,
                       height: 200,
-                      end: ['card1','start', 8],
+                      end: ['slot1','start', 8],
                       centerVertically: 'parent',
                       custom: {
                         mainColor: '#0000FF'
                       }  
                     }, 
-                    card1: {
+                    slot1: {
                       width: 100,
                       height: 200,
                       end: ['parent','start', 8],
@@ -235,7 +537,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card2: {
+                    slot2: {
                       width: 100,
                       height: 200,
                       start: ['parent','start',8],
@@ -244,7 +546,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card3: {
+                    slot3: {
                       width: 150,
                       height: 250,
                       centerHorizontally: 'parent',
@@ -256,7 +558,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                           main: 1.0
                       }
                     },
-                    card4: {
+                    slot4: {
                       width: 100,
                       height: 200,
                       end: ['parent','end', 8],
@@ -266,12 +568,12 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                       }  
                     } 
         """}
-    val backwardCs = remember {"""
+    val previousCs = remember {"""
                     label: {
                       start: ['parent', 'start', 8],
                       top: ['parent', 'top', 8]
                     },
-                    card0: {
+                    slot0: {
                       width: 100,
                       height: 200,
                       start: ['parent','start', 8],
@@ -280,7 +582,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     }, 
-                    card1: {
+                    slot1: {
                       width: 150,
                       height: 250,
                       centerHorizontally: 'parent',
@@ -292,7 +594,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                           main: 1.0
                       }
                     },
-                    card2: {
+                    slot2: {
                       width: 100,
                       height: 200,
                       end: ['parent','end', 8],
@@ -301,7 +603,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card3: {
+                    slot3: {
                       width: 100,
                       height: 200,
                       start: ['parent','end', 8],
@@ -310,10 +612,10 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                         mainColor: '#0000FF'
                       }  
                     },
-                    card4: {
+                    slot4: {
                       width: 100,
                       height: 200,
-                      start: ['card3','end', 8],
+                      start: ['slot3','end', 8],
                       centerVertically: 'parent',
                       custom: {
                         mainColor: '#0000FF'
@@ -326,45 +628,52 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
                 },
                 ConstraintSets: {
                   start: { $startCs },
-                  forward: { $forwardCs },
-                  backward: { $backwardCs }
+                  next: { $nextCs },
+                  previous: { $previousCs }
                 },
                 Transitions: {
                   forward: {
                     from: 'start',
-                    to: 'forward',
+                    to: 'next',
                   },
                   backward: {
                     from: 'start',
-                    to: 'backward',
+                    to: 'previous',
                   }
             }""")
     MotionCarousel(motionScene, 2, 5, content = content, showSlots = false)
 }
 
+/**
+ * The resulting demo, still using MyCard() for the content
+ */
 @Preview
 @Composable
-fun CarouselDemo1() {
-    MySimpleCarousel() {
-        items(cardsExample) { card ->
-            NewCard(card)
-        }
-    }
-}
-
-@Preview
-@Composable
-fun CarouselDemo2() {
+fun CarouselDemo4() {
     MyCarousel() {
         items(cardsExample) { card ->
-            NewCard(card)
+            MyCard(card)
         }
     }
 }
 
+/**
+ * Finally, you might want to have the "selected" item of your carousel
+ * being painted or acting differently than the rest -- how could you implement this?
+ *
+ * One approach is to define custom properties directly in the MotionScene, and
+ * retrieving them at runtime.
+ *
+ * You might have noticed that this is exactly what we did in the MotionScene used for
+ * the previous CarouselDemo4 example -- we defined a "mainColor" as well as a "main" property
+ * that we assign to our "selected" slot.
+ *
+ * We can then simply retrieve those properties by using itemsWithProperties() instead of items(),
+ * and pass them to a new AnimatedCard composable
+ */
 @Preview
 @Composable
-fun CarouselDemo3() {
+fun CarouselDemo5() {
     MyCarousel() {
         itemsWithProperties(cardsExample) { card, properties ->
             AnimatedCard(properties, card)
@@ -372,56 +681,12 @@ fun CarouselDemo3() {
     }
 }
 
-@Composable
-fun NewCard(item: CardInfo) {
-    val i = item.index
-    val color = item.color
-    val label = item.text
-    println("blah NewCard with $item")
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .layoutId("card$i", "box")
-            .padding(4.dp)
-            .background(color)
-            .padding(4.dp)
-    ) {
-        Column(modifier = Modifier
-            .width(100.dp)
-            .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("$label")
-        }
-    }
-}
-
-@Preview(widthDp = 200, heightDp = 400)
-@Composable
-fun PreviewCard() {
-    NewCard2(item = cardsExample[0], false)
-}
-
-@Composable
-fun NewCard2(item: CardInfo, isMain: Boolean) {
-    val i = item.index
-    val color = item.color //if (isMain) item.color else Color.DarkGray
-    val label = item.text
-
-    val gradient = Brush.verticalGradient(0f to color, 1f to Color.White)
-    ConstraintLayout(constraintSet = ConstraintSet("""
-    {
-      label : { center: 'parent' }
-    }    
-    """), modifier = Modifier
-        .fillMaxSize()
-        .clip(RoundedCornerShape(20.dp))
-        .background(gradient)
-        .layoutId("card$i")) {
-        Text(modifier = Modifier.layoutId("label"), text = "$label")
-    }
-}
-
+/**
+ * This is using the custom properties we defined in the motion scene to do something a little
+ * more interesting -- here each card will have an intrinsic color, but will revert to a default
+ * color unless the card is the current selection (recognized by the attribute "main"). While we
+ * are at it, let's use a gradient too!
+ */
 @Composable
 fun AnimatedCard(properties: State<MotionLayoutScope.MotionProperties>, item: CardInfo) {
     val i = item.index
