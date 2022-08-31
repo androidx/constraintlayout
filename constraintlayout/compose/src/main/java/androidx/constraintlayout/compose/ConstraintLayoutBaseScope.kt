@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.core.state.State.Wrap
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 
 /**
@@ -396,67 +395,25 @@ abstract class ConstraintLayoutBaseScope {
         return HorizontalAnchor(id, 0, LayoutReferenceImpl(id))
     }
 
-
-    /**
-     * Wrap defines the type of chain
-     */
-    @Immutable
-    class Wrap internal constructor(
-        internal val mode: Int) {
-        companion object {
-            val None =
-                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
-            val Chain =
-                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
-            val Aligned =
-                Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
-        }
-    }
-
-    /**
-     * Defines how objects align vertically within the chain
-     */
-    @Immutable
-    class VerticalAlign internal constructor(
-        internal val mode: Int) {
-        companion object {
-            val Top =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
-            val Bottom =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM)
-            val Center =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER)
-            val Baseline =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE)
-        }
-    }
-
-    /**
-     * Defines how objects align horizontally in the chain
-     */
-    @Immutable
-    class HorizontalAlign internal constructor(
-        internal val mode: Int) {
-        companion object {
-            val Start =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
-            val End =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END)
-            val Center =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER)
-         }
-    }
-
-    /**
-     * Defines how widgets are spaced in a chain
-     */
-    @Immutable
-    class FlowStyle internal constructor(
-        internal val style: Int) {
-        companion object {
-            val Spread =  FlowStyle(0)
-            val SpreadInside =  FlowStyle(1)
-            val Packed =  FlowStyle(2)
-        }
-    }
-
     /**
      * This creates a flow helper
      * Flow helpers allows a long sequence of Composable widgets to wrap onto
      * multiple rows or columns.
+     * [flowVertically] if set to true aranges the Composables from top to bottom.
+     * Normally they are arranged from left to right.
+     * [verticalGap] defines the gap between views in the y axis
+     * [horizontalGap] defines the gap between views in the x axis
+     * [maxElement] defines the maximum element on a row before it if the
+     * [padding]  sets padding around the content
+     * [wrapMode] sets the way reach maxElements is handled
+     * Flow.WRAP_NONE (default) -- no wrap behavior,
+     * Flow.WRAP_CHAIN - create additional chains
+     * [verticalAlign] set the way elements are aligned vertically. Center is default
+     * [horizontalAlign] set the way elements are aligned horizontally. Center is default
+     * [horizontalFlowBias] set the way elements are aligned vertically Center is default
+     * [verticalFlowBias] sets the top bottom bias of the vertical chain
+     * [verticalStyle] sets the style of a vertical chain (Spread,Packed, or SpreadInside)
+     * [horizontalStyle] set the style of the horizontal chain (Spread, Packed, or SpreadInside)
      */
     fun createFlow(
         vararg elements: LayoutReference?,
@@ -465,7 +422,7 @@ abstract class ConstraintLayoutBaseScope {
         horizontalGap:  Dp = 0.dp,
         maxElement: Int = 0,
         padding: Dp = 0.dp,
-        wrap: Wrap = Wrap.None,
+        wrapMode: Wrap = Wrap.None,
         verticalAlign: VerticalAlign = VerticalAlign.Center,
         horizontalAlign: HorizontalAlign = HorizontalAlign.Center,
         horizontalFlowBias: Float = 0.0f,
@@ -483,7 +440,7 @@ abstract class ConstraintLayoutBaseScope {
                 horizontalBias(horizontalFlowBias)
                 horizontalAlign(horizontalAlign.mode)
                 verticalAlign(verticalAlign.mode)
-                wrapMode(wrap.mode)
+                wrapMode(wrapMode.mode)
                 padding(state.convertDimension(padding))
                 maxElementsWrap(maxElement)
                 horizontalGap(state.convertDimension(horizontalGap))
@@ -760,5 +717,61 @@ class Visibility internal constructor(
          */
         @Stable
         val Gone = Visibility(ConstraintWidget.GONE)
+    }
+}
+
+/**
+ * Wrap defines the type of chain
+ */
+@Immutable
+class Wrap internal constructor(
+    internal val mode: Int) {
+    companion object {
+        val None =
+            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_NONE)
+        val Chain =
+            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_CHAIN)
+        val Aligned =
+            Wrap(androidx.constraintlayout.core.state.helpers.FlowReference.WRAP_ALIGNED)
+    }
+}
+
+/**
+ * Defines how objects align vertically within the chain
+ */
+@Immutable
+class VerticalAlign internal constructor(
+    internal val mode: Int) {
+    companion object {
+        val Top =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
+        val Bottom =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM)
+        val Center =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER)
+        val Baseline =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE)
+    }
+}
+
+/**
+ * Defines how objects align horizontally in the chain
+ */
+@Immutable
+class HorizontalAlign internal constructor(
+    internal val mode: Int) {
+    companion object {
+        val Start =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
+        val End =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END)
+        val Center =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER)
+    }
+}
+
+/**
+ * Defines how widgets are spaced in a chain
+ */
+@Immutable
+class FlowStyle internal constructor(
+    internal val style: Int) {
+    companion object {
+        val Spread =  FlowStyle(0)
+        val SpreadInside =  FlowStyle(1)
+        val Packed =  FlowStyle(2)
     }
 }
