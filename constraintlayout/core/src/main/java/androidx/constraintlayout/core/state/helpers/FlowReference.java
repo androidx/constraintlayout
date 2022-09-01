@@ -594,8 +594,8 @@ public class FlowReference extends HelperReference {
             mFlow.setLastHorizontalStyle(mLastVerticalStyle);
         }
 
-        // Constraint
-        applyWidgetConstraints();
+        // General attributes of a widget
+        applyBase();
 
         // TODO - Need to figure out how to set these values properly.
         mFlow.measure(AT_MOST, 1000, AT_MOST,1000);

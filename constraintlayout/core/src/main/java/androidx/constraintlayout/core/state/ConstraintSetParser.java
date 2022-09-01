@@ -940,6 +940,7 @@ public class ConstraintSetParser {
                     } else {
                         flow.setOrientation(VERTICAL);
                     }
+                    break;
                 case "wrap":
                     String wrapValue = element.get(param).content();
                     flow.setWrapMode(State.Wrap.getValueByString(wrapValue));

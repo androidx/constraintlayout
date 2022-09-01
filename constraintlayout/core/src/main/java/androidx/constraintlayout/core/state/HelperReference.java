@@ -63,4 +63,11 @@ public class HelperReference extends ConstraintReference implements Facade {
     public void apply() {
         // nothing
     }
+
+    /**
+     * Allows the derived classes to invoke the apply method in the ConstraintReference
+     */
+    public void applyBase() {
+        super.apply();
+    }
 }
