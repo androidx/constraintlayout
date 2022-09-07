@@ -117,24 +117,12 @@ class TransitionScope internal constructor(
         keyFramesObject.put("KeyCycles", keyCyclesArray)
     }
 
-    /**
-     *
-     */
     var durationMs: Long = 400L
 
-    /**
-     *
-     */
     var easing: Easing = Easing.Standard
 
-    /**
-     *
-     */
     var motionArc: Arc = Arc.None
 
-    /**
-     *
-     */
     var onSwipe: OnSwipe? = null
 
     fun keyAttributes(vararg targets: Any, keyAttributesContent: KeyAttributesScope.() -> Unit) {
