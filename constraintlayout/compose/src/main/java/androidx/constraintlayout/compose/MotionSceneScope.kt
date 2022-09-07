@@ -151,13 +151,14 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
     }
 
     /**
-     * Adds a [ConstraintSet] defined by [constraintSetContent]. A [name] may be provided and it can
-     * be used on MotionLayout calls that request a ConstraintSet name.
+     * Creates a [ConstraintSet] that extends the changes applied by [extendConstraintSet] (if not
+     * null).
+     *
+     * A [name] may be provided and it can be used on MotionLayout calls that request a
+     * ConstraintSet name.
      *
      * Returns a [ConstraintSetRef] object representing this ConstraintSet, which may be used as a
      * parameter of [transition].
-     *
-     * If not null, inherits the changes applied by [extendConstraintSet]
      */
     fun constraintSet(
         name: String? = null,
