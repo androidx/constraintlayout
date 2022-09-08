@@ -68,8 +68,8 @@ public class ConstraintReference implements Reference {
     float mHorizontalChainWeight = UNKNOWN;
     float mVerticalChainWeight = UNKNOWN;
 
-    float mHorizontalBias = 0.5f;
-    float mVerticalBias = 0.5f;
+    protected float mHorizontalBias = 0.5f;
+    protected float mVerticalBias = 0.5f;
 
     protected int mMarginLeft = 0;
     protected int mMarginRight = 0;

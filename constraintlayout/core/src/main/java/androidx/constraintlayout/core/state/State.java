@@ -20,6 +20,7 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_PACK
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD_INSIDE;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
@@ -272,10 +273,21 @@ public class State {
     // @TODO: add description
     public ConstraintReference constraints(Object key) {
         Reference reference = mReferences.get(key);
+
         if (reference == null) {
-            reference = createConstraintReference(key);
-            mReferences.put(key, reference);
-            reference.setKey(key);
+            // if it's flow, reuse the reference instead of creating a new one.
+            // Therefore, the value of attributes such as mHorizontalDimension can be preserved
+            if (mHelperReferences.containsKey(key)
+                    && (mHelperReferences.get(key).getType().equals(Helper.HORIZONTAL_FLOW)
+                        || mHelperReferences.get(key).getType().equals(Helper.VERTICAL_FLOW))
+            ) {
+                reference = mHelperReferences.get(key);
+                mReferences.put(key, reference);
+            } else {
+                reference = createConstraintReference(key);
+                mReferences.put(key, reference);
+                reference.setKey(key);
+            }
         }
         if (reference instanceof ConstraintReference) {
             return (ConstraintReference) reference;

@@ -1027,7 +1027,7 @@ public class ConstraintSetParser {
                         vBiasValue = vBiasObject.getFloat();
                     }
                     try {
-                        flow.setVerticalBias(vBiasValue);
+                        flow.verticalBias(vBiasValue);
                         if (vFirstBiasValue != 0.5f) {
                             flow.setFirstVerticalBias(vFirstBiasValue);
                         }
@@ -1053,7 +1053,7 @@ public class ConstraintSetParser {
                         hBiasValue = hBiasObject.getFloat();
                     }
                     try {
-                        flow.setHorizontalBias(hBiasValue);
+                        flow.horizontalBias(hBiasValue);
                         if (hFirstBiasValue != 0.5f) {
                             flow.setFirstHorizontalBias(hFirstBiasValue);
                         }
