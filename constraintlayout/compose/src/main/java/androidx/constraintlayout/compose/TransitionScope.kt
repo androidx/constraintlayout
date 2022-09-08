@@ -133,14 +133,14 @@ class TransitionScope internal constructor(
     }
 
     fun keyPositions(vararg targets: Any, keyPositionsContent: KeyPositionsScope.() -> Unit) {
-        val scope = KeyPositionsScope(* targets)
+        val scope = KeyPositionsScope(*targets)
         keyPositionsContent(scope)
         addKeyPositionsIfMissing()
         keyPositionsArray.add(scope.keyFramePropsObject)
     }
 
     fun keyCycles(vararg targets: Any, keyCyclesContent: KeyCyclesScope.() -> Unit) {
-        val scope = KeyCyclesScope(* targets)
+        val scope = KeyCyclesScope(*targets)
         keyCyclesContent(scope)
         addKeyCyclesIfMissing()
         keyCyclesArray.add(scope.keyFramePropsObject)
@@ -150,8 +150,10 @@ class TransitionScope internal constructor(
         containerObject.putString("pathMotionArc", motionArc.name)
         containerObject.putString("from", from)
         containerObject.putString("to", to)
-        containerObject.putString("interpolator", easing.name)
-        containerObject.putNumber("duration", durationMs.toFloat())
+        // TODO: Uncomment once we decide how to deal with Easing discrepancy from user driven
+        //  `progress` value. Eg: `animateFloat(tween(duration, LinearEasing))`
+//        containerObject.putString("interpolator", easing.name)
+//        containerObject.putNumber("duration", durationMs.toFloat())
         onSwipe?.let {
             containerObject.put("onSwipe", onSwipeObject)
             onSwipeObject.putString("direction", it.direction.name)
@@ -281,7 +283,7 @@ abstract class BaseKeyFrameScope internal constructor() {
 }
 
 @ExperimentalMotionApi
-class KeyAttributeScope internal constructor(): BaseKeyFrameScope() {
+class KeyAttributeScope internal constructor() : BaseKeyFrameScope() {
     var alpha by addOnPropertyChange(1f, "alpha")
     var scaleX by addOnPropertyChange(1f, "scaleX")
     var scaleY by addOnPropertyChange(1f, "scaleY")
@@ -294,7 +296,7 @@ class KeyAttributeScope internal constructor(): BaseKeyFrameScope() {
 }
 
 @ExperimentalMotionApi
-class KeyPositionScope internal constructor(): BaseKeyFrameScope() {
+class KeyPositionScope internal constructor() : BaseKeyFrameScope() {
     var percentX by addOnPropertyChange(1f)
     var percentY by addOnPropertyChange(1f)
     var percentWidth by addOnPropertyChange(1f)
@@ -303,7 +305,7 @@ class KeyPositionScope internal constructor(): BaseKeyFrameScope() {
 }
 
 @ExperimentalMotionApi
-class KeyCycleScope internal constructor(): BaseKeyFrameScope() {
+class KeyCycleScope internal constructor() : BaseKeyFrameScope() {
     var alpha by addOnPropertyChange(1f)
     var scaleX by addOnPropertyChange(1f)
     var scaleY by addOnPropertyChange(1f)
@@ -325,7 +327,7 @@ internal interface NamedPropertyOrValue {
 }
 
 @ExperimentalMotionApi
-data class OnSwipe (
+data class OnSwipe(
     val anchor: Any,
     val side: SwipeSide,
     val direction: SwipeDirection,
@@ -409,6 +411,7 @@ class SwipeSide internal constructor(val name: String) {
     companion object {
         val Top: SwipeSide = SwipeSide("top")
         val Right: SwipeSide = SwipeSide("right")
+        val End: SwipeSide = SwipeSide("end")
         val Bottom: SwipeSide = SwipeSide("bottom")
         val Left: SwipeSide = SwipeSide("left")
         val Middle: SwipeSide = SwipeSide("middle")
