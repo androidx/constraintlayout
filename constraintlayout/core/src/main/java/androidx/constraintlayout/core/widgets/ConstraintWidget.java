@@ -672,6 +672,16 @@ public class ConstraintWidget {
         ret.append(",\n");
     }
 
+    private void serializeAttribute(StringBuilder ret, String type, String value, String def) {
+        if (def.equals(value)) {
+            return;
+        }
+        ret.append(type);
+        ret.append(" :   ");
+        ret.append(value);
+        ret.append(",\n");
+    }
+
     private void serializeDimensionRatio(StringBuilder ret,
             String type,
             float value,
@@ -3763,6 +3773,7 @@ public class ConstraintWidget {
                 mMatchConstraintMinWidth,
                 mMatchConstraintDefaultWidth,
                 mMatchConstraintPercentWidth,
+                mListDimensionBehaviors[HORIZONTAL],
                 mWeight[DIMENSION_HORIZONTAL]
         );
 
@@ -3774,6 +3785,7 @@ public class ConstraintWidget {
                 mMatchConstraintMinHeight,
                 mMatchConstraintDefaultHeight,
                 mMatchConstraintPercentHeight,
+                mListDimensionBehaviors[VERTICAL],
                 mWeight[DIMENSION_VERTICAL]);
         serializeDimensionRatio(ret, "    dimensionRatio", mDimensionRatio, mDimensionRatioSide);
         serializeAttribute(ret, "    horizontalBias", mHorizontalBiasPercent, DEFAULT_BIAS);
@@ -3790,9 +3802,11 @@ public class ConstraintWidget {
             @SuppressWarnings("unused") int override,
             int matchConstraintMin, int matchConstraintDefault,
             float matchConstraintPercent,
+            DimensionBehaviour behavior,
             @SuppressWarnings("unused") float weight) {
         ret.append(type);
         ret.append(" :  {\n");
+        serializeAttribute(ret, "      behavior", behavior.toString(), DimensionBehaviour.FIXED.toString());
         serializeAttribute(ret, "      size", size, 0);
         serializeAttribute(ret, "      min", min, 0);
         serializeAttribute(ret, "      max", max, Integer.MAX_VALUE);

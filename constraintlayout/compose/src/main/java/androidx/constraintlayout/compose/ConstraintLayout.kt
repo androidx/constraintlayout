@@ -95,6 +95,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD
 import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
+import androidx.constraintlayout.core.widgets.Flow
 import androidx.constraintlayout.core.widgets.Guideline
 import androidx.constraintlayout.core.widgets.HelperWidget
 import androidx.constraintlayout.core.widgets.Optimizer
@@ -1271,6 +1272,14 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             Log.d("CCL", root.toDebugString())
             for (child in root.children) {
                 Log.d("CCL", child.toDebugString())
+            }
+        }
+
+        // invoke the measure method of a Flow helper to properly measure the widgets
+        // associated with the Flow helper
+        for (child in root.children) {
+            if (child is Flow) {
+                child.measure(BasicMeasure.UNSPECIFIED, root.width, BasicMeasure.UNSPECIFIED, root.height)
             }
         }
 

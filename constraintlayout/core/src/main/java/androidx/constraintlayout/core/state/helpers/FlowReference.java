@@ -21,7 +21,6 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 import static androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER;
 import static androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER;
 import static androidx.constraintlayout.core.widgets.Flow.WRAP_NONE;
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.AT_MOST;
 
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
@@ -63,10 +62,8 @@ public class FlowReference extends HelperReference {
 
     protected int mOrientation = HORIZONTAL;
 
-    protected float mVerticalBias = 0.5f;
     protected float mFirstVerticalBias = 0.5f;
     protected float mLastVerticalBias = 0.5f;
-    protected float mHorizontalBias = 0.5f;
     protected float mFirstHorizontalBias = 0.5f;
     protected float mLastHorizontalBias = 0.5f;
 
@@ -409,14 +406,6 @@ public class FlowReference extends HelperReference {
         return mVerticalBias;
     }
 
-    /**
-     * Set vertical bias value
-     *
-     * @param verticalBias vertical bias value
-     */
-    public void setVerticalBias(float verticalBias) {
-        this.mVerticalBias = verticalBias;
-    }
 
     /**
      * Get first vertical bias
@@ -460,15 +449,6 @@ public class FlowReference extends HelperReference {
      */
     public float getHorizontalBias() {
         return mHorizontalBias;
-    }
-
-    /**
-     * Set horizontal bias
-     *
-     * @param horizontalBias horizontal bias value
-     */
-    public void setHorizontalBias(float horizontalBias) {
-        this.mHorizontalBias = horizontalBias;
     }
 
     /**
@@ -596,8 +576,5 @@ public class FlowReference extends HelperReference {
 
         // General attributes of a widget
         applyBase();
-
-        // TODO - Need to figure out how to set these values properly.
-        mFlow.measure(AT_MOST, 1000, AT_MOST,1000);
     }
 }

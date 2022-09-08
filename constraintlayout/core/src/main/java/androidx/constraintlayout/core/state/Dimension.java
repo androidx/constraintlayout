@@ -27,12 +27,12 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
  */
 public class Dimension {
 
-    public static final Object FIXED_DIMENSION = new Object();
-    public static final Object WRAP_DIMENSION = new Object();
-    public static final Object SPREAD_DIMENSION = new Object();
-    public static final Object PARENT_DIMENSION = new Object();
-    public static final Object PERCENT_DIMENSION = new Object();
-    public static final Object RATIO_DIMENSION = new Object();
+    public static final Object FIXED_DIMENSION = new String("FIXED_DIMENSION");
+    public static final Object WRAP_DIMENSION = new String("WRAP_DIMENSION");
+    public static final Object SPREAD_DIMENSION = new String("SPREAD_DIMENSION");
+    public static final Object PARENT_DIMENSION = new String("PARENT_DIMENSION");
+    public static final Object PERCENT_DIMENSION = new String("PERCENT_DIMENSION");
+    public static final Object RATIO_DIMENSION = new String("RATIO_DIMENSION");
 
     private final int mWrapContent = -2;
 
