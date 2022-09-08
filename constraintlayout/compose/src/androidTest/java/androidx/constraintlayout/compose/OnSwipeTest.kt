@@ -66,7 +66,6 @@ class OnSwipeTest {
         testMotionLayoutSwipe { OnSwipeTestJson() }
     }
 
-    @Ignore("Fails with left = 52.72 instead of 51.6")
     @Test
     fun simpleCornerToCornerRightSwipe_Dsl() {
         testMotionLayoutSwipe { OnSwipeTestDsl() }
@@ -201,7 +200,7 @@ private fun OnSwipeTestDsl() {
             onSwipe = OnSwipe(
                 anchor = "box",
                 direction = SwipeDirection.End,
-                side = SwipeSide.Right,
+                side = SwipeSide.End,
                 mode = SwipeMode.Spring,
                 onTouchUp = SwipeTouchUp.NeverCompleteStart,
                 springThreshold = 0.0001f
