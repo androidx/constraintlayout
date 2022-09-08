@@ -99,7 +99,9 @@ import androidx.constraintlayout.core.widgets.Flow
 import androidx.constraintlayout.core.widgets.Guideline
 import androidx.constraintlayout.core.widgets.HelperWidget
 import androidx.constraintlayout.core.widgets.Optimizer
+import androidx.constraintlayout.core.widgets.VirtualLayout
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
+import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
 import kotlinx.coroutines.channels.Channel
@@ -967,7 +969,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     protected var layoutInformationReceiver: LayoutInformationReceiver? = null
     protected val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
     protected val placeables = mutableMapOf<Measurable, Placeable>()
-    private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
+    private val lastMeasures = mutableMapOf<String, Array<Int>>()
     protected val frameCache = mutableMapOf<Measurable, WidgetFrame>()
 
     protected lateinit var density: Density
@@ -990,49 +992,48 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     override fun getDesignInfo(startX: Int, startY: Int, args: String) =
         parseConstraintsToJson(root, state, startX, startY, args)
 
+    /**
+     * Measure the given [constraintWidget] with the specs defined by [measure].
+     */
     override fun measure(constraintWidget: ConstraintWidget, measure: BasicMeasure.Measure) {
-        val measurable = constraintWidget.companionWidget
-        if (measurable !is Measurable) return
+        val widgetId = constraintWidget.stringId
 
         if (DEBUG) {
             Log.d(
                 "CCL",
-                "Measuring ${measurable.layoutId} with: " +
+                "Measuring $widgetId with: " +
                     constraintWidget.toDebugString() + "\n"
             )
         }
 
-        var constraints: Constraints
-        run {
-            val measurableLastMeasures = lastMeasures[measurable]
-            obtainConstraints(
-                measure.horizontalBehavior,
-                measure.horizontalDimension,
-                constraintWidget.mMatchConstraintDefaultWidth,
-                measure.measureStrategy,
-                (measurableLastMeasures?.get(1) ?: 0) == constraintWidget.height,
-                constraintWidget.isResolvedHorizontally,
-                state.rootIncomingConstraints.maxWidth,
-                widthConstraintsHolder
-            )
-            obtainConstraints(
-                measure.verticalBehavior,
-                measure.verticalDimension,
-                constraintWidget.mMatchConstraintDefaultHeight,
-                measure.measureStrategy,
-                (measurableLastMeasures?.get(0) ?: 0) == constraintWidget.width,
-                constraintWidget.isResolvedVertically,
-                state.rootIncomingConstraints.maxHeight,
-                heightConstraintsHolder
-            )
+        val measurableLastMeasures = lastMeasures[widgetId]
+        obtainConstraints(
+            measure.horizontalBehavior,
+            measure.horizontalDimension,
+            constraintWidget.mMatchConstraintDefaultWidth,
+            measure.measureStrategy,
+            (measurableLastMeasures?.get(1) ?: 0) == constraintWidget.height,
+            constraintWidget.isResolvedHorizontally,
+            state.rootIncomingConstraints.maxWidth,
+            widthConstraintsHolder
+        )
+        obtainConstraints(
+            measure.verticalBehavior,
+            measure.verticalDimension,
+            constraintWidget.mMatchConstraintDefaultHeight,
+            measure.measureStrategy,
+            (measurableLastMeasures?.get(0) ?: 0) == constraintWidget.width,
+            constraintWidget.isResolvedVertically,
+            state.rootIncomingConstraints.maxHeight,
+            heightConstraintsHolder
+        )
 
-            constraints = Constraints(
-                widthConstraintsHolder[0],
-                widthConstraintsHolder[1],
-                heightConstraintsHolder[0],
-                heightConstraintsHolder[1]
-            )
-        }
+        var constraints = Constraints(
+            widthConstraintsHolder[0],
+            widthConstraintsHolder[1],
+            heightConstraintsHolder[0],
+            heightConstraintsHolder[1]
+        )
 
         if ((measure.measureStrategy == TRY_GIVEN_DIMENSIONS ||
                 measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
@@ -1042,28 +1043,28 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
         ) {
             if (DEBUG) {
-                Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
+                Log.d("CCL", "Measuring $widgetId with $constraints")
             }
-            val placeable = measurable.measure(constraints).also { placeables[measurable] = it }
+            val result = measureWidget(constraintWidget, constraints)
             constraintWidget.isMeasureRequested = false
             if (DEBUG) {
                 Log.d(
                     "CCL",
-                    "${measurable.layoutId} is size ${placeable.width} ${placeable.height}"
+                    "$widgetId is size ${result.first} ${result.second}"
                 )
             }
 
-            val coercedWidth = placeable.width.coerceIn(
+            val coercedWidth = result.first.coerceIn(
                 constraintWidget.mMatchConstraintMinWidth.takeIf { it > 0 },
                 constraintWidget.mMatchConstraintMaxWidth.takeIf { it > 0 }
             )
-            val coercedHeight = placeable.height.coerceIn(
+            val coercedHeight = result.second.coerceIn(
                 constraintWidget.mMatchConstraintMinHeight.takeIf { it > 0 },
                 constraintWidget.mMatchConstraintMaxHeight.takeIf { it > 0 }
             )
 
             var remeasure = false
-            if (coercedWidth != placeable.width) {
+            if (coercedWidth != result.first) {
                 constraints = Constraints(
                     minWidth = coercedWidth,
                     minHeight = constraints.minHeight,
@@ -1072,7 +1073,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 )
                 remeasure = true
             }
-            if (coercedHeight != placeable.height) {
+            if (coercedHeight != result.second) {
                 constraints = Constraints(
                     minWidth = constraints.minWidth,
                     minHeight = coercedHeight,
@@ -1083,14 +1084,14 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
             if (remeasure) {
                 if (DEBUG) {
-                    Log.d("CCL", "Remeasuring coerced ${measurable.layoutId} with $constraints")
+                    Log.d("CCL", "Remeasuring coerced $widgetId with $constraints")
                 }
-                measurable.measure(constraints).also { placeables[measurable] = it }
+                measureWidget(constraintWidget, constraints)
                 constraintWidget.isMeasureRequested = false
             }
         }
 
-        val currentPlaceable = placeables[measurable]
+        val currentPlaceable = placeables[constraintWidget.companionWidget]
         measure.measuredWidth = currentPlaceable?.width ?: constraintWidget.width
         measure.measuredHeight = currentPlaceable?.height ?: constraintWidget.height
         val baseline =
@@ -1101,7 +1102,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         measure.measuredHasBaseline = baseline != AlignmentLine.Unspecified
         measure.measuredBaseline = baseline
-        lastMeasures.getOrPut(measurable, { arrayOf(0, 0, AlignmentLine.Unspecified) })
+        lastMeasures.getOrPut(widgetId) { arrayOf(0, 0, AlignmentLine.Unspecified) }
             .copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
@@ -1275,14 +1276,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         }
 
-        // invoke the measure method of a Flow helper to properly measure the widgets
-        // associated with the Flow helper
-        for (child in root.children) {
-            if (child is Flow) {
-                child.measure(BasicMeasure.UNSPECIFIED, root.width, BasicMeasure.UNSPECIFIED, root.height)
-            }
-        }
-
         // No need to set sizes and size modes as we passed them to the state above.
         root.optimizationLevel = optimizationLevel
         root.measure(root.optimizationLevel, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1416,6 +1409,54 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 
     override fun didMeasures() {}
+
+    /**
+     * Measure a [ConstraintWidget] with the given [constraints].
+     *
+     * Note that the [constraintWidget] could correspond to either a Composable or a Helper, which
+     * need to be measured differently.
+     *
+     * Returns a [Pair] with the result of the measurement, the first and second values are the
+     * measured width and height respectively.
+     */
+    private fun measureWidget(
+        constraintWidget: ConstraintWidget,
+        constraints: Constraints
+    ): Pair<Int, Int> {
+        val measurable = constraintWidget.companionWidget
+        val widgetId = constraintWidget.stringId
+        return when {
+            constraintWidget is VirtualLayout -> {
+                // TODO: This step should really be performed within ConstraintWidgetContainer,
+                //  compose-ConstraintLayout should only have to measure Composables/Measurables
+                val widthMode = when {
+                    constraints.hasFixedWidth -> BasicMeasure.EXACTLY
+                    constraints.hasBoundedWidth -> BasicMeasure.AT_MOST
+                    else -> BasicMeasure.UNSPECIFIED
+                }
+                val heightMode = when {
+                    constraints.hasFixedHeight -> BasicMeasure.EXACTLY
+                    constraints.hasBoundedHeight -> BasicMeasure.AT_MOST
+                    else -> BasicMeasure.UNSPECIFIED
+                }
+                constraintWidget.measure(
+                    widthMode,
+                    constraints.maxWidth,
+                    heightMode,
+                    constraints.maxHeight
+                )
+                Pair(constraintWidget.measuredWidth, constraintWidget.measuredHeight)
+            }
+            measurable is Measurable -> {
+                val result = measurable.measure(constraints).also { placeables[measurable] = it }
+                Pair(result.width, result.height)
+            }
+            else -> {
+                Log.e("CCL", "Can't measure widget: $widgetId")
+                Pair(0, 0)
+            }
+        }
+    }
 
     @Composable
     fun BoxScope.drawDebugBounds(forcedScaleFactor: Float) {
