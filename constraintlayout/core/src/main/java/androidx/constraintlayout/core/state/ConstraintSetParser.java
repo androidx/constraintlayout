@@ -889,10 +889,8 @@ public class ConstraintSetParser {
                                        String flowName,
                                        LayoutVariables layoutVariables,
                                        CLObject element) throws CLParsingException {
-
-        FlowReference flow = (flowType.charAt(0) == 'h')
-                ? state.getHorizontalFlow() : state.getVerticalFlow();
-        flow.setKey(flowName);
+        boolean isVertical = flowType.charAt(0) == 'v';
+        FlowReference flow = state.getFlow(flowName, isVertical);
 
         for (String param : element.names()) {
             switch (param) {
@@ -1115,7 +1113,10 @@ public class ConstraintSetParser {
                     }
                     break;
                 default:
-                    applyAttribute(state, layoutVariables, flow, element, param);
+                    // Get the underlying reference for the flow, apply the constraints
+                    // attributes to it
+                    ConstraintReference reference = state.constraints(flowName);
+                    applyAttribute(state, layoutVariables, reference, element, param);
             }
         }
     }

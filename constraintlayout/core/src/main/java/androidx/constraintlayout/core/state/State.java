@@ -275,19 +275,9 @@ public class State {
         Reference reference = mReferences.get(key);
 
         if (reference == null) {
-            // if it's flow, reuse the reference instead of creating a new one.
-            // Therefore, the value of attributes such as mHorizontalDimension can be preserved
-            if (mHelperReferences.containsKey(key)
-                    && (mHelperReferences.get(key).getType().equals(Helper.HORIZONTAL_FLOW)
-                        || mHelperReferences.get(key).getType().equals(Helper.VERTICAL_FLOW))
-            ) {
-                reference = mHelperReferences.get(key);
-                mReferences.put(key, reference);
-            } else {
-                reference = createConstraintReference(key);
-                mReferences.put(key, reference);
-                reference.setKey(key);
-            }
+            reference = createConstraintReference(key);
+            mReferences.put(key, reference);
+            reference.setKey(key);
         }
         if (reference instanceof ConstraintReference) {
             return (ConstraintReference) reference;
@@ -386,12 +376,12 @@ public class State {
      */
     public FlowReference getFlow(Object key, boolean vertical) {
         ConstraintReference reference = constraints(key);
-        if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
-            FlowReference barrierReference =
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof FlowReference)) {
+            FlowReference flowReference =
                     (vertical) ? new FlowReference(this, Helper.VERTICAL_FLOW)
                             : new FlowReference(this, Helper.HORIZONTAL_FLOW);
 
-            reference.setFacade(barrierReference);
+            reference.setFacade(flowReference);
         }
         return (FlowReference) reference.getFacade();
     }
@@ -572,19 +562,6 @@ public class State {
                 container.add(widget);
             } else {
                 reference.setConstraintWidget(container);
-            }
-        }
-        for (Object key : mHelperReferences.keySet()) {
-            HelperReference reference = mHelperReferences.get(key);
-            HelperWidget helperWidget = reference.getHelperWidget();
-            if (helperWidget != null) {
-                for (Object keyRef : reference.mReferences) {
-                    Reference constraintReference = mReferences.get(keyRef);
-                    reference.getHelperWidget().add(constraintReference.getConstraintWidget());
-                }
-                reference.apply();
-            } else {
-                reference.apply();
             }
         }
         for (Object key : mReferences.keySet()) {

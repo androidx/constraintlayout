@@ -72,12 +72,6 @@ internal class MotionMeasurer : Measurer() {
             }
         }
 
-        root.children.forEach { child ->
-            val measurable = (child.companionWidget as? Measurable)
-            val id = measurable?.layoutId ?: measurable?.constraintLayoutId
-            child.stringId = id?.toString()
-        }
-
         root.optimizationLevel = optimizationLevel
         // No need to set sizes and size modes as we passed them to the state above.
         root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
