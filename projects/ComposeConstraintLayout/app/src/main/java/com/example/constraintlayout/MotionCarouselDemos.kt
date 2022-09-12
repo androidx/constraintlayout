@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionCarousel
 import androidx.constraintlayout.compose.MotionCarouselScope
 import androidx.constraintlayout.compose.MotionLayoutScope
@@ -450,6 +451,113 @@ fun CarouselDemo3() {
     }
 }
 
+/**
+ * Of course, we can use the new MotionLayout DSL instead of JSON to write the Carousel :)
+ * Let's rewrite MySimpleCarousel with the DSL.
+ */
+@Composable
+fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
+
+    val motionScene = MotionScene {
+        val startState = constraintSet("start") {
+            val slot0 = createRefFor("slot0")
+            val slot1 = createRefFor("slot1")
+            val slot2 = createRefFor("slot2")
+            constrain(slot0) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                end.linkTo(parent.start, 8.dp)
+                centerVerticallyTo(parent)
+            }
+            constrain(slot1) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                centerTo(parent)
+            }
+            constrain(slot2) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                start.linkTo(parent.end, 8.dp)
+                centerVerticallyTo(parent)
+            }
+        }
+        val nextState = constraintSet("next") {
+            val slot0 = createRefFor("slot0")
+            val slot1 = createRefFor("slot1")
+            val slot2 = createRefFor("slot2")
+            constrain(slot0) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                end.linkTo(slot1.start, 8.dp)
+                centerVerticallyTo(parent)
+            }
+            constrain(slot1) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                end.linkTo(parent.start, 8.dp)
+                centerVerticallyTo(parent)
+            }
+            constrain(slot2) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                centerTo(parent)
+            }
+        }
+        val previousState = constraintSet("previous") {
+            val slot0 = createRefFor("slot0")
+            val slot1 = createRefFor("slot1")
+            val slot2 = createRefFor("slot2")
+            constrain(slot0) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                centerTo(parent)
+            }
+            constrain(slot1) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                start.linkTo(parent.end, 8.dp)
+                centerVerticallyTo(parent)
+            }
+            constrain(slot2) {
+                width = Dimension.value(200.dp)
+                height = Dimension.value(400.dp)
+                start.linkTo(slot1.end, 8.dp)
+                centerVerticallyTo(parent)
+            }
+        }
+        transition("forward", startState, nextState) {
+            keyAttributes("slot0", "slot1", "slot2") {
+                frame(50f) {
+                    scaleX = .3f
+                    scaleY = .3f
+                }
+            }
+        }
+        transition("backward", startState, previousState) {
+            keyAttributes("slot0", "slot1", "slot2") {
+                frame(50f) {
+                    scaleX = .3f
+                    scaleY = .3f
+                }
+            }
+        }
+    }
+    MotionCarousel(motionScene, 1, 3, content = content)
+}
+
+/**
+ * As you can see, we can easily change CarouselDemo3 to reference MySimpleCarouselDSL instead
+ * for a similar result.
+ */
+@Preview
+@Composable
+fun CarouselDemo4() {
+    MySimpleCarouselDSL() {
+        items(cardsExample) { card ->
+            MyCard(card)
+        }
+    }
+}
 
 /**
  * Let's do another example with a more complex MotionScene using 5 slots,
@@ -649,7 +757,7 @@ fun MyCarousel(content: MotionCarouselScope.() -> Unit) {
  */
 @Preview
 @Composable
-fun CarouselDemo4() {
+fun CarouselDemo5() {
     MyCarousel() {
         items(cardsExample) { card ->
             MyCard(card)
@@ -665,7 +773,7 @@ fun CarouselDemo4() {
  * retrieving them at runtime.
  *
  * You might have noticed that this is exactly what we did in the MotionScene used for
- * the previous CarouselDemo4 example -- we defined a "mainColor" as well as a "main" property
+ * the previous CarouselDemo5 example -- we defined a "mainColor" as well as a "main" property
  * that we assign to our "selected" slot.
  *
  * We can then simply retrieve those properties by using itemsWithProperties() instead of items(),
@@ -673,7 +781,7 @@ fun CarouselDemo4() {
  */
 @Preview
 @Composable
-fun CarouselDemo5() {
+fun CarouselDemo6() {
     MyCarousel() {
         itemsWithProperties(cardsExample) { card, properties ->
             AnimatedCard(properties, card)
