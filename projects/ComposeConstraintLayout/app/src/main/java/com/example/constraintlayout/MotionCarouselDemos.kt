@@ -459,10 +459,10 @@ fun CarouselDemo3() {
 fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
 
     val motionScene = MotionScene {
+        val slot0 = createRefFor("slot0")
+        val slot1 = createRefFor("slot1")
+        val slot2 = createRefFor("slot2")
         val startState = constraintSet("start") {
-            val slot0 = createRefFor("slot0")
-            val slot1 = createRefFor("slot1")
-            val slot2 = createRefFor("slot2")
             constrain(slot0) {
                 width = Dimension.value(200.dp)
                 height = Dimension.value(400.dp)
@@ -482,9 +482,6 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
             }
         }
         val nextState = constraintSet("next") {
-            val slot0 = createRefFor("slot0")
-            val slot1 = createRefFor("slot1")
-            val slot2 = createRefFor("slot2")
             constrain(slot0) {
                 width = Dimension.value(200.dp)
                 height = Dimension.value(400.dp)
@@ -504,9 +501,6 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
             }
         }
         val previousState = constraintSet("previous") {
-            val slot0 = createRefFor("slot0")
-            val slot1 = createRefFor("slot1")
-            val slot2 = createRefFor("slot2")
             constrain(slot0) {
                 width = Dimension.value(200.dp)
                 height = Dimension.value(400.dp)
