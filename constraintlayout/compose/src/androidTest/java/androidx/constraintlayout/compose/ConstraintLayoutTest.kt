@@ -1652,5 +1652,3 @@ class ConstraintLayoutTest {
         rule.onNodeWithTag(boxTag2).assertPositionInRootIsEqualTo(60.dp, 0.dp)
     }
 }
-
-private fun Modifier.layoutTestId(id: Any): Modifier = testTag(id.toString()).layoutId(id)
