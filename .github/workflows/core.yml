@@ -26,7 +26,7 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       # These setup steps should be common across all jobs in this workflow.
       - name: Checkout
@@ -68,7 +68,7 @@ jobs:
   test:
     name: Unit Tests
     needs: assemble
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -99,7 +99,7 @@ jobs:
 
   compose-androidTest:
     name: Compose instrumentation tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     strategy:
       matrix:
@@ -157,7 +157,7 @@ jobs:
   lint:
     name: Lint
     needs: assemble
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
