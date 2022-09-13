@@ -125,26 +125,32 @@ class TransitionScope internal constructor(
 
     var onSwipe: OnSwipe? = null
 
-    fun keyAttributes(vararg targets: Any, keyAttributesContent: KeyAttributesScope.() -> Unit) {
+    fun keyAttributes(vararg targets: ConstrainedLayoutReference, keyAttributesContent: KeyAttributesScope.() -> Unit) {
         val scope = KeyAttributesScope(*targets)
         keyAttributesContent(scope)
         addKeyAttributesIfMissing()
         keyAttributesArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyPositions(vararg targets: Any, keyPositionsContent: KeyPositionsScope.() -> Unit) {
+    fun keyPositions(vararg targets: ConstrainedLayoutReference, keyPositionsContent: KeyPositionsScope.() -> Unit) {
         val scope = KeyPositionsScope(*targets)
         keyPositionsContent(scope)
         addKeyPositionsIfMissing()
         keyPositionsArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyCycles(vararg targets: Any, keyCyclesContent: KeyCyclesScope.() -> Unit) {
+    fun keyCycles(vararg targets: ConstrainedLayoutReference, keyCyclesContent: KeyCyclesScope.() -> Unit) {
         val scope = KeyCyclesScope(*targets)
         keyCyclesContent(scope)
         addKeyCyclesIfMissing()
         keyCyclesArray.add(scope.keyFramePropsObject)
     }
+
+    /**
+     * Creates one [ConstrainedLayoutReference] corresponding to the [ConstraintLayout] element
+     * with [id].
+     */
+    fun createRefFor(id: Any): ConstrainedLayoutReference = ConstrainedLayoutReference(id)
 
     internal fun getObject(): CLObject {
         containerObject.putString("pathMotionArc", motionArc.name)
@@ -158,7 +164,7 @@ class TransitionScope internal constructor(
             containerObject.put("onSwipe", onSwipeObject)
             onSwipeObject.putString("direction", it.direction.name)
             onSwipeObject.putString("mode", it.mode.name)
-            onSwipeObject.putString("anchor", it.anchor.toString())
+            onSwipeObject.putString("anchor", it.anchor.id.toString())
             onSwipeObject.putString("side", it.side.name)
             onSwipeObject.putString("touchUp", it.onTouchUp.name)
             onSwipeObject.putNumber("stopThreshold", it.springThreshold)
@@ -168,7 +174,7 @@ class TransitionScope internal constructor(
 }
 
 @ExperimentalMotionApi
-open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
+open class BaseKeyFramesScope internal constructor(vararg targets: ConstrainedLayoutReference) {
     internal val keyFramePropsObject = CLObject(charArrayOf()).apply {
         clear()
     }
@@ -182,10 +188,10 @@ open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
         keyFramePropsObject.put("target", targetsContainer)
         keyFramePropsObject.put("frames", framesContainer)
         targets.forEach {
-            val stringChars = it.toString().toCharArray()
-            targetsContainer.add(CLString(stringChars).apply {
+            val targetChars = it.id.toString().toCharArray()
+            targetsContainer.add(CLString(targetChars).apply {
                 start = 0
-                end = stringChars.size.toLong() - 1
+                end = targetChars.size.toLong() - 1
             })
         }
     }
@@ -205,7 +211,7 @@ open class BaseKeyFramesScope internal constructor(vararg targets: Any) {
 }
 
 @ExperimentalMotionApi
-class KeyAttributesScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(*targets) {
+class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
     fun frame(frame: Float, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
         keyFrameContent(scope)
@@ -215,7 +221,7 @@ class KeyAttributesScope internal constructor(vararg targets: Any) : BaseKeyFram
 }
 
 @ExperimentalMotionApi
-class KeyPositionsScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(* targets) {
+class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
     var type by addNameOnPropertyChange(RelativePosition.Parent)
 
     fun frame(frame: Float, keyFrameContent: KeyPositionScope.() -> Unit) {
@@ -227,7 +233,7 @@ class KeyPositionsScope internal constructor(vararg targets: Any) : BaseKeyFrame
 }
 
 @ExperimentalMotionApi
-class KeyCyclesScope internal constructor(vararg targets: Any) : BaseKeyFramesScope(* targets) {
+class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
     fun frame(frame: Float, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
         keyFrameContent(scope)
@@ -328,7 +334,7 @@ internal interface NamedPropertyOrValue {
 
 @ExperimentalMotionApi
 data class OnSwipe(
-    val anchor: Any,
+    val anchor: ConstrainedLayoutReference,
     val side: SwipeSide,
     val direction: SwipeDirection,
     val mode: SwipeMode = SwipeMode.Velocity,

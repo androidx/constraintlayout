@@ -419,15 +419,20 @@ class ConstraintLayoutTest {
     // region positioning tests
 
     @Test
-    @Ignore
     fun testConstraintLayout_withInlineDSL() = with(rule.density) {
+        var rootSize: IntSize = IntSize.Zero
         val boxSize = 100
         val offset = 150
 
         val position = Array(3) { Ref<Offset>() }
 
         rule.setContent {
-            ConstraintLayout(Modifier.fillMaxSize()) {
+            ConstraintLayout(
+                Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned {
+                        rootSize = it.size
+                    }) {
                 val (box0, box1, box2) = createRefs()
                 Box(
                     Modifier
@@ -465,8 +470,8 @@ class ConstraintLayoutTest {
             }
         }
 
-        val displayWidth = displaySize.width
-        val displayHeight = displaySize.height
+        val displayWidth = rootSize.width
+        val displayHeight = rootSize.height
 
         rule.runOnIdle {
             assertEquals(
@@ -494,8 +499,8 @@ class ConstraintLayoutTest {
     }
 
     @Test
-    @Ignore
     fun testConstraintLayout_withConstraintSet() = with(rule.density) {
+        var rootSize: IntSize = IntSize.Zero
         val boxSize = 100
         val offset = 150
 
@@ -503,7 +508,7 @@ class ConstraintLayoutTest {
 
         rule.setContent {
             ConstraintLayout(
-                ConstraintSet {
+                constraintSet = ConstraintSet {
                     val box0 = createRefFor("box0")
                     val box1 = createRefFor("box1")
                     val box2 = createRefFor("box2")
@@ -523,7 +528,11 @@ class ConstraintLayoutTest {
                         bottom.linkTo(parent.bottom, margin = offset.toDp())
                     }
                 },
-                Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned {
+                        rootSize = it.size
+                    }
             ) {
                 for (i in 0..2) {
                     Box(
@@ -538,8 +547,8 @@ class ConstraintLayoutTest {
             }
         }
 
-        val displayWidth = displaySize.width
-        val displayHeight = displaySize.height
+        val displayWidth = rootSize.width
+        val displayHeight = rootSize.height
 
         rule.runOnIdle {
             assertEquals(
@@ -551,7 +560,7 @@ class ConstraintLayoutTest {
             )
             assertEquals(
                 Offset(
-                    (displayWidth / 2f + offset).toFloat(),
+                    (displayWidth / 2f + offset),
                     ((displayHeight - boxSize) / 2 - boxSize).toFloat()
                 ),
                 position[1].value
