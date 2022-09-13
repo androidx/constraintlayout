@@ -22,31 +22,26 @@ import androidx.constraintlayout.compose.OnSwipe
 import androidx.constraintlayout.compose.SwipeDirection
 import androidx.constraintlayout.compose.SwipeMode
 import androidx.constraintlayout.compose.SwipeSide
-import androidx.constraintlayout.compose.Transition
-import androidx.constraintlayout.compose.TransitionScope
 
 @Preview
 @Composable
 fun KeyAttributesSimpleDslExample() {
-    TwoItemLayout(transition = Transition {
+    TwoItemLayout(transitionContent = { img1, img2 ->
         onSwipe = OnSwipe(
-            anchor = "img1",
+            anchor = img1,
             side = SwipeSide.Right,
             direction = SwipeDirection.Right,
             mode = SwipeMode.Spring
         )
-        keyAttributes("img1") {
+        keyAttributes(img1) {
             frame(50f) {
                 scaleX = 1.5f
                 scaleY = 1.5f
             }
         }
-        keyAttributes("img2") {
+        keyAttributes(img2) {
             frame(25f) {
                 rotationZ = -45f
-            }
-            frame(50f) {
-                // Do nothing
             }
             frame(75f) {
                 rotationZ = 45f

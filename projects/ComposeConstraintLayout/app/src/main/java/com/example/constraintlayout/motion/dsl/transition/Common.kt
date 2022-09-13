@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,17 +33,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.Transition
-import com.example.constraintlayout.R
+import androidx.constraintlayout.compose.TransitionScope
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun TwoItemLayout(transition: Transition) {
+fun TwoItemLayout(transitionContent: TransitionScope.(img1: ConstrainedLayoutReference, img2: ConstrainedLayoutReference) -> Unit) {
     var atStart by remember { mutableStateOf(true) }
     val progress by animateFloatAsState(if (atStart) 0f else 1f, tween(2000))
 
@@ -88,17 +89,21 @@ inline fun TwoItemLayout(transition: Transition) {
                 .weight(1.0f, true),
             start = start,
             end = end,
-            transition = transition,
+            transition = Transition {
+                val img1 = createRefFor("img1")
+                val img2 = createRefFor("img2")
+                this.transitionContent(img1, img2)
+            },
             progress = progress
         ) {
             Image(
                 modifier = Modifier.layoutId("img1"),
-                painter = painterResource(id = R.drawable.intercom_snooze),
+                imageVector = Icons.Default.Android,
                 contentDescription = null
             )
             Image(
                 modifier = Modifier.layoutId("img2"),
-                painter = painterResource(id = R.drawable.intercom_snooze),
+                imageVector = Icons.Default.Android,
                 contentDescription = null
             )
         }

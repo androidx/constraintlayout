@@ -22,7 +22,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
@@ -40,7 +39,6 @@ import androidx.test.filters.MediumTest
 import kotlin.math.roundToInt
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -171,40 +169,37 @@ private fun OnSwipeTestJson() {
 
 @Composable
 private fun OnSwipeTestDsl() {
-    val start = remember {
-        ConstraintSet {
-            constrain(createRefFor("box")) {
-                width = Dimension.value(20.dp)
-                height = Dimension.value(20.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
-                start.linkTo(parent.start, 10.dp)
-            }
-        }
-    }
-    val end = remember {
-        ConstraintSet(start) {
-            constrain(createRefFor("box")) {
-                clearConstraints()
-                top.linkTo(parent.top, 10.dp)
-                end.linkTo(parent.end, 10.dp)
-            }
-        }
-    }
     MotionLayout(
         modifier = Modifier
             .testTag("MyMotion")
             .size(200.dp),
-        start = start,
-        end = end,
-        transition = Transition {
-            onSwipe = OnSwipe(
-                anchor = "box",
-                direction = SwipeDirection.End,
-                side = SwipeSide.End,
-                mode = SwipeMode.Spring,
-                onTouchUp = SwipeTouchUp.NeverCompleteStart,
-                springThreshold = 0.0001f
-            )
+        motionScene = MotionScene {
+            val box = createRefFor("box")
+            val from: ConstraintSetRef = constraintSet {
+                constrain(box) {
+                    width = Dimension.value(20.dp)
+                    height = Dimension.value(20.dp)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    start.linkTo(parent.start, 10.dp)
+                }
+            }
+            val to = constraintSet(extendConstraintSet = from) {
+                constrain(box) {
+                    clearConstraints()
+                    top.linkTo(parent.top, 10.dp)
+                    end.linkTo(parent.end, 10.dp)
+                }
+            }
+            defaultTransition(from, to) {
+                onSwipe = OnSwipe(
+                    anchor = box,
+                    direction = SwipeDirection.End,
+                    side = SwipeSide.End,
+                    mode = SwipeMode.Spring,
+                    onTouchUp = SwipeTouchUp.NeverCompleteStart,
+                    springThreshold = 0.0001f
+                )
+            }
         },
         progress = 0.0f
     ) {

@@ -72,9 +72,11 @@ val cardsExample = arrayListOf<CardInfo>(
  * in the center of the screen, slot0 on its left, slot2 on its right.
  * As slot1 is the "initial" slot, initialSlotIndex is 1 and numSlots is 3.
  *
+ * ```
  * next        [slot0] [slot1] | [slot2] |
  * start               [slot0] | [slot1] | [slot2]
  * previous                    | [slot0] | [slot1] [slot2]
+ * ```
  *
  * We are using the above data (cardsExample) that we pass to the
  * items() function, which leads to the item passed to be a CardInfo.
@@ -520,7 +522,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
             }
         }
         transition("forward", startState, nextState) {
-            keyAttributes("slot0", "slot1", "slot2") {
+            keyAttributes(slot0, slot1, slot2) {
                 frame(50f) {
                     scaleX = .3f
                     scaleY = .3f
@@ -528,7 +530,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
             }
         }
         transition("backward", startState, previousState) {
-            keyAttributes("slot0", "slot1", "slot2") {
+            keyAttributes(slot0, slot1, slot2) {
                 frame(50f) {
                     scaleX = .3f
                     scaleY = .3f

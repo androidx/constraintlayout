@@ -23,26 +23,24 @@ import androidx.constraintlayout.compose.RelativePosition
 import androidx.constraintlayout.compose.SwipeDirection
 import androidx.constraintlayout.compose.SwipeMode
 import androidx.constraintlayout.compose.SwipeSide
-import androidx.constraintlayout.compose.Transition
-import androidx.constraintlayout.compose.TransitionScope
 
 @Preview
 @Composable
 fun KeyPositionsSimpleDslExample() {
-    TwoItemLayout(transition = Transition {
+    TwoItemLayout(transitionContent = { img1, img2 ->
         onSwipe = OnSwipe(
-            anchor = "img1",
-            side = SwipeSide.Right,
-            direction = SwipeDirection.Right,
+            anchor = img1,
+            side = SwipeSide.Top,
+            direction = SwipeDirection.Up,
             mode = SwipeMode.Spring
         )
-        keyPositions("img1") {
+        keyPositions(img1) {
             type = RelativePosition.Delta
             frame(50f) {
                 percentX = -0.2f
             }
         }
-        keyPositions("img2") {
+        keyPositions(img2) {
             type = RelativePosition.Parent
             frame(25f) {
                 percentX = 0.2f

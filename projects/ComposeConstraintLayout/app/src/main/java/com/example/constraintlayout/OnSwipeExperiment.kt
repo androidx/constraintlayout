@@ -576,7 +576,7 @@ fun SimpleSwipeDsl(config: SimpleSwipeConfig) {
                 to = to
             ) {
                 onSwipe = OnSwipe(
-                    anchor = "box",
+                    anchor = box,
                     direction = SwipeDirection.Right,
                     side = SwipeSide.Left,
                     mode = mode,
