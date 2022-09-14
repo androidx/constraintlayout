@@ -73,7 +73,6 @@ fun Transition(@Language("json5") content: String): Transition? {
  * Used to reduced the exposed API from [Transition].
  */
 @ExperimentalMotionApi
-@PublishedApi
 internal class TransitionImpl(
     private val parsedTransition: CLObject,
     private val pixelDp: CorePixelDp
