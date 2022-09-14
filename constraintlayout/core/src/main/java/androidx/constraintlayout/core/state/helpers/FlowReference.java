@@ -571,7 +571,7 @@ public class FlowReference extends HelperReference {
             mFlow.setFirstHorizontalStyle(mFirstHorizontalStyle);
         }
         if (mLastHorizontalStyle!= UNKNOWN) {
-            mFlow.setLastHorizontalStyle(mLastVerticalStyle);
+            mFlow.setLastHorizontalStyle(mLastHorizontalStyle);
         }
 
         // General attributes of a widget
