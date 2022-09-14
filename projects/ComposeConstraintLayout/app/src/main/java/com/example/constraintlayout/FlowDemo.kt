@@ -30,70 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.*
 
-// Currently, we have an issue setting a fixed width and height
-@Preview(group = "flow-invalid")
-@Composable
-fun FlowInvalidDemo1() {
-    ConstraintLayout(
-        ConstraintSet("""
-        {
-            flow1: { 
-                width: 500,
-                height: 500,
-                type: 'hFlow',
-                contains: ['btn1', 'btn2'],
-              }
-        }
-        """.trimIndent()),
-        modifier = Modifier.fillMaxSize()) {
-        val numArray = arrayOf("btn1", "btn2")
-        for (num in numArray) {
-            Button(
-                modifier = Modifier.layoutId(num),
-                onClick = {},
-            ) {
-                Text(text = num)
-            }
-        }
-    }
-}
-
-// With some specific Ids such as "1", "11", "111" or "a", "aa", "aaa"
-// The left position would become 0
-@Preview(group = "flow-invalid")
-@Composable
-fun FlowInvalidDemo2() {
-    ConstraintLayout(
-        ConstraintSet("""
-        {
-            flow: { 
-                width: 'parent',
-                height: 'parent',
-                type: 'vFlow',
-                contains: ['1', '2', '3', '4'],
-              }
-        }
-        """.trimIndent()),
-        modifier = Modifier.fillMaxSize()) {
-        val numArray = arrayOf("1", "2", "3", "4")
-        for (num in numArray) {
-            Button(
-                modifier = Modifier.layoutId(num),
-                onClick = {},
-            ) {
-                Text(text = num)
-            }
-        }
-    }
-}
-
-
-
 @Preview(group = "flow-basic")
 @Composable
 fun FlowBasicDemo1() {
-    // Currently, we still have problem with positioning the Flow Helper
-    // and/or setting the width/height properly.
     ConstraintLayout(
         ConstraintSet("""
         {
@@ -119,7 +58,7 @@ fun FlowBasicDemo1() {
 }
 
 
-
+// test horizontal style and horizontal Gap
 @Preview(group = "flow-basic")
 @Composable
 fun FlowBasicDemo2() {
@@ -149,6 +88,7 @@ fun FlowBasicDemo2() {
     }
 }
 
+// test adding constraints to the other widget
 @Preview(group = "flow-basic")
 @Composable
 fun FlowBasicDemo3() {
@@ -209,6 +149,7 @@ fun FlowBasicDemo4() {
     }
 }
 
+// test vertical style and vertical gap
 @Preview(group = "flow-basic")
 @Composable
 fun FlowBasicDemo5() {
@@ -238,6 +179,7 @@ fun FlowBasicDemo5() {
     }
 }
 
+// test adding constraints to parent
 @Preview(group = "flow-basic")
 @Composable
 fun FlowBasicDemo6() {
@@ -266,3 +208,4 @@ fun FlowBasicDemo6() {
         }
     }
 }
+

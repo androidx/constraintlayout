@@ -17,11 +17,15 @@
 package com.example.constraintlayout
 
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.*
@@ -147,70 +151,9 @@ fun FlowChainDemo4() {
     }
 }
 
-@Preview(group = "flow-aligned")
+@Preview(group = "flow")
 @Composable
-fun FlowAlignedDemo1() {
-    ConstraintLayout(
-        ConstraintSet("""
-        {
-            flow1: { 
-                width: 'parent',
-                height: 'parent',
-                type: 'vFlow',
-                wrap: 'aligned',
-                center: 'parent',
-                maxElement: 3,
-                contains: ['1', '2', '3', '4', '5'],
-              }
-        }
-        """.trimIndent()),
-        modifier = Modifier.fillMaxSize()) {
-        val chArray = arrayOf("1", "2", "3", "4", "5")
-        for (ch in chArray) {
-            Button(
-                modifier = Modifier.layoutId(ch),
-                onClick = {},
-            ) {
-                Text(text = ch)
-            }
-        }
-    }
-}
-
-@Preview(group = "flow-aligned")
-@Composable
-fun FlowAlignedDemo2() {
-    ConstraintLayout(
-        ConstraintSet("""
-        {
-            flow1: { 
-                width: 'parent',
-                height: 'parent',
-                type: 'vFlow',
-                wrap: 'aligned',
-                center: 'parent',
-                maxElement: 3,
-                vStyle: 'packed',
-                contains: ['1', '2', '3', '4', '5'],
-              }
-        }
-        """.trimIndent()),
-        modifier = Modifier.fillMaxSize()) {
-        val chArray = arrayOf("1", "2", "3", "4", "5")
-        for (ch in chArray) {
-            Button(
-                modifier = Modifier.layoutId(ch),
-                onClick = {},
-            ) {
-                Text(text = ch)
-            }
-        }
-    }
-}
-
-@Preview(group = "flow-aligned")
-@Composable
-fun FlowAlignedDemo4() {
+fun FlowChainDemo5() {
     ConstraintLayout(
         ConstraintSet("""
         {
@@ -218,52 +161,51 @@ fun FlowAlignedDemo4() {
                 width: 'parent',
                 height: 'parent',
                 type: 'hFlow',
-                wrap: 'aligned',
-                center: 'parent',
-                maxElement: 3,
-                contains: ['1', '2', '3', '4', '5'],
+                wrap: 'chain',
+                hStyle: ['spread', 'spread_inside', 'packed'],
+                maxElement: 2,
+                contains: ['1', '2', '3', '4', '5', '6'],
               }
         }
         """.trimIndent()),
         modifier = Modifier.fillMaxSize()) {
-        val chArray = arrayOf("1", "2", "3", "4", "5")
-        for (ch in chArray) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
             Button(
-                modifier = Modifier.layoutId(ch),
+                modifier = Modifier.layoutId(num),
                 onClick = {},
             ) {
-                Text(text = ch)
+                Text(text = num)
             }
         }
     }
 }
 
-@Preview(group = "flow-aligned")
+@Preview(group = "flow-chain")
 @Composable
-fun FlowAlignedDemo3() {
+fun FlowChainDemo6() {
     ConstraintLayout(
         ConstraintSet("""
         {
             flow1: { 
                 width: 'parent',
                 height: 'parent',
-                type: 'hFlow',
-                wrap: 'aligned',
-                center: 'parent',
-                maxElement: 3,
-                hStyle: 'spread_inside',
-                contains: ['1', '2', '3', '4', '5'],
+                type: 'vFlow',
+                wrap: 'chain',
+                vStyle: ['spread', 'spread_inside', 'packed'],
+                maxElement: 2,
+                contains: ['1', '2', '3', '4', '5', '6'],
               }
         }
         """.trimIndent()),
         modifier = Modifier.fillMaxSize()) {
-        val chArray = arrayOf("1", "2", "3", "4", "5")
-        for (ch in chArray) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
             Button(
-                modifier = Modifier.layoutId(ch),
+                modifier = Modifier.layoutId(num),
                 onClick = {},
             ) {
-                Text(text = ch)
+                Text(text = num)
             }
         }
     }
