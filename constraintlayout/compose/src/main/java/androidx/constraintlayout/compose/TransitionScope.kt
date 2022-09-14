@@ -33,6 +33,8 @@ import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
 
+val itemized = "MOVABLE_ITEM"
+
 @ExperimentalMotionApi
 @Composable
 fun Transition(
