@@ -22,10 +22,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.rememberSwipeableState
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -41,6 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
+
+// TODO: replace this implementation?
+import androidx.constraintlayout.compose.swipeable.FractionalThreshold
+import androidx.constraintlayout.compose.swipeable.rememberSwipeableState
+import androidx.constraintlayout.compose.swipeable.swipeable
 
 /**
  * Implements an horizontal Carousel of n elements, driven by drag gestures and customizable
@@ -148,7 +149,7 @@ import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
  * @param showSlots a debug flag to display the slots in the scene regardless if they are populated
  * @param content the MotionCarouselScope we use to map the elements to the slots
  */
-@OptIn(ExperimentalMotionApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMotionApi::class)
 @Composable
 fun MotionCarousel(
     motionScene: MotionScene,
@@ -402,3 +403,5 @@ private class MotionCarouselScopeImpl() : MotionCarouselScope, MotionItemsProvid
         return itemsProviderWithProperties != null
     }
 }
+
+//////
