@@ -10,7 +10,7 @@ on:
       - 'constraintlayout/**.gradle'
   pull_request:
     paths:
-      - 'workflows/core.yml'
+      - '.github/workflows/core.yml'
       - 'constraintlayout/**.java'
       - 'constraintlayout/**.kt'
       - 'constraintlayout/**.xml'
@@ -35,11 +35,22 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
       - name: Set up JDK 1.11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: '11'
-          cache: 'gradle'
+          java-version: 1.11
+      ## Caching
+      - name: Cache gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.GRADLE_HOME }}/caches
+          # Include the SHA in the hash so this step always adds a cache entry. If we didn't use the SHA, the artifacts
+          # would only get cached once for each build config hash.
+          # Don't use ${{ runner.os }} in the key so we don't re-assemble for UI tests.
+          key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/buildSrc/**') }}-${{ github.sha }}
+          # The first time a SHA is assembled, we still want to load dependencies from the cache.
+          # Note that none of jobs dependent on this one need restore keys, since they'll always have an exact hit.
+          restore-keys: |
+            gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/buildSrc/**') }}-
       # We want to keep the dependencies from the cache, but clear out the build cache which contains the actual
       # compiled artifacts from this project. This ensures we don't run into any issues with stale cache entries,
       # and that the resulting cache we upload for the other jobs won't waste any space on stale binaries.
@@ -65,11 +76,10 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
       - name: Set up JDK 1.11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: '11'
-          cache: 'gradle'
+          java-version: 1.11
+
       ## Caching
       - name: Cache build artifacts
         uses: actions/cache@v2
@@ -82,31 +92,28 @@ jobs:
       ## Actual task
       - name: Run tests
         run: ./gradlew test --build-cache --no-daemon --stacktrace --gradle-user-home "$GRADLE_HOME"
-      - name: Publish Test Report
+      - name: Core Test Report
         uses: mikepenz/action-junit-report@v1.2.1
         with:
-          report_paths: '/tmp/out/build/core/build/test-results/test/TEST-*.xml'
+          report_paths: '${{ github.workspace }}/constraintlayout/core/build/test-results/test/TEST-*.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   compose-androidTest:
     name: Compose instrumentation tests
+    needs: assemble
     runs-on: macos-latest
 
     strategy:
       matrix:
-        api-level: [29]
+        api-level: [30]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Gradle cache
-        uses: actions/cache@v2
+      - name: Set up JDK 1.11
+        uses: actions/setup-java@v1
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+          java-version: 1.11
 
       - name: AVD cache
         uses: actions/cache@v2
@@ -122,6 +129,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: google_apis
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -133,16 +141,25 @@ jobs:
         with:
           working-directory: ./constraintlayout
           api-level: ${{ matrix.api-level }}
+          target: google_apis
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew :compose:connectedCheck
+          script: ./gradlew :compose:connectedCheck --build-cache --no-daemon --stacktrace --gradle-user-home "$GRADLE_HOME"
 
       - name: Upload results
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: instrumentation-test-results
-          path: /tmp/out/build/constraintlayout/build/reports/androidTests/connected/**
+          path: ${{ github.workspace }}/constraintlayout/compose/build/reports/androidTests/connected/**
+
+      - name: Compose AndroidTest Report
+        if: ${{ always() }}
+        uses: mikepenz/action-junit-report@v1.2.1
+        with:
+          report_paths: '${{ github.workspace }}/constraintlayout/compose/build/outputs/androidTest-results/connected/TEST-*.xml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
   lint:
@@ -155,11 +172,9 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
       - name: Set up JDK 1.11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: '11'
-          cache: 'gradle'
+          java-version: 1.11
 
       ## Caching
       - name: Cache build artifacts
