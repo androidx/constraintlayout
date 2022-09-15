@@ -403,5 +403,3 @@ private class MotionCarouselScopeImpl() : MotionCarouselScope, MotionItemsProvid
         return itemsProviderWithProperties != null
     }
 }
-
-//////
