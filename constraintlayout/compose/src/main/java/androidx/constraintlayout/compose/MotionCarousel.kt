@@ -39,9 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.MotionLayoutScope.MotionProperties
 
 // TODO: replace this implementation?
-import androidx.constraintlayout.compose.swipeable.FractionalThreshold
-import androidx.constraintlayout.compose.swipeable.rememberSwipeableState
-import androidx.constraintlayout.compose.swipeable.swipeable
+import androidx.constraintlayout.compose.carousel.FractionalThreshold
+import androidx.constraintlayout.compose.carousel.rememberCarouselSwipeableState
+import androidx.constraintlayout.compose.carousel.carouselSwipeable
 
 /**
  * Implements an horizontal Carousel of n elements, driven by drag gestures and customizable
@@ -169,7 +169,7 @@ fun MotionCarousel(
     val provider = rememberStateOfItemsProvider(content)
 
     var componentWidth by remember { mutableStateOf(1000f) }
-    val swipeableState = rememberSwipeableState(swipeStateStart)
+    val swipeableState = rememberCarouselSwipeableState(swipeStateStart)
     var mprogress = (swipeableState.offset.value / componentWidth)
 
     var state by remember {
@@ -242,7 +242,7 @@ fun MotionCarousel(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .swipeable(
+            .carouselSwipeable(
                 state = swipeableState,
                 anchors = anchors,
                 reverseDirection = true,
