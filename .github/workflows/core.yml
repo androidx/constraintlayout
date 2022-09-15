@@ -10,6 +10,7 @@ on:
       - 'constraintlayout/**.gradle'
   pull_request:
     paths:
+      - 'workflows/core.yml'
       - 'constraintlayout/**.java'
       - 'constraintlayout/**.kt'
       - 'constraintlayout/**.xml'
