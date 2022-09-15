@@ -53,6 +53,45 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget
 import kotlin.math.abs
 import kotlinx.coroutines.launch
 
+/**
+ * Composables within [MotionScope] may apply the [MotionScope.motion] modifier to enable animations
+ * on bounds change. This means that the Layout with [MotionScope.motion] will animate everytime its
+ * position or size change.
+ *
+ * &nbsp;
+ *
+ * KeyFrames then may be applied to the animation caused by [MotionScope.motion], see
+ * [MotionModifierScope].
+ *
+ * &nbsp;
+ *
+ * Use [rememberMotionContent] and [MotionScope.motion] to animate layout changes caused by changing
+ * the Composable's Layout parent on state changes.
+ *
+ * E.g:
+ *
+ * ```
+ * var vertOrHor by remember { mutableStateOf(false) }
+ * // Declare movable content
+ * val texts = rememberMotionContent { // this:MotionScope
+ *     Text(text = "Hello", modifier = Modifier.motion(tween(250))) // Animate for 250ms
+ *     Text(text = "World", modifier = Modifier.motion { // this:MotionModifierScope
+ *         keyAttributes { // KeyFrames applied on every layout change
+ *             frame(50f) { // Rotate 90° at 50% progress
+ *                 rotationZ = 90f
+ *             }
+ *         }
+ *     })
+ * }
+ * Motion(Modifier.fillMaxSize()) { // this:MotionScope
+ *     if (vertOrHor) {
+ *         Column { texts() }
+ *     } else {
+ *         Row { texts() }
+ *     }
+ * }
+ * ```
+ */
 @ExperimentalMotionApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -90,6 +129,12 @@ fun Motion(
 @DslMarker
 annotation class MotionDslScope
 
+/**
+ * Scope for the [Motion] Composable.
+ *
+ * Use [Modifier.motion] to enable animations on layout changes for Composables defined within this
+ * scope.
+ */
 @ExperimentalMotionApi
 @MotionDslScope
 @OptIn(ExperimentalComposeUiApi::class)
@@ -99,6 +144,9 @@ class MotionScope(
     private var nextId: Int = 1000
     private var lastId: Int = nextId
 
+    /**
+     * Emit the content of every Composable within the list.
+     */
     @SuppressLint("ComposableNaming") // it's easier to understand as a regular extension function
     @Composable
     fun List<@Composable MotionScope.(index: Int) -> Unit>.emit() {
@@ -107,7 +155,15 @@ class MotionScope(
         }
     }
 
-    @SuppressLint("SyntheticAccessor")
+    /**
+     * Animate layout changes.
+     *
+     * The duration and easing of the animation is defined by [animationSpec]. Note that this
+     * [AnimationSpec] will be used to drive a progress value from 0 to 1.
+     *
+     * Set [ignoreAxisChanges] to `true` to prevent triggering animations when the Composable is
+     * being scrolled either vertically or horizontally.
+     */
     fun Modifier.motion(
         animationSpec: AnimationSpec<Float> = spring(),
         ignoreAxisChanges: Boolean = false,
@@ -294,8 +350,19 @@ class MotionScope(
                 }
             }
     }
+
+    private fun ConstraintWidget.applyBounds(rect: IntRect) {
+        val position = rect.topLeft
+        x = position.x
+        y = position.y
+        width = rect.width
+        height = rect.height
+    }
 }
 
+/**
+ * Equivalent to [movableContentOf] with [MotionScope] as context.
+ */
 @ExperimentalMotionApi
 @Composable
 fun rememberMotionContent(content: @Composable MotionScope.() -> Unit): @Composable MotionScope.() -> Unit {
@@ -304,6 +371,13 @@ fun rememberMotionContent(content: @Composable MotionScope.() -> Unit): @Composa
     }
 }
 
+/**
+ * Alternative to [movableContentOf] to generate a finite List of Composables.
+ *
+ * Useful when each Composable is meant to be used as an item of a List such as Row or Column.
+ *
+ * @see [MotionScope.emit]
+ */
 @ExperimentalMotionApi
 @Composable
 fun rememberMotionListItems(
@@ -318,12 +392,4 @@ fun rememberMotionListItems(
         return@remember list
     }
     return items
-}
-
-private fun ConstraintWidget.applyBounds(rect: IntRect) {
-    val position = rect.topLeft
-    x = position.x
-    y = position.y
-    width = rect.width
-    height = rect.height
 }
