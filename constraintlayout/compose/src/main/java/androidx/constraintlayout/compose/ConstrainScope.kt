@@ -487,6 +487,20 @@ class ConstrainScope internal constructor(internal val id: Any) {
                 .pivotY(Float.NaN)
         }
     }
+
+    /**
+     * Convenience function to set a fixed dimension in Dp to the width
+     */
+    fun width(value: Dp) {
+        width = Dimension.value(value)
+    }
+
+    /**
+     * Convenience function to set a fixed dimension in Dp to the height
+     */
+    fun height(value: Dp) {
+        height = Dimension.value(value)
+    }
 }
 
 /**
