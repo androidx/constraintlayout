@@ -23,10 +23,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,9 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.size
 import androidx.constraintlayout.compose.test.R
@@ -74,8 +81,8 @@ internal class MotionLayoutTest {
 
         // TextSize is 18sp at the start. Since getting the resulting dimensions of the text is not
         // straightforward, the values were obtained by running the test
-        assertEquals(41.dp.value, usernameSize.width.value, absoluteTolerance = 0.5f)
-        assertEquals(24.36.dp.value, usernameSize.height.value, absoluteTolerance = 0.5f)
+        assertEquals(55.dp.value, usernameSize.width.value, absoluteTolerance = 0.5f)
+        assertEquals(25.dp.value, usernameSize.height.value, absoluteTolerance = 0.5f)
 
         animateToEnd = true
         rule.waitForIdle()
@@ -83,8 +90,8 @@ internal class MotionLayoutTest {
         usernameSize = rule.onNodeWithTag("username").getUnclippedBoundsInRoot().size
 
         // TextSize is 12sp at the end. Results in approx. 66% of the original text height
-        assertEquals(28.dp.value, usernameSize.width.value, absoluteTolerance = 0.5f)
-        assertEquals(16.dp.value, usernameSize.height.value, absoluteTolerance = 0.5f)
+        assertEquals(35.dp.value, usernameSize.width.value, absoluteTolerance = 0.5f)
+        assertEquals(17.dp.value, usernameSize.height.value, absoluteTolerance = 0.5f)
     }
 }
 
@@ -92,40 +99,48 @@ internal class MotionLayoutTest {
 @Composable
 private fun CustomTextSize(modifier: Modifier, progress: Float) {
     val context = LocalContext.current
-    MotionLayout(
-        motionScene = MotionScene(
-            content = context
-                .resources
-                .openRawResource(R.raw.custom_text_size_scene)
-                .readBytes()
-                .decodeToString()
-        ),
-        progress = progress,
-        modifier = modifier
+    CompositionLocalProvider(
+        LocalDensity provides Density(1f, 1f),
+        LocalTextStyle provides TextStyle(
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Normal
+        )
     ) {
-        val profilePicProperties = motionProperties(id = "profile_pic")
-        Box(
-            modifier = Modifier
-                .layoutTestId("box")
-                .background(Color.DarkGray)
-        )
-        Image(
-            imageVector = Icons.Default.Person,
-            contentDescription = null,
-            modifier = Modifier
-                .clip(CircleShape)
-                .border(
-                    width = 2.dp,
-                    color = profilePicProperties.value.color("background"),
-                    shape = CircleShape
-                )
-                .layoutTestId("profile_pic")
-        )
-        Text(
-            text = "Hello",
-            fontSize = motionFontSize("username", "textSize"),
-            modifier = Modifier.layoutTestId("username"),
-            color = profilePicProperties.value.color("background")
-        )
+        MotionLayout(
+            motionScene = MotionScene(
+                content = context
+                    .resources
+                    .openRawResource(R.raw.custom_text_size_scene)
+                    .readBytes()
+                    .decodeToString()
+            ),
+            progress = progress,
+            modifier = modifier
+        ) {
+            val profilePicProperties = motionProperties(id = "profile_pic")
+            Box(
+                modifier = Modifier
+                    .layoutTestId("box")
+                    .background(Color.DarkGray)
+            )
+            Image(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .border(
+                        width = 2.dp,
+                        color = profilePicProperties.value.color("background"),
+                        shape = CircleShape
+                    )
+                    .layoutTestId("profile_pic")
+            )
+            Text(
+                text = "Hello",
+                fontSize = motionFontSize("username", "textSize"),
+                modifier = Modifier.layoutTestId("username"),
+                color = profilePicProperties.value.color("background")
+            )
+        }
     }
 }
