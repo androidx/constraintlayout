@@ -19,6 +19,13 @@ package androidx.constraintlayout.compose
 import androidx.constraintlayout.core.parser.CLArray
 import androidx.constraintlayout.core.parser.CLObject
 
+/**
+ * Define keyframes for the animation caused by [MotionScope.motion].
+ *
+ * @see [KeyAttributesScope]
+ * @see [KeyPositionsScope]
+ * @see [KeyCyclesScope]
+ */
 @ExperimentalMotionApi
 class MotionModifierScope internal constructor(
     id: Any
@@ -54,10 +61,6 @@ class MotionModifierScope internal constructor(
         containerObject.put("KeyFrames", keyFramesObject)
         keyFramesObject.put("KeyCycles", keyCyclesArray)
     }
-
-    var durationMs: Long = 400L
-
-    var easing: Easing = Easing.Standard
 
     var motionArc: Arc = Arc.None
 
