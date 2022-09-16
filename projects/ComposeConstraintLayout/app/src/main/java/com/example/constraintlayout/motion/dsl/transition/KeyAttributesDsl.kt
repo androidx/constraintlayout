@@ -34,16 +34,16 @@ fun KeyAttributesSimpleDslExample() {
             mode = SwipeMode.Spring
         )
         keyAttributes(img1) {
-            frame(50f) {
+            frame(50) {
                 scaleX = 1.5f
                 scaleY = 1.5f
             }
         }
         keyAttributes(img2) {
-            frame(25f) {
+            frame(25) {
                 rotationZ = -45f
             }
-            frame(75f) {
+            frame(75) {
                 rotationZ = 45f
             }
         }

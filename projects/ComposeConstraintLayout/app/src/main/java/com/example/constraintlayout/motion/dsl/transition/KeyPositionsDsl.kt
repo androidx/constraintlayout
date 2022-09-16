@@ -36,20 +36,20 @@ fun KeyPositionsSimpleDslExample() {
         )
         keyPositions(img1) {
             type = RelativePosition.Delta
-            frame(50f) {
+            frame(50) {
                 percentX = -0.2f
             }
         }
         keyPositions(img2) {
             type = RelativePosition.Parent
-            frame(25f) {
+            frame(25) {
                 percentX = 0.2f
             }
-            frame(50f) {
+            frame(50) {
                 percentX = 0.5f
 
             }
-            frame(75f) {
+            frame(75) {
                 percentX = 0.2f
             }
         }

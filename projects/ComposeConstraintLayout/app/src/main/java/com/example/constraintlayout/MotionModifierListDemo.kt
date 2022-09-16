@@ -96,7 +96,7 @@ private fun ExpandableListPreview() {
                 .motion(animationSpec = tween(durationMs), ignoreAxisChanges = true) {
                     // We may apply keyframes to modify the items during animation
                     keyAttributes {
-                        frame(50f) {
+                        frame(50) {
                             scaleX = 0.7f
                             scaleY = 0.7f
                         }

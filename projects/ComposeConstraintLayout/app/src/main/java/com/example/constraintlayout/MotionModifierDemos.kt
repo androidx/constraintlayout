@@ -77,7 +77,7 @@ fun MotionModifier1() {
                 modifier = Modifier.motion(tween(2000)) {
                     // KeyFrames applied on every layout change
                     keyAttributes {
-                        frame(50f) {
+                        frame(80) {
                             rotationZ = 90f
                             scaleY = 2f
                             scaleX = 2f
@@ -135,15 +135,15 @@ fun CardTest() {
             modifier = Modifier
                 .motion(animationSpec) {
                     keyAttributes {
-                        frame(20f) {
+                        frame(20) {
                             translationX = -30f
                             translationY = 0f
                         }
-                        frame(50f) {
+                        frame(50) {
                             translationX = -50f
                             translationY = -20f
                         }
-                        frame(80f) {
+                        frame(80) {
                             translationX = -30f
                             translationY = -20f
                         }
@@ -165,10 +165,10 @@ fun CardTest() {
         Text(
             modifier = Modifier.motion(animationSpec) {
                 keyAttributes {
-                    frame(0f) {
+                    frame(0) {
                         rotationX = -180f
                     }
-                    frame(50f) {
+                    frame(50) {
                         rotationX = -100f
                     }
                 }
@@ -271,7 +271,7 @@ fun MotionLookAhead2() {
             modifier = Modifier
                 .motion(tween(2000), ignoreAxisChanges = true) {
                     keyAttributes {
-                        frame(50f) {
+                        frame(50) {
                             rotationZ = 40f
                             scaleY = 0.7f
                             scaleX = 0.7f
@@ -318,7 +318,7 @@ fun MotionLookAhead3() {
                 .motion(tween(2000), ignoreAxisChanges = true) {
                     // Move every listed item with this KeyAttribute
                     keyAttributes {
-                        frame(50f) {
+                        frame(50) {
                             rotationZ = 40f
                             scaleY = 0.7f
                             scaleX = 0.7f
