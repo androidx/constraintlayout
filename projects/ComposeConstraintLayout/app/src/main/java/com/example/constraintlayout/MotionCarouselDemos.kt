@@ -34,7 +34,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionCarousel
 import androidx.constraintlayout.compose.MotionCarouselScope
 import androidx.constraintlayout.compose.MotionLayoutScope
@@ -75,6 +77,12 @@ val cardsExample = arrayListOf<CardInfo>(
     CardInfo(7, "Card 8", colors[7 % colors.size]),
     CardInfo(8, "Card 9", colors[8 % colors.size]),
 )
+
+/**
+ * Helper function
+ */
+inline val Dp.asDimension : Dimension
+    get() = Dimension.value(this)
 
 /**
  * Simple Carousel demo
@@ -478,57 +486,57 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
         val slot2 = createRefFor("slot2")
         val startState = constraintSet("start") {
             constrain(slot0) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 end.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
             }
             constrain(slot1) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 centerTo(parent)
             }
             constrain(slot2) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 start.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
             }
         }
         val nextState = constraintSet("next") {
             constrain(slot0) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 end.linkTo(slot1.start, 8.dp)
                 centerVerticallyTo(parent)
             }
             constrain(slot1) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 end.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
             }
             constrain(slot2) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 centerTo(parent)
             }
         }
         val previousState = constraintSet("previous") {
             constrain(slot0) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 centerTo(parent)
             }
             constrain(slot1) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 start.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
             }
             constrain(slot2) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
                 start.linkTo(slot1.end, 8.dp)
                 centerVerticallyTo(parent)
             }
@@ -581,16 +589,16 @@ fun MySimpleCarouselDSL2(content: MotionCarouselScope.() -> Unit) {
         val slot2 = createRefFor("slot2")
         val baseState = constraintSet("base") {
             constrain(slot0) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
             }
             constrain(slot1) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
             }
             constrain(slot2) {
-                width(200.dp)
-                height(400.dp)
+                width = 200.dp.asDimension
+                height = 400.dp.asDimension
             }
         }
         val startState = constraintSet("start", baseState) {
@@ -681,22 +689,22 @@ fun MyCarouselDSL(content: MotionCarouselScope.() -> Unit) {
 
         val startState = constraintSet("start") {
             constrain(slot0) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot1) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot2) {
-                width(150.dp)
-                height(250.dp)
+                width = 150.dp.asDimension
+                height = 250.dp.asDimension
                 centerTo(parent)
                 rotationX = 5f
                 rotationY = 360f
@@ -704,15 +712,15 @@ fun MyCarouselDSL(content: MotionCarouselScope.() -> Unit) {
                 customFloat("main", 1.0f)
             }
             constrain(slot3) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot4) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
@@ -720,37 +728,37 @@ fun MyCarouselDSL(content: MotionCarouselScope.() -> Unit) {
         }
         val nextState = constraintSet("next") {
             constrain(slot0) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(slot1.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot1) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot2) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot3) {
-                width(150.dp)
-                height(250.dp)
+                width = 150.dp.asDimension
+                height = 250.dp.asDimension
                 centerTo(parent)
                 rotationX = 5f
                 customColor("mainColor", Color.Red)
                 customFloat("main", 1.0f)
             }
             constrain(slot4) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
@@ -758,37 +766,37 @@ fun MyCarouselDSL(content: MotionCarouselScope.() -> Unit) {
         }
         val previousState = constraintSet("previous") {
             constrain(slot0) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(parent.start, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot1) {
-                width(150.dp)
-                height(250.dp)
+                width = 150.dp.asDimension
+                height = 250.dp.asDimension
                 centerTo(parent)
                 rotationX = 5f
                 customColor("mainColor", Color.Red)
                 customFloat("main", 1.0f)
             }
             constrain(slot2) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 end.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot3) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(parent.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
             }
             constrain(slot4) {
-                width(100.dp)
-                height(200.dp)
+                width = 100.dp.asDimension
+                height = 200.dp.asDimension
                 start.linkTo(slot3.end, 8.dp)
                 centerVerticallyTo(parent)
                 customColor("mainColor", Color.Blue)
