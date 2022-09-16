@@ -41,14 +41,14 @@ import androidx.constraintlayout.compose.MotionScene
 public fun MotionFlowDemo() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0f) }
+    val progress = remember { Animatable(0f) }
 
     LaunchedEffect(animateToEnd) {
         progress.animateTo(if (animateToEnd) 1f else 0f,
         animationSpec = tween(3000))
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
         val scene1 = MotionScene("""
             {
@@ -59,14 +59,11 @@ public fun MotionFlowDemo() {
                 ConstraintSets: {
                   start: {
                     flow1: { 
-                        width: 'match_parent',
-                        height: 'match_parent',
+                        width: 'parent',
+                        height: 'parent',
                         type: 'hFlow',
-                        wrap: 'none',
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4'],
                       }
                   },
@@ -79,8 +76,6 @@ public fun MotionFlowDemo() {
                         wrap: 'none',
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4'],
                       }
                   }
@@ -88,7 +83,7 @@ public fun MotionFlowDemo() {
                 
                 Transitions: {
                   default: {
-                    from: 'start',   to: 'end',
+                    from: 'start', to: 'end',
                   }
                 }
             }
@@ -99,7 +94,7 @@ public fun MotionFlowDemo() {
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   = progress.value) {
+            progress = progress.value) {
             val numArray = arrayOf("1", "2", "3", "4")
             for (num in numArray) {
                 Button(
@@ -109,7 +104,6 @@ public fun MotionFlowDemo() {
                     Text(text = num)
                 }
             }
-
         }
 
         Button(onClick = { animateToEnd = !animateToEnd },
@@ -126,47 +120,42 @@ public fun MotionFlowDemo() {
 public fun MotionFlowDemo2() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0f) }
+    val progress = remember { Animatable(0f) }
 
     LaunchedEffect(animateToEnd) {
         progress.animateTo(if (animateToEnd) 1f else 0f,
             animationSpec = tween(3000))
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
         val scene1 = MotionScene("""
             {
                 Header: {
-                  name: 'flowDemo1'
+                  name: 'flowDemo2'
                 },
                 
                 ConstraintSets: {
                   start: {
                     flow1: { 
-                        width: 'match_parent',
-                        height: 'match_parent',
+                        width: 'parent',
+                        height: 'parent',
                         type: 'hFlow',
-                        wrap: 'none',
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4', '5'],
                       }
                   },
                   
                   end: {
                     flow2: { 
-                        width: 'match_parent',
-                        height: 'match_parent',
+                        width: 300,
+                        height: 300,
                         type: 'vFlow',
                         wrap: 'aligned',
                         maxElement: 3,
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4', '5'],
                       }
                   }
@@ -174,18 +163,18 @@ public fun MotionFlowDemo2() {
                 
                 Transitions: {
                   default: {
-                    from: 'start',   to: 'end',
+                    from: 'start', to: 'end',
                   }
                 }
             }
             """)
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
             motionScene = scene1,
-            progress   = progress.value) {
+            progress = progress.value) {
             val numArray = arrayOf("1", "2", "3", "4", "5")
             for (num in numArray) {
                 Button(
@@ -213,47 +202,45 @@ public fun MotionFlowDemo2() {
 public fun MotionFlowDemo3() {
     var animateToEnd by remember { mutableStateOf(false) }
 
-    val progress  = remember { Animatable(0f) }
+    val progress = remember { Animatable(0f) }
 
     LaunchedEffect(animateToEnd) {
         progress.animateTo(if (animateToEnd) 1f else 0f,
             animationSpec = tween(3000))
     }
 
-    Column( modifier = Modifier.background(Color.White)) {
+    Column(modifier = Modifier.background(Color.White)) {
 
         val scene1 = MotionScene("""
             {
                 Header: {
-                  name: 'flowDemo2'
+                  name: 'flowDemo3'
                 },
                 
                 ConstraintSets: {
                   start: {
                     flow1: { 
-                        width: 'match_parent',
-                        height: 'match_parent',
+                        width: 'parent',
+                        height: 'parent',
                         type: 'vFlow',
-                        wrap: 'none',
+                        wrap: 'chain',
+                        maxElement: 3,
+                        vStyle: ['spread', 'packed', 'spread_inside'],
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4', '5', '6', '7', '8'],
                       }
                   },
                   
                   end: {
                     flow2: { 
-                        width: 'match_parent',
-                        height: 'match_parent',
+                        width: 'wrap',
+                        height: 'wrap',
                         type: 'hFlow',
                         wrap: 'chain',
                         maxElement: 3,
                         vGap: 20,
                         hGap: 20,
-                        centerVertically: 'parent',
-                        centerHorizontally: 'parent',
                         contains: ['1', '2', '3', '4', '5', '6', '7', '8'],
                       }
                   }
@@ -261,18 +248,18 @@ public fun MotionFlowDemo3() {
                 
                 Transitions: {
                   default: {
-                    from: 'start',   to: 'end',
+                    from: 'start', to: 'end',
                   }
                 }
             }
             """)
 
         MotionLayout(
-            modifier    = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp),
             motionScene = scene1,
-            progress   = progress.value) {
+            progress = progress.value) {
             val numArray = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
             for (num in numArray) {
                 Button(
@@ -283,6 +270,94 @@ public fun MotionFlowDemo3() {
                 }
             }
 
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(3.dp)) {
+            Text(text = "Run")
+        }
+    }
+}
+
+@Preview(group = "motion")
+@Composable
+public fun MotionFlowDemo4() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress = remember { Animatable(0f) }
+
+    LaunchedEffect(animateToEnd) {
+        progress.animateTo(if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000))
+    }
+
+    Column(modifier = Modifier.background(Color.White)) {
+
+        val scene1 = MotionScene("""
+            {
+                Header: {
+                  name: 'flowDemo4'
+                },
+                
+                ConstraintSets: {
+                  start: {
+                    flow1: { 
+                        width: 'parent',
+                        height: 'parent',
+                        type: 'hFlow',
+                        wrap: 'chain',
+                        maxElement: 3,
+                        padding: 20,
+                        hStyle: ['spread', 'packed', 'spread_inside'],
+                        contains: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                      }
+                  },
+                  
+                  end: {
+                    flow2: { 
+                        width: 'wrap',
+                        height: 'wrap',
+                        type: 'vFlow',
+                        wrap: 'chain',
+                        vGap: 10,
+                        hGap: 10,
+                        vBias: 0.1,
+                        hBias: 0.9,
+                        maxElement: 3,
+                        contains: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                        start: ['parent', 'start', 20],
+                        top: ['parent', 'top', 20],
+                        end: ['parent', 'end', 20],
+                        bottom: ['parent', 'bottom', 20]
+                      }
+                  }
+                },
+                
+                Transitions: {
+                  default: {
+                    from: 'start', to: 'end',
+                  }
+                }
+            }
+            """)
+
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp),
+            motionScene = scene1,
+            progress = progress.value) {
+            val numArray = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
+            for (num in numArray) {
+                Button(
+                    modifier = Modifier.layoutId(num),
+                    onClick = {},
+                ) {
+                    Text(text = num)
+                }
+            }
         }
 
         Button(onClick = { animateToEnd = !animateToEnd },
