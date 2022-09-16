@@ -318,3 +318,39 @@ fun FlowDemo8() {
         }
     }
 }
+
+// test padding
+@Preview(group = "flow")
+@Composable
+fun FlowDemo9() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            flow: { 
+                width: 'parent',
+                height: 'parent',
+                type: 'hFlow',
+                wrap: 'chain',
+                hStyle: 'spread_inside',
+                vStyle: 'spread_inside',
+                maxElement: 2,
+                paddingLeft: 50,
+                paddingRight: 100,
+                paddingTop: 150,
+                paddingBottom: 200,
+                contains: ['1', '2', '3', '4', '5', '6'],
+              }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}

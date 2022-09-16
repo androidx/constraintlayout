@@ -970,11 +970,38 @@ public class ConstraintSetParser {
 
                     }
                     break;
-                case "padding":
-                    String paddingValue = element.get(param).content();
+                case "paddingLeft":
+                    String paddingLeftValue = element.get(param).content();
                     try {
-                        int value = Integer.parseInt(paddingValue);
-                        flow.setPadding(value);
+                        int value = Integer.parseInt(paddingLeftValue);
+                        flow.setPaddingLeft(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "paddingTop":
+                    String paddingTopValue = element.get(param).content();
+                    try {
+                        int value = Integer.parseInt(paddingTopValue);
+                        flow.setPaddingTop(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "paddingRight":
+                    String paddingRightValue = element.get(param).content();
+                    try {
+                        int value = Integer.parseInt(paddingRightValue);
+                        flow.setPaddingRight(value);
+                    } catch(NumberFormatException e) {
+
+                    }
+                    break;
+                case "paddingBottom":
+                    String paddingBottomValue = element.get(param).content();
+                    try {
+                        int value = Integer.parseInt(paddingBottomValue);
+                        flow.setPaddingBottom(value);
                     } catch(NumberFormatException e) {
 
                     }

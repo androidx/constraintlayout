@@ -56,7 +56,10 @@ public class FlowReference extends HelperReference {
     protected int mVerticalGap = 0;
     protected int mHorizontalGap = 0;
 
-    protected int mPadding = 0;
+    protected int mPaddingLeft = 0;
+    protected int mPaddingRight = 0;
+    protected int mPaddingTop = 0;
+    protected int mPaddingBottom = 0;
 
     protected int mMaxElementsWrap = UNKNOWN;
 
@@ -165,21 +168,75 @@ public class FlowReference extends HelperReference {
     }
 
     /**
-     * Get padding
+     * Get paddingLeft
      *
-     * @return padding value
+     * @return paddingLeft value
      */
-    public int getPadding() {
-        return mPadding;
+    public int getPaddingLeft() {
+        return mPaddingLeft;
+    }
+
+    /**
+     * Set paddingLeft
+     *
+     * @param padding paddingLeft value
+     */
+    public void setPaddingLeft(int padding) {
+        this.mPaddingLeft = padding;
+    }
+
+    /**
+     * Get paddingTop
+     *
+     * @return paddingTop value
+     */
+    public int getPaddingTop() {
+        return mPaddingTop;
+    }
+
+    /**
+     * Set paddingTop
+     *
+     * @param padding paddingTop value
+     */
+    public void setPaddingTop(int padding) {
+        this.mPaddingTop = padding;
+    }
+
+    /**
+     * Get paddingRight
+     *
+     * @return paddingRight value
+     */
+    public int getPaddingRight() {
+        return mPaddingRight;
+    }
+
+    /**
+     * Set paddingRight
+     *
+     * @param padding paddingRight value
+     */
+    public void setPaddingRight(int padding) {
+        this.mPaddingRight = padding;
+    }
+
+    /**
+     * Get paddingBottom
+     *
+     * @return paddingBottom value
+     */
+    public int getPaddingBottom() {
+        return mPaddingBottom;
     }
 
     /**
      * Set padding
      *
-     * @param padding padding value
+     * @param padding paddingBottom value
      */
-    public void setPadding(int padding) {
-        this.mPadding = padding;
+    public void setPaddingBottom(int padding) {
+        this.mPaddingBottom = padding;
     }
 
     /**
@@ -514,8 +571,19 @@ public class FlowReference extends HelperReference {
         if (mMaxElementsWrap != UNKNOWN) {
             mFlow.setMaxElementsWrap(mMaxElementsWrap);
         }
-        if (mPadding != 0) {
-            mFlow.setPadding(mPadding);
+
+        // Padding
+        if (mPaddingLeft != 0) {
+            mFlow.setPaddingLeft(mPaddingLeft);
+        }
+        if (mPaddingTop != 0) {
+            mFlow.setPaddingTop(mPaddingTop);
+        }
+        if (mPaddingRight != 0) {
+            mFlow.setPaddingRight(mPaddingRight);
+        }
+        if (mPaddingBottom != 0) {
+            mFlow.setPaddingBottom(mPaddingBottom);
         }
 
         // Gap

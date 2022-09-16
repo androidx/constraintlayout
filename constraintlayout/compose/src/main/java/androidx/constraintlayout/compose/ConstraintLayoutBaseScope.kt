@@ -421,7 +421,10 @@ abstract class ConstraintLayoutBaseScope {
         verticalGap:  Dp = 0.dp,
         horizontalGap:  Dp = 0.dp,
         maxElement: Int = 0,
-        padding: Dp = 0.dp,
+        paddingLeft: Dp = 0.dp,
+        paddingTop: Dp = 0.dp,
+        paddingRight: Dp = 0.dp,
+        paddingBottom: Dp = 0.dp,
         wrapMode: Wrap = Wrap.None,
         verticalAlign: VerticalAlign = VerticalAlign.Center,
         horizontalAlign: HorizontalAlign = HorizontalAlign.Center,
@@ -441,7 +444,10 @@ abstract class ConstraintLayoutBaseScope {
                 setHorizontalAlign(horizontalAlign.mode)
                 setVerticalAlign(verticalAlign.mode)
                 setWrapMode(wrapMode.mode)
-                setPadding(state.convertDimension(padding))
+                setPaddingLeft(state.convertDimension(paddingLeft))
+                setPaddingTop(state.convertDimension(paddingTop))
+                setPaddingRight(state.convertDimension(paddingRight))
+                setPaddingBottom(state.convertDimension(paddingBottom))
                 maxElementsWrap = maxElement
                 setHorizontalGap(state.convertDimension(horizontalGap))
                 setVerticalGap(state.convertDimension(verticalGap))

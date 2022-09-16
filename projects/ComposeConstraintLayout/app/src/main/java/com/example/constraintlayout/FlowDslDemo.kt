@@ -120,7 +120,7 @@ public fun FlowDslDemo3() {
             val g1 = createFlow(
                 elements = *elem,
                 flowVertically = true,
-                padding = 30.dp,
+                paddingLeft = 30.dp,
                 wrapMode = Wrap.Chain,
                 verticalFlowBias = 0.1f,
                 horizontalFlowBias = 0.8f,
