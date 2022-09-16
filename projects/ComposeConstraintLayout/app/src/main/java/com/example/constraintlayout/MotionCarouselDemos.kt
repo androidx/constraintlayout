@@ -543,7 +543,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
         }
         transition("forward", startState, nextState) {
             keyAttributes(slot0, slot1, slot2) {
-                frame(50f) {
+                frame(50) {
                     scaleX = .3f
                     scaleY = .3f
                 }
@@ -551,7 +551,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
         }
         transition("backward", startState, previousState) {
             keyAttributes(slot0, slot1, slot2) {
-                frame(50f) {
+                frame(50) {
                     scaleX = .3f
                     scaleY = .3f
                 }
@@ -642,7 +642,7 @@ fun MySimpleCarouselDSL2(content: MotionCarouselScope.() -> Unit) {
         }
         transition("forward", startState, nextState) {
             keyAttributes(slot0, slot1, slot2) {
-                frame(50f) {
+                frame(50) {
                     scaleX = .3f
                     scaleY = .3f
                 }
@@ -650,7 +650,7 @@ fun MySimpleCarouselDSL2(content: MotionCarouselScope.() -> Unit) {
         }
         transition("backward", startState, previousState) {
             keyAttributes(slot0, slot1, slot2) {
-                frame(50f) {
+                frame(50) {
                     scaleX = .3f
                     scaleY = .3f
                 }

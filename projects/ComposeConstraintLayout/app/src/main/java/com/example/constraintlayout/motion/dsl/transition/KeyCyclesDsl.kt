@@ -35,17 +35,17 @@ fun KeyCyclesSimpleDslExample() {
         )
         keyCycles(img1) {
             // TODO: Consider supporting common/base values declared at this level, eg: offset = 1
-            frame(0f) {
+            frame(0) {
                 scaleX = 0f
                 period = 0f
                 offset = 1f
             }
-            frame(50f) {
+            frame(50) {
                 scaleX = 3f
                 period = 2f
                 offset = 1f
             }
-            frame(100f) {
+            frame(100) {
                 scaleX = 0f
                 period = 0f
                 offset = 1f
@@ -53,17 +53,17 @@ fun KeyCyclesSimpleDslExample() {
         }
         keyCycles(img2) {
             // TODO: Consider supporting common/base values declared at this level, eg: translationX = 50f
-            frame(0f) {
+            frame(0) {
                 translationX = 50f
                 translationY = 50f
                 period = 0f
             }
-            frame(50f) {
+            frame(50) {
                 translationX = 50f
                 translationY = 50f
                 period = 3f
             }
-            frame(100f) {
+            frame(100) {
                 translationX = 50f
                 translationY = 50f
                 period = 0f

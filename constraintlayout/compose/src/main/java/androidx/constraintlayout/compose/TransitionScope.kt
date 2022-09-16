@@ -32,6 +32,7 @@ import androidx.constraintlayout.core.parser.CLString
 import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
+import androidx.annotation.IntRange
 
 @ExperimentalMotionApi
 @Composable
@@ -212,10 +213,10 @@ open class BaseKeyFramesScope internal constructor(vararg targets: ConstrainedLa
 
 @ExperimentalMotionApi
 class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
-    fun frame(frame: Float, keyFrameContent: KeyAttributeScope.() -> Unit) {
+    fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
         keyFrameContent(scope)
-        framesContainer.add(CLNumber(frame))
+        framesContainer.add(CLNumber(frame.toFloat()))
         scope.addToContainer(keyFramePropsObject)
     }
 }
@@ -224,20 +225,20 @@ class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutR
 class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
     var type by addNameOnPropertyChange(RelativePosition.Parent)
 
-    fun frame(frame: Float, keyFrameContent: KeyPositionScope.() -> Unit) {
+    fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyPositionScope.() -> Unit) {
         val scope = KeyPositionScope()
         keyFrameContent(scope)
-        framesContainer.add(CLNumber(frame))
+        framesContainer.add(CLNumber(frame.toFloat()))
         scope.addToContainer(keyFramePropsObject)
     }
 }
 
 @ExperimentalMotionApi
 class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
-    fun frame(frame: Float, keyFrameContent: KeyCycleScope.() -> Unit) {
+    fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
         keyFrameContent(scope)
-        framesContainer.add(CLNumber(frame))
+        framesContainer.add(CLNumber(frame.toFloat()))
         scope.addToContainer(keyFramePropsObject)
     }
 }
