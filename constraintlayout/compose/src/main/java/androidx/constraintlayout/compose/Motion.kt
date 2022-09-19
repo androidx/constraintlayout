@@ -365,7 +365,8 @@ class MotionScope(
  */
 @ExperimentalMotionApi
 @Composable
-fun rememberMotionContent(content: @Composable MotionScope.() -> Unit): @Composable MotionScope.() -> Unit {
+fun rememberMotionContent(content: @Composable MotionScope.() -> Unit):
+    @Composable MotionScope.() -> Unit {
     return remember {
         movableContentOf(content)
     }
