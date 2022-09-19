@@ -921,7 +921,6 @@ public class Transition implements TypedValues {
                 for (int i = 0; i < custom.length; i++) {
                     keyAttributes.mCustom.put( custom[i].getName(), custom[i]);
                 }
-
             }
             mMotionControl.addKey(keyAttributes);
         }

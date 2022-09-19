@@ -327,7 +327,6 @@ public fun AttributesRotationXY() {
                           frames: [25,50,75],
                           rotationX: [0, 45, 60],
                           rotationY: [60, 45, 0],
-                          
                         }
                       ]
                     }
@@ -363,7 +362,8 @@ public fun AttributesCustom() {
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(Color.White),
-            motionScene = MotionScene("""{
+            motionScene = MotionScene(
+                """{
                 ConstraintSets: {
                   start: {
                     a: {
@@ -414,16 +414,20 @@ public fun AttributesCustom() {
                     }
                   }
                 }
-            }"""),
+            }"""
+            ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
-            val  color = motionProperties("a").value.color("background")
-            var  count = motionProperties("a").value.float("count")
+            progress = progress
+        ) {
+            val color = motionProperties("a").value.color("background")
+            var count = motionProperties("a").value.float("count")
             count = (count * 100).toInt() / 100f
 
-            Box(modifier = Modifier
-                .layoutId("a")
-                .background(color)){
+            Box(
+                modifier = Modifier
+                    .layoutId("a")
+                    .background(color)
+            ) {
                 Text(text = " $count ")
             }
         }

@@ -335,30 +335,21 @@ public class TransitionParser {
         if (customElement != null && customElement instanceof CLObject) {
             CLObject customObj = ((CLObject) customElement);
             int n = customObj.size();
-            customVars =  new CustomVariable[frames.size()][n];
+            customVars = new CustomVariable[frames.size()][n];
             for (int i = 0; i < n; i++) {
                 CLKey key = (CLKey) customObj.get(i);
                 String customName = key.content();
-                Utils.log(" >>>>customObj  "+customObj.content());
-                Utils.log(" >>>>key "+key.content());
-                Utils.log(" >>>>key.value "+key.getValue());
-                Utils.log(" >>>> "+customName);
-
                 if (key.getValue() instanceof CLArray) {
-                    Utils.log(" >>>> "+ customName+" CLArray ");
-                    CLArray arrayValues = (CLArray) key.getValue() ;
+                    CLArray arrayValues = (CLArray) key.getValue();
                     int vSize = arrayValues.size();
                     if (vSize == bundles.length && vSize > 0) {
                         if (arrayValues.get(0) instanceof CLNumber) {
-                            Utils.log(" >>>> "+ customName+" CLNumber's");
                             for (int j = 0; j < bundles.length; j++) {
                                 customVars[j][i] = new CustomVariable(customName,
                                         TypedValues.Custom.TYPE_FLOAT,
                                         arrayValues.get(j).getFloat());
                             }
-                        } else {
-                            Utils.log(" >>>> "+ customName+" color's");
-
+                        } else {  // since it is not a number switching to custom color parsing
                             for (int j = 0; j < bundles.length; j++) {
                                 long color = parseColorString(arrayValues.get(j).content());
                                 if (color != -1) {
@@ -372,7 +363,6 @@ public class TransitionParser {
                 } else {
                     CLElement value = key.getValue();
                     if (value instanceof CLNumber) {
-                        Utils.log(" >>>> "+ customName+" CLNumber");
                         float fValue = value.getFloat();
                         for (int j = 0; j < bundles.length; j++) {
                             customVars[j][i] = new CustomVariable(customName,
@@ -381,7 +371,6 @@ public class TransitionParser {
                         }
                     } else {
                         long cValue = parseColorString(value.content());
-                        Utils.log(" >>>> "+ customName+" color");
                         if (cValue != -1) {
                             for (int j = 0; j < bundles.length; j++) {
                                 customVars[j][i] = new CustomVariable(customName,
@@ -400,7 +389,6 @@ public class TransitionParser {
             for (int j = 0; j < bundles.length; j++) {
                 String target = targets.getString(i);
                 TypedBundle bundle = bundles[j];
-
                 if (curveFit != null) {
                     bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT,
                             map(curveFit, "spline", "linear"));
@@ -409,10 +397,8 @@ public class TransitionParser {
                         transitionEasing);
                 int frame = frames.getInt(j);
                 bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
-
                 transition.addKeyAttribute(target, bundle, (customVars != null) ? customVars[j] :
                         null);
-
             }
         }
     }

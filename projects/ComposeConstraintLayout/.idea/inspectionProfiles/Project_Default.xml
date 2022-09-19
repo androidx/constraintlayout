@@ -49,11 +49,47 @@
       <option name="IGNORE_POINT_TO_ITSELF" value="false" />
       <option name="myAdditionalJavadocTags" value="hide" />
     </inspection_tool>
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="hide" />
+    </inspection_tool>
     <inspection_tool class="JavadocReference" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="REPORT_INACCESSIBLE" value="false" />
     </inspection_tool>
     <inspection_tool class="KDocUnresolvedReference" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="MissingJavadoc" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="PACKAGE_SETTINGS">
+        <Options>
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+      <option name="MODULE_SETTINGS">
+        <Options>
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+      <option name="TOP_LEVEL_CLASS_SETTINGS">
+        <Options>
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+      <option name="INNER_CLASS_SETTINGS">
+        <Options>
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+      <option name="METHOD_SETTINGS">
+        <Options>
+          <option name="REQUIRED_TAGS" value="@return@param@throws or @exception" />
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+      <option name="FIELD_SETTINGS">
+        <Options>
+          <option name="ENABLED" value="false" />
+        </Options>
+      </option>
+    </inspection_tool>
     <inspection_tool class="NullableProblems" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="REPORT_NULLABLE_METHOD_OVERRIDES_NOTNULL" value="true" />
       <option name="REPORT_NOT_ANNOTATED_METHOD_OVERRIDES_NOTNULL" value="true" />
@@ -64,6 +100,42 @@
       <option name="REPORT_ANNOTATION_NOT_PROPAGATED_TO_OVERRIDERS" value="true" />
       <option name="REPORT_NULLS_PASSED_TO_NON_ANNOTATED_METHOD" value="true" />
       <option name="REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER" value="false" />
+    </inspection_tool>
+    <inspection_tool class="PreviewAnnotationInFunctionWithParameters" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewApiLevelMustBeValid" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewDimensionRespectsLimit" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewFontScaleMustBeGreaterThanZero" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewMultipleParameterProviders" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewMustBeTopLevelFunction" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewNeedsComposableAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewNotSupportedInUnitTestFiles" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewPickerAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+      <option name="previewFile" value="true" />
     </inspection_tool>
     <inspection_tool class="PrivatePropertyName" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <scope name="Compose" level="WEAK WARNING" enabled="true">
