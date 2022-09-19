@@ -16,14 +16,21 @@
 
 package androidx.constraintlayout.core.state;
 
+import static androidx.constraintlayout.core.state.ConstraintSetParser.parseColorString;
+
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLContainer;
 import androidx.constraintlayout.core.parser.CLElement;
+import androidx.constraintlayout.core.parser.CLKey;
+import androidx.constraintlayout.core.parser.CLNumber;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParsingException;
+
+import java.util.ArrayList;
 
 /**
  * Contains code for Parsing Transitions
@@ -285,6 +292,8 @@ public class TransitionParser {
                 false,
         };
         TypedBundle[] bundles = new TypedBundle[frames.size()];
+        CustomVariable[][] customVars  = null;
+
         for (int i = 0; i < frames.size(); i++) {
             bundles[i] = new TypedBundle();
         }
@@ -321,6 +330,71 @@ public class TransitionParser {
                 }
             }
         }
+        // Support for custom attributes in KeyAttributes
+        CLElement customElement = keyAttribute.getOrNull("custom");
+        if (customElement != null && customElement instanceof CLObject) {
+            CLObject customObj = ((CLObject) customElement);
+            int n = customObj.size();
+            customVars =  new CustomVariable[frames.size()][n];
+            for (int i = 0; i < n; i++) {
+                CLKey key = (CLKey) customObj.get(i);
+                String customName = key.content();
+                Utils.log(" >>>>customObj  "+customObj.content());
+                Utils.log(" >>>>key "+key.content());
+                Utils.log(" >>>>key.value "+key.getValue());
+                Utils.log(" >>>> "+customName);
+
+                if (key.getValue() instanceof CLArray) {
+                    Utils.log(" >>>> "+ customName+" CLArray ");
+                    CLArray arrayValues = (CLArray) key.getValue() ;
+                    int vSize = arrayValues.size();
+                    if (vSize == bundles.length && vSize > 0) {
+                        if (arrayValues.get(0) instanceof CLNumber) {
+                            Utils.log(" >>>> "+ customName+" CLNumber's");
+                            for (int j = 0; j < bundles.length; j++) {
+                                customVars[j][i] = new CustomVariable(customName,
+                                        TypedValues.Custom.TYPE_FLOAT,
+                                        arrayValues.get(j).getFloat());
+                            }
+                        } else {
+                            Utils.log(" >>>> "+ customName+" color's");
+
+                            for (int j = 0; j < bundles.length; j++) {
+                                long color = parseColorString(arrayValues.get(j).content());
+                                if (color != -1) {
+                                    customVars[j][i] = new CustomVariable(customName,
+                                            TypedValues.Custom.TYPE_COLOR,
+                                            (int) color);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    CLElement value = key.getValue();
+                    if (value instanceof CLNumber) {
+                        Utils.log(" >>>> "+ customName+" CLNumber");
+                        float fValue = value.getFloat();
+                        for (int j = 0; j < bundles.length; j++) {
+                            customVars[j][i] = new CustomVariable(customName,
+                                    TypedValues.Custom.TYPE_FLOAT,
+                                    fValue);
+                        }
+                    } else {
+                        long cValue = parseColorString(value.content());
+                        Utils.log(" >>>> "+ customName+" color");
+                        if (cValue != -1) {
+                            for (int j = 0; j < bundles.length; j++) {
+                                customVars[j][i] = new CustomVariable(customName,
+                                        TypedValues.Custom.TYPE_COLOR,
+                                        (int) cValue);
+
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
         String curveFit = keyAttribute.getStringOrNull("curveFit");
         for (int i = 0; i < targets.size(); i++) {
             for (int j = 0; j < bundles.length; j++) {
@@ -335,7 +409,10 @@ public class TransitionParser {
                         transitionEasing);
                 int frame = frames.getInt(j);
                 bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
-                transition.addKeyAttribute(target, bundle);
+
+                transition.addKeyAttribute(target, bundle, (customVars != null) ? customVars[j] :
+                        null);
+
             }
         }
     }

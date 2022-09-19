@@ -25,17 +25,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
-import java.util.*
+import java.util.EnumSet
 
 @Preview(group = "motion8")
 @Composable
@@ -323,7 +326,8 @@ public fun AttributesRotationXY() {
                           target: ['a'],
                           frames: [25,50,75],
                           rotationX: [0, 45, 60],
-                          rotationY: [60, 45, 0], 
+                          rotationY: [60, 45, 0],
+                          
                         }
                       ]
                     }
@@ -335,6 +339,93 @@ public fun AttributesRotationXY() {
             Box(modifier = Modifier
                 .layoutId("a")
                 .background(Color.Red))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
+
+
+@Preview(group = "customMotion")
+@Composable
+public fun AttributesCustom() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(6000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White),
+            motionScene = MotionScene("""{
+                ConstraintSets: {
+                  start: {
+                    a: {
+                      width: 40,
+                      height: 40,
+                      start: ['parent', 'start', 16],
+                      bottom: ['parent', 'bottom', 16],
+                      custom: {
+                        background: '#FF0000',
+                        count: 0.0
+                      }
+                    }
+                  },
+                  end: {
+                    a: {
+                      width: 40,
+                      height: 40,
+                      //rotationZ: 390,
+                      end: ['parent', 'end', 16],
+                      top: ['parent', 'top', 16],
+                      custom: {
+                        background: '#0000FF',
+                        count: 100.0
+                      }
+                    }
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+ 
+                      KeyAttributes: [
+                        {
+                          target: ['a'],
+                          frames: [25,50,75],
+                          rotationX: [0, 45, 60],
+                          rotationY: [60, 45, 0],
+                          custom: {
+                            background: ['#FFFFFF', '#000000','#FFFFFF'],
+                            count: [50,50,50]
+                          }
+                          
+                        }
+                      ]
+                    }
+                  }
+                }
+            }"""),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            val  color = motionProperties("a").value.color("background")
+            var  count = motionProperties("a").value.float("count")
+            count = (count * 100).toInt() / 100f
+
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(color)){
+                Text(text = " $count ")
+            }
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {

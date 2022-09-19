@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
@@ -660,6 +661,16 @@ public class Transition implements TypedValues {
         getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
+    /**
+     * Add a key attribute and the custom variables into the
+     * @param target the id of the target
+     * @param bundle the key attributes bundle containing position etc.
+     * @param custom the customVariables to add at that position
+     */
+    public void addKeyAttribute(String target, TypedBundle bundle, CustomVariable[]custom) {
+        getWidgetState(target, null, 0).setKeyAttribute(bundle,custom);
+    }
+
     // @TODO: add description
     public void addKeyCycle(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyCycle(bundle);
@@ -895,6 +906,23 @@ public class Transition implements TypedValues {
         public void setKeyAttribute(TypedBundle prop) {
             MotionKeyAttributes keyAttributes = new MotionKeyAttributes();
             prop.applyDelta(keyAttributes);
+            mMotionControl.addKey(keyAttributes);
+        }
+
+        /**
+         * Set tge keyAttribute bundle and associated custom attributes
+         * @param prop
+         * @param custom
+         */
+        public void setKeyAttribute(TypedBundle prop, CustomVariable[] custom) {
+            MotionKeyAttributes keyAttributes = new MotionKeyAttributes();
+            prop.applyDelta(keyAttributes);
+            if (custom != null) {
+                for (int i = 0; i < custom.length; i++) {
+                    keyAttributes.mCustom.put( custom[i].getName(), custom[i]);
+                }
+
+            }
             mMotionControl.addKey(keyAttributes);
         }
 
