@@ -970,41 +970,36 @@ public class ConstraintSetParser {
 
                     }
                     break;
-                case "paddingLeft":
-                    String paddingLeftValue = element.get(param).content();
-                    try {
-                        int value = Integer.parseInt(paddingLeftValue);
-                        flow.setPaddingLeft(value);
-                    } catch(NumberFormatException e) {
+                case "padding":
+                    CLElement paddingObject = element.get(param);
+                    int paddingLeft = 0;
+                    int paddingTop = 0;
+                    int paddingRight = 0;
+                    int paddingBottom = 0;
+                    if (paddingObject instanceof CLArray && ((CLArray) paddingObject).size() > 1) {
+                        paddingLeft = ((CLArray) paddingObject).getInt(0);
+                        paddingRight = paddingLeft;
+                        paddingTop = ((CLArray) paddingObject).getInt(1);
+                        paddingBottom = paddingTop;
+                        if (((CLArray) paddingObject).size() > 2) {
+                            paddingRight = ((CLArray) paddingObject).getInt(2);
+                            try {
+                                paddingBottom = ((CLArray) paddingObject).getInt(3);
+                            } catch (Exception e) {
+                                paddingBottom = 0;
+                            }
 
+                        }
+                    } else {
+                        paddingLeft = paddingObject.getInt();
+                        paddingTop = paddingLeft;
+                        paddingRight = paddingLeft;
+                        paddingBottom = paddingLeft;
                     }
-                    break;
-                case "paddingTop":
-                    String paddingTopValue = element.get(param).content();
-                    try {
-                        int value = Integer.parseInt(paddingTopValue);
-                        flow.setPaddingTop(value);
-                    } catch(NumberFormatException e) {
-
-                    }
-                    break;
-                case "paddingRight":
-                    String paddingRightValue = element.get(param).content();
-                    try {
-                        int value = Integer.parseInt(paddingRightValue);
-                        flow.setPaddingRight(value);
-                    } catch(NumberFormatException e) {
-
-                    }
-                    break;
-                case "paddingBottom":
-                    String paddingBottomValue = element.get(param).content();
-                    try {
-                        int value = Integer.parseInt(paddingBottomValue);
-                        flow.setPaddingBottom(value);
-                    } catch(NumberFormatException e) {
-
-                    }
+                    flow.setPaddingLeft(paddingLeft);
+                    flow.setPaddingTop(paddingTop);
+                    flow.setPaddingRight(paddingRight);
+                    flow.setPaddingBottom(paddingBottom);
                     break;
                 case "vAlign":
                     String vAlignValue = element.get(param).content();

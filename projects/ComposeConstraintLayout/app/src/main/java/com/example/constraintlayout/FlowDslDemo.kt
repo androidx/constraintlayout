@@ -31,6 +31,8 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutBaseScope
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.FlowStyle
 import androidx.constraintlayout.compose.LayoutReference
 import androidx.constraintlayout.compose.Wrap
 import java.util.Arrays
@@ -120,7 +122,7 @@ public fun FlowDslDemo3() {
             val g1 = createFlow(
                 elements = *elem,
                 flowVertically = true,
-                paddingLeft = 30.dp,
+                padding = 30.dp,
                 wrapMode = Wrap.Chain,
                 verticalFlowBias = 0.1f,
                 horizontalFlowBias = 0.8f,
@@ -226,7 +228,48 @@ public fun FlowDslDemo5() {
             Text(text = stringResource(id = R.string.log_in))
         }
     }
+}
 
+// verticalStyle and horizontalStyle don't work properly
+// Need to figure out the the reason.
+@Preview(group = "flow-invalid")
+@Composable
+public fun FlowDslDemo6() {
+    val numArray = arrayOf("1", "2", "3", "4", "5", "6", "7")
+
+    ConstraintLayout(
+        ConstraintSet {
+            val elem = arrayOfNulls<LayoutReference>(numArray.size)
+
+            for (i in numArray.indices) {
+                elem[i] = createRefFor(numArray[i])
+            }
+
+            val g1 = createFlow(
+                elements = *elem,
+                flowVertically = true,
+                wrapMode = Wrap.Aligned,
+                verticalStyle = FlowStyle.Packed,
+                horizontalStyle = FlowStyle.Packed,
+                maxElement = 2,
+            )
+
+            constrain(g1) {
+                width = Dimension.matchParent
+                height = Dimension.matchParent
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
 }
 
 

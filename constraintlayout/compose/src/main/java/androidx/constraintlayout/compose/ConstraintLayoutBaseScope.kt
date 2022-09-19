@@ -404,7 +404,134 @@ abstract class ConstraintLayoutBaseScope {
      * [verticalGap] defines the gap between views in the y axis
      * [horizontalGap] defines the gap between views in the x axis
      * [maxElement] defines the maximum element on a row before it if the
-     * [padding]  sets padding around the content
+     * [padding] sets padding around the content
+     * [wrapMode] sets the way reach maxElements is handled
+     * Flow.WRAP_NONE (default) -- no wrap behavior,
+     * Flow.WRAP_CHAIN - create additional chains
+     * [verticalAlign] set the way elements are aligned vertically. Center is default
+     * [horizontalAlign] set the way elements are aligned horizontally. Center is default
+     * [horizontalFlowBias] set the way elements are aligned vertically Center is default
+     * [verticalFlowBias] sets the top bottom bias of the vertical chain
+     * [verticalStyle] sets the style of a vertical chain (Spread,Packed, or SpreadInside)
+     * [horizontalStyle] set the style of the horizontal chain (Spread, Packed, or SpreadInside)
+     */
+    fun createFlow(
+        vararg elements: LayoutReference?,
+        flowVertically: Boolean = false,
+        verticalGap:  Dp = 0.dp,
+        horizontalGap:  Dp = 0.dp,
+        maxElement: Int = 0,
+        padding: Dp = 0.dp,
+        wrapMode: Wrap = Wrap.None,
+        verticalAlign: VerticalAlign = VerticalAlign.Center,
+        horizontalAlign: HorizontalAlign = HorizontalAlign.Center,
+        horizontalFlowBias: Float = 0.0f,
+        verticalFlowBias: Float = 0.0f,
+        verticalStyle: FlowStyle = FlowStyle.Packed,
+        horizontalStyle: FlowStyle = FlowStyle.Packed,
+    ): ConstrainedLayoutReference {
+        val id = createHelperId()
+        tasks.add { state ->
+            state.getFlow(id, flowVertically).apply {
+                add(*(elements.map { it?.id }.toTypedArray()))
+                horizontalChainStyle = horizontalStyle.style
+                setVerticalChainStyle(verticalStyle.style)
+                verticalBias(verticalFlowBias)
+                horizontalBias(horizontalFlowBias)
+                setHorizontalAlign(horizontalAlign.mode)
+                setVerticalAlign(verticalAlign.mode)
+                setWrapMode(wrapMode.mode)
+                paddingLeft = state.convertDimension(padding)
+                paddingTop = state.convertDimension(padding)
+                paddingRight = state.convertDimension(padding)
+                paddingBottom = state.convertDimension(padding)
+                maxElementsWrap = maxElement
+                setHorizontalGap(state.convertDimension(horizontalGap))
+                setVerticalGap(state.convertDimension(verticalGap))
+            }
+        }
+        updateHelpersHashCode(16)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+        return ConstrainedLayoutReference(id)
+    }
+
+    /**
+     * This creates a flow helper
+     * Flow helpers allows a long sequence of Composable widgets to wrap onto
+     * multiple rows or columns.
+     * [flowVertically] if set to true aranges the Composables from top to bottom.
+     * Normally they are arranged from left to right.
+     * [verticalGap] defines the gap between views in the y axis
+     * [horizontalGap] defines the gap between views in the x axis
+     * [maxElement] defines the maximum element on a row before it if the
+     * [paddingHorizontal] sets paddingLeft and paddingRight of the content
+     * [paddingVertical] sets paddingTop and paddingBottom of the content
+     * [wrapMode] sets the way reach maxElements is handled
+     * Flow.WRAP_NONE (default) -- no wrap behavior,
+     * Flow.WRAP_CHAIN - create additional chains
+     * [verticalAlign] set the way elements are aligned vertically. Center is default
+     * [horizontalAlign] set the way elements are aligned horizontally. Center is default
+     * [horizontalFlowBias] set the way elements are aligned vertically Center is default
+     * [verticalFlowBias] sets the top bottom bias of the vertical chain
+     * [verticalStyle] sets the style of a vertical chain (Spread,Packed, or SpreadInside)
+     * [horizontalStyle] set the style of the horizontal chain (Spread, Packed, or SpreadInside)
+     */
+    fun createFlow(
+        vararg elements: LayoutReference?,
+        flowVertically: Boolean = false,
+        verticalGap:  Dp = 0.dp,
+        horizontalGap:  Dp = 0.dp,
+        maxElement: Int = 0,
+        paddingHorizontal: Dp = 0.dp,
+        paddingVertical: Dp = 0.dp,
+        wrapMode: Wrap = Wrap.None,
+        verticalAlign: VerticalAlign = VerticalAlign.Center,
+        horizontalAlign: HorizontalAlign = HorizontalAlign.Center,
+        horizontalFlowBias: Float = 0.0f,
+        verticalFlowBias: Float = 0.0f,
+        verticalStyle: FlowStyle = FlowStyle.Packed,
+        horizontalStyle: FlowStyle = FlowStyle.Packed,
+    ): ConstrainedLayoutReference {
+        val id = createHelperId()
+        tasks.add { state ->
+            state.getFlow(id, flowVertically).apply {
+                add(*(elements.map { it?.id }.toTypedArray()))
+                horizontalChainStyle = horizontalStyle.style
+                setVerticalChainStyle(verticalStyle.style)
+                verticalBias(verticalFlowBias)
+                horizontalBias(horizontalFlowBias)
+                setHorizontalAlign(horizontalAlign.mode)
+                setVerticalAlign(verticalAlign.mode)
+                setWrapMode(wrapMode.mode)
+                paddingLeft = state.convertDimension(paddingHorizontal)
+                paddingTop = state.convertDimension(paddingVertical)
+                paddingRight = state.convertDimension(paddingHorizontal)
+                paddingBottom = state.convertDimension(paddingVertical)
+                maxElementsWrap = maxElement
+                setHorizontalGap(state.convertDimension(horizontalGap))
+                setVerticalGap(state.convertDimension(verticalGap))
+            }
+        }
+        updateHelpersHashCode(16)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+        return ConstrainedLayoutReference(id)
+    }
+
+    /**
+     * This creates a flow helper
+     * Flow helpers allows a long sequence of Composable widgets to wrap onto
+     * multiple rows or columns.
+     * [flowVertically] if set to true aranges the Composables from top to bottom.
+     * Normally they are arranged from left to right.
+     * [verticalGap] defines the gap between views in the y axis
+     * [horizontalGap] defines the gap between views in the x axis
+     * [maxElement] defines the maximum element on a row before it if the
+     * [paddingLeft] sets paddingLeft of the content
+     * [paddingTop] sets paddingTop of the content
+     * [paddingRight] sets paddingRight of the content
+     * [paddingBottom] sets paddingBottom of the content
      * [wrapMode] sets the way reach maxElements is handled
      * Flow.WRAP_NONE (default) -- no wrap behavior,
      * Flow.WRAP_CHAIN - create additional chains
