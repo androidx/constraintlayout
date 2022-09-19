@@ -382,11 +382,19 @@ public class WidgetFrame {
         }
     }
 
-    // @TODO: add description
+    /**
+     * Get the custom attribute given Nam
+     * @param name Name of the custom attribut
+     * @return The customAttribute
+     */
     public CustomVariable getCustomAttribute(String name) {
         return mCustom.get(name);
     }
 
+    /**
+     * Get the known custom Attributes names
+     * @return set of custom attribute names
+     */
     public Set<String> getCustomAttributeNames() {
         return mCustom.keySet();
     }

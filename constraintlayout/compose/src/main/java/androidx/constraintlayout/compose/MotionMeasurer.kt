@@ -501,17 +501,9 @@ internal class MotionMeasurer : Measurer() {
         if (!transition.contains(id)) {
             return 0f
         }
-        val startFrame = transition.getStart(id)
-        val endFrame = transition.getEnd(id)
-        var startFloat = startFrame.getCustomFloat(name)
-        var endFloat = endFrame.getCustomFloat(name)
-        if (startFloat.isNaN()) {
-            startFloat = 0f
-        }
-        if (endFloat.isNaN()) {
-            endFloat = 0f
-        }
-        return (1f - progress) * startFloat + progress * endFloat
+        transition.interpolate(root.width, root.height, progress)
+        val interpolatedFrame = transition.getInterpolated(id)
+        return interpolatedFrame.getCustomFloat(name)
     }
 
     fun clearConstraintSets() {
