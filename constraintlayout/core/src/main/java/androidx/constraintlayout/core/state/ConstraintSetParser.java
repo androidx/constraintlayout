@@ -985,7 +985,7 @@ public class ConstraintSetParser {
                             paddingRight = ((CLArray) paddingObject).getInt(2);
                             try {
                                 paddingBottom = ((CLArray) paddingObject).getInt(3);
-                            } catch (Exception e) {
+                            } catch (ArrayIndexOutOfBoundsException e) {
                                 paddingBottom = 0;
                             }
 
