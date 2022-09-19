@@ -318,3 +318,102 @@ fun FlowDemo8() {
         }
     }
 }
+
+// test padding single value
+@Preview(group = "flow")
+@Composable
+fun FlowDemo9() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            flow: { 
+                width: 'parent',
+                height: 'parent',
+                type: 'hFlow',
+                wrap: 'chain',
+                hStyle: 'spread_inside',
+                vStyle: 'spread_inside',
+                maxElement: 2,
+                padding: 200,
+                contains: ['1', '2', '3', '4', '5', '6'],
+              }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}
+
+// test padding two values
+@Preview(group = "flow")
+@Composable
+fun FlowDemo10() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            flow: { 
+                width: 'parent',
+                height: 'parent',
+                type: 'hFlow',
+                wrap: 'chain',
+                hStyle: 'spread_inside',
+                vStyle: 'spread_inside',
+                maxElement: 2,
+                padding: [100, 400],
+                contains: ['1', '2', '3', '4', '5', '6'],
+              }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}
+
+// test padding four values
+@Preview(group = "flow")
+@Composable
+fun FlowDemo11() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            flow: { 
+                width: 'parent',
+                height: 'parent',
+                type: 'hFlow',
+                wrap: 'chain',
+                hStyle: 'spread_inside',
+                vStyle: 'spread_inside',
+                maxElement: 2,
+                padding: [100, 200, 300, 400],
+                contains: ['1', '2', '3', '4', '5', '6'],
+              }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("1", "2", "3", "4", "5", "6")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}

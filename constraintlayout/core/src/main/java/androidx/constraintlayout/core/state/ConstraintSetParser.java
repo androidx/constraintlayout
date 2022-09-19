@@ -971,13 +971,35 @@ public class ConstraintSetParser {
                     }
                     break;
                 case "padding":
-                    String paddingValue = element.get(param).content();
-                    try {
-                        int value = Integer.parseInt(paddingValue);
-                        flow.setPadding(value);
-                    } catch(NumberFormatException e) {
+                    CLElement paddingObject = element.get(param);
+                    int paddingLeft = 0;
+                    int paddingTop = 0;
+                    int paddingRight = 0;
+                    int paddingBottom = 0;
+                    if (paddingObject instanceof CLArray && ((CLArray) paddingObject).size() > 1) {
+                        paddingLeft = ((CLArray) paddingObject).getInt(0);
+                        paddingRight = paddingLeft;
+                        paddingTop = ((CLArray) paddingObject).getInt(1);
+                        paddingBottom = paddingTop;
+                        if (((CLArray) paddingObject).size() > 2) {
+                            paddingRight = ((CLArray) paddingObject).getInt(2);
+                            try {
+                                paddingBottom = ((CLArray) paddingObject).getInt(3);
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                paddingBottom = 0;
+                            }
 
+                        }
+                    } else {
+                        paddingLeft = paddingObject.getInt();
+                        paddingTop = paddingLeft;
+                        paddingRight = paddingLeft;
+                        paddingBottom = paddingLeft;
                     }
+                    flow.setPaddingLeft(paddingLeft);
+                    flow.setPaddingTop(paddingTop);
+                    flow.setPaddingRight(paddingRight);
+                    flow.setPaddingBottom(paddingBottom);
                     break;
                 case "vAlign":
                     String vAlignValue = element.get(param).content();
