@@ -17,11 +17,14 @@
 package com.example.constraintlayout
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,76 +40,56 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Motion
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
+import androidx.constraintlayout.compose.RelativePosition
+import androidx.constraintlayout.compose.rememberMotionContent
 import java.util.*
+import kotlin.collections.ArrayList
 
-@Preview(group = "motion_2")
+@Preview(group = "LookAheadMotion")
 @Composable
-public fun MotionDemo3() {
-    var animateToEnd by remember { mutableStateOf(false) }
+public fun LaMotion01() {
+    var vert: Boolean by remember { mutableStateOf(true) }
+    var words = "This is a test of motionLayout".split(' ')
+    val animationSpec: AnimationSpec<Float> = tween(2000)
+    val s = rememberMotionContent {
+        for (word in words) {
+            Text(modifier = Modifier
+                .padding(2.dp)
+                .motion(animationSpec) {
+                    keyPositions {
+                        frame(50f) {
+                            type = RelativePosition.Delta
+                            percentX = if (vert) 0f else 1.0f
 
-    val progress  = remember { Animatable(0f) }
-
-    LaunchedEffect(animateToEnd) {
-        progress.animateTo(if (animateToEnd) 1f else 0f,
-            animationSpec = tween(3000))
+                        }
+                    }
+                }, text = word)
+        }
     }
 
-    Column( modifier = Modifier.background(Color.Gray)) {
-
-        val scene1 = MotionScene("""
-            {
-                Header: {
-                  name: 'motion26'
-                },
-                
-                ConstraintSets: {
-                  start: {
-                    id1: {
-                      width: 400, height: 40,
-                      start:  ['parent', 'start' , 16],
-                      bottom: ['parent', 'bottom', 16]
-                    }
-                  },
-                  
-                  end: {
-                    id1: {
-                      width: 40, height: 40,
-                      end: ['parent', 'end', 16],
-                      top: ['parent', 'top', 16]
-                    }
-                  }
-                },
-                
-                Transitions: {
-                  default: {
-                    from: 'start',   to: 'end',
-                  }
-                }
+    Motion(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
+        Column(modifier = Modifier.background(Color.LightGray)) {
+            Button(onClick = { vert = !vert }) {
+                Text(modifier = Modifier.motion(), text = "Click")
             }
-            """)
+            if (vert) {
+                Row() {
+                    s()
+                }
+            } else Column() {
+                s()
+            }
 
-        MotionLayout(
-            modifier    = Modifier
-                .wrapContentWidth()
-                .align(CenterHorizontally)
-                .height(400.dp)
-                .background(Color.Cyan),
-            motionScene = scene1,
-            progress   = progress.value) {
 
-            Box(modifier = Modifier
-                .layoutId("id1")
-                .background(Color.Red))
-        }
-
-        Button(onClick = { animateToEnd = !animateToEnd },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(3.dp)) {
-            Text(text = "Wrap Content MotionLayout")
         }
     }
-}
+
+   }
+
+
