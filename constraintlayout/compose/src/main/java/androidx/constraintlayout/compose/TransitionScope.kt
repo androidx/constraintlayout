@@ -422,19 +422,19 @@ class SwipeMode internal constructor(
             )
 
         fun Spring(
-            springMass: Float = 1f,
-            springStiffness: Float = 400f,
-            springDamping: Float = 10f,
-            springThreshold: Float = 0.01f,
-            springBoundary: SpringBoundary = SpringBoundary.Overshoot
+            mass: Float = 1f,
+            stiffness: Float = 400f,
+            damping: Float = 10f,
+            threshold: Float = 0.01f,
+            boundary: SpringBoundary = SpringBoundary.Overshoot
         ): SwipeMode =
             SwipeMode(
                 name = "spring",
-                springMass = springMass,
-                springStiffness = springStiffness,
-                springDamping = springDamping,
-                springThreshold = springThreshold,
-                springBoundary = springBoundary
+                springMass = mass,
+                springStiffness = stiffness,
+                springDamping = damping,
+                springThreshold = threshold,
+                springBoundary = boundary
             )
     }
 }
