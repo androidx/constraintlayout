@@ -480,8 +480,8 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        verticalGap:  Dp = 0.dp,
-        horizontalGap:  Dp = 0.dp,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
         maxElement: Int = 0,
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
@@ -545,8 +545,8 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        verticalGap:  Dp = 0.dp,
-        horizontalGap:  Dp = 0.dp,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
         maxElement: Int = 0,
         paddingLeft: Dp = 0.dp,
         paddingTop: Dp = 0.dp,
