@@ -17,6 +17,7 @@
 package androidx.constraintlayout.compose
 
 import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.currentRecomposeScope
@@ -32,7 +33,6 @@ import androidx.constraintlayout.core.parser.CLString
 import androidx.constraintlayout.core.state.CorePixelDp
 import kotlin.properties.ObservableProperty
 import kotlin.reflect.KProperty
-import androidx.annotation.IntRange
 
 @ExperimentalMotionApi
 @Composable
@@ -118,29 +118,34 @@ class TransitionScope internal constructor(
         keyFramesObject.put("KeyCycles", keyCyclesArray)
     }
 
-    var durationMs: Long = 400L
-
-    var easing: Easing = Easing.Standard
-
     var motionArc: Arc = Arc.None
 
     var onSwipe: OnSwipe? = null
 
-    fun keyAttributes(vararg targets: ConstrainedLayoutReference, keyAttributesContent: KeyAttributesScope.() -> Unit) {
+    fun keyAttributes(
+        vararg targets: ConstrainedLayoutReference,
+        keyAttributesContent: KeyAttributesScope.() -> Unit
+    ) {
         val scope = KeyAttributesScope(*targets)
         keyAttributesContent(scope)
         addKeyAttributesIfMissing()
         keyAttributesArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyPositions(vararg targets: ConstrainedLayoutReference, keyPositionsContent: KeyPositionsScope.() -> Unit) {
+    fun keyPositions(
+        vararg targets: ConstrainedLayoutReference,
+        keyPositionsContent: KeyPositionsScope.() -> Unit
+    ) {
         val scope = KeyPositionsScope(*targets)
         keyPositionsContent(scope)
         addKeyPositionsIfMissing()
         keyPositionsArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyCycles(vararg targets: ConstrainedLayoutReference, keyCyclesContent: KeyCyclesScope.() -> Unit) {
+    fun keyCycles(
+        vararg targets: ConstrainedLayoutReference,
+        keyCyclesContent: KeyCyclesScope.() -> Unit
+    ) {
         val scope = KeyCyclesScope(*targets)
         keyCyclesContent(scope)
         addKeyCyclesIfMissing()
@@ -164,11 +169,22 @@ class TransitionScope internal constructor(
         onSwipe?.let {
             containerObject.put("onSwipe", onSwipeObject)
             onSwipeObject.putString("direction", it.direction.name)
-            onSwipeObject.putString("mode", it.mode.name)
+            onSwipeObject.putNumber("dragScale", it.dragScale)
+            it.dragAround?.id?.let { id ->
+                onSwipeObject.putString("around", id.toString())
+            }
+            onSwipeObject.putNumber("threshold", it.dragThreshold)
             onSwipeObject.putString("anchor", it.anchor.id.toString())
             onSwipeObject.putString("side", it.side.name)
             onSwipeObject.putString("touchUp", it.onTouchUp.name)
-            onSwipeObject.putNumber("stopThreshold", it.springThreshold)
+            onSwipeObject.putString("mode", it.mode.name)
+            onSwipeObject.putNumber("maxVelocity", it.mode.maxVelocity)
+            onSwipeObject.putNumber("maxAccel", it.mode.maxAcceleration)
+            onSwipeObject.putNumber("springMass", it.mode.springMass)
+            onSwipeObject.putNumber("springStiffness", it.mode.springStiffness)
+            onSwipeObject.putNumber("springDamping", it.mode.springDamping)
+            onSwipeObject.putNumber("stopThreshold", it.mode.springThreshold)
+            onSwipeObject.putString("springBoundary", it.mode.springBoundary.name)
         }
         return containerObject
     }
@@ -212,7 +228,8 @@ open class BaseKeyFramesScope internal constructor(vararg targets: ConstrainedLa
 }
 
 @ExperimentalMotionApi
-class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
         keyFrameContent(scope)
@@ -222,7 +239,8 @@ class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutR
 }
 
 @ExperimentalMotionApi
-class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     var type by addNameOnPropertyChange(RelativePosition.Parent)
 
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyPositionScope.() -> Unit) {
@@ -234,7 +252,8 @@ class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutRe
 }
 
 @ExperimentalMotionApi
-class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
         keyFrameContent(scope)
@@ -338,11 +357,12 @@ data class OnSwipe(
     val anchor: ConstrainedLayoutReference,
     val side: SwipeSide,
     val direction: SwipeDirection,
-    val mode: SwipeMode = SwipeMode.Velocity,
+    val dragScale: Float = 1f,
+    val dragThreshold: Float = 10f,
+    val dragAround: ConstrainedLayoutReference? = null,
+    val limitBoundsTo: ConstrainedLayoutReference? = null,
     val onTouchUp: SwipeTouchUp = SwipeTouchUp.AutoComplete,
-    // TODO: Consider using proper default & consider making this part of SwipeModes
-    //   eg: SwipeModes.Spring(mass: Float, stiffness: Float, stopThreshold: Float, ...)
-    val springThreshold: Float = 0.01f
+    val mode: SwipeMode = SwipeMode.Velocity(),
 )
 
 @ExperimentalMotionApi
@@ -379,10 +399,43 @@ class Arc internal constructor(val name: String) {
 }
 
 @ExperimentalMotionApi
-class SwipeMode internal constructor(val name: String) {
+class SwipeMode internal constructor(
+    val name: String,
+    internal val springMass: Float = 1f,
+    internal val springStiffness: Float = 400f,
+    internal val springDamping: Float = 10f,
+    internal val springThreshold: Float = 0.01f,
+    internal val springBoundary: SpringBoundary = SpringBoundary.Overshoot,
+    internal val maxVelocity: Float = 4f,
+    internal val maxAcceleration: Float = 1.2f
+) {
     companion object {
-        val Velocity = SwipeMode("velocity")
-        val Spring = SwipeMode("spring")
+        val Velocity = Velocity()
+
+        val Spring = Spring()
+
+        fun Velocity(maxVelocity: Float = 4f, maxAcceleration: Float = 1.2f): SwipeMode =
+            SwipeMode(
+                name = "velocity",
+                maxVelocity = maxVelocity,
+                maxAcceleration = maxAcceleration
+            )
+
+        fun Spring(
+            springMass: Float = 1f,
+            springStiffness: Float = 400f,
+            springDamping: Float = 10f,
+            springThreshold: Float = 0.01f,
+            springBoundary: SpringBoundary = SpringBoundary.Overshoot
+        ): SwipeMode =
+            SwipeMode(
+                name = "spring",
+                springMass = springMass,
+                springStiffness = springStiffness,
+                springDamping = springDamping,
+                springThreshold = springThreshold,
+                springBoundary = springBoundary
+            )
     }
 }
 
@@ -417,11 +470,22 @@ class SwipeDirection internal constructor(val name: String) {
 class SwipeSide internal constructor(val name: String) {
     companion object {
         val Top: SwipeSide = SwipeSide("top")
-        val Right: SwipeSide = SwipeSide("right")
-        val End: SwipeSide = SwipeSide("end")
-        val Bottom: SwipeSide = SwipeSide("bottom")
         val Left: SwipeSide = SwipeSide("left")
+        val Right: SwipeSide = SwipeSide("right")
+        val Bottom: SwipeSide = SwipeSide("bottom")
         val Middle: SwipeSide = SwipeSide("middle")
+        val Start: SwipeSide = SwipeSide("start")
+        val End: SwipeSide = SwipeSide("end")
+    }
+}
+
+@ExperimentalMotionApi
+class SpringBoundary internal constructor(val name: String) {
+    companion object {
+        val Overshoot = SpringBoundary("overshoot")
+        val BounceStart = SpringBoundary("bounceStart")
+        val BounceEnd = SpringBoundary("bounceEnd")
+        val BounceBoth = SpringBoundary("bounceBoth")
     }
 }
 
