@@ -77,6 +77,7 @@ internal class MotionMeasurer : Measurer() {
         root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
     }
 
+    @Suppress("UnavailableSymbol")
     fun performInterpolationMeasure(
         constraints: Constraints,
         layoutDirection: LayoutDirection,
@@ -86,16 +87,17 @@ internal class MotionMeasurer : Measurer() {
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
-        motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+        motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
         measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
 
         var needsRemeasure = false
-        if (motionLayoutFlags == MotionLayoutFlags.Default) {
+        var flag = motionLayoutFlags.firstOrNull()
+        if (flag == MotionLayoutFlag.Default || flag == null) {
             needsRemeasure = needsRemeasure(constraints)
-        } else if (motionLayoutFlags == MotionLayoutFlags.FullMeasure) {
+        } else if (flag == MotionLayoutFlag.FullMeasure) {
             needsRemeasure = true
         }
 
@@ -511,6 +513,7 @@ internal class MotionMeasurer : Measurer() {
         frameCache.clear()
     }
 
+    @Suppress("UnavailableSymbol")
     fun initWith(
         start: ConstraintSet,
         end: ConstraintSet,

@@ -3806,7 +3806,8 @@ public class ConstraintWidget {
             @SuppressWarnings("unused") float weight) {
         ret.append(type);
         ret.append(" :  {\n");
-        serializeAttribute(ret, "      behavior", behavior.toString(), DimensionBehaviour.FIXED.toString());
+        serializeAttribute(ret, "      behavior", behavior.toString(),
+                DimensionBehaviour.FIXED.toString());
         serializeAttribute(ret, "      size", size, 0);
         serializeAttribute(ret, "      min", min, 0);
         serializeAttribute(ret, "      max", max, Integer.MAX_VALUE);

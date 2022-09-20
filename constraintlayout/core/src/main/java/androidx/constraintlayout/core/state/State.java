@@ -378,7 +378,7 @@ public class State {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null || !(reference.getFacade() instanceof FlowReference)) {
             FlowReference flowReference =
-                    (vertical) ? new FlowReference(this, Helper.VERTICAL_FLOW)
+                    vertical ? new FlowReference(this, Helper.VERTICAL_FLOW)
                             : new FlowReference(this, Helper.HORIZONTAL_FLOW);
 
             reference.setFacade(flowReference);

@@ -151,7 +151,9 @@ import androidx.constraintlayout.compose.carousel.carouselSwipeable
  */
 @OptIn(ExperimentalMotionApi::class)
 @Composable
+@Suppress("UnavailableSymbol")
 fun MotionCarousel(
+    @Suppress("HiddenTypeParameter")
     motionScene: MotionScene,
     initialSlotIndex: Int,
     numSlots: Int,
@@ -238,7 +240,7 @@ fun MotionCarousel(
     MotionLayout(motionScene = motionScene,
         transitionName = transitionName.value,
         progress = mprogress,
-        motionLayoutFlags = MotionLayoutFlags.FullMeasure, // TODO: only apply as needed
+        motionLayoutFlags = setOf(MotionLayoutFlag.FullMeasure), // TODO: only apply as needed
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -319,8 +321,10 @@ interface MotionCarouselScope {
     )
 
     @OptIn(ExperimentalMotionApi::class)
+    @Suppress("UnavailableSymbol")
     fun itemsWithProperties(
         count: Int,
+        @Suppress("HiddenTypeParameter")
         itemContent: @Composable (
             index: Int,
             properties: androidx.compose.runtime.State<MotionProperties>
@@ -329,8 +333,10 @@ interface MotionCarouselScope {
 }
 
 @OptIn(ExperimentalMotionApi::class)
+@Suppress("UnavailableSymbol")
 inline fun <T> MotionCarouselScope.itemsWithProperties(
     items: List<T>,
+    @Suppress("HiddenTypeParameter")
     crossinline itemContent: @Composable (
         item: T,
         properties: androidx.compose.runtime.State<MotionProperties>
@@ -351,9 +357,12 @@ private fun rememberStateOfItemsProvider(
 
 @OptIn(ExperimentalMotionApi::class)
 interface MotionItemsProvider {
+    @SuppressWarnings("UnavailableSymbol")
     fun getContent(index: Int): @Composable() () -> Unit
+    @SuppressWarnings("UnavailableSymbol")
     fun getContent(
         index: Int,
+        @SuppressWarnings("HiddenTypeParameter")
         properties: androidx.compose.runtime.State<MotionProperties>
     ): @Composable() () -> Unit
 

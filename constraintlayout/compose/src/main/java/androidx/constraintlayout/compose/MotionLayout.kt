@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 /**
  * Measure flags for MotionLayout
  */
-enum class MotionLayoutFlags(value: Long) {
+enum class MotionLayoutFlag(@Suppress("UNUSED_PARAMETER") value: Long) {
     Default(0),
     FullMeasure(1)
 }
@@ -71,7 +71,7 @@ inline fun MotionLayout(
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val motionProgress = createAndUpdateMotionProgress(progress = progress)
@@ -103,7 +103,7 @@ inline fun MotionLayout(
     transitionName: String = "default",
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
     MotionLayoutCore(
@@ -139,7 +139,7 @@ inline fun MotionLayout(
     animationSpec: AnimationSpec<Float> = tween(),
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
@@ -168,7 +168,7 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     informationReceiver: LayoutInformationReceiver? = null,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
     val motionProgress = createAndUpdateMotionProgress(progress = progress)
@@ -189,15 +189,18 @@ inline fun MotionLayout(
 @ExperimentalMotionApi
 @PublishedApi
 @Composable
+@Suppress("UnavailableSymbol")
 internal inline fun MotionLayoutCore(
+    @Suppress("HiddenTypeParameter")
     motionScene: MotionScene,
     modifier: Modifier = Modifier,
     constraintSetName: String? = null,
     animationSpec: AnimationSpec<Float> = tween(),
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     noinline finishedAnimationListener: (() -> Unit)? = null,
+    @Suppress("HiddenTypeParameter")
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
     val needsUpdate = remember {
@@ -285,14 +288,17 @@ internal inline fun MotionLayoutCore(
 @ExperimentalMotionApi
 @PublishedApi
 @Composable
+@Suppress("UnavailableSymbol")
 internal inline fun MotionLayoutCore(
+    @Suppress("HiddenTypeParameter")
     motionScene: MotionScene,
     progress: Float,
     modifier: Modifier = Modifier,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     transitionName: String,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
+    @Suppress("HiddenTypeParameter")
     crossinline content: @Composable MotionLayoutScope.() -> Unit,
 ) {
     val transition = remember(motionScene, transitionName) {
@@ -328,6 +334,7 @@ internal inline fun MotionLayoutCore(
 @ExperimentalMotionApi
 @PublishedApi
 @Composable
+@Suppress("UnavailableSymbol")
 internal inline fun MotionLayoutCore(
     start: ConstraintSet,
     end: ConstraintSet,
@@ -337,7 +344,8 @@ internal inline fun MotionLayoutCore(
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     informationReceiver: LayoutInformationReceiver? = null,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
+    @Suppress("HiddenTypeParameter")
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     // TODO: Merge this snippet with UpdateWithForcedIfNoUserChange
@@ -422,12 +430,15 @@ inline fun MotionLayout(
 @PublishedApi
 @ExperimentalMotionApi
 @Composable
+@Suppress("UnavailableSymbol")
 internal inline fun MotionLayoutCore(
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     motionLayoutState: MotionLayoutStateImpl,
+    @Suppress("HiddenTypeParameter")
     motionScene: MotionScene,
     transitionName: String = "default",
+    @Suppress("HiddenTypeParameter")
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val transition = remember(motionScene, transitionName) {
@@ -460,10 +471,10 @@ internal inline fun MotionLayoutCore(
     )
 }
 
-@Suppress("unused")
 @LayoutScopeMarker
 @ExperimentalMotionApi
-class MotionLayoutScope @PublishedApi internal constructor(
+class MotionLayoutScope @Suppress("ShowingMemberInHiddenClass")
+    @PublishedApi internal constructor(
     private val measurer: MotionMeasurer,
     private val motionProgress: MotionProgress
 ) {
@@ -554,7 +565,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     constraintSetEnd: ConstraintSet,
     @SuppressWarnings("HiddenTypeParameter") transition: TransitionImpl?,
     motionProgress: MotionProgress,
-    motionLayoutFlags: MotionLayoutFlags = MotionLayoutFlags.Default,
+    motionLayoutFlags: Set<MotionLayoutFlag> = setOf<MotionLayoutFlag>(),
     measurer: MotionMeasurer
 ): MeasurePolicy {
     val density = LocalDensity.current

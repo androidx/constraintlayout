@@ -97,7 +97,7 @@ internal class MotionSceneDslImpl(
 /**
  * Scope used by the MotionScene DSL.
  *
- * &nbsp
+ * &nbsp;
  *
  * Define new [ConstraintSet]s and [Transition]s within this scope using [constraintSet] and
  * [transition] respectively.
@@ -105,7 +105,7 @@ internal class MotionSceneDslImpl(
  * Alternatively, you may add existing objects to this scope using [addConstraintSet] and
  * [addTransition].
  *
- * &nbsp
+ * &nbsp;
  *
  * The [defaultTransition] **should always be set**. It defines the initial state of the layout and
  * works as a fallback for undefined `from -> to` transitions.

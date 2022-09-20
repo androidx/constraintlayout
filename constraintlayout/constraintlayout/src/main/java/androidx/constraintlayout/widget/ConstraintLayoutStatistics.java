@@ -95,6 +95,7 @@ public class ConstraintLayoutStatistics {
      * Create a copy of the statistics
      * @return a copy
      */
+    @Override
     public ConstraintLayoutStatistics clone() {
         return new ConstraintLayoutStatistics(this);
     }
@@ -122,10 +123,10 @@ public class ConstraintLayoutStatistics {
 
     @SuppressLint({"LogConditional"})
     private void log(String tag) {
-        String value;
         StackTraceElement s = new Throwable().getStackTrace()[2];
 
-        Log.v(tag, "CL Perf: --------  Performance .(" + s.getFileName() + ":" + s.getLineNumber() + ")  ------ ");
+        Log.v(tag, "CL Perf: --------  Performance .(" +
+                s.getFileName() + ":" + s.getLineNumber() + ")  ------ ");
 
         DecimalFormat df = new DecimalFormat("###.000");
 
@@ -172,7 +173,8 @@ public class ConstraintLayoutStatistics {
     }
 
     /**
-     * Generate a float formatted String for the parameter comparing current value with value in relative
+     * Generate a float formatted String for the parameter comparing
+     * current value with value in relative
      * @param df Format the float using this
      * @param relative compare against
      * @param param the parameter to compare
@@ -218,7 +220,8 @@ public class ConstraintLayoutStatistics {
         DecimalFormat df = new DecimalFormat("###.000");
         StackTraceElement s = new Throwable().getStackTrace()[1];
 
-        Log.v(tag, "CL Perf: -=  Performance .(" + s.getFileName() + ":" + s.getLineNumber() + ")  =- ");
+        Log.v(tag, "CL Perf: -=  Performance .(" +
+                s.getFileName() + ":" + s.getLineNumber() + ")  =- ");
         Log.v(tag, compare(df, prev, DURATION_OF_CHILD_MEASURES));
         Log.v(tag, compare(df, prev, DURATION_OF_LAYOUT));
         Log.v(tag, compare(df, prev, DURATION_OF_MEASURES));

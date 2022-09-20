@@ -73,7 +73,7 @@ class MotionFlowTest {
             {
                 ConstraintSets: {
                   start: {
-                    flow1: { 
+                    flow1: {
                         width: 'parent',
                         height: 'parent',
                         type: 'hFlow',
@@ -83,9 +83,8 @@ class MotionFlowTest {
                         contains: ['1', '2', '3', '4'],
                       }
                   },
-                  
                   end: {
-                    flow2: { 
+                    flow2: {
                         width: 'parent',
                         height: 'parent',
                         type: 'vFlow',
@@ -96,7 +95,6 @@ class MotionFlowTest {
                       }
                   }
                 },
-                
                 Transitions: {
                   default: {
                     from: 'start',   to: 'end',
