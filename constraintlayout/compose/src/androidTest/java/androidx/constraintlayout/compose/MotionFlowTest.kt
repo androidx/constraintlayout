@@ -58,7 +58,6 @@ class MotionFlowTest {
         isDebugInspectorInfoEnabled = false
     }
 
-
     @Test
     fun horizontalToVerticalFlow() {
         val rootSize = 200.dp

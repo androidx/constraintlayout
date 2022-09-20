@@ -1357,8 +1357,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 frameCache.keys.firstOrNull {
                     it.layoutId != null && it.layoutId == measurable.layoutId
                 } ?: return@fastForEach
-            }
-            else {
+            } else {
                 measurable
             }
             val frame = frameCache[matchedMeasurable] ?: return
@@ -1366,9 +1365,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             if (!frameCache.containsKey(measurable)) {
                 // TODO: Workaround for lookaheadLayout, the measurable is a different instance and
                 //   the placeable should be a result of the given measurable
-                placeWithFrameTransform(measurable.measure(Constraints.fixed(placeable.width, placeable.height)), frame)
-            }
-            else {
+                placeWithFrameTransform(
+                    measurable.measure(Constraints.fixed(placeable.width, placeable.height)),
+                    frame)
+            } else {
                 placeWithFrameTransform(placeable, frame)
             }
         }
@@ -1551,7 +1551,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 }
 
-internal fun Placeable.PlacementScope.placeWithFrameTransform(placeable: Placeable, frame: WidgetFrame, offset: IntOffset = IntOffset.Zero) {
+internal fun Placeable.PlacementScope.placeWithFrameTransform(
+    placeable: Placeable,
+    frame: WidgetFrame,
+    offset: IntOffset = IntOffset.Zero
+    ) {
     if (frame.isDefaultTransform) {
         val x = frame.left - offset.x
         val y = frame.top - offset.y

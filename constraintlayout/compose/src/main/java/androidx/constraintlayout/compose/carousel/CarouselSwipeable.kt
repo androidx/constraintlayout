@@ -823,7 +823,8 @@ internal object SwipeableDefaults {
 
 // temp default nested scroll connection for swipeables which desire as an opt in
 // revisit in b/174756744 as all types will have their own specific connection probably
-internal val <T> CarouselSwipeableState<T>.PreUpPostDownNestedScrollConnection: NestedScrollConnection
+internal val <T> CarouselSwipeableState<T>.PreUpPostDownNestedScrollConnection:
+    NestedScrollConnection
     get() = object : NestedScrollConnection {
         override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
             val delta = available.toFloat()

@@ -418,8 +418,8 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        verticalGap:  Dp = 0.dp,
-        horizontalGap:  Dp = 0.dp,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
         maxElement: Int = 0,
         padding: Dp = 0.dp,
         wrapMode: Wrap = Wrap.None,
@@ -480,8 +480,8 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        verticalGap:  Dp = 0.dp,
-        horizontalGap:  Dp = 0.dp,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
         maxElement: Int = 0,
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
@@ -545,8 +545,8 @@ abstract class ConstraintLayoutBaseScope {
     fun createFlow(
         vararg elements: LayoutReference?,
         flowVertically: Boolean = false,
-        verticalGap:  Dp = 0.dp,
-        horizontalGap:  Dp = 0.dp,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
         maxElement: Int = 0,
         paddingLeft: Dp = 0.dp,
         paddingTop: Dp = 0.dp,
@@ -858,7 +858,8 @@ class Visibility internal constructor(
  */
 @Immutable
 class Wrap internal constructor(
-    internal val mode: Int) {
+    internal val mode: Int
+    ) {
     companion object {
         val None =
             Wrap(androidx.constraintlayout.core.widgets.Flow.WRAP_NONE)
@@ -874,12 +875,16 @@ class Wrap internal constructor(
  */
 @Immutable
 class VerticalAlign internal constructor(
-    internal val mode: Int) {
+    internal val mode: Int
+    ) {
     companion object {
-        val Top =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
-        val Bottom =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM)
-        val Center =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER)
-        val Baseline =  VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE)
+        val Top = VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP)
+        val Bottom =
+            VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM)
+        val Center =
+            VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER)
+        val Baseline =
+            VerticalAlign(androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE)
     }
 }
 
@@ -888,11 +893,14 @@ class VerticalAlign internal constructor(
  */
 @Immutable
 class HorizontalAlign internal constructor(
-    internal val mode: Int) {
+    internal val mode: Int
+    ) {
     companion object {
-        val Start =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
-        val End =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END)
-        val Center =  HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER)
+        val Start =
+            HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START)
+        val End = HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END)
+        val Center =
+            HorizontalAlign(androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER)
     }
 }
 
@@ -901,10 +909,11 @@ class HorizontalAlign internal constructor(
  */
 @Immutable
 class FlowStyle internal constructor(
-    internal val style: Int) {
+    internal val style: Int
+    ) {
     companion object {
-        val Spread =  FlowStyle(0)
-        val SpreadInside =  FlowStyle(1)
-        val Packed =  FlowStyle(2)
+        val Spread = FlowStyle(0)
+        val SpreadInside = FlowStyle(1)
+        val Packed = FlowStyle(2)
     }
 }

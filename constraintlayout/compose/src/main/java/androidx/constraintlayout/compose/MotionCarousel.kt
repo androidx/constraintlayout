@@ -211,8 +211,8 @@ fun MotionCarousel(
     }
 
     if (!swipeableState.isAnimationRunning) {
-        if (state.direction == MotionCarouselDirection.FORWARD
-            && swipeableState.currentValue.equals(swipeStateForward)
+        if (state.direction == MotionCarouselDirection.FORWARD &&
+            swipeableState.currentValue.equals(swipeStateForward)
         ) {
             LaunchedEffect(true) {
                 if (state.index + 1 < provider.value.count()) {
@@ -221,8 +221,8 @@ fun MotionCarousel(
                     state.direction = MotionCarouselDirection.FORWARD
                 }
             }
-        } else if (state.direction == MotionCarouselDirection.BACKWARD
-            && swipeableState.currentValue.equals(swipeStateBackward)
+        } else if (state.direction == MotionCarouselDirection.BACKWARD &&
+            swipeableState.currentValue.equals(swipeStateBackward)
         ) {
             LaunchedEffect(true) {
                 if (state.index > 0) {
@@ -292,7 +292,6 @@ fun ItemHolder(i: Int, slotPrefix: String, showSlot: Boolean, function: @Composa
     }
 }
 
-
 private enum class MotionCarouselDirection {
     FORWARD,
     BACKWARD
@@ -322,14 +321,20 @@ interface MotionCarouselScope {
     @OptIn(ExperimentalMotionApi::class)
     fun itemsWithProperties(
         count: Int,
-        itemContent: @Composable (index: Int, properties: androidx.compose.runtime.State<MotionProperties>) -> Unit
+        itemContent: @Composable (
+            index: Int,
+            properties: androidx.compose.runtime.State<MotionProperties>
+        ) -> Unit
     )
 }
 
 @OptIn(ExperimentalMotionApi::class)
 inline fun <T> MotionCarouselScope.itemsWithProperties(
     items: List<T>,
-    crossinline itemContent: @Composable (item: T, properties: androidx.compose.runtime.State<MotionProperties>) -> Unit
+    crossinline itemContent: @Composable (
+        item: T,
+        properties: androidx.compose.runtime.State<MotionProperties>
+    ) -> Unit
 ) = itemsWithProperties(items.size) { index, properties ->
     itemContent(items[index], properties)
 }
@@ -361,7 +366,8 @@ private class MotionCarouselScopeImpl() : MotionCarouselScope, MotionItemsProvid
 
     var itemsCount = 0
     var itemsProvider: @Composable ((index: Int) -> Unit)? = null
-    var itemsProviderWithProperties: @Composable ((index: Int, properties: androidx.compose.runtime.State<MotionProperties>) -> Unit)? =
+    var itemsProviderWithProperties: @Composable ((index: Int,
+        properties: androidx.compose.runtime.State<MotionProperties>) -> Unit)? =
         null
 
     override fun items(
@@ -374,7 +380,10 @@ private class MotionCarouselScopeImpl() : MotionCarouselScope, MotionItemsProvid
 
     override fun itemsWithProperties(
         count: Int,
-        itemContent: @Composable (index: Int, properties: androidx.compose.runtime.State<MotionProperties>) -> Unit
+        itemContent: @Composable (
+            index: Int,
+            properties: androidx.compose.runtime.State<MotionProperties>
+        ) -> Unit
     ) {
         itemsCount = count
         itemsProviderWithProperties = itemContent

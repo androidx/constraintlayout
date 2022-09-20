@@ -126,7 +126,6 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
     internal var constraintSetsByName = HashMap<String, ConstraintSet>()
     internal var transitionsByName = HashMap<String, Transition>()
 
-
     internal fun reset() {
         generatedCount = 0
         constraintSetsByName.clear()

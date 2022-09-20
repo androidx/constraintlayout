@@ -126,21 +126,30 @@ class TransitionScope internal constructor(
 
     var onSwipe: OnSwipe? = null
 
-    fun keyAttributes(vararg targets: ConstrainedLayoutReference, keyAttributesContent: KeyAttributesScope.() -> Unit) {
+    fun keyAttributes(
+        vararg targets: ConstrainedLayoutReference,
+        keyAttributesContent: KeyAttributesScope.() -> Unit
+    ) {
         val scope = KeyAttributesScope(*targets)
         keyAttributesContent(scope)
         addKeyAttributesIfMissing()
         keyAttributesArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyPositions(vararg targets: ConstrainedLayoutReference, keyPositionsContent: KeyPositionsScope.() -> Unit) {
+    fun keyPositions(
+        vararg targets: ConstrainedLayoutReference,
+        keyPositionsContent: KeyPositionsScope.() -> Unit
+    ) {
         val scope = KeyPositionsScope(*targets)
         keyPositionsContent(scope)
         addKeyPositionsIfMissing()
         keyPositionsArray.add(scope.keyFramePropsObject)
     }
 
-    fun keyCycles(vararg targets: ConstrainedLayoutReference, keyCyclesContent: KeyCyclesScope.() -> Unit) {
+    fun keyCycles(
+        vararg targets: ConstrainedLayoutReference,
+        keyCyclesContent: KeyCyclesScope.() -> Unit
+    ) {
         val scope = KeyCyclesScope(*targets)
         keyCyclesContent(scope)
         addKeyCyclesIfMissing()
@@ -212,7 +221,8 @@ open class BaseKeyFramesScope internal constructor(vararg targets: ConstrainedLa
 }
 
 @ExperimentalMotionApi
-class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyAttributeScope.() -> Unit) {
         val scope = KeyAttributeScope()
         keyFrameContent(scope)
@@ -222,7 +232,8 @@ class KeyAttributesScope internal constructor(vararg targets: ConstrainedLayoutR
 }
 
 @ExperimentalMotionApi
-class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     var type by addNameOnPropertyChange(RelativePosition.Parent)
 
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyPositionScope.() -> Unit) {
@@ -234,7 +245,8 @@ class KeyPositionsScope internal constructor(vararg targets: ConstrainedLayoutRe
 }
 
 @ExperimentalMotionApi
-class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) : BaseKeyFramesScope(*targets) {
+class KeyCyclesScope internal constructor(vararg targets: ConstrainedLayoutReference) :
+    BaseKeyFramesScope(*targets) {
     fun frame(@IntRange(0, 100) frame: Int, keyFrameContent: KeyCycleScope.() -> Unit) {
         val scope = KeyCycleScope()
         keyFrameContent(scope)
