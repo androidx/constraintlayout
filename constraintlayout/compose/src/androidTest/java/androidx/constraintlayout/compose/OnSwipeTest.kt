@@ -195,7 +195,7 @@ private fun OnSwipeTestDsl() {
                     anchor = box,
                     direction = SwipeDirection.End,
                     side = SwipeSide.End,
-                    mode = SwipeMode.Spring(springThreshold = 0.0001f),
+                    mode = SwipeMode.Spring(threshold = 0.0001f),
                     onTouchUp = SwipeTouchUp.NeverCompleteStart,
                 )
             }
