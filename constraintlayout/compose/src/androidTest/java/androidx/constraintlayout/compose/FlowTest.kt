@@ -239,7 +239,7 @@ private fun FlowComposableTest(
         constraintSet = ConstraintSet(
             """
         {
-            flow1: { 
+            flow1: {
                 width: $width,
                 height: $height,
                 type: '$type',

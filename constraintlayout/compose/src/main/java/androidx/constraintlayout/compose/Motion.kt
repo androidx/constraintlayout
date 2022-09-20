@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
  * Use [rememberMotionContent] and [MotionScope.motion] to animate layout changes caused by changing
  * the Composable's Layout parent on state changes.
  *
- * E.g:
+ * E.g.:
  *
  * ```
  * var vertOrHor by remember { mutableStateOf(false) }
@@ -225,7 +225,7 @@ class MotionScope(
                 update(endWidget, 1)
             }
         }
-        // TODO: Optimize all animated items at a time under a single Animatable. E.g: If after
+        // TODO: Optimize all animated items at a time under a single Animatable. E.g.: If after
         //  a state change, 10 different items changed, animate them using one Animatable
         //  object, as opposed to running 10 separate Animatables doing the same thing,
         //  measure/layout calls in the LookAheadLayout MeasurePolicy might provide the clue to

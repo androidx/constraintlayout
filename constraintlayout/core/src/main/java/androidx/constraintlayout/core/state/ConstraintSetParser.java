@@ -1099,13 +1099,14 @@ public class ConstraintSetParser {
                         vStyleValueStr = vStyleObject.content();
                     }
 
-                    if (vStyleValueStr != "") {
+                    if (!vStyleValueStr.equals("")) {
                         flow.setVerticalStyle(State.Chain.getValueByString(vStyleValueStr));
                     }
-                    if (vFirstStyleValueStr != "") {
-                        flow.setFirstVerticalStyle(State.Chain.getValueByString(vFirstStyleValueStr));
+                    if (!vFirstStyleValueStr.equals("")) {
+                        flow.setFirstVerticalStyle(
+                                State.Chain.getValueByString(vFirstStyleValueStr));
                     }
-                    if (vLastStyleValueStr != "") {
+                    if (!vLastStyleValueStr.equals("")) {
                         flow.setLastVerticalStyle(State.Chain.getValueByString(vLastStyleValueStr));
                     }
                     break;
@@ -1124,14 +1125,16 @@ public class ConstraintSetParser {
                         hStyleValueStr = hStyleObject.content();
                     }
 
-                    if (hStyleValueStr != "") {
+                    if (!hStyleValueStr.equals("")) {
                         flow.setHorizontalStyle(State.Chain.getValueByString(hStyleValueStr));
                     }
-                    if (hFirstStyleValueStr != "") {
-                        flow.setFirstHorizontalStyle(State.Chain.getValueByString(hFirstStyleValueStr));
+                    if (!hFirstStyleValueStr.equals("")) {
+                        flow.setFirstHorizontalStyle(
+                                State.Chain.getValueByString(hFirstStyleValueStr));
                     }
-                    if (hLastStyleValueStr != "") {
-                        flow.setLastHorizontalStyle(State.Chain.getValueByString(hLastStyleValueStr));
+                    if (!hLastStyleValueStr.equals("")) {
+                        flow.setLastHorizontalStyle(
+                                State.Chain.getValueByString(hLastStyleValueStr));
                     }
                     break;
                 default:
@@ -1408,7 +1411,6 @@ public class ConstraintSetParser {
             ConstraintReference reference,
             CLObject element
     ) throws CLParsingException {
-        float value;
         if (reference.getWidth() == null) {
             // Default to Wrap when the Dimension has not been assigned
             reference.setWidth(Dimension.createWrap());

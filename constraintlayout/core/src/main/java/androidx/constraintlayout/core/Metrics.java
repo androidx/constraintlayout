@@ -171,5 +171,4 @@ public class Metrics {
         resolvedWidgets = metrics.resolvedWidgets;
         nonresolvedWidgets = metrics.nonresolvedWidgets;
     }
-    
 }
