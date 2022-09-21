@@ -208,8 +208,7 @@ public class KeyAttributes extends Keys {
 
     protected void attributesToString(StringBuilder builder) {
         append(builder, "target", mTarget);
-        builder.append("frame:").append(Arrays.stream(mFrames).boxed().collect(Collectors.toList()))
-                .append(",\n");
+        builder.append("frame:").append(Arrays.toString(mFrames)).append(",\n");
 
         append(builder, "easing", mTransitionEasing);
         if (mCurveFit != null) {
