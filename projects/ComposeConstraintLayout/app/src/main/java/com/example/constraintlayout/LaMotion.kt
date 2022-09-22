@@ -61,7 +61,7 @@ public fun LaMotion01() {
                 .padding(2.dp)
                 .motion(animationSpec) {
                     keyPositions {
-                        frame(50f) {
+                        frame(50) {
                             type = RelativePosition.Delta
                             percentX = if (vert) 0f else 1.0f
 

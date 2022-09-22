@@ -46,7 +46,6 @@ dependencies {
     implementation "androidx.compose.ui:ui-util:$compose_ui_version"
     implementation "androidx.compose.foundation:foundation-layout:$compose_ui_version"
     implementation "androidx.compose.foundation:foundation:$compose_ui_version"
-    implementation "androidx.compose.material:material:$compose_ui_version"
 
     implementation project(':core')
 
@@ -54,6 +53,7 @@ dependencies {
     androidTestImplementation 'junit:junit:4.13.1'
     androidTestImplementation "androidx.compose.ui:ui-test:$compose_ui_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
+    androidTestImplementation "androidx.compose.material:material:$compose_ui_version"
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
     androidTestImplementation "androidx.activity:activity:1.3.0"
