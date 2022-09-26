@@ -176,6 +176,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
         point.mPathMotionArc = c.mPathMotionArc;
     }
+
     /**
      * takes the new keyPosition
      *

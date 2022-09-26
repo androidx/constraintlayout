@@ -27,7 +27,7 @@ public class ArcCurveFit extends CurveFit {
     public static final int ARC_START_VERTICAL = 1;
     public static final int ARC_START_HORIZONTAL = 2;
     public static final int ARC_START_FLIP = 3;
-    public static final int ARC_DOWN  = 4;
+    public static final int ARC_DOWN = 4;
     public static final int ARC_UP = 5;
 
     public static final int ARC_START_LINEAR = 0;
@@ -283,11 +283,9 @@ public class ArcCurveFit extends CurveFit {
                     mode = START_LINEAR;
                     break;
                 case ARC_UP:
-                    Utils.log("Arc ARC_UP");
                     mode = UP_ARC;
                     break;
                 case ARC_DOWN:
-                    Utils.log("Arc down");
                     mode = DOWN_ARC;
                     break;
             }
