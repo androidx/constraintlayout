@@ -62,13 +62,6 @@ public fun LaMotion01() {
                 .padding(2.dp)
                 .motion(animationSpec) {
                     motionArc = Arc.ArcDown
-//                    keyPositions {
-//                        frame(50) {
-//                            type = RelativePosition.Delta
-//                            percentX = if (vert) 0f else 1.0f
-//
-//                        }
-//                    }
                 }, text = word)
         }
     }
