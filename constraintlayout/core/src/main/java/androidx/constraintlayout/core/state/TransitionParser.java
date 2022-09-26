@@ -63,6 +63,12 @@ public class TransitionParser {
                     break;
                 case "flip":
                     bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 3);
+                    break;
+                case "arcDown":
+                    bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 4);
+                    break;
+                case "arcUp":
+                    bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 5);
             }
 
         }
@@ -222,7 +228,7 @@ public class TransitionParser {
 
             if (pathMotionArc != null) {
                 map(bundle, TypedValues.PositionType.TYPE_PATH_MOTION_ARC, pathMotionArc,
-                        "none", "startVertical", "startHorizontal", "flip");
+                        "none", "startVertical", "startHorizontal", "flip", "arcDown", "arcUp");
             }
 
             for (int j = 0; j < frames.size(); j++) {

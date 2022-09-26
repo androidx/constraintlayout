@@ -116,9 +116,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     private static boolean REVERSE = false;
 
-
-    private static final String RUN_FIRST = "perf_030";// (true) ? "verification_801" : "bug_005";
-    private final String LAYOUTS_MATCHES = "[bcpv].*_.*";
+    private static final String RUN_FIRST = "verification_043";// (true) ? "verification_801" : "bug_005";
+    private final String LAYOUTS_MATCHES = "[bcv].*_.*";
 
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
