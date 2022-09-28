@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.Arc
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Motion
 import androidx.constraintlayout.compose.MotionLayout
@@ -60,13 +61,14 @@ public fun LaMotion01() {
             Text(modifier = Modifier
                 .padding(2.dp)
                 .motion(animationSpec) {
-                    keyPositions {
-                        frame(50) {
-                            type = RelativePosition.Delta
-                            percentX = if (vert) 0f else 1.0f
-
-                        }
-                    }
+                    motionArc = Arc.ArcDown
+//                    keyPositions {
+//                        frame(50) {
+//                            type = RelativePosition.Delta
+//                            percentX = if (vert) 0f else 1.0f
+//
+//                        }
+//                    }
                 }, text = word)
         }
     }
