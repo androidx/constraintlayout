@@ -17,7 +17,6 @@
 package androidx.constraintlayout.core.dsl;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * Provides the API for creating a KeyAttribute Object for use in the Core

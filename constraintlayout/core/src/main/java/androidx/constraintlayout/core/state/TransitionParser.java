@@ -21,7 +21,6 @@ import static androidx.constraintlayout.core.state.ConstraintSetParser.parseColo
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLContainer;
 import androidx.constraintlayout.core.parser.CLElement;
@@ -29,8 +28,6 @@ import androidx.constraintlayout.core.parser.CLKey;
 import androidx.constraintlayout.core.parser.CLNumber;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParsingException;
-
-import java.util.ArrayList;
 
 /**
  * Contains code for Parsing Transitions
