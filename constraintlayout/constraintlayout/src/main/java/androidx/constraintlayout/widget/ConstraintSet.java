@@ -1045,6 +1045,9 @@ public class ConstraintSet {
         }
 
         int equalIndex = value.indexOf('=');
+        if (equalIndex < 1) {
+            return;
+        }
         int len = value.length();
         if (equalIndex > 0 && equalIndex < len - 1) {
             String key = value.substring(0, equalIndex);
