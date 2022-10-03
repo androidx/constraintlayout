@@ -36,6 +36,8 @@ public class MotionKeyPosition extends MotionKey {
     public float mPercentY = Float.NaN;
     public float mAltPercentX = Float.NaN;
     public float mAltPercentY = Float.NaN;
+
+    public static final int TYPE_AXIS = 3;
     public static final int TYPE_SCREEN = 2;
     public static final int TYPE_PATH = 1;
     public static final int TYPE_CARTESIAN = 0;
@@ -79,6 +81,20 @@ public class MotionKeyPosition extends MotionKey {
         mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
 
+    private void calcAxisPosition(float startX, float startY,
+                                       float endX, float endY) {
+        float pathVectorX = Math.abs(endX - startX);
+        float pathVectorY = Math.abs(endY - startY);
+        float minX = Math.min(startX,endX);
+        float minY = Math.min(startY,endY);
+        float dxdx = Float.isNaN(mPercentX) ? 0 : mPercentX;
+        float dydx = Float.isNaN(mAltPercentY) ? 0 : mAltPercentY;
+        float dydy = Float.isNaN(mPercentY) ? 0 : mPercentY;
+        float dxdy = Float.isNaN(mAltPercentX) ? 0 : mAltPercentX;
+        mCalculatedPositionX = (int) (minX + pathVectorX * dxdx + pathVectorY * dxdy);
+        mCalculatedPositionY = (int) (minY + pathVectorX * dydx + pathVectorY * dydy);
+    }
+
     float getPositionX() {
         return mCalculatedPositionX;
     }
@@ -102,6 +118,9 @@ public class MotionKeyPosition extends MotionKey {
                 return;
             case TYPE_SCREEN:
                 positionScreenAttributes(view, start, end, x, y, attribute, value);
+                return;
+            case TYPE_AXIS:
+                positionAxisAttributes(start, end, x, y, attribute, value);
                 return;
             case TYPE_CARTESIAN:
             default:
@@ -209,6 +228,35 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
+    void positionAxisAttributes(FloatRect start,
+                                FloatRect end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
+        float startCenterX = start.centerX();
+        float startCenterY = start.centerY();
+        float endCenterX = end.centerX();
+        float endCenterY = end.centerY();
+        float minX = Math.min(startCenterX, endCenterX);
+        float minY = Math.min(startCenterY, endCenterY);
+        float pathVectorX = Math.abs(endCenterX - startCenterX);
+        float pathVectorY = Math.abs(endCenterY - startCenterY);
+        if (attribute[0] != null) { // they are saying what to use
+            if (PositionType.S_PERCENT_X.equals(attribute[0])) {
+                value[0] = (x - minX) / pathVectorX;
+                value[1] = (y - minY) / pathVectorY;
+            } else {
+                value[1] = (x - minX) / pathVectorX;
+                value[0] = (y - minY) / pathVectorY;
+            }
+        } else { // we will use what we want to
+            attribute[0] = PositionType.S_PERCENT_X;
+            value[0] = (x - minX) / pathVectorX;
+            attribute[1] = PositionType.S_PERCENT_Y;
+            value[1] = (y - minY) / pathVectorY;
+        }
+    }
     // @TODO: add description
     public boolean intersects(int layoutWidth,
             int layoutHeight,
@@ -263,6 +311,9 @@ public class MotionKeyPosition extends MotionKey {
 
             case TYPE_PATH:
                 calcPathPosition(startX, startY, endX, endY);
+                return;
+            case TYPE_AXIS:
+                calcAxisPosition(startX, startY, endX, endY);
                 return;
             case TYPE_CARTESIAN:
             default:
