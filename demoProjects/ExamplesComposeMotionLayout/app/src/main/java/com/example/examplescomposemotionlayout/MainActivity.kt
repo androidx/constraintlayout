@@ -25,6 +25,9 @@ class MainActivity : ComponentActivity() {
     private var cmap =   listOf(
         get("CollapsingToolbarJson") {ToolBarExampleDsl()},
         get("CollapsingToolbarDSL") {ToolBarExample()},
+        get("ToolBarLazyExample") {ToolBarLazyExample()},
+        get("ToolBarLazyExampleDsl") {ToolBarLazyExampleDsl()},
+
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
