@@ -1,15 +1,10 @@
 package com.example.examplescomposemotionlayout
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,11 +21,9 @@ import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 
-
-
-
-
-
+/**
+ * A demo of using MotionLayout as a collapsing Toolbar using JSON to define the MotionScene
+ */
 @OptIn(ExperimentalMotionApi::class)
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
 @Composable
@@ -90,7 +83,6 @@ fun ToolBarExample() {
       }
       """
 
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.verticalScroll(scroll)
@@ -119,9 +111,11 @@ fun ToolBarExample() {
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
-        Box(modifier = Modifier
-            .layoutId("image")
-            .background(motionProperties("image").value.color("cover"))) {
+        Box(
+            modifier = Modifier
+                .layoutId("image")
+                .background(motionProperties("image").value.color("cover"))
+        ) {
         }
         Image(
             modifier = Modifier.layoutId("icon"),

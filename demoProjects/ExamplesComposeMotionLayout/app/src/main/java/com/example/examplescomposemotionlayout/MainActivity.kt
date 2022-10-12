@@ -1,8 +1,5 @@
 package com.example.examplescomposemotionlayout
 
-import androidx.compose.ui.tooling.preview.Preview
-
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -90,12 +87,12 @@ fun get(name: String, cRun:@Composable () ->  Unit):ComposeFunc {
         override fun Run() {
             cRun()
         }
-
         override fun toString(): String {
             return name
         }
     }
 }
+
 interface  ComposeFunc {
     @Composable
     fun Run()
