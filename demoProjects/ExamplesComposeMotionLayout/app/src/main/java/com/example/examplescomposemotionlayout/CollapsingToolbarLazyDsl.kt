@@ -42,10 +42,11 @@ fun ToolBarLazyExampleDsl() {
     val big = 250.dp
     val small = 50.dp
     var scene = MotionScene() {
+        val title = createRefFor("title")
+        val image = createRefFor("image")
+        val icon = createRefFor("icon")
+
         val start1 = constraintSet {
-            val title = createRefFor("title")
-            val image = createRefFor("image")
-            val icon = createRefFor("icon")
             constrain(title) {
                 bottom.linkTo(image.bottom)
                 start.linkTo(image.start)
@@ -62,10 +63,8 @@ fun ToolBarLazyExampleDsl() {
                 alpha = 0f
             }
         }
+
         val end1 = constraintSet {
-            val title = createRefFor("title")
-            val image = createRefFor("image")
-            val icon = createRefFor("icon")
             constrain(title) {
                 bottom.linkTo(image.bottom)
                 start.linkTo(icon.end)

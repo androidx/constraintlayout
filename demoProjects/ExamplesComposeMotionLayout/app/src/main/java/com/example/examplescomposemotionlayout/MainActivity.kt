@@ -21,11 +21,10 @@ class MainActivity : ComponentActivity() {
     private val composeKey = "USE_COMPOSE"
 
     private var cmap = listOf(
-        get("CollapsingToolbarJson") { ToolBarExampleDsl() },
-        get("CollapsingToolbarDSL") { ToolBarExample() },
-        get("ToolBarLazyExample") { ToolBarLazyExample() },
-        get("ToolBarLazyExampleDsl") { ToolBarLazyExampleDsl() },
-
+        get("CollapsingToolbar DSL") { ToolBarExampleDsl() },
+        get("CollapsingToolbar  JSON") { ToolBarExample() },
+        get("ToolBarLazyExample JSON") { ToolBarLazyExample() },
+        get("ToolBarLazyExample DSL") { ToolBarLazyExampleDsl() },
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +56,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
 
     private fun launch(to_run: ComposeFunc) {
@@ -78,7 +76,7 @@ fun ComposableMenu(map: List<ComposeFunc>, act: (act: ComposeFunc) -> Unit) {
     ) {
         for (cFunc in map) {
             Button(onClick = { act(cFunc) }) {
-                Text(cFunc.toString())
+                Text(cFunc.toString(), modifier = Modifier.padding(2.dp))
             }
         }
     }
