@@ -4,31 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-
-import com.example.examplescomposemotionlayout.ui.theme.ExamplesComposeMotionLayoutTheme
 
 class MainActivity : ComponentActivity() {
     private val composeKey = "USE_COMPOSE"
 
-    private var cmap =   listOf(
-        get("CollapsingToolbarJson") {ToolBarExampleDsl()},
-        get("CollapsingToolbarDSL") {ToolBarExample()},
-        get("ToolBarLazyExample") {ToolBarLazyExample()},
-        get("ToolBarLazyExampleDsl") {ToolBarLazyExampleDsl()},
+    private var cmap = listOf(
+        get("CollapsingToolbarJson") { ToolBarExampleDsl() },
+        get("CollapsingToolbarDSL") { ToolBarExample() },
+        get("ToolBarLazyExample") { ToolBarLazyExample() },
+        get("ToolBarLazyExampleDsl") { ToolBarLazyExampleDsl() },
 
-    )
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,23 +41,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        setContent {
-            ExamplesComposeMotionLayoutTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    if (cfunc != null) {
-                        Log.v("MAIN", " running $cfunc")
-                        cfunc.Run()
-                    } else {
-                        ComposableMenu(map = cmap) { act -> launch(act) }
-                    }
 
+        val com = ComposeView(this)
+        setContentView(com)
+        com.setContent {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = Color(0xFFF0E7FC)
+            ) {
+                if (cfunc != null) {
+                    Log.v("MAIN", " running $cfunc")
+                    cfunc.Run()
+                } else {
+                    ComposableMenu(map = cmap) { act -> launch(act) }
                 }
             }
         }
+
     }
 
     private fun launch(to_run: ComposeFunc) {
@@ -72,32 +70,35 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ComposableMenu(map: List<ComposeFunc>, act: (act:ComposeFunc) -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp)) {
+fun ComposableMenu(map: List<ComposeFunc>, act: (act: ComposeFunc) -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+    ) {
         for (cFunc in map) {
-            Button(onClick = { act(cFunc)}) {
+            Button(onClick = { act(cFunc) }) {
                 Text(cFunc.toString())
             }
         }
     }
 }
 
-fun get(name: String, cRun:@Composable () ->  Unit):ComposeFunc {
-    return object: ComposeFunc {
+fun get(name: String, cRun: @Composable () -> Unit): ComposeFunc {
+    return object : ComposeFunc {
         @Composable
         override fun Run() {
             cRun()
         }
+
         override fun toString(): String {
             return name
         }
     }
 }
 
-interface  ComposeFunc {
+interface ComposeFunc {
     @Composable
     fun Run()
-    override fun toString():String
+    override fun toString(): String
 }
