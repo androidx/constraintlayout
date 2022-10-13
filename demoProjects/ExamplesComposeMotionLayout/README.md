@@ -7,10 +7,14 @@ Sample project that demonstrates various uses of MotionLayout in Compose
 ### App Demo
 
 #### MainActivity
-https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
+https://user-images.githubusercontent.com/15019413/195418373-5a92e2b7-9ff1-4a8a-851e-09951557147b.mp4
 
 #### MotionRecycler2
-https://user-images.githubusercontent.com/20599348/195158689-7cb80466-9045-4e39-a587-65859a4cfd2e.mov
+
+
+https://user-images.githubusercontent.com/15019413/195679372-153f6ccf-d263-4085-9441-c29c105360e7.mp4
+
+
 
 ## Contributing
 
