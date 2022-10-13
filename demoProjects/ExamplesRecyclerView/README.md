@@ -7,11 +7,11 @@ Sample project that demonstrates the use of MotionLayout in RecycleView.
 ### This show use of MotionLayout as an item in RecyclerView
 
 * [MainActivity.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MainActivity.java)
-- the recycler view code
+ the recycler view code
 * [res/layout/motion_item.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/motion_item.xml)
-- the layout used as an item containing the MotionLayout
+ the layout used as an item containing the MotionLayout
 * [res/xml/motion_item_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/motion_item_scene.xml)
- - the motionScene file 
+ the motionScene file 
 
 https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
 
@@ -27,6 +27,7 @@ This is a simple implementation of a series of timers.
 is the layout used as an item containing the MotionLayout
 * [res/xml/timer_item_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/timer_item_scene.xml)
 the motionScene file
+
 https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-8631-671b5ce7fd64.mov
 
 
