@@ -97,6 +97,9 @@ public class KeyPosition extends KeyPositionBase {
             case TYPE_PATH:
                 calcPathPosition(startX, startY, endX, endY);
                 return;
+            case TYPE_AXIS:
+                calcAxisPosition(startX, startY, endX, endY);
+                return;
             case TYPE_CARTESIAN:
             default:
                 calcCartesianPosition(startX, startY, endX, endY);
@@ -134,6 +137,19 @@ public class KeyPosition extends KeyPositionBase {
         mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
 
+    private void calcAxisPosition(float startX, float startY,
+                                       float endX, float endY) {
+        float pathVectorX = Math.abs(endX - startX);
+        float pathVectorY = Math.abs(endY - startY);
+        float minX = Math.min(startX,endX);
+        float minY = Math.min(startY,endY);
+        float dxdx = Float.isNaN(mPercentX) ? 0 : mPercentX;
+        float dydx = Float.isNaN(mAltPercentY) ? 0 : mAltPercentY;
+        float dydy = Float.isNaN(mPercentY) ? 0 : mPercentY;
+        float dxdy = Float.isNaN(mAltPercentX) ? 0 : mAltPercentX;
+        mCalculatedPositionX = (int) (minX + pathVectorX * dxdx + pathVectorY * dxdy);
+        mCalculatedPositionY = (int) (minY + pathVectorX * dydx + pathVectorY * dydy);
+    }
     @Override
     float getPositionX() {
         return mCalculatedPositionX;

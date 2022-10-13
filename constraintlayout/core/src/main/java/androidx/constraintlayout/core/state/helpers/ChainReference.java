@@ -102,4 +102,5 @@ public class ChainReference extends HelperReference {
         mBias = bias;
         return this;
     }
+
 }
