@@ -50,6 +50,8 @@ class MotionPaths implements Comparable<MotionPaths> {
     // mode and type have same numbering scheme
     static final int PERPENDICULAR = KeyPosition.TYPE_PATH;
     static final int CARTESIAN = KeyPosition.TYPE_CARTESIAN;
+    static final int AXIS = KeyPosition.TYPE_AXIS;
+
     static final int SCREEN =  KeyPosition.TYPE_SCREEN;
     static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
     Easing mKeyFrameEasing;
@@ -146,31 +148,20 @@ class MotionPaths implements Comparable<MotionPaths> {
         float startCenterY = startTimePoint.mY + startTimePoint.mHeight / 2;
         float endCenterX = endTimePoint.mX + endTimePoint.mWidth / 2;
         float endCenterY = endTimePoint.mY + endTimePoint.mHeight / 2;
-        if (startCenterX > endCenterX) {
-            float tmp = startCenterX;
-            startCenterX = endCenterX;
-            endCenterX = tmp;
-        }
-        if (startCenterY > endCenterY) {
-            float tmp = startCenterY;
-            startCenterY = endCenterY;
-            endCenterY = tmp;
-        }
-        float pathVectorX = endCenterX - startCenterX;
-        float pathVectorY = endCenterY - startCenterY;
+        float pathVectorX = Math.abs(endCenterX - startCenterX);
+        float pathVectorY = Math.abs(endCenterY - startCenterY);
         point.mX = (int) (startTimePoint.mX + pathVectorX * path - scaleX * scaleWidth / 2);
         point.mY = (int) (startTimePoint.mY + pathVectorY * path - scaleY * scaleHeight / 2);
         point.mWidth = (int) (startTimePoint.mWidth + scaleX * scaleWidth);
         point.mHeight = (int) (startTimePoint.mHeight + scaleY * scaleHeight);
-
+        float minX = Math.min(startTimePoint.mX, endTimePoint.mX);
+        float minY = Math.min(startTimePoint.mY, endTimePoint.mY);
         float dxdx = Float.isNaN(c.mPercentX) ? position : c.mPercentX;
-        float dydx = Float.isNaN(c.mAltPercentY) ? 0 : c.mAltPercentY;
         float dydy = Float.isNaN(c.mPercentY) ? position : c.mPercentY;
-        float dxdy = Float.isNaN(c.mAltPercentX) ? 0 : c.mAltPercentX;
-        point.mMode = MotionPaths.CARTESIAN;
-        point.mX = (int) (startTimePoint.mX + pathVectorX * dxdx + pathVectorY * dxdy
+        point.mMode = MotionPaths.AXIS;
+        point.mX = (int) (minX + pathVectorX * dxdx
                 - scaleX * scaleWidth / 2);
-        point.mY = (int) (startTimePoint.mY + pathVectorX * dydx + pathVectorY * dydy
+        point.mY = (int) (minY+  pathVectorY * dydy
                 - scaleY * scaleHeight / 2);
 
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);

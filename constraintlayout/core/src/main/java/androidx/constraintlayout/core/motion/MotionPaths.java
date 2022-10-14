@@ -43,6 +43,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
     // mode and type have same numbering scheme
     public static final int PERPENDICULAR = MotionKeyPosition.TYPE_PATH;
     public static final int CARTESIAN = MotionKeyPosition.TYPE_CARTESIAN;
+    public static final int AXIS = MotionKeyPosition.TYPE_AXIS;
     public static final int SCREEN = MotionKeyPosition.TYPE_SCREEN;
     static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
     public String mId;
@@ -112,6 +113,48 @@ public class MotionPaths implements Comparable<MotionPaths> {
     }
 
     /**
+     * set up with Axis TODO check
+     */
+    void initAxis(MotionKeyPosition c, MotionPaths startTimePoint, MotionPaths endTimePoint) {
+        float position = c.mFramePosition / 100f;
+        MotionPaths point = this;
+        point.mTime = position;
+
+        mDrawPath = c.mDrawPath;
+        float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
+        float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
+        float scaleX = endTimePoint.mWidth - startTimePoint.mWidth;
+        float scaleY = endTimePoint.mHeight - startTimePoint.mHeight;
+
+        point.mPosition = point.mTime;
+
+        float path = position; // the position on the path
+
+        float startCenterX = startTimePoint.mX + startTimePoint.mWidth / 2;
+        float startCenterY = startTimePoint.mY + startTimePoint.mHeight / 2;
+        float endCenterX = endTimePoint.mX + endTimePoint.mWidth / 2;
+        float endCenterY = endTimePoint.mY + endTimePoint.mHeight / 2;
+        float pathVectorX = endCenterX - startCenterX;
+        float pathVectorY = endCenterY - startCenterY;
+        point.mX = (int) (startTimePoint.mX + pathVectorX * path - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY + pathVectorY * path - scaleY * scaleHeight / 2);
+        point.mWidth = (int) (startTimePoint.mWidth + scaleX * scaleWidth);
+        point.mHeight = (int) (startTimePoint.mHeight + scaleY * scaleHeight);
+
+        float dxdx = Float.isNaN(c.mPercentX) ? position : c.mPercentX;
+        float dydy = Float.isNaN(c.mPercentY) ? position : c.mPercentY;
+
+        point.mMode = MotionPaths.AXIS;
+        point.mX = (int) (startTimePoint.mX + pathVectorX * dxdx
+                 - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY
+                + pathVectorY * dydy - scaleY * scaleHeight / 2);
+
+        point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
+        point.mPathMotionArc = c.mPathMotionArc;
+    }
+
+    /**
      * takes the new keyPosition
      */
     public MotionPaths(int parentWidth,
@@ -133,6 +176,9 @@ public class MotionPaths implements Comparable<MotionPaths> {
             default:
             case MotionKeyPosition.TYPE_CARTESIAN:
                 initCartesian(c, startTimePoint, endTimePoint);
+                return;
+            case MotionKeyPosition.TYPE_AXIS:
+                initAxis(c, startTimePoint, endTimePoint);
                 return;
         }
     }
@@ -169,6 +215,12 @@ public class MotionPaths implements Comparable<MotionPaths> {
                         ? position : c.mPercentX) * (e.mX - s.mX) + s.mX;
                 this.mY = (Float.isNaN(c.mPercentY)
                         ? position : c.mPercentY) * (e.mY - s.mY) + s.mY;
+                break;
+            case MotionKeyPosition.TYPE_AXIS:
+                this.mX = (Float.isNaN(c.mPercentX)
+                        ? position : c.mPercentX) * Math.abs(e.mX - s.mX) + Math.min(s.mX, e.mX);
+                this.mY = (Float.isNaN(c.mPercentY)
+                        ? position : c.mPercentY) * Math.abs(e.mY - s.mY) + Math.min(s.mY, e.mY);
                 break;
             default:
             case MotionKeyPosition.TYPE_CARTESIAN:

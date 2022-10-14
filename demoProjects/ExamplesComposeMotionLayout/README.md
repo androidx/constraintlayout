@@ -6,11 +6,43 @@ Sample project that demonstrates various uses of MotionLayout in Compose
 
 ### App Demo
 
-#### MainActivity
-https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
+#### Motion Layout as Collapsing toolbar for Column
 
-#### MotionRecycler2
-https://user-images.githubusercontent.com/20599348/195158689-7cb80466-9045-4e39-a587-65859a4cfd2e.mov
+This is based on using 
+```kotlin
+Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.verticalScroll(scroll)
+    )
+```
+
+* [DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarDsl.kt)
+* [JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarJson.kt)
+
+https://user-images.githubusercontent.com/15019413/195418373-5a92e2b7-9ff1-4a8a-851e-09951557147b.mp4
+
+#### Motion Layout as Collapsing toolbar for Lazy column
+
+This is based on using
+```kotlin
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .nestedScroll(nestedScrollConnection)) {
+            LazyColumn() {
+                items(100) {
+                    Text(text = "item $it", modifier = Modifier.padding(4.dp))
+                }
+            }
+        }
+```
+
+* [DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyDsl.kt)
+* [JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyJson.kt)
+
+https://user-images.githubusercontent.com/15019413/195679372-153f6ccf-d263-4085-9441-c29c105360e7.mp4
+
+
 
 ## Contributing
 

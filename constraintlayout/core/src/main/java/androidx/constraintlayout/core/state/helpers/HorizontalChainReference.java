@@ -23,7 +23,7 @@ import androidx.constraintlayout.core.state.State;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public class HorizontalChainReference extends ChainReference {
-
+    private boolean useLeftRight;
     public HorizontalChainReference(State state) {
         super(state, State.Helper.HORIZONTAL_CHAIN);
     }
@@ -37,7 +37,7 @@ public class HorizontalChainReference extends ChainReference {
             ConstraintReference reference = mHelperState.constraints(key);
             reference.clearHorizontal();
         }
-
+         boolean lrMode = (mLeftToLeft != null || mLeftToRight != null);
         for (Object key : mReferences) {
             ConstraintReference reference = mHelperState.constraints(key);
 
@@ -51,21 +51,31 @@ public class HorizontalChainReference extends ChainReference {
                     first.startToEnd(mStartToEnd).margin(mMarginStart).marginGone(mMarginStartGone);
                 } else if (mLeftToLeft != null) {
                     // TODO: Hack until we support RTL properly
-                    first.startToStart(mLeftToLeft).margin(mMarginLeft).marginGone(mMarginLeftGone);
+                    first.leftToLeft(mLeftToLeft).margin(mMarginLeft).marginGone(mMarginLeftGone);
                 } else if (mLeftToRight != null) {
                     // TODO: Hack until we support RTL properly
-                    first.startToEnd(mLeftToRight).margin(mMarginLeft).marginGone(mMarginLeftGone);
+                    first.leftToRight(mLeftToRight).margin(mMarginLeft).marginGone(mMarginLeftGone);
                 } else {
                     // No constraint declared, default to Parent.
                     String refKey = reference.getKey().toString();
-                    first.startToStart(State.PARENT).margin(getPreMargin(refKey));
+                    if (lrMode) {
+                        first.leftToLeft(State.PARENT).margin(getPreMargin(refKey));
+
+                    } else {
+                        first.startToStart(State.PARENT).margin(getPreMargin(refKey));
+                    }
                 }
             }
             if (previous != null) {
                 String preKey = previous.getKey().toString();
                 String refKey = reference.getKey().toString();
-                previous.endToStart(reference.getKey()).margin(getPostMargin(preKey));
-                reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));
+                if (lrMode) {
+                    previous.rightToLeft(reference.getKey()).margin(getPostMargin(preKey));
+                    reference.leftToRight(previous.getKey()).margin(getPreMargin(refKey));
+                } else {
+                    previous.endToStart(reference.getKey()).margin(getPostMargin(preKey));
+                    reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));
+                }
             }
             float weight = getWeight(key.toString());
             if (weight != UNKNOWN) {
@@ -80,15 +90,18 @@ public class HorizontalChainReference extends ChainReference {
             } else if (mEndToEnd != null) {
                 previous.endToEnd(mEndToEnd).margin(mMarginEnd).marginGone(mMarginEndGone);
             } else if (mRightToLeft != null) {
-                // TODO: Hack until we support RTL properly
-                previous.endToStart(mRightToLeft).margin(mMarginRight).marginGone(mMarginRightGone);
+                previous.rightToLeft(mRightToLeft).margin(mMarginRight).marginGone(mMarginRightGone);
             } else if (mRightToRight != null) {
-                // TODO: Hack until we support RTL properly
-                previous.endToEnd(mRightToRight).margin(mMarginRight).marginGone(mMarginRightGone);
+                previous.rightToRight(mRightToRight).margin(mMarginRight).marginGone(mMarginRightGone);
             } else {
                 // No constraint declared, default to Parent.
                 String preKey = previous.getKey().toString();
-                previous.endToEnd(State.PARENT).margin(getPostMargin(preKey));
+                if (lrMode) {
+                    previous.rightToRight(State.PARENT).margin(getPostMargin(preKey));
+
+                } else {
+                    previous.endToEnd(State.PARENT).margin(getPostMargin(preKey));
+                }
             }
         }
 
