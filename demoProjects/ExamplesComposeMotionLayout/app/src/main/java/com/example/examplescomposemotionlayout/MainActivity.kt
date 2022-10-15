@@ -24,6 +24,8 @@ class MainActivity : ComponentActivity() {
         get("ToolBarLazyExample JSON") { ToolBarLazyExample() },
         get("MotionInLazyColumn Dsl") { MotionInLazyColumnDsl() },
         get("MotionInLazyColumn JSON") { MotionInLazyColumn() },
+        get("DynamicGraph") { ManyGraphs() },
+
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
