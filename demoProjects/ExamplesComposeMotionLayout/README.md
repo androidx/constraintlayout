@@ -16,8 +16,8 @@ Column(
     )
 ```
 
-* [DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarDsl.kt)
-* [JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarJson.kt)
+* [Code for Collapsing Toolbar over Column DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarDsl.kt)
+* [Code for Collapsing Toolbar over Column JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarJson.kt)
 
 https://user-images.githubusercontent.com/15019413/195418373-5a92e2b7-9ff1-4a8a-851e-09951557147b.mp4
 
@@ -37,18 +37,79 @@ This is based on using
         }
 ```
 
-* [DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyDsl.kt)
-* [JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyJson.kt)
+* [Code for Collapsing Toolbar over Lazycolumn DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyDsl.kt)
+* [Code for Collapsing Toolbar over Lazycolumn JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyJson.kt)
 
 https://user-images.githubusercontent.com/15019413/195679372-153f6ccf-d263-4085-9441-c29c105360e7.mp4
 
 #### Motion Layout in a Lazy column
 
-https://user-images.githubusercontent.com/15019413/195972547-c532fea8-08f0-4d71-acc6-059e438ea8fb.gif
+This demostrates how to create a MotionLayout that is part of a lazycolumn
+
+```Kotlin
+    val maxPx = with(LocalDensity.current) { 250.dp.roundToPx().toFloat() }
+    val minPx = with(LocalDensity.current) { 50.dp.roundToPx().toFloat() }
+    val toolbarHeight = remember { mutableStateOf(maxPx) }
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val height = toolbarHeight.value;
+
+                if (height + available.y > maxPx) {
+                    toolbarHeight.value = maxPx
+                    return Offset(0f, maxPx - height)
+                }
+
+                if (height + available.y < minPx) {
+                    toolbarHeight.value = minPx
+                    return Offset(0f, minPx - height)
+                }
+
+                toolbarHeight.value += available.y
+                return Offset(0f, available.y)
+            }
+
+        }
+    }
+
+    val progress = 1 - (toolbarHeight.value - minPx) / (maxPx - minPx);
+    Column {
+      MotionLayout(....) { ....} 
+        Box(
+            Modifier
+              .fillMaxWidth()
+              .nestedScroll(nestedScrollConnection)) {
+          LazyColumn() {
+            items(100) {
+              Text(text = "item $it", modifier = Modifier.padding(4.dp))
+            }
+          }
+        }      
+  
+```
+
+* [Code for MotionLayout in a Lazycolumn DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/MotionInLazyColumnDsl.kt)
+* [Code for MotionLayout in a Lazycolumn JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/MotionInLazyColumnJson.kt)
+
+![GraphInLazy](https://user-images.githubusercontent.com/15019413/195972547-c532fea8-08f0-4d71-acc6-059e438ea8fb.gif)
 
 #### Motion Layout in a Lazy column animated computed graphs
 
-https://user-images.githubusercontent.com/15019413/195972535-b99f986e-d7f2-4908-9c93-e769da5831c0.gif
+The demo creates 100 graphs filled with random numbers in a LazyColumn
+
+This demonstrates dynnamic creation of constraints to create a graph based on inputs. 
+Creating a graph composable that is called:
+
+```kotlin
+  DynamicGraph(values = listOf<Float>(12f, 32f, 21f, 32f, 2f))
+```
+
+* [Graph in Lazy code](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/DynamicGraph.kt)
+
+
+![GraphInLazy](https://user-images.githubusercontent.com/15019413/195987030-29d2a656-26e9-4087-93e4-8e62e31ce73d.gif)
+
 
 ## Contributing
 
