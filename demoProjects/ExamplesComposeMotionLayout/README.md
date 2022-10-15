@@ -42,7 +42,13 @@ This is based on using
 
 https://user-images.githubusercontent.com/15019413/195679372-153f6ccf-d263-4085-9441-c29c105360e7.mp4
 
+#### Motion Layout in a Lazy column
 
+https://user-images.githubusercontent.com/15019413/195972547-c532fea8-08f0-4d71-acc6-059e438ea8fb.gif
+
+#### Motion Layout in a Lazy column animated computed graphs
+
+https://user-images.githubusercontent.com/15019413/195972535-b99f986e-d7f2-4908-9c93-e769da5831c0.gif
 
 ## Contributing
 
