@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -22,9 +19,13 @@ class MainActivity : ComponentActivity() {
 
     private var cmap = listOf(
         get("CollapsingToolbar DSL") { ToolBarExampleDsl() },
-        get("CollapsingToolbar  JSON") { ToolBarExample() },
-        get("ToolBarLazyExample JSON") { ToolBarLazyExample() },
+        get("CollapsingToolbar JSON") { ToolBarExample() },
         get("ToolBarLazyExample DSL") { ToolBarLazyExampleDsl() },
+        get("ToolBarLazyExample JSON") { ToolBarLazyExample() },
+        get("MotionInLazyColumn Dsl") { MotionInLazyColumnDsl() },
+        get("MotionInLazyColumn JSON") { MotionInLazyColumn() },
+        get("DynamicGraph") { ManyGraphs() },
+
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,11 +75,23 @@ fun ComposableMenu(map: List<ComposeFunc>, act: (act: ComposeFunc) -> Unit) {
             .fillMaxWidth()
             .padding(10.dp)
     ) {
-        for (cFunc in map) {
-            Button(onClick = { act(cFunc) }) {
-                Text(cFunc.toString(), modifier = Modifier.padding(2.dp))
+        for (i in 0..(map.size-1)/2) {
+            val cFunc1 = map[i*2]
+            val cFunc2 = if ((i*2+1 < map.size)) map[i*2+1] else null
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Button(onClick = { act(cFunc1) }) {
+                    Text(cFunc1.toString(), modifier = Modifier.padding(2.dp))
+                }
+           if (cFunc2 != null) {
+               Button(onClick = { act(cFunc2) }) {
+                   val s = cFunc2.toString().substring(cFunc2.toString().indexOf(' ')+1)
+                   Text(s, modifier = Modifier.padding(2.dp))
+               }
+           }
             }
         }
+
     }
 }
 
