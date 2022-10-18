@@ -10,6 +10,14 @@
         android:theme="@style/Theme.AppCompat"
         android:supportsRtl="true"
         tools:targetApi="31">
+        <activity android:name="com.example.motionrecycle.MotionRecycler1"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name="com.example.motionrecycle.MotionRecycler2"
             android:exported="true">
             <intent-filter>
