@@ -30,7 +30,7 @@ the motionScene file
 
 https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-8631-671b5ce7fd64.mov
 
-###Scroll locking during transition
+### Scroll locking during transition
 
 Demo of locking the RecyclerView during swipe
 
