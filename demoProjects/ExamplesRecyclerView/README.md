@@ -30,7 +30,44 @@ the motionScene file
 
 https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-8631-671b5ce7fd64.mov
 
+###Scroll locking during transition
 
+Demo of locking the RecyclerView during swipe
+
+* [java code](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MotionRecycler1.java)
+* [layout](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml) 
+* [motion scene](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml)
+
+![scrollLock](https://user-images.githubusercontent.com/15019413/196498539-b17683ac-84b7-495a-9242-103ede4440ec.gif)
+
+#important code snipit
+```java
+        TransitionAdapter adapter = new TransitionAdapter() {
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+                mRecyclerView.suppressLayout(true); // the swipe has begun 
+            }
+
+            @Override
+            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                mRecyclerView.suppressLayout(false); // the swipe end allow scroll 
+            }
+        };
+ ```
+Consider adjusting ```motion:dragThreshold="15"``` affects how many pixels (default 10 pixels) you swipe before you start the swip.
+
+```XML
+ <OnSwipe
+            motion:touchAnchorId="@+id/backdrop"
+            motion:dragDirection="dragRight"
+            motion:maxAcceleration="400"
+            motion:maxVelocity="300"
+            motion:dragThreshold="15"
+            motion:springBoundary="bounceStart"
+            motion:onTouchUp="neverCompleteToEnd"
+            motion:touchAnchorSide="left"
+            />
+```
 
 ## Contributing
 
