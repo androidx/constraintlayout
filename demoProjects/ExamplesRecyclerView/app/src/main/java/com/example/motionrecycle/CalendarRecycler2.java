@@ -111,9 +111,7 @@ public class CalendarRecycler2 extends AppCompatActivity {
                     mTextView[count++].setText(str);
                 }
             }
-
             mMotionLayout.jumpToState(R.id.start);
         }
-
     }
 }

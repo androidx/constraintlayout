@@ -10,8 +10,7 @@
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
-        <ConstraintOverride android:id="@+id/cl_view"
-          >
+        <ConstraintOverride android:id="@+id/cl_view">
             <CustomAttribute
                 motion:attributeName="background"
                 motion:customColorDrawableValue="#2A5112" />
@@ -19,9 +18,10 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <ConstraintOverride android:id="@id/cl_view"
-            android:visibility="invisible"
-            android:rotation="360">
+        <ConstraintOverride
+            android:id="@id/cl_view"
+            android:rotation="360"
+            android:visibility="invisible">
             <CustomAttribute
                 motion:attributeName="background"
                 motion:customColorDrawableValue="#6A1728" />

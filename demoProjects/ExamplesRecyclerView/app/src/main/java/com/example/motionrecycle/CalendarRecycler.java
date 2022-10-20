@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalendarRecycler extends AppCompatActivity {
-
-
     RecyclerView recyclerView;
     Handler handler = new Handler();
 

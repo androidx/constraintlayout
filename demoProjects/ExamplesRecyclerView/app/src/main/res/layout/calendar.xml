@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_view"
     android:layout_width="250dp"
     android:layout_height="300dp"
-    android:background="#888"
-    android:id="@+id/cl_view">
+    android:background="#888">
 
     <TextView
         android:id="@+id/title"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="this is a test "
         android:textSize="22sp"
-        android:text="this is a test "/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="day0 ,day1 ,day2 ,day3 ,day4 ,day5 ,day6 ,date0 ,date1 ,date2 ,date3 ,date4 ,date5 ,date6 ,date7 ,date8 ,date9 ,date10 ,date11 ,date12 ,date13 ,date14 ,date15 ,date16 ,date17 ,date18 ,date19 ,date20 ,date21 ,date22 ,date23 ,date24 ,date25 ,date26 ,date27 ,date28 ,date29 ,date30 ,date31 ,date32 ,date33 ,date34 ,date35 ,date36 ,date37 ,date38 ,date39 ,date40 ,date41"
-        app:flow_maxElementsWrap="7"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:flow_wrapMode="aligned"
-        app:flow_horizontalGap="8dp"
-        app:flow_verticalGap="8dp"
         android:background="#2B2515"
+        app:constraint_referenced_ids="day0 ,day1 ,day2 ,day3 ,day4 ,day5 ,day6 ,date0 ,date1 ,date2 ,date3 ,date4 ,date5 ,date6 ,date7 ,date8 ,date9 ,date10 ,date11 ,date12 ,date13 ,date14 ,date15 ,date16 ,date17 ,date18 ,date19 ,date20 ,date21 ,date22 ,date23 ,date24 ,date25 ,date26 ,date27 ,date28 ,date29 ,date30 ,date31 ,date32 ,date33 ,date34 ,date35 ,date36 ,date37 ,date38 ,date39 ,date40 ,date41"
+        app:flow_horizontalGap="8dp"
+        app:flow_maxElementsWrap="7"
+        app:flow_verticalGap="8dp"
+        app:flow_wrapMode="aligned"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
     <include layout="@layout/calendar_entries" />
 </androidx.constraintlayout.widget.ConstraintLayout>
