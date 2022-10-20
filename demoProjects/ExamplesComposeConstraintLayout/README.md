@@ -6,6 +6,12 @@ Sample project that demonstrates some unique use of ConstraintLayoutCompose
 
 ### Flow Demos Keypad and Calendar
 
+Source 
+* [FlowCalendar.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeConstraintLayout/app/src/main/java/com/example/examplescomposeconstraintlayout/FlowCalendar.kt) - scrolling list of a calendar in 100 LOC!
+* [FlowKeyPad.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeConstraintLayout/app/src/main/java/com/example/examplescomposeconstraintlayout/FlowKeyPad.kt) - Simple keypad in 40 LOC
+
+
+These both folow a similar pattern where we create a list of strings which we turn into ids for flow
 ```kotlin
  ConstraintLayout(
    ConstraintSet {
