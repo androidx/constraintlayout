@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView android:id="@+id/day0" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day1" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day2" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day3" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day4" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day5" style="@style/dayStyle"/>
+    <TextView android:id="@+id/day6" style="@style/dayStyle"/>
+
+    <TextView android:id="@+id/date0" style="@style/calStyle"/>
+    <TextView android:id="@+id/date1" style="@style/calStyle"/>
+    <TextView android:id="@+id/date2" style="@style/calStyle"/>
+    <TextView android:id="@+id/date3" style="@style/calStyle"/>
+    <TextView android:id="@+id/date4" style="@style/calStyle"/>
+    <TextView android:id="@+id/date5" style="@style/calStyle"/>
+    <TextView android:id="@+id/date6" style="@style/calStyle"/>
+    <TextView android:id="@+id/date7" style="@style/calStyle"/>
+    <TextView android:id="@+id/date8" style="@style/calStyle"/>
+    <TextView android:id="@+id/date9" style="@style/calStyle"/>
+    <TextView android:id="@+id/date10" style="@style/calStyle"/>
+    <TextView android:id="@+id/date11" style="@style/calStyle"/>
+    <TextView android:id="@+id/date12" style="@style/calStyle"/>
+    <TextView android:id="@+id/date13" style="@style/calStyle"/>
+    <TextView android:id="@+id/date14" style="@style/calStyle"/>
+    <TextView android:id="@+id/date15" style="@style/calStyle"/>
+    <TextView android:id="@+id/date16" style="@style/calStyle"/>
+    <TextView android:id="@+id/date17" style="@style/calStyle"/>
+    <TextView android:id="@+id/date18" style="@style/calStyle"/>
+    <TextView android:id="@+id/date19" style="@style/calStyle"/>
+    <TextView android:id="@+id/date20" style="@style/calStyle"/>
+    <TextView android:id="@+id/date21" style="@style/calStyle"/>
+    <TextView android:id="@+id/date22" style="@style/calStyle"/>
+    <TextView android:id="@+id/date23" style="@style/calStyle"/>
+    <TextView android:id="@+id/date24" style="@style/calStyle"/>
+    <TextView android:id="@+id/date25" style="@style/calStyle"/>
+    <TextView android:id="@+id/date26" style="@style/calStyle"/>
+    <TextView android:id="@+id/date27" style="@style/calStyle"/>
+    <TextView android:id="@+id/date28" style="@style/calStyle"/>
+    <TextView android:id="@+id/date29" style="@style/calStyle"/>
+    <TextView android:id="@+id/date30" style="@style/calStyle"/>
+    <TextView android:id="@+id/date31" style="@style/calStyle"/>
+    <TextView android:id="@+id/date32" style="@style/calStyle"/>
+    <TextView android:id="@+id/date33" style="@style/calStyle"/>
+    <TextView android:id="@+id/date34" style="@style/calStyle"/>
+    <TextView android:id="@+id/date35" style="@style/calStyle"/>
+    <TextView android:id="@+id/date36" style="@style/calStyle"/>
+    <TextView android:id="@+id/date37" style="@style/calStyle"/>
+    <TextView android:id="@+id/date38" style="@style/calStyle"/>
+    <TextView android:id="@+id/date39" style="@style/calStyle"/>
+    <TextView android:id="@+id/date40" style="@style/calStyle"/>
+    <TextView android:id="@+id/date41" style="@style/calStyle"/>
+</merge>

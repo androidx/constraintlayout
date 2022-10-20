@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="400">
+        <OnClick />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride android:id="@+id/cl_view"
+          >
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#2A5112" />
+        </ConstraintOverride>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride android:id="@id/cl_view"
+            android:visibility="invisible"
+            android:rotation="360">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#6A1728" />
+        </ConstraintOverride>
+    </ConstraintSet>
+</MotionScene>
