@@ -2,15 +2,39 @@
 Sample project that demonstrates the use of MotionLayout in RecycleView.
 
 ## Overview
+
+Using ConstraintLayout or MotionLayout in Recycler view can be trickey. 
+The basic pattern of useage is 
+1. Create an base layout (say res/layout/activity_main.xml) that contains <RecyclerView..>
+2. Create a layout for one item (say res/layout/motion_item.xml)
+1. create a subclass of RecyclerView.Adapter say ```static class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder>```
+1. create a subclass of RecyclerView.ViewHolder say ```static class CustomViewHolder extends RecyclerView.ViewHolder```
+1. find the RecyclerView. ```rv = findViewById(R.id.recyclerView)```
+1. set your custom ViewHolder to it ```rv.setAdapter(new CustomAdapter(...));```
+1. set a Layout Manager on the RecyclerView ```rv.setLayoutManager(new LinearLayoutManager(this));```
+
 -----------------------------
+### ConstraintLayout in Recycler View
+
+* [CalendarRecycler.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler.java)
+ the recycler view code
+* [res/layout/calendar.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar.xml)
+ the layout used as an item containing the ConstraintLayout
+* [res/layout/calendar_entries.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_entries.xml)
+ the TextViews included in the ConstraintLayout
+* [res/xml/motion_item_scene.xml]()
+ the motionScene file 
+
+![recycler_vew_cl](https://user-images.githubusercontent.com/15019413/197081542-de4947e7-fa14-4c95-8b8d-9e46766230e0.gif)
+
 
 ### This show use of MotionLayout as an item in RecyclerView
 
-* [MainActivity.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MainActivity.java)
+* [MainActivity.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java)
  the recycler view code
-* [res/layout/motion_item.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/motion_item.xml)
+* [res/layout/calendar_motion.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_motion.xml)
  the layout used as an item containing the MotionLayout
-* [res/xml/motion_item_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/motion_item_scene.xml)
+* [res/xml/calendar_motion_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/calendar_motion_scene.xml)
  the motionScene file 
 
 https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
