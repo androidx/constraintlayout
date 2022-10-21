@@ -14,7 +14,7 @@ The basic pattern of useage is
 1. set a Layout Manager on the RecyclerView ```rv.setLayoutManager(new LinearLayoutManager(this));```
 
 -----------------------------
-### ConstraintLayout in Recycler View
+### Calendar using ConstraintLayout in Recycler View
 
 * [CalendarRecycler.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler.java)
  the recycler view code
@@ -22,13 +22,14 @@ The basic pattern of useage is
  the layout used as an item containing the ConstraintLayout
 * [res/layout/calendar_entries.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_entries.xml)
  the TextViews included in the ConstraintLayout
-* [res/xml/motion_item_scene.xml]()
- the motionScene file 
+* [res/values/styles.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/values/styles.xml)
+ the styles minimizes the amount of xml for each widget 
 
 ![recycler_vew_cl](https://user-images.githubusercontent.com/15019413/197081542-de4947e7-fa14-4c95-8b8d-9e46766230e0.gif)
 
+-----------------------------
 
-### This show use of MotionLayout as an item in RecyclerView
+###  Calendar using ConstraintLayout in a MotionLayout as an item in RecyclerView
 
 * [MainActivity.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java)
  the recycler view code
@@ -37,14 +38,23 @@ The basic pattern of useage is
 * [res/xml/calendar_motion_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/calendar_motion_scene.xml)
  the motionScene file 
 
-https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
+
+![recycler_ml](https://user-images.githubusercontent.com/15019413/197082807-2929704a-81ad-4401-ae65-b66b898d0a1b.gif)
+
+-----------------------------
 
 ### MotionLayout in Recycler view showing how to cache the states of active motionLayouts
+
+
+https://user-images.githubusercontent.com/20599348/194928671-7ba50aec-c7a7-45cf-80b0-3656601301a7.mov
+
 
 Implementation may vary but typically you will need to cache and reflect some parts of the state of a MotionLayout before they atach to other views.
 You may also need to update the state of MotionLayout as infomation in the backend changes.
 
-This is a simple implementation of a series of timers.
+-----------------------------
+
+### This is a simple implementation of a series of timers.
 
 * [MotionRecycler2.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MotionRecycler2.java) Contains all the recycler view code
 * [res/layout/timer_item.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/timer_item.xml)
@@ -53,6 +63,10 @@ is the layout used as an item containing the MotionLayout
 the motionScene file
 
 https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-8631-671b5ce7fd64.mov
+
+
+-----------------------------
+
 
 ### Scroll locking during transition
 
@@ -92,6 +106,9 @@ Consider adjusting ```motion:dragThreshold="15"``` affects how many pixels (defa
             motion:touchAnchorSide="left"
             />
 ```
+
+-----------------------------
+
 
 ## Contributing
 
