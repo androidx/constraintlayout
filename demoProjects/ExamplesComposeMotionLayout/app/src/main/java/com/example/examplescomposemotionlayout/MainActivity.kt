@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         get("MotionInLazyColumn Dsl") { MotionInLazyColumnDsl() },
         get("MotionInLazyColumn JSON") { MotionInLazyColumn() },
         get("DynamicGraph") { ManyGraphs() },
-
+        get("ReactionSelector") { ReactionSelector() },
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
