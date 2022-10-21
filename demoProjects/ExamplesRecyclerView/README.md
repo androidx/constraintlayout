@@ -31,7 +31,7 @@ The basic pattern of useage is
 
 ###  Calendar using ConstraintLayout in a MotionLayout as an item in RecyclerView
 
-* [MainActivity.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java)
+* [CalendarRecycler2.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java)
  the recycler view code
 * [res/layout/calendar_motion.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_motion.xml)
  the layout used as an item containing the MotionLayout
