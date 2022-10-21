@@ -109,6 +109,13 @@ Creating a graph composable that is called:
 
 
 ![GraphInLazy](https://user-images.githubusercontent.com/15019413/195987030-29d2a656-26e9-4087-93e4-8e62e31ce73d.gif)
+---------------
+### Implement animation resulting from selection
+
+This demos using the DSL to simply create complex interactions
+[ReactionSelector.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/ReactionSelecor.kt) 
+
+![emoji_selector_crop](https://user-images.githubusercontent.com/15019413/197297375-9a2463dc-8a40-48d7-8526-6b9424f9ec46.gif)
 
 
 ## Contributing
