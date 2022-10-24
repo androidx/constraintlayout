@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="800">
+
+    <Transition
+        motion:constraintSetEnd="@+id/state5"
+
+        motion:duration="1000">
+        <OnClick />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/state0">
+        <ConstraintOverride android:id="@+id/light1" android:visibility="gone"/>
+        <ConstraintOverride android:id="@+id/light2" android:visibility="invisible"/>
+        <ConstraintOverride android:id="@+id/light3" android:visibility="gone"/>
+        <ConstraintOverride android:id="@+id/light4" android:visibility="invisible"/>
+        <ConstraintOverride android:id="@+id/light5" android:visibility="gone"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state1" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light1" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state2" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light1" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light2" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state3" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light1" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light2" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light3" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state4" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light1" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light2" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light3" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light4" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state5" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light1" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light2" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light3" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light4" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light5" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state6" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light2" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light3" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light4" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light5" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state7" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light3" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light4" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light5" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state8" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light4" android:visibility="visible"/>
+        <ConstraintOverride android:id="@id/light5" android:visibility="visible"/>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/state9" motion:deriveConstraintsFrom="@id/state0">
+        <ConstraintOverride android:id="@id/light5" android:visibility="visible"/>
+    </ConstraintSet>
+
+</MotionScene>
