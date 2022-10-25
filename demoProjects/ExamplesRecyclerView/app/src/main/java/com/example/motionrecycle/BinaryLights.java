@@ -2,21 +2,19 @@ package com.example.motionrecycle;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class BinaryLights extends AppCompatActivity {
-    class MyModel {
+    static class MyModel {
         String name;
         int current = 0;
 
@@ -47,12 +45,11 @@ public class BinaryLights extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < models.length; i++) {
-
-                    if (models[i].view != null) {
-                        models[i].view.upDateProgress();
-                    } else if (models[i].current > 0) {
-                        models[i].next();
+                for (MyModel model : models) {
+                    if (model.view != null) {
+                        model.view.upDateProgress();
+                    } else if (model.current > 0) {
+                        model.next();
                     }
                 }
 
@@ -63,12 +60,13 @@ public class BinaryLights extends AppCompatActivity {
 
     // ========================= The RecyclerView adapter =====================
     static class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
-        private MyModel[] mModels;
+        private final MyModel[] mModels;
 
         public CustomAdapter(MyModel[] models) {
             mModels = models;
         }
 
+        @NonNull
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -92,37 +90,23 @@ public class BinaryLights extends AppCompatActivity {
 
     // ========================= The View Holder adapter =====================
     public static class CustomViewHolder extends RecyclerView.ViewHolder {
-        private int view_number = view_count;
-        private static int view_count = 0;
-        private final Button button;
-        private final MotionLayout mMotionLayout;
-        boolean mAnimating = false;
-        MyModel mModel;
-        MotionLayout.TransitionListener listener = new TransitionAdapter() {
-            @Override
-            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-                mAnimating = true;
-            }
 
-            @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                mAnimating = false;
-            }
-        };
+        private final Button mButton;
+        private final MotionLayout mMotionLayout;
+        MyModel mModel;
 
         public void click(View e) {
             mModel.next();
             mMotionLayout.transitionToState(mStates[mModel.current]);
             String str = mModel.name + mModel.current;
-            button.setText(str);
+            mButton.setText(str);
         }
 
         public CustomViewHolder(View view) {
             super(view);
-            view_count++;
             mMotionLayout = (MotionLayout) view;
-            button = view.findViewById(R.id.button);
-            button.setOnClickListener(this::click);
+            mButton = view.findViewById(R.id.button);
+            mButton.setOnClickListener(this::click);
             mMotionLayout.jumpToState(R.id.state0);
         }
 
@@ -131,24 +115,15 @@ public class BinaryLights extends AppCompatActivity {
                 mModel.next();
                 mMotionLayout.transitionToState(mStates[mModel.current]);
                 String str = mModel.name + mModel.current;
-                button.setText(str);
+                mButton.setText(str);
             }
-
-
-        }
-
-        private float calcProgress(long duration) {
-            return duration * 1E-5f;
-        }
-
-        private long calcDuration(float progress) {
-            return (long) (progress * 1E5);
         }
 
         public void bind(MyModel model) {
             mModel = model;
             model.view = this;
-            button.setText(model.name + model.current);
+            String title = model.name + model.current;
+            mButton.setText(title);
             mMotionLayout.jumpToState(mStates[model.current]);
             mMotionLayout.setTransition(mStates[model.current], mStates[model.current]);
 
