@@ -111,12 +111,12 @@ Consider adjusting ```motion:dragThreshold="15"``` affects how many pixels (defa
 ### This is a demo of cycling throught a sequence of states
 That also support transitioning betwen states and remembering the states in a model
 
-[BinaryLights.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/BinaryLights.java)
-[res/layout/binary_lights.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/binary_lights.xml)
-[res/xml/binary_lights_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/binary_lights_scene.xml)
+* [BinaryLights.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/BinaryLights.java)
+* [res/layout/binary_lights.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/binary_lights.xml)
+* [res/xml/binary_lights_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/binary_lights_scene.xml)
 
-
-
+This show caching the state in the model and restoreing it interacting with the state with buttons etc.
+A key issue is that bind(...) is done before onAtach so custom atach may get confused.
 
 
 https://user-images.githubusercontent.com/15019413/197657408-3b60f4d6-0e0b-4a00-b6ec-83ca6b6b5ac7.mp4
