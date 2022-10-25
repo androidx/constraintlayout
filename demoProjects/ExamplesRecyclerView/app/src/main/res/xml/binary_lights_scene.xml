@@ -7,7 +7,7 @@
         motion:constraintSetEnd="@+id/state5"
 
         motion:duration="1000">
-        <OnClick />
+
     </Transition>
 
     <ConstraintSet android:id="@+id/state0">
