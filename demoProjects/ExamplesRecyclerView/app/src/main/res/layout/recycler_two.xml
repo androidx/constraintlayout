@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motion_layout_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginVertical="16dp"
+    app:layoutDescription="@xml/recycle_two_scene"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/horizontal_title_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Horizontal RecyclerView"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/recycler_view_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_title_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_horizontal_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="1"
+            tools:listitem="@layout/row_single_item_horizontal" />
+    </androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/vertical_title_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Vertical RecyclerView"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_vertical"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:itemCount="10"
+        tools:listitem="@layout/row_single_item" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

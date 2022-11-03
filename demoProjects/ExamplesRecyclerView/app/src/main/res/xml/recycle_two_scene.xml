@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+ 
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@id/horizontal_title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+          />
+
+        <Constraint
+            android:id="@id/recycler_view_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/horizontal_title_text_view" />
+
+        <Constraint
+            android:id="@id/vertical_title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/recycler_view_horizontal"
+           />
+
+        <Constraint
+            android:id="@id/recycler_view_vertical"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/vertical_title_text_view" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/horizontal_title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"
+            />
+
+        <Constraint
+            android:id="@id/recycler_view_horizontal"
+            motion:layout_constraintBottom_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:visibility="invisible"
+             />
+
+        <Constraint
+            android:id="@id/vertical_title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@id/recycler_view_vertical"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/vertical_title_text_view" />
+    </ConstraintSet>
+
+    <Transition
+        motion:duration="1000"
+        motion:layoutDuringTransition="honorRequest"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start">
+
+        <OnSwipe
+            motion:dragScale=".25"
+            motion:touchAnchorId="@id/recycler_view_vertical"
+            motion:dragDirection="dragUp"
+            motion:onTouchUp="stop" />
+    </Transition>
+</MotionScene>
