@@ -121,10 +121,20 @@ A key issue is that bind(...) is done before onAtach so custom atach may get con
 
 https://user-images.githubusercontent.com/15019413/197657408-3b60f4d6-0e0b-4a00-b6ec-83ca6b6b5ac7.mp4
 
+---------------------------
+### This demos having 2 recycler views one horizontal and one Veritcal
+
+* [layout/recycler_two.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/recycler_two.xml) - Top Level Layout
+* [xml/recycle_two_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/recycle_two_scene.xml) - Top Level MotionScene
+* [TwoRecycler.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/TwoRecycler.java)
+* [layout/row_item_horizontal.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/row_item_horizontal.xml) - The horizontal recyclerView item
+* [layout/lock_recycler_item.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml) - The vertical recycler view item
+* [xml/lock_recycler_item_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml)
+
+This uses a trick to have have the horizontal recycler view not get the vertical strokes.
 
 
-
-
+![recyclerView_hv2](https://user-images.githubusercontent.com/15019413/199828729-d6a95d67-c85f-42b6-9b94-5ad4d55c0627.gif)
 
 
 
