@@ -103,17 +103,40 @@ https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-
 
 -----------------------------
  
-### Scroll locking during transition
+ <table border="0">
+ <tr>
+    <td colspan="2"><b style="font-size:30px">Scroll locking during transition</b></td>
+    
+ </tr>
+ <tr>
+    <td> 
 
-Demo of locking the RecyclerView during swipe
+ <ul><li>
 
-* [java code](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MotionRecycler1.java)
-* [layout](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml) 
-* [motion scene](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml)
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/MotionRecycler1.java">CalendarRecycler2.java</a>
+  the activy with RecyclerView Code
+</li><li>
 
-![scrollLock](https://user-images.githubusercontent.com/15019413/196498539-b17683ac-84b7-495a-9242-103ede4440ec.gif)
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml">layout/lock_recycler_item.xml</a>
+  basic layout with RecyclerView
+ </li><li> 
 
-#important code snipit
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml">xml/lock_recycler_item_scene.xml</a>
+  Motion Scene with Transition designed to bounce back
+</li></ul>
+
+  </td>
+  <td>
+ <img src="https://user-images.githubusercontent.com/15019413/196498539-b17683ac-84b7-495a-9242-103ede4440ec.gif" alt="recycler_ml"/>
+ </td>
+ </tr>
+</table>
+
+
+ 
+### Locking the RecyclerView during swipe
+
+ important code snipit:
 ```java
         TransitionAdapter adapter = new TransitionAdapter() {
             @Override
