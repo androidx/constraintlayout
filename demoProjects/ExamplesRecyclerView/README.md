@@ -14,34 +14,70 @@ The basic pattern of useage is
 1. set a Layout Manager on the RecyclerView ```rv.setLayoutManager(new LinearLayoutManager(this));```
 
 -----------------------------
-### Calendar using ConstraintLayout in Recycler View
 
-* [CalendarRecycler.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler.java)
- the recycler view code
-* [res/layout/calendar.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar.xml)
- the layout used as an item containing the ConstraintLayout
-* [res/layout/calendar_entries.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_entries.xml)
- the TextViews included in the ConstraintLayout
-* [res/values/styles.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/values/styles.xml)
- the styles minimizes the amount of xml for each widget 
+<table border="0">
+ <tr>
+    <td colspan="2"><b style="font-size:30px">Calendar using ConstraintLayout in Recycler View</b></td>
+    
+ </tr>
+ <tr>
+    <td> 
+<ul>
+<li> <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler.java">CalendarRecycler.java</a>
+  the recycler view code
+</li>
+<li> <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar.xml">res/layout/calendar.xml</a>
+  the layout used as an item containing the ConstraintLayout
+ </li>
+<li> <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_entries.xml">res/layout/calendar_entries.xml</a>
+  the TextViews included in the ConstraintLayout
+</li>
+ <li> <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/values/styles.xml">res/values/styles.xml</a>
+  the styles minimizes the amount of xml for each widget
+ </li>
+</ul>
+ </td>
+    <td>
+ <img src="https://user-images.githubusercontent.com/15019413/197081542-de4947e7-fa14-4c95-8b8d-9e46766230e0.gif" alt="recycler_vew_cl"/>
+ </td>
+ </tr>
+</table>
 
-![recycler_vew_cl](https://user-images.githubusercontent.com/15019413/197081542-de4947e7-fa14-4c95-8b8d-9e46766230e0.gif)
 
 -----------------------------
 
-###  Calendar using ConstraintLayout in a MotionLayout as an item in RecyclerView
+<table border="0">
+ <tr>
+    <td colspan="2"><b style="font-size:30px">Calendar using ConstraintLayout in a MotionLayout as an item in RecyclerView</b></td>
+    
+ </tr>
+ <tr>
+    <td> 
 
-* [CalendarRecycler2.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java)
- the recycler view code
-* [res/layout/calendar_motion.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_motion.xml)
- the layout used as an item containing the MotionLayout
-* [res/xml/calendar_motion_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/calendar_motion_scene.xml)
- the motionScene file 
+ <ul><li>
 
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/CalendarRecycler2.java">CalendarRecycler2.java</a>
+  the recycler view code
+</li><li>
 
-![recycler_ml](https://user-images.githubusercontent.com/15019413/197082807-2929704a-81ad-4401-ae65-b66b898d0a1b.gif)
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/calendar_motion.xml">res/layout/calendar_motion.xml</a>
+  the layout used as an item containing the ConstraintLayout
+ </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/calendar_motion_scene.xml">res/xml/calendar_motion_scene.xml</a>
+  the TextViews included in the ConstraintLayout
+</li></ul>
+
+  </td>
+  <td>
+ <img src="https://user-images.githubusercontent.com/15019413/197082807-2929704a-81ad-4401-ae65-b66b898d0a1b.gif" alt="recycler_ml"/>
+ </td>
+ </tr>
+</table>
+
 
 -----------------------------
+
 
 ### MotionLayout in Recycler view showing how to cache the states of active motionLayouts
 
@@ -66,8 +102,7 @@ https://user-images.githubusercontent.com/20599348/195418010-512859a1-8503-48e5-
 
 
 -----------------------------
-
-
+ 
 ### Scroll locking during transition
 
 Demo of locking the RecyclerView during swipe
@@ -122,20 +157,45 @@ A key issue is that bind(...) is done before onAtach so custom atach may get con
 https://user-images.githubusercontent.com/15019413/197657408-3b60f4d6-0e0b-4a00-b6ec-83ca6b6b5ac7.mp4
 
 ---------------------------
-### This demos having 2 recycler views one horizontal and one Veritcal
 
-* [layout/recycler_two.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/recycler_two.xml) - Top Level Layout
-* [xml/recycle_two_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/recycle_two_scene.xml) - Top Level MotionScene
-* [TwoRecycler.java](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/TwoRecycler.java)
-* [layout/row_item_horizontal.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/row_item_horizontal.xml) - The horizontal recyclerView item
-* [layout/lock_recycler_item.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml) - The vertical recycler view item
-* [xml/lock_recycler_item_scene.xml](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml)
+<table border="0">
+ <tr>
+    <td colspan="2"><b style="font-size:30px">This demos having 2 recycler views one horizontal and one Veritcal</b></td>
+ </tr>
+ <tr>
+    <td> 
 
+ <ul><li>
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/recycler_two.xml">layout/recycler_two.xml</a>  Top Level Layout
+</li><li>
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/recycle_two_scene.xml">xml/recycle_two_scene.xml</a> Top Level MotionScene
+ </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/TwoRecycler.java">TwoRecycler.java</a> The activity, Adapter and ViewHolder
+   
+</li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/row_item_horizontal.xml">layout/row_item_horizontal.xml</a>  The horizontal recyclerView item
+  
+  </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/lock_recycler_item.xml">layout/lock_recycler_item.xml</a> The vertical recycler view item
+  </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/lock_recycler_item_scene.xml">xml/lock_recycler_item_scene.xml</a> The Vertical item (also a motionLayout)
+   
+ </li></ul>
 This uses a trick to have have the horizontal recycler view not get the vertical strokes.
+  </td>
+  <td>
+ <img src="https://user-images.githubusercontent.com/15019413/199828729-d6a95d67-c85f-42b6-9b94-5ad4d55c0627.gif" alt="Vertical + horizontal recyclerviews"/>
+ </td>
+ </tr>
+</table>
 
-
-![recyclerView_hv2](https://user-images.githubusercontent.com/15019413/199828729-d6a95d67-c85f-42b6-9b94-5ad4d55c0627.gif)
-
+ 
 
 
 ## Contributing
