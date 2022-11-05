@@ -218,8 +218,44 @@ This uses a trick to have have the horizontal recycler view not get the vertical
  </tr>
 </table>
 
- 
+ ---------------------------
 
+<table border="0">
+ <tr>
+    <td colspan="2"><b style="font-size:30px">This demos a recycler view expanding into detail view</b></td>
+ </tr>
+ <tr>
+    <td> 
+
+ <ul><li>
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/recycler_to_detail.xml">layout/recycler_to_detail.xml</a>  Top Level Layout
+</li><li>
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/recycler_to_detail_scene.xml">xml/recycler_to_detail_scene.xml</a> Top Level MotionScene with expansion to detail
+ </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/java/com/example/motionrecycle/RecyclerToDetailView.java">RecyclerToDetailView.java</a> The activity, Adapter and ViewHolder
+   
+</li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/layout/recycler_to_detail_item.xml">layout/recycler_to_detail_item.xml</a>  The recyclerView item
+  
+  </li><li> 
+
+ <a href="https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesRecyclerView/app/src/main/res/xml/recycler_to_detail_item_scene.xml">xml/recycler_to_detail_item_scene.xml</a> The vertical recycler view item
+ 
+ </li></ul>
+The outer MotionLayout contains an include of a single inner MotionLayout.<br>
+This will be used in the detail expansion effect
+  </td>
+  <td>
+ <img src="https://user-images.githubusercontent.com/15019413/200138139-496ed6eb-4a86-497b-940a-613dd16760bf.gif" alt="detail expansion recyclerviews"/>
+ </td>
+ </tr>
+</table>
+
+ 
 
 ## Contributing
 
