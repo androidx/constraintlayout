@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/base_motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1E0A1E"
     app:layoutDescription="@xml/recycler_to_detail_scene"
-    android:id="@+id/base_motionLayout"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -19,17 +20,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <FrameLayout-->
-<!--        android:id="@+id/frameLayout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-
-<!--        android:visibility="invisible"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-        <include layout="@layout/recycler_to_detail_item" android:id="@+id/detail"    android:layout_width="match_parent"
-            android:layout_height="100dp" />
-<!--    </FrameLayout>-->
+    <include
+        android:id="@+id/detail"
+        layout="@layout/recycler_to_detail_item"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
