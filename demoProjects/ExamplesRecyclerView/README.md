@@ -255,7 +255,19 @@ This will be used in the detail expansion effect
  </tr>
 </table>
 
- 
+- Top level xml MotionLayout
+```xml
+<MotionLayout>
+  <RecyclerView/>
+  <include layout="@layout/item" />
+<MotionLayout>
+```
+- item.xml
+ ```xml
+<MotionLayout>
+ <-- user interface that can expand>
+<MotionLayout>
+```
 
 ## Contributing
 
