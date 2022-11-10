@@ -269,6 +269,28 @@ This will be used in the detail expansion effect
 <MotionLayout>
 ```
 
+```mermaid
+classDiagram
+xml_main_activity <|-- item : include
+xml_main_activity <|-- RecyclerView
+MainActivity *-- Adapter : bind
+Adapter : baseMotionLayout
+Adapter <|-- ViewHolder : create*
+MainActivity : onCreate()
+MainActivity : int[] colors
+xml_main_activity : MotionLayout base
+xml_main_activity : include item
+xml_main_activity : RecyclerView
+item : MotionLayout expand
+ViewHolder : item
+ViewHolder : MotionLayout base
+ViewHolder : MotionLayout item
+ViewHolder : click(View v) expand
+ViewHolder .. ViewHolder : expand
+ViewHolder .. item
+MainActivity .. xml_main_activity
+```
+
 ## Contributing
 
 If you'd like to get involved and contribute please read [CONTRIBUTING](https://github.com/androidx/constraintlayout/blob/main/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
