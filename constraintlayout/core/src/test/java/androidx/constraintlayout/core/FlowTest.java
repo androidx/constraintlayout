@@ -21,6 +21,7 @@ import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPE
 
 import static org.junit.Assert.assertEquals;
 
+import androidx.constraintlayout.core.utils.Split;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -229,5 +230,41 @@ public class FlowTest {
         System.out.println("flow: " + flow);
         System.out.println("A: " + a);
         System.out.println("B: " + b);
+    }
+    @Test
+    public void testSplit() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(50, 50);
+        Split split = new Split();
+        split.setDebugName("split");
+
+        split.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+        split.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+        split.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        split.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        split.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        split.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        split.setOrientation(1);
+        root.add(split);
+        split.setContainer(root);
+        root.setMeasurer(new BasicMeasure.Measurer() {
+            @Override
+            public void measure(ConstraintWidget widget, BasicMeasure.Measure measure) {
+                measure.measuredWidth = widget.getWidth();
+                measure.measuredHeight = widget.getHeight();
+            }
+
+            @Override
+            public void didMeasures() {
+
+            }
+        });
+        root.setMeasurer(sMeasurer);
+        root.measure(Optimizer.OPTIMIZATION_NONE,
+                0, 0, 0, 0, 0, 0, 0, 0);
+        //root.layout();
+        System.out.println("root: " + root);
+        System.out.println("flow: " + split);
+        System.out.println("A: " + split.getFirst());
+        System.out.println("B: " + split.getSecond());
     }
 }

@@ -209,3 +209,36 @@ fun FlowBasicDemo6() {
     }
 }
 
+// test adding constraints to parent
+@Preview(group = "split")
+@Composable
+fun SplitDemo1() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+            split: { 
+                height: 'parent',
+                width: 'parent',
+                type: 'Split',
+                orientation: 0,
+                contains: ['btn1', 'btn2'],
+              },
+             btn1: {
+              height: 'spread',
+              width: 'spread',
+             }
+        }
+        """.trimIndent()),
+        modifier = Modifier.fillMaxSize()) {
+        val numArray = arrayOf("btn1", "btn2")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num),
+                onClick = {},
+            ) {
+                Text(text = num)
+            }
+        }
+    }
+}
+
