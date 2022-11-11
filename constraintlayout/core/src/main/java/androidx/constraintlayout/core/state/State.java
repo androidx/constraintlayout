@@ -27,6 +27,7 @@ import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
+import androidx.constraintlayout.core.state.helpers.SplitReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -93,6 +94,7 @@ public class State {
         LAYER,
         HORIZONTAL_FLOW,
         VERTICAL_FLOW,
+        SPLIT,
         FLOW
     }
 
@@ -324,6 +326,10 @@ public class State {
                     reference = new FlowReference(this, type);
                 }
                 break;
+                case SPLIT: {
+                    reference = new SplitReference(this, type);
+                }
+                break;
                 default: {
                     reference = new HelperReference(this, type);
                 }
@@ -366,6 +372,15 @@ public class State {
             reference.setFacade(barrierReference);
         }
         return (BarrierReference) reference.getFacade();
+    }
+
+    public SplitReference getSplit(Object key) {
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof SplitReference)) {
+            SplitReference flowReference = new SplitReference(this, Helper.SPLIT);
+            reference.setFacade(flowReference);
+        }
+        return (SplitReference) reference.getFacade();
     }
 
     /**

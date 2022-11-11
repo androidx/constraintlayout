@@ -36,6 +36,7 @@ import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.ChainReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
+import androidx.constraintlayout.core.state.helpers.SplitReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Flow;
 
@@ -538,6 +539,12 @@ public class ConstraintSetParser {
                                                 (CLObject) element
                                         );
                                         break;
+                                    case "Split":
+                                        parseSplitType(state,
+                                                elementName,
+                                                layoutVariables,
+                                                (CLObject) element);
+                                        break;
                                 }
                             } else {
                                 parseWidget(state, layoutVariables,
@@ -850,6 +857,45 @@ public class ConstraintSetParser {
                     }
 
                     break;
+            }
+        }
+    }
+
+    private static void parseSplitType(State state,
+                                       String name,
+                                       LayoutVariables layoutVariables,
+                                       CLObject element) throws CLParsingException {
+
+        SplitReference split = state.getSplit(name);
+
+        for (String param : element.names()) {
+            switch (param) {
+                case "contains":
+                    CLArray list = element.getArrayOrNull(param);
+                    if (list != null) {
+                        for (int j = 0; j < list.size(); j++) {
+
+                            String elementNameReference = list.get(j).content();
+                            ConstraintReference elementReference =
+                                    state.constraints(elementNameReference);
+                            if (PARSER_DEBUG) {
+                                System.out.println(
+                                        "Add REFERENCE "
+                                                + "($elementNameReference = $elementReference) "
+                                                + "TO BARRIER "
+                                );
+                            }
+                            split.add(elementReference);
+                        }
+                    }
+                    break;
+                case "orientation":
+                    int orientation = element.get(param).getInt();
+                    split.setOrientation(orientation);
+                    break;
+                default:
+                    ConstraintReference reference = state.constraints(name);
+                    applyAttribute(state, layoutVariables, reference, element, param);
             }
         }
     }
