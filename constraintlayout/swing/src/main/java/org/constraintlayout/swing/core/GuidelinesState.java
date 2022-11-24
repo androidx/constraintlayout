@@ -145,7 +145,7 @@ public class GuidelinesState {
                 g = guideline;
                 layout.add(g);
             }
-            applyGuideline(mapIdsToIdx.get(id), g);
+            applyGuideline(2*mapIdsToIdx.get(id), g);
         }
     }
 
