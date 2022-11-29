@@ -36,6 +36,7 @@ import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.ChainReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
+import androidx.constraintlayout.core.state.helpers.GridReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Flow;
 
@@ -538,6 +539,12 @@ public class ConstraintSetParser {
                                                 (CLObject) element
                                         );
                                         break;
+                                    case "Grid":
+                                        parseGridType(state,
+                                                elementName,
+                                                layoutVariables,
+                                                (CLObject) element);
+                                        break;
                                 }
                             } else {
                                 parseWidget(state, layoutVariables,
@@ -850,6 +857,85 @@ public class ConstraintSetParser {
                     }
 
                     break;
+            }
+        }
+    }
+
+    private static void parseGridType(State state,
+                                       String name,
+                                       LayoutVariables layoutVariables,
+                                       CLObject element) throws CLParsingException {
+
+        GridReference grid = state.getGrid(name);
+
+        for (String param : element.names()) {
+            switch (param) {
+                case "contains":
+                    CLArray list = element.getArrayOrNull(param);
+                    if (list != null) {
+                        for (int j = 0; j < list.size(); j++) {
+
+                            String elementNameReference = list.get(j).content();
+                            ConstraintReference elementReference =
+                                    state.constraints(elementNameReference);
+                            if (PARSER_DEBUG) {
+                                System.out.println(
+                                        "Add REFERENCE "
+                                                + "($elementNameReference = $elementReference) "
+                                                + "TO BARRIER "
+                                );
+                            }
+                            grid.add(elementReference);
+                        }
+                    }
+                    break;
+                case "orientation":
+                    int orientation = element.get(param).getInt();
+                    grid.setOrientation(orientation);
+                    break;
+                case "rows":
+                    int rows = element.get(param).getInt();
+                    grid.setRowsSet(rows);
+                    break;
+                case "columns":
+                    int columns = element.get(param).getInt();
+                    grid.setColumnsSet(columns);
+                    break;
+                case "hGap":
+                    float hGap = element.get(param).getFloat();
+                    grid.setHorizontalGaps(toPix(state, hGap));
+                    break;
+                case "vGap":
+                    float vGap = element.get(param).getFloat();
+                    grid.setVerticalGaps(toPix(state, vGap));
+                    break;
+                case "spans":
+                    String spans = element.get(param).content();
+                    if (spans != null && spans.contains("x") && spans.contains(":")) {
+                        grid.setStrSpans(spans);
+                    }
+                    break;
+                case "skips":
+                    String skips = element.get(param).content();
+                    if (skips != null && skips.contains("x") && skips.contains(":")) {
+                        grid.setStrSkips(skips);
+                    }
+                    break;
+                case "rowWeights":
+                    String rowWeights = element.get(param).content();
+                    if (rowWeights != null && rowWeights.contains(",")) {
+                        grid.setStrRowWeights(rowWeights);
+                    }
+                    break;
+                case "columnWeights":
+                    String columnWeights = element.get(param).content();
+                    if (columnWeights != null && columnWeights.contains(",")) {
+                        grid.setStrColumnWeights(columnWeights);
+                    }
+                    break;
+                default:
+                    ConstraintReference reference = state.constraints(name);
+                    applyAttribute(state, layoutVariables, reference, element, param);
             }
         }
     }
