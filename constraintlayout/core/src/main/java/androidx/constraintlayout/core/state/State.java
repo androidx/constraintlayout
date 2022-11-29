@@ -20,13 +20,13 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_PACK
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD_INSIDE;
 
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
+import androidx.constraintlayout.core.state.helpers.GridReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -93,6 +93,7 @@ public class State {
         LAYER,
         HORIZONTAL_FLOW,
         VERTICAL_FLOW,
+        GRID,
         FLOW
     }
 
@@ -324,6 +325,10 @@ public class State {
                     reference = new FlowReference(this, type);
                 }
                 break;
+                case GRID: {
+                    reference = new GridReference(this, type);
+                }
+                break;
                 default: {
                     reference = new HelperReference(this, type);
                 }
@@ -366,6 +371,15 @@ public class State {
             reference.setFacade(barrierReference);
         }
         return (BarrierReference) reference.getFacade();
+    }
+
+    public GridReference getGrid(Object key) {
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof GridReference)) {
+            GridReference flowReference = new GridReference(this, Helper.GRID);
+            reference.setFacade(flowReference);
+        }
+        return (GridReference) reference.getFacade();
     }
 
     /**
