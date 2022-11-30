@@ -116,7 +116,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     private static boolean REVERSE = false;
 
-    private static final String RUN_FIRST = "verification_043";// (true) ? "verification_801" : "bug_005";
+    private static final String RUN_FIRST = "verification_005";// (true) ? "verification_801" : "bug_005";
     private final String LAYOUTS_MATCHES = "[bcv].*_.*";
 
     private static String SHOW_FIRST = "";
@@ -140,6 +140,11 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             }
         }
         return null;
+    }
+
+    public void dumpMotionLayout() {
+        MotionLayoutToJason mlJson = new MotionLayoutToJason();
+        mlJson.setMotionLayout(mMotionLayout);
     }
 
     @Override
@@ -167,28 +172,28 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ViewGroup root = ((ViewGroup) findViewById(android.R.id.content).getRootView());
         View mlView = findViewById(R.id.motionLayout);
         mMotionLayout = (mlView != null) ? (MotionLayout) mlView : findMotionLayout(root);
-        if (mMotionLayout != null || DEBUG_LAYOUT) {
-            ConstraintSet set = new ConstraintSet();
-            set.clone(mMotionLayout);
-            StringWriter writer = new StringWriter();
-            try {
-                log("-----------------------------------------------------------------------");
+        mMotionLayout.postDelayed(() -> { dumpMotionLayout();},300 );
+         if (mMotionLayout != null && DEBUG_LAYOUT) {
+             mMotionLayout.postDelayed(() -> {
+                 ConstraintSet set = new ConstraintSet();
+                 set.clone(mMotionLayout);
+                 StringWriter writer = new StringWriter();
+                 try {
+                     log("-----------------------------------------------------------------------");
+                     set.writeState(writer, mMotionLayout, 1);
+                     logBigString(writer.toString());
+                     log("-----------------------------------------------------------------------");
+                     log("-----------------------------------------------------------------------");
+                     set.writeState(writer, mMotionLayout, 0);
+                     logBigString(writer.toString());
 
-                set.writeState(writer, mMotionLayout, 1);
+                     log("-----------------------------------------------------------------------");
 
-                logBigString( writer.toString());
-
-                log("-----------------------------------------------------------------------");
-                log("-----------------------------------------------------------------------");
-                set.writeState(writer, mMotionLayout, 0);
-                logBigString( writer.toString());
-
-                log("-----------------------------------------------------------------------");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+             },500);
+         }
         View view = findViewById(R.id.flow);
         if (view != null) {
             setupFlow((Flow) view);
