@@ -144,6 +144,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     public void dumpMotionLayout() {
         MotionLayoutToJason mlJson = new MotionLayoutToJason();
+        Log.v(TAG,Debug.getLoc()+" MotionLayoutToJason ");
         mlJson.setMotionLayout(mMotionLayout);
     }
 

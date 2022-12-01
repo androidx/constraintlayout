@@ -1,7 +1,12 @@
 package android.support.constraint.app;
 
+import static androidx.constraintlayout.widget.ConstraintSet.Layout.UNSET_GONE_MARGIN;
+
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -23,6 +28,7 @@ public class MotionLayoutToJason {
         int[] mid = motionLayout.getConstraintSetIds();
         StringWriter writer = new StringWriter();
         writer.append("{\n");
+        writeWidgets(writer, motionLayout);
         writer.append("  ConstraintSets:{\n");
         for (int i = 0; i < mid.length; i++) {
             String name = Debug.getName(motionLayout.getContext(), mid[i]);
@@ -44,6 +50,36 @@ public class MotionLayoutToJason {
         Log.v(TAG, writer.toString());
 
     }
+
+    private void writeWidgets(StringWriter writer, MotionLayout motionLayout) {
+        writer.append("Widgets:{\n");
+        int count  = motionLayout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View v = motionLayout.getChildAt(i);
+            int id = v.getId();
+            String name = Debug.getName(v);
+            String cname = v.getClass().getSimpleName();
+            if (cname.contains("Text")) {
+                if (v instanceof TextView) {
+                    writer.append(name+": { type: 'Text', label: '"+((TextView)v).getText()+"'}\n");
+                } else {
+                    writer.append(name+": { type: 'Text' }\n");
+                }
+
+            }else if (cname.contains("Button")) {
+                if (v instanceof Button) {
+                    writer.append(name+": { type: 'Button', label: '"+((Button)v).getText()+"'}\n");
+                } else
+                writer.append(name+": { type: 'Button' }\n");
+            }else if (cname.contains("Image")) {
+                writer.append(name+": { type: 'Image' }\n");
+            }else if (cname.contains("View")) {
+                writer.append(name+": { type: 'Box' }\n");
+            }
+        }
+        writer.append("}\n");
+    }
+
     private void logBigString(String str) {
         int len = str.length();
         for (int i = 0; i < len; i++) {
@@ -61,7 +97,7 @@ public class MotionLayoutToJason {
     // ================================== JSON ===============================================
     static class WriteJsonEngine {
         public static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
-       ConstraintSet set;
+        ConstraintSet set;
         Writer mWriter;
         ConstraintLayout mLayout;
         Context mContext;
@@ -86,23 +122,23 @@ public class MotionLayoutToJason {
             set.getConstraint(2);
         }
 
-        int []getIDs() {
-          return set.getKnownIds();
+        int[] getIDs() {
+            return set.getKnownIds();
         }
 
-       ConstraintSet.Constraint getConstraint(int id)  {
+        ConstraintSet.Constraint getConstraint(int id) {
             return set.getConstraint(id);
         }
 
         void writeLayout() throws IOException {
-            mWriter.write( "{\n");
+            mWriter.write("{\n");
             for (Integer id : getIDs()) {
                 ConstraintSet.Constraint c = getConstraint(id);
                 String idName = getSimpleName(id);
-                mWriter.write(SP+idName + ":{\n");
+                mWriter.write(SP + idName + ":{\n");
                 ConstraintSet.Layout l = c.layout;
                 if (l.mReferenceIds != null) {
-                    String ref = "type: '_"+idName+"_' , contains: [";
+                    String ref = "type: '_" + idName + "_' , contains: [";
                     for (int r = 0; r < l.mReferenceIds.length; r++) {
                         int rid = l.mReferenceIds[r];
                         ref += ((r == 0) ? "" : ", ") + getName(rid);
@@ -111,10 +147,10 @@ public class MotionLayoutToJason {
                 }
                 if (l.mReferenceIdString != null) {
                     String ref = SP + "type: '???' , contains: [";
-                    String []rids = l.mReferenceIdString.split(",");
+                    String[] rids = l.mReferenceIdString.split(",");
                     for (int r = 0; r < rids.length; r++) {
                         String rid = rids[r];
-                        ref += ((r == 0) ? "" : ", ") + "`" +rid +"`";
+                        ref += ((r == 0) ? "" : ", ") + "`" + rid + "`";
                     }
                     mWriter.write(ref + "]\n");
                 }
@@ -168,7 +204,7 @@ public class MotionLayoutToJason {
                 writeTransform(c.transform);
                 writeCustom(c.mCustomConstraints);
                 writeMotion(c.motion);
-                
+
                 mWriter.write("  }\n");
             }
             mWriter.write("}\n");
@@ -178,16 +214,16 @@ public class MotionLayoutToJason {
         }
 
         private void writeTransform(ConstraintSet.Transform transform) {
-            
+
         }
 
-        void writeCustom( HashMap<String, ConstraintAttribute> cset ) throws IOException {
+        void writeCustom(HashMap<String, ConstraintAttribute> cset) throws IOException {
             if (cset != null && cset.size() > 0) {
-                mWriter.write(SPACE+"custom: {\n");
+                mWriter.write(SPACE + "custom: {\n");
                 for (String s : cset.keySet()) {
 
                     ConstraintAttribute attr = cset.get(s);
-                    String custom = SPACE+SP+attr.getName() +": ";
+                    String custom = SPACE + SP + attr.getName() + ": ";
                     switch (attr.getType()) {
                         case INT_TYPE:
                             custom += attr.getIntegerValue();
@@ -199,7 +235,7 @@ public class MotionLayoutToJason {
                             custom += attr.getFloatValue();
                             break;
                         case STRING_TYPE:
-                            custom += "'"+attr.getStringValue()+"'";
+                            custom += "'" + attr.getStringValue() + "'";
                             break;
                         case DIMENSION_TYPE:
                             custom += attr.getFloatValue();
@@ -213,11 +249,11 @@ public class MotionLayoutToJason {
                         mWriter.write(custom + "\n");
                     }
                 }
-                mWriter.write( SP+"   } \n");
+                mWriter.write(SP + "   } \n");
             }
         }
-        
-         static String colorString(int v) {
+
+        static String colorString(int v) {
             String str = "00000000" + Integer.toHexString(v);
             return "#" + str.substring(str.length() - 8);
         }
@@ -243,7 +279,7 @@ public class MotionLayoutToJason {
                                     boolean unusedConstrainedDim) throws IOException {
             if (dim == 0) {
                 if (dimMax != UNSET || dimMin != UNSET) {
-                    String s ="-----";
+                    String s = "-----";
                     switch (dimDefault) {
                         case 0: // spread
                             s = SPACE + dimString + ": {value:'spread'";
@@ -299,6 +335,7 @@ public class MotionLayoutToJason {
             mIdMap.put(id, name);
             return "" + name + "";
         }
+
         String getName(int id) {
             return "\'" + getSimpleName(id) + "\'";
         }
@@ -327,9 +364,12 @@ public class MotionLayoutToJason {
             mWriter.write(":[");
             mWriter.write(getName(leftToLeft));
             mWriter.write(", ");
-            mWriter.write(other);
-            if (margin != 0) {
+            mWriter.write("'" + other + "'");
+            if (margin != 0 || goneMargin != UNSET_GONE_MARGIN) {
                 mWriter.write(", " + margin);
+                if (goneMargin != 0) {
+                    mWriter.write(", " + goneMargin);
+                }
             }
             mWriter.write("],\n");
 
@@ -392,7 +432,8 @@ public class MotionLayoutToJason {
             mWriter.write(",\n");
 
         }
-        void writeVariable(String name, boolean value , boolean def) throws IOException {
+
+        void writeVariable(String name, boolean value, boolean def) throws IOException {
             if (value == def) {
                 return;
             }
