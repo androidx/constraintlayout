@@ -29,6 +29,11 @@ public class GridReference extends HelperReference {
 
     public GridReference(State state, State.Helper type) {
         super(state, type);
+        if (type == State.Helper.ROW) {
+            this.mColumnsSet = 1;
+        } else if (type == State.Helper.COLUMN) {
+            this.mRowsSet = 1;
+        }
     }
 
     /**
@@ -94,6 +99,9 @@ public class GridReference extends HelperReference {
      * @param rowsSet the number of rows
      */
     public void setRowsSet(int rowsSet) {
+        if (super.getType() == State.Helper.COLUMN) {
+            return;
+        }
         mRowsSet = rowsSet;
     }
 
@@ -110,6 +118,9 @@ public class GridReference extends HelperReference {
      * @param columnsSet the number of columns
      */
     public void setColumnsSet(int columnsSet) {
+        if (super.getType() == State.Helper.ROW) {
+            return;
+        }
         mColumnsSet = columnsSet;
     }
 
