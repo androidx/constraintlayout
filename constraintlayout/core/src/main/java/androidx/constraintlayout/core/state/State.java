@@ -94,6 +94,8 @@ public class State {
         HORIZONTAL_FLOW,
         VERTICAL_FLOW,
         GRID,
+        ROW,
+        COLUMN,
         FLOW
     }
 
@@ -325,7 +327,9 @@ public class State {
                     reference = new FlowReference(this, type);
                 }
                 break;
-                case GRID: {
+                case GRID:
+                case ROW:
+                case COLUMN: {
                     reference = new GridReference(this, type);
                 }
                 break;
@@ -373,11 +377,17 @@ public class State {
         return (BarrierReference) reference.getFacade();
     }
 
-    public GridReference getGrid(Object key) {
+    public GridReference getGrid(Object key, String gridType) {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null || !(reference.getFacade() instanceof GridReference)) {
-            GridReference flowReference = new GridReference(this, Helper.GRID);
-            reference.setFacade(flowReference);
+            State.Helper Type = Helper.GRID;
+            if (gridType.charAt(0) == 'R') {
+                Type = Helper.ROW;
+            } else if (gridType.charAt(0) == 'C') {
+                Type = Helper.COLUMN;
+            }
+            GridReference gridReference = new GridReference(this, Type);
+            reference.setFacade(gridReference);
         }
         return (GridReference) reference.getFacade();
     }

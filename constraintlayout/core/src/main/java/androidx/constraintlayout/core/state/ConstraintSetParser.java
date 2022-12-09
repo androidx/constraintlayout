@@ -540,7 +540,10 @@ public class ConstraintSetParser {
                                         );
                                         break;
                                     case "Grid":
-                                        parseGridType(state,
+                                    case "Row":
+                                    case "Column":
+                                        parseGridType(type,
+                                                state,
                                                 elementName,
                                                 layoutVariables,
                                                 (CLObject) element);
@@ -861,12 +864,13 @@ public class ConstraintSetParser {
         }
     }
 
-    private static void parseGridType(State state,
+    private static void parseGridType(String gridType,
+                                       State state,
                                        String name,
                                        LayoutVariables layoutVariables,
                                        CLObject element) throws CLParsingException {
 
-        GridReference grid = state.getGrid(name);
+        GridReference grid = state.getGrid(name, gridType);
 
         for (String param : element.names()) {
             switch (param) {
