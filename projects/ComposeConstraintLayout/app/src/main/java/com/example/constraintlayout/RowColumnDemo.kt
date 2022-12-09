@@ -39,7 +39,6 @@ fun RowDemo() {
                 type: "Row",
                 vGap: 10,
                 hGap: 10,
-                orientation: 0,
                 contains: ["btn1", "btn2", "btn3", "btn4", "btn5"],
               },
         }
@@ -69,7 +68,6 @@ fun ColumnDemo() {
                 type: "Column",
                 vGap: 10,
                 hGap: 10,
-                orientation: 0,
                 contains: ["btn1", "btn2", "btn3", "btn4", "btn5"],
               },
         }
