@@ -30,6 +30,7 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <View
+        android:id="@+id/view1"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:background="@color/colorPrimaryDark"

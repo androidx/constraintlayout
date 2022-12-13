@@ -8,6 +8,7 @@
     <!-- b/110314365 -->
 
     <TextView
+        android:id="@+id/view1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorPrimary"

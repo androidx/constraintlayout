@@ -17,6 +17,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
+            android:id="@+id/view1"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#ff212121"

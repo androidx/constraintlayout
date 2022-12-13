@@ -20,7 +20,9 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <EditText android:layout_width="0dp"
+    <EditText
+        android:id="@+id/view1"
+        android:layout_width="0dp"
         android:tag="540,861,540,199"
         android:layout_height="wrap_content"
         android:maxLines="10"

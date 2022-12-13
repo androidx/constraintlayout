@@ -11,6 +11,7 @@
     <!-- b/77617046 -->
 
     <androidx.constraintlayout.widget.Placeholder
+        android:id="@+id/myTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:content="@+id/myTextView"
@@ -20,7 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/myTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#0ff"

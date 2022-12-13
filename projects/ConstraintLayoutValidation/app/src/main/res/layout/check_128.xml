@@ -21,6 +21,7 @@
         app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/view1"
         android:tag="1020,0,0,0"
         android:layout_width="1dp"
         android:layout_height="0dp"
@@ -28,6 +29,7 @@
         app:layout_constraintGuide_begin="20dp"/>
 
     <View
+        android:id="@+id/view2"
         android:tag="750,0,30,1920"
         android:layout_width="10dp"
         android:background="@color/colorAccent"

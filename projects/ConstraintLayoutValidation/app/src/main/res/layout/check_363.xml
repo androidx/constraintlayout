@@ -8,6 +8,7 @@
     <!-- b/164160877 -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl1"
         android:padding="-8dp"
         android:background="@color/colorAccent"
         android:layout_width="200dp"

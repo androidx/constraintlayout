@@ -15,7 +15,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +42,7 @@
             app:layout_constraintGuide_percent="0.96" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout 
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app;
+package androidx.constraintlayout.validation;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import android.util.Log;
+import android.support.constraintlayout.validation.R;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -42,13 +43,8 @@ public class CheckDumpJson extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAllLayout =  getLayouts("v.*_.*");
-        Bundle extra = getIntent().getExtras();
-        if (extra != null) {
-            setLayout(extra.getString(Utils.KEY));
-        } else {
-            setLayout(mAllLayout[current]);
-        }
+        mAllLayout =  getLayouts("check_.*");
+        setLayout(mAllLayout[current]);
     }
 
     void setLayout(String name) {
@@ -57,7 +53,7 @@ public class CheckDumpJson extends AppCompatActivity {
         Log.v("MAIN", current+" : "+name);
         int  id = ctx.getResources().getIdentifier(name, "layout", ctx.getPackageName());
         setContentView(id);
-        mLayout = Utils.findConstraintLayout(this);
+        mLayout = findConstraintLayout(this);
         if (mLayout == null) {
             current++;
             if (current < mAllLayout.length)
@@ -71,13 +67,16 @@ public class CheckDumpJson extends AppCompatActivity {
     ArrayList<String> allFiles = new ArrayList<>();
     private void dumpJson() {
       Log.v("MAIN", current+" : "+mAllLayout[current]);
-      String fileName;
-        if (mLayout instanceof MotionLayout) {
-            fileName = MotionLayoutToJason.writeJSonToFile((MotionLayout) mLayout, layout_name);
-        } else {
-            fileName = ConstraintLayoutToJason.writeJSonToFile(mLayout, layout_name);
-        }
+      try {
+
+
+      String   fileName = ConstraintLayoutToJason.writeJSonToFile(mLayout, layout_name);
+
         allFiles.add(fileName);
+      } catch (Exception e) {
+          Log.v("MAIN", e.getMessage()+" "+current+" :ERROR  .("+mAllLayout[current]+".xml:01) ");
+
+      }
         current++;
         if (current < mAllLayout.length)
             setLayout(mAllLayout[current]);
@@ -108,5 +107,24 @@ public class CheckDumpJson extends AppCompatActivity {
         return list.toArray(new String[0]);
     }
 
+    static ConstraintLayout findConstraintLayout(AppCompatActivity activity) {
+        ViewGroup group = ((ViewGroup) activity.findViewById(android.R.id.content).getRootView());
+        ArrayList<ViewGroup> groups = new ArrayList<>();
+        groups.add(group);
+        while (!groups.isEmpty()) {
+            ViewGroup vg = groups.remove(0);
+            int n = vg.getChildCount();
+            for (int i = 0; i < n; i++) {
+                View view = vg.getChildAt(i);
+                if (view instanceof ConstraintLayout) {
+                    return (ConstraintLayout) view;
+                }
+                if (view instanceof ViewGroup) {
+                    groups.add((ViewGroup) view);
+                }
+            }
+        }
+        return null;
+    }
 
 }

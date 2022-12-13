@@ -13,6 +13,7 @@
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,300 315,120,450,60"/>
 
     <TextView
+        android:id="@+id/view1"
         android:layout_width="150dp"
         android:layout_height="20dp"
         android:background="#ff00ff"

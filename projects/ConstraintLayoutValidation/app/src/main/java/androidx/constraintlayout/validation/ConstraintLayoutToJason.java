@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.constraint.app;
+package androidx.constraintlayout.validation;
 
-import static androidx.constraintlayout.widget.ConstraintSet.Layout.UNSET;
 import static androidx.constraintlayout.widget.ConstraintSet.Layout.UNSET_GONE_MARGIN;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.constraintlayout.motion.widget.Debug;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -37,39 +35,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MotionLayoutToJason {
-    MotionLayout mMotionLayout;
-    Context mContext;
+public class ConstraintLayoutToJason {
+    private ConstraintLayout mConstraintLayout;
+    private Context mContext;
     private static String TAG = "ML_DEBUG";
 
-    private MotionLayoutToJason() {
+    private ConstraintLayoutToJason() {
     }
-
 
     private static String escape(String str) {
-        return str
-                .replaceAll("\'", "\\'")
-                .replaceAll("\t", "\\t")
-                .replaceAll("\b", "\\b")
-                .replaceAll("\n", "\\n")
-                .replaceAll("\r", "\\r")
-                .replaceAll("\f", "\\f");
+        return str.replaceAll("\'", "\\'");
     }
 
-    public static String writeJSonToFile(MotionLayout motionLayout, String name) {
-        MotionLayoutToJason m = new MotionLayoutToJason();
+    public static String writeJSonToFile(ConstraintLayout constraintLayout, String name) {
         FileOutputStream outputStream;
+        ConstraintLayoutToJason c = new ConstraintLayoutToJason();
         try {
             File down = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
             File file = new File(down, name + ".json5");
             outputStream = new FileOutputStream(file);
-            // Write data to file
-            outputStream.write(m.motionLayoutToJson(motionLayout).getBytes());
-            // Close the file
+            outputStream.write(c.constraintLayoutToJson(constraintLayout).getBytes());
             outputStream.close();
             return file.getCanonicalPath();
         } catch (IOException e) {
@@ -78,120 +66,79 @@ public class MotionLayoutToJason {
         return null;
     }
 
-    public static void setMotionLayout(MotionLayout motionLayout) {
-        MotionLayoutToJason m = new MotionLayoutToJason();
-
-        Log.v(TAG, m.motionLayoutToJson(motionLayout));
+    public static void setConstraintLayout(ConstraintLayout constraintLayout) {
+        ConstraintLayoutToJason c = new ConstraintLayoutToJason();
+        Log.v(TAG, c.constraintLayoutToJson(constraintLayout));
     }
 
-    public String motionLayoutToJson(MotionLayout motionLayout) {
-        mMotionLayout = motionLayout;
-        mContext = motionLayout.getContext();
-        int[] id = motionLayout.getConstraintSetIds();
+    public String constraintLayoutToJson(ConstraintLayout constraintLayout) {
+        mConstraintLayout = constraintLayout;
+        mContext = constraintLayout.getContext();
         StringWriter writer = new StringWriter();
         writer.append("{\n");
-        writeTransitions(writer);
-        writeWidgets(writer, motionLayout);
-        writer.append("  ConstraintSets:{\n");
-        for (int i = 0; i < id.length; i++) {
-            String name = Debug.getName(motionLayout.getContext(), id[i]);
-            if (name.equals("motion_base")) {
-                continue;
-            }
-            ConstraintSet set = motionLayout.getConstraintSet(id[i]);
 
-            try {
-                writer.append(name + ":");
-                new WriteJsonEngine(writer, set, motionLayout, 0).writeLayout();
-                writer.append("\n");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        writeWidgets(writer, constraintLayout);
+        writer.append("  ConstraintSet:{\n");
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        String name = Debug.getName(constraintLayout);
+        try {
+            writer.append(name + ":");
+            new WriteJsonEngine(writer, set, constraintLayout, 0).writeLayout();
+            writer.append("\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
         writer.append("  }\n");
         writer.append("}\n");
         return writer.toString();
-
     }
 
-    String[] autoName = {
-            "'none'",
-            "'jumpToStart'",
-            "'jumpToEnd'",
-            "'jumpToStart'",
-            "'animateToEnd'",
-            "'animateToStart'"
-    };
-
-    String[] arcMode = {
-            "'none'", "'startVertical'", "'startHorizontal'", "'flip'", "'arcDown'", "'arcUp'"
-    };
-
-    private void writeTransitions(StringWriter writer) {
-        ArrayList<MotionScene.Transition> t = mMotionLayout.getDefinedTransitions();
-        writer.append("Transitions:{\n");
-        int titleCount = 0;
-        for (MotionScene.Transition transition : t) {
-            int id = transition.getId();
-            if (id == -1) {
-                writer.append(((titleCount == 0) ? "  default" : ("  default" + (titleCount + 1))) + ":{\n");
-                titleCount++;
-            } else {
-                writer.append(Debug.getName(mContext, id) + ":{\n");
-            }
-            int from = transition.getStartConstraintSetId();
-            int to = transition.getEndConstraintSetId();
-            writer.append("    from: '" + Debug.getName(mContext, from) + "',\n");
-            writer.append("    to: '" + Debug.getName(mContext, to) + "',\n");
-            int dur = transition.getDuration();
-            writer.append("    duration: " + dur + ",\n");
-
-            int auto = transition.getAutoTransition();
-            if (auto != MotionScene.Transition.AUTO_NONE) {
-                writer.append("    auto: " + autoName[auto] + ",\n");
-            }
-            int arc = transition.getPathMotionArc();
-            if (arc != UNSET) {
-                writer.append("    pathMotionArc: " + arcMode[arc] + ",\n");
-            }
-            float stagger = transition.getStagger();
-            if (stagger != 0.0f) {
-                writer.append("    stagger: " + stagger + ",\n");
-
-            }
-            writer.append("  },\n");
-
-        }
-        writer.append("},\n");
-    }
-
-    private void writeWidgets(StringWriter writer, MotionLayout motionLayout) {
+    private void writeWidgets(StringWriter writer, ConstraintLayout constraintLayout) {
         writer.append("Widgets:{\n");
-        int count = motionLayout.getChildCount();
+        int count = constraintLayout.getChildCount();
 
-        for (int i = 0; i < count; i++) {
-            View v = motionLayout.getChildAt(i);
+        for (int i = -1; i < count; i++) {
+            View v = (i == -1) ? constraintLayout : constraintLayout.getChildAt(i);
             int id = v.getId();
-            String name = Debug.getName(v);
+            String name = (i == -1) ? "parent" : Debug.getName(v);
             String cname = v.getClass().getSimpleName();
-            String bounds = ", bounds: [" + v.getLeft() + ", " + v.getTop() + ", " + v.getRight() + ", " + v.getBottom() + "]},\n";
-            if (cname.contains("Text")) {
+            String bounds = ", bounds: [" + v.getLeft() + ", " + v.getTop()
+                    + ", " + v.getRight() + ", " + v.getBottom() + "]},\n";
+            writer.append("  " + name + ": { ");
+            if (i == -1) {
+                writer.append("type: '" + v.getClass().getSimpleName() + "' , ");
+
+                try {
+                    ViewGroup.LayoutParams p = (ViewGroup.LayoutParams) v.getLayoutParams();
+
+                    String w = p.width == -1 ? "'MATCH_PARENT'" :
+                            (p.width == -2) ? "'WRAP_CONTENT'" : p.width + "";
+                    writer.append("width: " + w + ", ");
+                    String h = p.height == -1 ? "'MATCH_PARENT'" :
+                            (p.height == -2) ? "'WRAP_CONTENT'" : p.height + "";
+                    writer.append("height: " + h);
+                } catch (Exception e) {
+
+                }
+            } else if (cname.contains("Text")) {
                 if (v instanceof TextView) {
-                    writer.append(name + ": { type: 'Text', label: '" + escape(((TextView) v).getText().toString()) + "'");
+                    writer.append("type: 'Text', label: '" + escape(((TextView) v).getText().toString()) + "'");
                 } else {
-                    writer.append(name + ": { type: 'Text' },\n");
+                    writer.append("type: 'Text' },\n");
                 }
             } else if (cname.contains("Button")) {
                 if (v instanceof Button) {
-                    writer.append(name + ": { type: 'Button', label: '" + ((Button) v).getText() + "'");
+                    writer.append("type: 'Button', label: '" + ((Button) v).getText()+"'");
                 } else
-                    writer.append(name + ": { type: 'Button'");
+                    writer.append("type: 'Button'");
             } else if (cname.contains("Image")) {
-                writer.append(name + ": { type: 'Image'");
+                writer.append("type: 'Image'");
             } else if (cname.contains("View")) {
-                writer.append(name + ": { type: 'Box'");
+                writer.append("type: 'Box'");
             } else {
-                writer.append(name + ": { type: '" + v.getClass().getSimpleName() + "'");
+                writer.append("type: '" + v.getClass().getSimpleName() + "'");
             }
             writer.append(bounds);
         }
@@ -231,12 +178,16 @@ public class MotionLayoutToJason {
         private static final String INDENT = "    ";
         private static final String SMALL_INDENT = "  ";
 
-        WriteJsonEngine(Writer writer, ConstraintSet set, ConstraintLayout layout, int flags) throws IOException {
+        WriteJsonEngine(Writer writer,
+                        ConstraintSet set,
+                        ConstraintLayout layout,
+                        int flags) throws IOException {
             this.mWriter = writer;
             this.mLayout = layout;
             this.mContext = layout.getContext();
             this.mFlags = flags;
             this.set = set;
+            set.getConstraint(2);
         }
 
         int[] getIDs() {
@@ -256,7 +207,7 @@ public class MotionLayoutToJason {
                 mWriter.write(SMALL_INDENT + idName + ":{\n");
                 ConstraintSet.Layout l = c.layout;
                 if (l.mReferenceIds != null) {
-                    String ref = "type: '" + v.getClass() + "', contains: [";
+                    String ref = "type: '" + v.getClass() + "' , contains: [";
                     for (int r = 0; r < l.mReferenceIds.length; r++) {
                         int rid = l.mReferenceIds[r];
                         ref += ((r == 0) ? "" : ", ") + getName(rid);
@@ -264,11 +215,11 @@ public class MotionLayoutToJason {
                     mWriter.write(ref + "],\n");
                 }
                 if (l.mReferenceIdString != null) {
-                    String ref = SMALL_INDENT + "type: '" + v.getClass() + "', contains: [";
+                    String ref = SMALL_INDENT + "type: '"+v.getClass() + "', contains: [";
                     String[] rids = l.mReferenceIdString.split(",");
                     for (int r = 0; r < rids.length; r++) {
                         String rid = rids[r];
-                        ref += ((r == 0) ? "" : ", ") + "'" + rid + "'";
+                        ref += ((r == 0) ? "" : ", ") + "`" + rid + "`";
                     }
                     mWriter.write(ref + "],\n");
                 }
@@ -314,9 +265,10 @@ public class MotionLayoutToJason {
                 writeVariable("verticalWeight", l.verticalWeight);
                 writeVariable("horizontalWeight", l.horizontalWeight);
                 String []style = {null, "packed","spread_inside"};
+
                 writeVariable("horizontalChainStyle", style[l.horizontalChainStyle]);
                 writeVariable("verticalChainStyle", style[l.verticalChainStyle]);
-                  if (l.mBarrierDirection != UNSET) {
+                if (l.mBarrierDirection != UNSET) {
                     String []barr = {"left", "right","top","bottom"};
                     writeVariable("barrierDirection", barr[l.mBarrierDirection]);
                 }
@@ -325,67 +277,20 @@ public class MotionLayoutToJason {
                 }
                 writeTransform(c.transform);
                 writeCustom(c.mCustomConstraints);
-                writeMotion(c.motion);
+
 
                 mWriter.write("  },\n");
             }
             mWriter.write("},\n");
         }
 
-        private void writeMotion(ConstraintSet.Motion motion) throws IOException {
-            float motionStagger = motion.mMotionStagger;
-            float animateCircleAngleTo = motion.mAnimateCircleAngleTo;
-            int pathMotionArc = motion.mPathMotionArc;
-            float animateRelativeTo = motion.mAnimateRelativeTo;
-            float pathRotate = motion.mPathRotate;
-            float polarRelativeTo = motion.mPolarRelativeTo;
-            float quantizeInterpolatorID = motion.mQuantizeInterpolatorID;
-            float stagmQuantizeMotionPhaseger = motion.mQuantizeMotionPhase;
-            float quantizeMotionSteps = motion.mQuantizeMotionSteps;
-            float quantizeInterpolatorType = motion.mQuantizeInterpolatorType;
-            String quantizeInterpolatorString = motion.mQuantizeInterpolatorString;
-            String transitionEasing = motion.mTransitionEasing;
-
-            if (!Float.isNaN(motionStagger)
-                    || animateRelativeTo != ConstraintSet.Layout.UNSET
-                    || animateCircleAngleTo != 0
-                    || transitionEasing != null
-                    || pathMotionArc != ConstraintSet.Layout.UNSET
-                    || polarRelativeTo != ConstraintSet.Layout.UNSET
-                    || quantizeMotionSteps != ConstraintSet.Layout.UNSET
-                    || !Float.isNaN(motionStagger)
-            ) {
-                mWriter.append("motion:{");
-                if (!Float.isNaN(motionStagger)) {
-                    writeVariable("stagger", motionStagger);
-                }
-                if (!Float.isNaN(pathRotate)) {
-                    writeVariable("pathRotate", pathRotate);
-                }
-                if (pathMotionArc != ConstraintSet.Layout.UNSET) {
-                    writeVariable("pathArc", pathMotionArc);
-                }
-                if (polarRelativeTo != ConstraintSet.Layout.UNSET) {
-                    writeVariable("relativeTo", polarRelativeTo);
-                }
-                if (transitionEasing != null) {
-                    writeVariable("easing", transitionEasing);
-                }
-                if (quantizeMotionSteps != ConstraintSet.Layout.UNSET) {
-                    writeVariable("quantize", quantizeMotionSteps, 0);
-                }
-
-
-                mWriter.append("},\n");
-            }
-        }
 
         private void writeTransform(ConstraintSet.Transform transform) throws IOException {
             if (transform.applyElevation) {
                 writeVariable("elevation", transform.elevation);
             }
-            writeVariable("transformPivotX", transform.transformPivotX, Float.NaN);
-            writeVariable("transformPivotY", transform.transformPivotY, Float.NaN);
+//            writeVariable("transformPivotX", transform.transformPivotX, Float.NaN);
+//            writeVariable("transformPivotY", transform.transformPivotY, Float.NaN);
             writeVariable("rotationX", transform.rotationX, 0);
             writeVariable("rotationY", transform.rotationY, 0);
             writeVariable("rotationZ", transform.rotation, 0);
@@ -445,6 +350,7 @@ public class MotionLayoutToJason {
             writeVariable("guideBegin", guideBegin);
             writeVariable("guideEnd", guideEnd);
             writeVariable("guidePercent", guidePercent);
+
         }
 
 
