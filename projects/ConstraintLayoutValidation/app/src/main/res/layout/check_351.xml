@@ -9,6 +9,7 @@
 
 
     <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
         android:background="#0FF"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -13,6 +13,7 @@
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,420 0,0,1080,57 0,105,0,0 0,153,1080,57"/>
 
     <TextView
+        android:id="@+id/view1"
         android:tag="0,375,1080,57"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
         app:layout_constraintGuide_percent="0.25"/>
 
     <TextView
+        android:id="@+id/view2"
         android:tag="0,528,1080,57"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

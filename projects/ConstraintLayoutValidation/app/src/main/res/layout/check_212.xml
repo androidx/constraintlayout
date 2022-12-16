@@ -12,6 +12,7 @@
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,270 360,0,360,270"/>
 
     <ImageView
+        android:id="@+id/view1"
         android:tag="360,825,360,270"
         android:layout_width="0dp"
         android:layout_height="0dp"

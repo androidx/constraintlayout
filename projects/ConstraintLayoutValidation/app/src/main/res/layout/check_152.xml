@@ -22,6 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/view1"
         android:layout_width="0dp"
         android:tag="24,12,505,73"
         android:layout_height="wrap_content"

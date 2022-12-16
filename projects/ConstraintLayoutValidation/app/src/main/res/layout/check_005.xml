@@ -26,6 +26,7 @@
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,657 218,333,538,0 203,0,0,0 0,300,0,0 780,0,0,0 0,357,0,0"/>
 
     <TextView
+        android:id="@+id/view1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

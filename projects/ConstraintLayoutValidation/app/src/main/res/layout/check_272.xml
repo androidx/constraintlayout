@@ -8,6 +8,7 @@
     <!--  b/117087368 -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#89ffff00"

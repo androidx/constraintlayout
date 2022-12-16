@@ -26,6 +26,7 @@
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,51 264,0,200,51"/>
 
     <androidx.constraintlayout.validation.TestTextView
+        android:id="@+id/view1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tag="264,561,200,51"

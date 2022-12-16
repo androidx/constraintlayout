@@ -8,6 +8,7 @@
     <!-- b/141889124 -->
 
     <ScrollView
+        android:id="@+id/view1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bt_next"

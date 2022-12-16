@@ -34,6 +34,7 @@
         />
 
     <TextView
+        android:id="@+id/view1"
         android:tag="0,932,1080,57"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

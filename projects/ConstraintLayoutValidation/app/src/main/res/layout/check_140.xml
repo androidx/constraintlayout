@@ -98,6 +98,7 @@
         app:constraint_referenced_ids="box,t2_barrier" />
 
     <View
+        android:id="@+id/view1"
         android:tag="24,432,1032,1464"
         android:layout_width="0dp"
         android:layout_height="0dp"
