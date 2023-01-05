@@ -174,7 +174,7 @@ public class DumpCL {
                 }
             } else if (cname.contains("Button")) {
                 if (v instanceof Button) {
-                    writer.append("type: 'Button', label: '" + ((Button) v).getText());
+                    writer.append("type: 'Button', label: '" + ((Button) v).getText()+"'");
                 } else
                     writer.append("type: 'Button'");
             } else if (cname.contains("Image")) {
