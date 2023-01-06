@@ -6,7 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     >
-
+    <androidx.constraintlayout.helper.widget.LogJson
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:logTo="log"
+        app:logMode="delayed"
+        app:logDuration="10000"
+        />
     <androidx.constraintlayout.widget.Group
         android:id="@+id/contentGroup"
         android:layout_width="wrap_content"

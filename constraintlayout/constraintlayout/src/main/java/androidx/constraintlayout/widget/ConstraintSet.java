@@ -6269,13 +6269,15 @@ public class ConstraintSet {
 
     // ================================== JSON ===============================================
     private static class DumpCL {
+        private static final String LOG_JSON = "LogJson";
         private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
         HashMap<Integer, String> names = new HashMap<>();
         private static int generateViewId() {
+            final int max_id = 0x00FFFFFF;
             for (; ; ) {
                 final int result = sNextGeneratedId.get();
                 int newValue = result + 1;
-                if (newValue > 0x00FFFFFF) {
+                if (newValue > max_id) {
                     newValue = 1;
                 }
                 if (sNextGeneratedId.compareAndSet(result, newValue)) {
@@ -6289,15 +6291,21 @@ public class ConstraintSet {
             int count = constraintLayout.getChildCount();
             for (int i = 0; i < count; i++) {
                 View v = constraintLayout.getChildAt(i);
-                if (v.getId() == -1) {
-                    int id;
+                String name = v.getClass().getSimpleName();
+                int id = v.getId();
+                if (id == -1) {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         id = View.generateViewId();
                     } else {
-                        id = generateViewId();;
+                        id = generateViewId();
                     }
                     v.setId(id);
-                    names.put(id, "noid_" + v.getClass().getSimpleName());
+                    if (!LOG_JSON.equals(name)) {
+                        name = "noid_" + name;
+                    }
+                    names.put(id, name);
+                } else if (LOG_JSON.equals(name)) {
+                    names.put(id, name);
                 }
             }
             writer.append("{\n");
@@ -6326,6 +6334,9 @@ public class ConstraintSet {
             for (int i = -1; i < count; i++) {
                 View v = (i == -1) ? constraintLayout : constraintLayout.getChildAt(i);
                 int id = v.getId();
+                if (LOG_JSON.equals(v.getClass().getSimpleName())) {
+                    continue;
+                }
                 String name = (names.containsKey(id)) ? names.get(id)
                         : ((i == -1) ? "parent" : Debug.getName(v));
                 String cname = v.getClass().getSimpleName();
@@ -6338,8 +6349,8 @@ public class ConstraintSet {
                     try {
                         ViewGroup.LayoutParams p = (ViewGroup.LayoutParams) v.getLayoutParams();
 
-                        String w = p.width == -1 ? "'MATCH_PARENT'" :
-                                (p.width == -2) ? "'WRAP_CONTENT'" : p.width + "";
+                        String w = p.width == INTERNAL_MATCH_PARENT ? "'MATCH_PARENT'" :
+                                (p.width == INTERNAL_WRAP_CONTENT) ? "'WRAP_CONTENT'" : p.width + "";
                         writer.append("width: " + w + ", ");
                         String h = p.height == -1 ? "'MATCH_PARENT'" :
                                 (p.height == -2) ? "'WRAP_CONTENT'" : p.height + "";
@@ -6445,6 +6456,8 @@ public class ConstraintSet {
         private static final String INDENT = "    ";
         private static final String SMALL_INDENT = "  ";
         HashMap<Integer, String> names;
+        HashMap<Integer, String> mIdMap = new HashMap<>();
+        private static final String LOG_JSON = "LogJson";
 
         WriteJsonEngine(Writer writer,
                         ConstraintSet set,
@@ -6473,6 +6486,9 @@ public class ConstraintSet {
             for (Integer id : getIDs()) {
                 ConstraintSet.Constraint c = getConstraint(id);
                 String idName = getSimpleName(id);
+                if (LOG_JSON.equals(idName)) { // skip LogJson it is for used to log
+                    continue;
+                }
                 mWriter.write(SMALL_INDENT + idName + ":{\n");
                 ConstraintSet.Layout l = c.layout;
                 if (l.mReferenceIds != null) {
@@ -6542,12 +6558,10 @@ public class ConstraintSet {
                 writeTransform(c.transform);
                 writeCustom(c.mCustomConstraints);
 
-
                 mWriter.write("  },\n");
             }
             mWriter.write("},\n");
         }
-
 
         private void writeTransform(ConstraintSet.Transform transform) throws IOException {
             if (transform.applyElevation) {
@@ -6567,7 +6581,6 @@ public class ConstraintSet {
             if (cset != null && cset.size() > 0) {
                 mWriter.write(INDENT + "custom: {\n");
                 for (String s : cset.keySet()) {
-
                     ConstraintAttribute attr = cset.get(s);
                     String custom = INDENT + SMALL_INDENT + attr.getName() + ": ";
                     switch (attr.getType()) {
@@ -6612,9 +6625,7 @@ public class ConstraintSet {
             writeVariable("guideBegin", guideBegin);
             writeVariable("guideEnd", guideEnd);
             writeVariable("guidePercent", guidePercent);
-
         }
-
 
         private void writeDimension(String dimString,
                                     int dim,
@@ -6666,8 +6677,6 @@ public class ConstraintSet {
                 mWriter.write(INDENT + dimString + ": " + dim + ",\n");
             }
         }
-
-        HashMap<Integer, String> mIdMap = new HashMap<>();
 
         private String getSimpleName(int id) {
             if (mIdMap.containsKey(id)) {
