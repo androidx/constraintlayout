@@ -36,6 +36,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 
+/**
+ * This is a class to help with logging the constraints in Jason
+ * This is used for debugging purposes
+ */
 public class LogJson extends ConstraintHelper {
     private static final String TAG = "JSON5";
     private int mDuration = 10000;
@@ -75,12 +79,8 @@ public class LogJson extends ConstraintHelper {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.LogJson_logDuration) {
                     mDuration = a.getInt(attr, mDuration);
-                    Log.v(TAG, Debug.getLoc()+" >> mDuration="+mDuration);
-
                 } else if (attr == R.styleable.LogJson_logMode) {
                     mMode = a.getInt(attr, mMode);
-                    Log.v(TAG, Debug.getLoc()+" >> mMode="+mMode);
-
                 } else if (attr == R.styleable.LogJson_logTo) {
                     TypedValue v = a.peekValue(attr);
                     if (v.type == TypedValue.TYPE_STRING) {
@@ -99,26 +99,18 @@ public class LogJson extends ConstraintHelper {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.v(TAG, Debug.getLoc()+" >> "+mMode);
         switch (mMode) {
             case LOG_PERIODIC:
                 mPeriodic = true;
                 this.postDelayed(this::periodic, mDuration);
-                Log.v(TAG, Debug.getLoc()+" >> LOG_PERIODIC");
-
                 break;
             case LOG_DELAYED:
                 this.postDelayed(this::writeLog, mDuration);
-                Log.v(TAG, Debug.getLoc()+" >> LOG_DELAYED");
-
                 break;
             case LOG_LAYOUT:
-                Log.v(TAG, Debug.getLoc()+" >> LOG_LAYOUT");
 
                 break;
             case LOG_API:
-                Log.v(TAG, Debug.getLoc()+" >> LOG_API");
-
                 break;
         }
     }
@@ -130,20 +122,24 @@ public class LogJson extends ConstraintHelper {
     public void setPeriodicDuration(int duration) {
         mDuration = duration;
     }
+
+    /**
+     * Start sampling periodically sampling
+     */
     public void periodicStart() {
         mPeriodic = true;
         this.postDelayed(this::periodic, mDuration);
     }
 
+    /**
+     * Stop sampling periodically sampling
+     */
     public void periodicStop() {
         mPeriodic = false;
     }
 
     private void periodic() {
-        Log.v(TAG, Debug.getLoc()+" >>>>>>---->>>>>>.");
-
         if (mPeriodic) {
-            Log.v(TAG, Debug.getLoc()+" >>>>>>>>.");
             writeLog();
             this.postDelayed(this::periodic, mDuration);
         }

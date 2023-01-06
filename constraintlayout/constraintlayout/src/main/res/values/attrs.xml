@@ -816,17 +816,17 @@
 
     </declare-styleable>
 
-<!--    This is the api for logging constraints in JSON5 format -->
+    <!--    This is the api for logging constraints in JSON5 format -->
     <declare-styleable name="LogJson">
-        <attr name="logTo" format="enum|string" >
-            <enum name="log" value="1"/>
-            <enum name="console" value="2"/>
+        <attr name="logTo" format="enum|string">
+            <enum name="log" value="1" />
+            <enum name="console" value="2" />
         </attr>
-        <attr name="logMode" format="enum" >
-            <enum name="periodic" value="1"/>
-            <enum name="delayed" value="2"/>
-            <enum name="layout" value="3"/>
-            <enum name="api" value="4"/>
+        <attr name="logMode" format="enum">
+            <enum name="periodic" value="1" />
+            <enum name="delayed" value="2" />
+            <enum name="layout" value="3" />
+            <enum name="api" value="4" />
         </attr>
         <attr name="logDuration" format="integer" />
     </declare-styleable>
