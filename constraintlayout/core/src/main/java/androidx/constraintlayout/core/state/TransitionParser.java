@@ -18,6 +18,8 @@ package androidx.constraintlayout.core.state;
 
 import static androidx.constraintlayout.core.state.ConstraintSetParser.parseColorString;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
@@ -36,14 +38,28 @@ public class TransitionParser {
     /**
      * Parse a JSON string of a Transition and insert it into the Transition object
      *
+     * @deprecated dpToPixel is unused now
      * @param json       Transition Object to parse.
      * @param transition Transition Object to write transition to
      */
+    @Deprecated
     public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel)
+            throws CLParsingException {
+        parse(json, transition);
+    }
+
+    /**
+     * Parse a JSON string of a Transition and insert it into the Transition object
+     *
+     * @param json       Transition Object to parse.
+     * @param transition Transition Object to write transition to
+     * @hide
+     */
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    public static void parse(@NonNull CLObject json, @NonNull Transition transition)
             throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
-        transition.mToPixel = dpToPixel;
         boolean setBundle = false;
         if (pathMotionArc != null) {
             setBundle = true;
@@ -60,12 +76,6 @@ public class TransitionParser {
                     break;
                 case "flip":
                     bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 3);
-                    break;
-                case "arcDown":
-                    bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 4);
-                    break;
-                case "arcUp":
-                    bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 5);
             }
 
         }
@@ -225,7 +235,7 @@ public class TransitionParser {
 
             if (pathMotionArc != null) {
                 map(bundle, TypedValues.PositionType.TYPE_PATH_MOTION_ARC, pathMotionArc,
-                        "none", "startVertical", "startHorizontal", "flip", "arcDown", "arcUp");
+                        "none", "startVertical", "startHorizontal", "flip");
             }
 
             for (int j = 0; j < frames.size(); j++) {

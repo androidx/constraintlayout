@@ -9,6 +9,7 @@ globalConfig {
 }
 
 dependencies {
+    api("androidx.annotation:annotation:1.5.0")
     testImplementation "junit:junit:4.13.1"
 }
 

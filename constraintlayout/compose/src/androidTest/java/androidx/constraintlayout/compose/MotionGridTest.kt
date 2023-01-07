@@ -45,6 +45,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Tests for motions using the Grid Helper
+ */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 class MotionGridTest {
@@ -76,10 +79,10 @@ class MotionGridTest {
             {
                 ConstraintSets: {
                   start: {
-                    grid1: { 
+                    grid1: {
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 0,
                         columns: 1,
@@ -93,10 +96,10 @@ class MotionGridTest {
                       }
                   },
                   end: {
-                    grid2: { 
+                    grid2: {
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 1,
                         columns: 0,
@@ -145,11 +148,11 @@ class MotionGridTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
-        rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
+        rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box4").assertPositionInRootIsEqualTo(expectedX, expectedY)
 
         animateToEnd = true
@@ -165,11 +168,11 @@ class MotionGridTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
-        rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
+        rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box4").assertPositionInRootIsEqualTo(expectedX, expectedY)
     }
 
@@ -184,7 +187,7 @@ class MotionGridTest {
         val vGapVal = Math.round(vGap.value)
         rule.setContent {
             val progress by animateFloatAsState(targetValue = if (animateToEnd) 1f else 0f)
-            
+
             MotionLayout(
                 modifier = Modifier
                     .size(rootSize),
@@ -193,10 +196,10 @@ class MotionGridTest {
             {
                 ConstraintSets: {
                   start: {
-                    grid1: { 
+                    grid1: {
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 2,
                         columns: 2,
@@ -206,10 +209,10 @@ class MotionGridTest {
                       }
                   },
                   end: {
-                    grid2: { 
+                    grid2: {
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 2,
                         columns: 2,
@@ -262,8 +265,8 @@ class MotionGridTest {
         val columns = 2
         var leftX = 0.dp
         var topY = 0.dp
-        var rightX = 0.dp
-        var bottomY = 0.dp
+        var rightX: Dp
+        var bottomY: Dp
 
         // 10.dp is the size of a singular box
         val gapSize = (rootSize - (10.dp * 2f)) / (columns * 2f)

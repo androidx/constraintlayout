@@ -16,13 +16,11 @@
 
 package androidx.constraintlayout.compose
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.core.state.CorePixelDp
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.constraintlayout.core.parser.CLObject
 
 private const val UNDEFINED_NAME_PREFIX = "androidx.constraintlayout"
 
@@ -34,22 +32,14 @@ private const val UNDEFINED_NAME_PREFIX = "androidx.constraintlayout"
  * @see ConstraintSetScope
  */
 @ExperimentalMotionApi
-@Composable
 fun MotionScene(
     motionSceneContent: MotionSceneScope.() -> Unit
 ): MotionScene {
-    // TODO: Add a state listener
-    val dpToPixel = with(LocalDensity.current) { CorePixelDp { 1.dp.toPx() } }
-    val scope = remember { MotionSceneScope(dpToPixel) }
-    scope.reset()
-    scope.motionSceneContent()
-    return remember {
-        // Clone the elements to avoid issues with async mutability
-        MotionSceneDslImpl(
-            constraintSetsByName = scope.constraintSetsByName.toMap(),
-            transitionsByName = scope.transitionsByName.toMap()
-        )
-    }
+    val scope = MotionSceneScope().apply(motionSceneContent)
+    return MotionSceneDslImpl(
+        constraintSetsByName = scope.constraintSetsByName,
+        transitionsByName = scope.transitionsByName
+    )
 }
 
 @ExperimentalMotionApi
@@ -92,6 +82,24 @@ internal class MotionSceneDslImpl(
     override fun getTransitionInstance(name: String): Transition? {
         return transitionsByName[name]
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MotionSceneDslImpl
+
+        if (constraintSetsByName != other.constraintSetsByName) return false
+        if (transitionsByName != other.transitionsByName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = constraintSetsByName.hashCode()
+        result = 31 * result + transitionsByName.hashCode()
+        return result
+    }
 }
 
 /**
@@ -111,7 +119,7 @@ internal class MotionSceneDslImpl(
  * works as a fallback for undefined `from -> to` transitions.
  */
 @ExperimentalMotionApi
-class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) {
+class MotionSceneScope internal constructor() {
     /**
      * Count of generated ConstraintSet & Transition names.
      */
@@ -146,7 +154,7 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
         to: ConstraintSetRef,
         transitionContent: TransitionScope.() -> Unit = { }
     ) {
-        transition("default", from, to, transitionContent)
+        transition(from, to, "default", transitionContent)
     }
 
     /**
@@ -180,9 +188,9 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
      * Where [from] and [to] are the ConstraintSets handled by it.
      */
     fun transition(
-        name: String? = null,
         from: ConstraintSetRef,
         to: ConstraintSetRef,
+        name: String? = null,
         transitionContent: TransitionScope.() -> Unit
     ) {
         val transitionName = name ?: nextName()
@@ -190,8 +198,7 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
             parsedTransition = TransitionScope(
                 from = from.name,
                 to = to.name
-            ).apply(transitionContent).getObject(),
-            pixelDp = dpToPixel
+            ).apply(transitionContent).getObject()
         )
     }
 
@@ -239,19 +246,83 @@ class MotionSceneScope internal constructor(private val dpToPixel: CorePixelDp) 
      * Declare a custom Float [value] addressed by [name].
      */
     fun ConstrainScope.customFloat(name: String, value: Float) {
-        tasks.add { state ->
-            state.constraints(id).addCustomFloat(name, value)
+        if (!containerObject.has("custom")) {
+            containerObject.put("custom", CLObject(charArrayOf()))
         }
+        val customPropsObject = containerObject.getObjectOrNull("custom") ?: return
+        customPropsObject.putNumber(name, value)
     }
 
     /**
      * Declare a custom Color [value] addressed by [name].
      */
     fun ConstrainScope.customColor(name: String, value: Color) {
-        tasks.add { state ->
-            state.constraints(id).addCustomColor(name, value.toArgb())
+        if (!containerObject.has("custom")) {
+            containerObject.put("custom", CLObject(charArrayOf()))
         }
+        val customPropsObject = containerObject.getObjectOrNull("custom") ?: return
+        customPropsObject.putString(name, value.toJsonHexString())
     }
+
+    /**
+     * Declare a custom Int [value] addressed by [name].
+     */
+    fun ConstrainScope.customInt(name: String, value: Int) {
+        customFloat(name, value.toFloat())
+    }
+
+    /**
+     * Declare a custom Dp [value] addressed by [name].
+     */
+    fun ConstrainScope.customDistance(name: String, value: Dp) {
+        customFloat(name, value.value)
+    }
+
+    /**
+     * Declare a custom TextUnit [value] addressed by [name].
+     */
+    fun ConstrainScope.customFontSize(name: String, value: TextUnit) {
+        customFloat(name, value.value)
+    }
+
+    /**
+     * Sets the custom Float [value] at the frame of the current [KeyAttributeScope].
+     */
+    fun KeyAttributeScope.customFloat(name: String, value: Float) {
+        customPropertiesValue[name] = value
+    }
+
+    /**
+     * Sets the custom Color [value] at the frame of the current [KeyAttributeScope].
+     */
+    fun KeyAttributeScope.customColor(name: String, value: Color) {
+        // Colors must be in the following format: "#AARRGGBB"
+        customPropertiesValue[name] = value.toJsonHexString()
+    }
+
+    /**
+     * Sets the custom Int [value] at the frame of the current [KeyAttributeScope].
+     */
+    fun KeyAttributeScope.customInt(name: String, value: Int) {
+        customPropertiesValue[name] = value
+    }
+
+    /**
+     * Sets the custom Dp [value] at the frame of the current [KeyAttributeScope].
+     */
+    fun KeyAttributeScope.customDistance(name: String, value: Dp) {
+        customPropertiesValue[name] = value.value
+    }
+
+    /**
+     * Sets the custom TextUnit [value] at the frame of the current [KeyAttributeScope].
+     */
+    fun KeyAttributeScope.customFontSize(name: String, value: TextUnit) {
+        customPropertiesValue[name] = value.value
+    }
+
+    private fun Color.toJsonHexString() =
+        "#${this.toArgb().toUInt().toString(16)}"
 }
 
 data class ConstraintSetRef internal constructor(

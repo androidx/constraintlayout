@@ -18,6 +18,8 @@ package androidx.constraintlayout.core.utils;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -32,20 +34,16 @@ import java.util.Set;
  */
 public class GridCore extends VirtualLayout {
 
-    public static final int VERTICAL = 1;
     public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+    private static final int DEFAULT_SIZE = 3; // default rows and columns.
     private static final int MAX_ROWS = 50; // maximum number of rows can be specified.
     private static final int MAX_COLUMNS = 50; // maximum number of columns can be specified.
-    private static final int DEFAULT_SIZE = 3; // default rows and columns.
 
     /**
      * Container for all the ConstraintWidgets
      */
     ConstraintWidgetContainer mContainer;
-
-    public ConstraintWidget[] getBoxWidgets() {
-        return mBoxWidgets;
-    }
 
     /**
      * boxWidgets were created as anchor points for arranging the associated widgets
@@ -85,22 +83,22 @@ public class GridCore extends VirtualLayout {
     /**
      * string format of the row weight
      */
-    private String mStrRowWeights;
+    private String mRowWeights;
 
     /**
      * string format of the column weight
      */
-    private String mStrColumnWeights;
+    private String mColumnWeights;
 
     /**
      * string format of the input Spans
      */
-    private String mStrSpans;
+    private String mSpans;
 
     /**
      * string format of the input Skips
      */
-    private String mStrSkips;
+    private String mSkips;
 
     /**
      * orientation of the widget arrangement - vertical or horizontal
@@ -108,7 +106,7 @@ public class GridCore extends VirtualLayout {
     private int mOrientation;
 
     /**
-     * Indicates what is the next available position to place an widget
+     * Indicates what is the next available position to place a widget
      */
     private int mNextAvailableIndex = 0;
 
@@ -156,6 +154,7 @@ public class GridCore extends VirtualLayout {
      *
      * @return the parent ConstraintWidgetContainer
      */
+    @Nullable
     public ConstraintWidgetContainer getContainer() {
         return mContainer;
     }
@@ -164,7 +163,7 @@ public class GridCore extends VirtualLayout {
      * Set the parent ConstraintWidgetContainer
      * @param container the parent ConstraintWidgetContainer
      */
-    public void setContainer(ConstraintWidgetContainer container) {
+    public void setContainer(@NonNull ConstraintWidgetContainer container) {
         mContainer = container;
     }
 
@@ -173,12 +172,12 @@ public class GridCore extends VirtualLayout {
      *
      * @param spans new spans value
      */
-    public void setSpans(CharSequence spans) {
-        if (mStrSpans != null && mStrSpans.equals(spans.toString())) {
+    public void setSpans(@NonNull CharSequence spans) {
+        if (mSpans != null && mSpans.equals(spans.toString())) {
             return;
         }
 
-        mStrSpans = spans.toString();
+        mSpans = spans.toString();
     }
 
     /**
@@ -186,12 +185,12 @@ public class GridCore extends VirtualLayout {
      *
      * @param skips new spans value
      */
-    public void setSkips(String skips) {
-        if (mStrSkips != null && mStrSkips.equals(skips)) {
+    public void setSkips(@NonNull String skips) {
+        if (mSkips != null && mSkips.equals(skips)) {
             return;
         }
 
-        mStrSkips = skips;
+        mSkips = skips;
 
     }
 
@@ -252,8 +251,9 @@ public class GridCore extends VirtualLayout {
      *
      * @return the string value of rowWeights
      */
+    @Nullable
     public String getRowWeights() {
-        return mStrRowWeights;
+        return mRowWeights;
     }
 
     /**
@@ -261,12 +261,12 @@ public class GridCore extends VirtualLayout {
      *
      * @param rowWeights new rowWeights value
      */
-    public void setRowWeights(String rowWeights) {
-        if (mStrRowWeights != null && mStrRowWeights.equals(rowWeights)) {
+    public void setRowWeights(@NonNull String rowWeights) {
+        if (mRowWeights != null && mRowWeights.equals(rowWeights)) {
             return;
         }
 
-        mStrRowWeights = rowWeights;
+        mRowWeights = rowWeights;
     }
 
     /**
@@ -274,8 +274,9 @@ public class GridCore extends VirtualLayout {
      *
      * @return the string value of columnWeights
      */
+    @Nullable
     public String getColumnWeights() {
-        return mStrColumnWeights;
+        return mColumnWeights;
     }
 
     /**
@@ -283,12 +284,12 @@ public class GridCore extends VirtualLayout {
      *
      * @param columnWeights new columnWeights value
      */
-    public void setColumnWeights(String columnWeights) {
-        if (mStrColumnWeights != null && mStrColumnWeights.equals(columnWeights)) {
+    public void setColumnWeights(@NonNull String columnWeights) {
+        if (mColumnWeights != null && mColumnWeights.equals(columnWeights)) {
             return;
         }
 
-        mStrColumnWeights = columnWeights;
+        mColumnWeights = columnWeights;
     }
 
     /**
@@ -404,7 +405,7 @@ public class GridCore extends VirtualLayout {
      *
      * @param isUpdate whether to update the existing grid (true) or create a new one (false)
      */
-    public void setupGrid(boolean isUpdate) {
+    private void setupGrid(boolean isUpdate) {
         if (mRows < 1 || mColumns < 1) {
             return;
         }
@@ -421,15 +422,15 @@ public class GridCore extends VirtualLayout {
         mNextAvailableIndex = 0;
         createBoxes();
 
-        if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
-            int[][] mSkips = parseSpans(mStrSkips);
+        if (mSkips != null && !mSkips.trim().isEmpty()) {
+            int[][] mSkips = parseSpans(this.mSkips);
             if (mSkips != null) {
                 handleSkips(mSkips);
             }
         }
 
-        if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
-            int[][] mSpans = parseSpans(mStrSpans);
+        if (mSpans != null && !mSpans.trim().isEmpty()) {
+            int[][] mSpans = parseSpans(this.mSpans);
             if (mSpans != null) {
                 handleSpans(mSpans);
             }
@@ -437,7 +438,7 @@ public class GridCore extends VirtualLayout {
     }
 
     /**
-     * Convert a 1D index to a 2D index that has index for row and index for column
+     * Convert a 1D index to a 2D index that has index for row
      *
      * @param index index in 1D
      * @return row as its values.
@@ -452,7 +453,7 @@ public class GridCore extends VirtualLayout {
     }
 
     /**
-     * Convert a 1D index to a 2D index that has index for row and index for column
+     * Convert a 1D index to a 2D index that has index for column
      *
      * @param index index in 1D
      * @return column as its values.
@@ -491,7 +492,7 @@ public class GridCore extends VirtualLayout {
      * @return true if we could properly invalidate the positions else false
      */
     private boolean invalidatePositions(int startRow, int startColumn,
-            int rowSpan, int columnSpan) {
+                                        int rowSpan, int columnSpan) {
         for (int i = startRow; i < startRow + rowSpan; i++) {
             for (int j = startColumn; j < startColumn + columnSpan; j++) {
                 if (i >= mPositionMatrix.length || j >= mPositionMatrix[0].length
@@ -598,7 +599,7 @@ public class GridCore extends VirtualLayout {
      * @param column column position to place the widget
      */
     private void connectWidget(ConstraintWidget widget, int row, int column,
-            int rowSpan, int columnSpan) {
+                               int rowSpan, int columnSpan) {
         // Connect the 4 sides
         widget.mLeft.connect(mBoxWidgets[column].mLeft, 0);
         widget.mTop.connect(mBoxWidgets[row].mTop, 0);
@@ -613,7 +614,7 @@ public class GridCore extends VirtualLayout {
         int maxVal = Math.max(mRows, mColumns);
 
         ConstraintWidget widget = mBoxWidgets[0];
-        float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
+        float[] columnWeights = parseWeights(mColumns, mColumnWeights);
         // chain all the widgets on the longer side (either horizontal or vertical)
         if (mColumns == 1) {
             clearHorizontalAttributes(widget);
@@ -660,7 +661,7 @@ public class GridCore extends VirtualLayout {
         int maxVal = Math.max(mRows, mColumns);
 
         ConstraintWidget widget = mBoxWidgets[0];
-        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
+        float[] rowWeights = parseWeights(mRows, mRowWeights);
         // chain all the widgets on the longer side (either horizontal or vertical)
         if (mRows == 1) {
             clearVerticalAttributes(widget);
@@ -704,7 +705,7 @@ public class GridCore extends VirtualLayout {
     /**
      * Chains the boxWidgets and add constraints to the widgets
      */
-    public void addConstraints() {
+    private void addConstraints() {
         setBoxWidgetVerticalChains();
         setBoxWidgetHorizontalChains();
         arrangeWidgets();
@@ -713,7 +714,7 @@ public class GridCore extends VirtualLayout {
     /**
      * Create all the boxWidgets that will be used to constrain widgets
      */
-    public void createBoxes() {
+    private void createBoxes() {
         int boxCount = Math.max(mRows, mColumns);
         if (mBoxWidgets == null) { // no box widgets build all
             mBoxWidgets = new ConstraintWidget[boxCount];
@@ -832,15 +833,15 @@ public class GridCore extends VirtualLayout {
 
         mNextAvailableIndex = 0;
 
-        if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
-            int[][] mSkips = parseSpans(mStrSkips);
+        if (mSkips != null && !mSkips.trim().isEmpty()) {
+            int[][] mSkips = parseSpans(this.mSkips);
             if (mSkips != null) {
                 handleSkips(mSkips);
             }
         }
 
-        if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
-            int[][] mSpans = parseSpans(mStrSpans);
+        if (mSpans != null && !mSpans.trim().isEmpty()) {
+            int[][] mSpans = parseSpans(this.mSpans);
             if (mSpans != null) {
                 handleSpans(mSpans);
             }
@@ -850,7 +851,7 @@ public class GridCore extends VirtualLayout {
     /**
      * Set up the Grid engine.
      */
-    public void initMatrices() {
+    private void initMatrices() {
         boolean isUpdate = mConstraintMatrix != null
                 && mConstraintMatrix.length == mWidgetsCount
                 && mPositionMatrix != null
@@ -874,7 +875,7 @@ public class GridCore extends VirtualLayout {
     }
 
     @Override
-    public void addToSolver(LinearSystem system, boolean optimize) {
+    public void addToSolver(@Nullable LinearSystem system, boolean optimize) {
         super.addToSolver(system, optimize);
         addConstraints();
     }

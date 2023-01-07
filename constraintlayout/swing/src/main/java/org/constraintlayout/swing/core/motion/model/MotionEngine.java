@@ -46,7 +46,7 @@ public class MotionEngine {
     MotionRenderDebug mRenderDebug = new MotionRenderDebug(23); // TODO only create when needed
 
     private TransitionModel mCurrentTransition;
-    private Transition mTransition = new Transition();
+    private Transition mTransition = new Transition(dpValue -> dpValue);
     ConstraintSetModel mStartConstraintSet;
     ConstraintSetModel mEndConstraintSet;
     boolean mNeedMeasure = true;
