@@ -20,7 +20,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     buildFeatures {
         compose true
         buildConfig false
@@ -28,6 +27,7 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs = ['-Xjvm-default=all']
     }
 
     composeOptions {
