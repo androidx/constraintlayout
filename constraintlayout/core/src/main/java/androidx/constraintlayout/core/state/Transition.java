@@ -73,6 +73,10 @@ public class Transition implements TypedValues {
     public Transition(@NonNull CorePixelDp dpToPixel) {
         mToPixel = dpToPixel;
     }
+    
+    public Transition() {
+        this((dp)->dp);
+    }
 
     // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
