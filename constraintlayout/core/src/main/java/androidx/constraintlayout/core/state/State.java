@@ -20,13 +20,14 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_PACK
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.CHAIN_SPREAD_INSIDE;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.FlowReference;
+import androidx.constraintlayout.core.state.helpers.GridReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
-import androidx.constraintlayout.core.state.helpers.GridReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -41,6 +42,7 @@ import java.util.Map;
  */
 public class State {
     private CorePixelDp mDpToPixel;
+    private boolean mIsLtr = true;
     protected HashMap<Object, Reference> mReferences = new HashMap<>();
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
     HashMap<String, ArrayList<String>> mTags = new HashMap<>();
@@ -199,6 +201,20 @@ public class State {
     }
 
     /**
+     * Set whether the layout direction is left to right (Ltr).
+     */
+    public void setLtr(boolean isLtr) {
+        mIsLtr = isLtr;
+    }
+
+    /**
+     * Returns true if layout direction is left to right. False for right to left.
+     */
+    public boolean isLtr() {
+        return mIsLtr;
+    }
+
+    /**
      * Clear the state
      */
     public void reset() {
@@ -222,7 +238,7 @@ public class State {
      */
     public int convertDimension(Object value) {
         if (value instanceof Float) {
-            return ((Float) value).intValue();
+            return (int) (((Float) value) + 0.5f);
         }
         if (value instanceof Integer) {
             return (Integer) value;
@@ -332,7 +348,7 @@ public class State {
                 case COLUMN: {
                     reference = new GridReference(this, type);
                 }
-                break;
+                    break;
                 default: {
                     reference = new HelperReference(this, type);
                 }
@@ -377,13 +393,21 @@ public class State {
         return (BarrierReference) reference.getFacade();
     }
 
-    public GridReference getGrid(Object key, String gridType) {
+    /**
+     * Get a Grid reference
+     *
+     * @param key name of the reference object
+     * @param gridType type of Grid pattern - Grid, Row, or Column
+     * @return a GridReference object
+     */
+    @NonNull
+    public GridReference getGrid(@NonNull Object key, @NonNull String gridType) {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null || !(reference.getFacade() instanceof GridReference)) {
             State.Helper Type = Helper.GRID;
-            if (gridType.charAt(0) == 'R') {
+            if (gridType.charAt(0) == 'r') {
                 Type = Helper.ROW;
-            } else if (gridType.charAt(0) == 'C') {
+            } else if (gridType.charAt(0) == 'c') {
                 Type = Helper.COLUMN;
             }
             GridReference gridReference = new GridReference(this, Type);
@@ -510,10 +534,9 @@ public class State {
 
     // @TODO: add description
     public void map(Object key, Object view) {
-        Reference ref = constraints(key);
-        if (ref instanceof ConstraintReference) {
-            ConstraintReference reference = (ConstraintReference) ref;
-            reference.setView(view);
+        ConstraintReference ref = constraints(key);
+        if (ref != null) {
+            ref.setView(view);
         }
     }
 
@@ -586,6 +609,20 @@ public class State {
                 container.add(widget);
             } else {
                 reference.setConstraintWidget(container);
+            }
+        }
+        for (Object key : mHelperReferences.keySet()) {
+            // We need this pass to apply chains properly
+            HelperReference reference = mHelperReferences.get(key);
+            HelperWidget helperWidget = reference.getHelperWidget();
+            if (helperWidget != null) {
+                for (Object keyRef : reference.mReferences) {
+                    Reference constraintReference = mReferences.get(keyRef);
+                    reference.getHelperWidget().add(constraintReference.getConstraintWidget());
+                }
+                reference.apply();
+            } else {
+                reference.apply();
             }
         }
         for (Object key : mReferences.keySet()) {

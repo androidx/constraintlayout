@@ -16,10 +16,11 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
 import androidx.constraintlayout.core.utils.GridCore;
-import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 
 /**
@@ -27,7 +28,7 @@ import androidx.constraintlayout.core.widgets.HelperWidget;
  */
 public class GridReference extends HelperReference {
 
-    public GridReference(State state, State.Helper type) {
+    public GridReference(@NonNull State state, @NonNull State.Helper type) {
         super(state, type);
         if (type == State.Helper.ROW) {
             this.mColumnsSet = 1;
@@ -39,52 +40,52 @@ public class GridReference extends HelperReference {
     /**
      * The Grid Object
      */
-    protected GridCore mGrid;
+    private GridCore mGrid;
 
     /**
      * The orientation of the widgets arrangement horizontally or vertically
      */
-    protected int mOrientation;
+    private int mOrientation;
 
     /**
      * Number of rows of the Grid
      */
-    protected int mRowsSet;
+    private int mRowsSet;
 
     /**
      * Number of columns of the Grid
      */
-    protected int mColumnsSet;
+    private int mColumnsSet;
 
     /**
      * The horizontal gaps between widgets
      */
-    protected float mHorizontalGaps;
+    private float mHorizontalGaps;
 
     /**
      * The vertical gaps between widgets
      */
-    protected float mVerticalGaps;
+    private float mVerticalGaps;
 
     /**
      * The weight of each widget in a row
      */
-    protected String mStrRowWeights;
+    private String mRowWeights;
 
     /**
      * The weight of each widget in a column
      */
-    protected String mStrColumnWeights;
+    private String mColumnWeights;
 
     /**
      * Specify the spanned areas of widgets
      */
-    protected String mStrSpans;
+    private String mSpans;
 
     /**
-     * Specify the positions to be skipped in a Grid
+     * Specify the positions to be skipped in the Grid
      */
-    protected String mStrSkips;
+    private String mSkips;
 
     /**
      * Get the number of rows
@@ -160,64 +161,68 @@ public class GridReference extends HelperReference {
      * Get the row weights
      * @return the row weights
      */
-    public String getStrRowWeights() {
-        return mStrRowWeights;
+    @Nullable
+    public String getRowWeights() {
+        return mRowWeights;
     }
 
     /**
      * Set the row weights
-     * @param strRowWeights the row weights
+     * @param rowWeights the row weights
      */
-    public void setStrRowWeights(String strRowWeights) {
-        mStrRowWeights = strRowWeights;
+    public void setRowWeights(@NonNull String rowWeights) {
+        mRowWeights = rowWeights;
     }
 
     /**
      * Get the column weights
      * @return the column weights
      */
-    public String getStrColumnWeights() {
-        return mStrColumnWeights;
+    @Nullable
+    public String getColumnWeights() {
+        return mColumnWeights;
     }
 
     /**
      * Set the column weights
-     * @param strColumnWeights the column weights
+     * @param columnWeights the column weights
      */
-    public void setStrColumnWeights(String strColumnWeights) {
-        mStrColumnWeights = strColumnWeights;
+    public void setColumnWeights(@NonNull String columnWeights) {
+        mColumnWeights = columnWeights;
     }
 
     /**
      * Get the spans
      * @return the spans
      */
-    public String getStrSpans() {
-        return mStrSpans;
+    @Nullable
+    public String getSpans() {
+        return mSpans;
     }
 
     /**
      * Set the spans
-     * @param strSpans the spans
+     * @param spans the spans
      */
-    public void setStrSpans(String strSpans) {
-        mStrSpans = strSpans;
+    public void setSpans(@NonNull String spans) {
+        mSpans = spans;
     }
 
     /**
      * Get the skips
      * @return the skips
      */
-    public String getStrSkips() {
-        return mStrSkips;
+    @Nullable
+    public String getSkips() {
+        return mSkips;
     }
 
     /**
      * Set the skips
-     * @param strSkips the skips
+     * @param skips the skips
      */
-    public void setStrSkips(String strSkips) {
-        mStrSkips = strSkips;
+    public void setSkips(@NonNull String skips) {
+        mSkips = skips;
     }
 
     /**
@@ -225,6 +230,7 @@ public class GridReference extends HelperReference {
      * @return the helper widget (Grid)
      */
     @Override
+    @NonNull
     public HelperWidget getHelperWidget() {
         if (mGrid == null) {
             mGrid = new GridCore();
@@ -237,8 +243,8 @@ public class GridReference extends HelperReference {
      * @param widget the helper widget (Grid)
      */
     @Override
-    public void setHelperWidget(HelperWidget widget) {
-        if (widget instanceof Flow) {
+    public void setHelperWidget(@Nullable HelperWidget widget) {
+        if (widget instanceof GridCore) {
             mGrid = (GridCore) widget;
         } else {
             mGrid = null;
@@ -287,20 +293,20 @@ public class GridReference extends HelperReference {
             mGrid.setVerticalGaps(mVerticalGaps);
         }
 
-        if (mStrRowWeights != null && !mStrRowWeights.equals("")) {
-            mGrid.setRowWeights(mStrRowWeights);
+        if (mRowWeights != null && !mRowWeights.equals("")) {
+            mGrid.setRowWeights(mRowWeights);
         }
 
-        if (mStrColumnWeights != null && !mStrColumnWeights.equals("")) {
-            mGrid.setColumnWeights(mStrColumnWeights);
+        if (mColumnWeights != null && !mColumnWeights.equals("")) {
+            mGrid.setColumnWeights(mColumnWeights);
         }
 
-        if (mStrSpans != null && !mStrSpans.equals("")) {
-            mGrid.setSpans(mStrSpans);
+        if (mSpans != null && !mSpans.equals("")) {
+            mGrid.setSpans(mSpans);
         }
 
-        if (mStrSkips != null && !mStrSkips.equals("")) {
-            mGrid.setSkips(mStrSkips);
+        if (mSkips != null && !mSkips.equals("")) {
+            mGrid.setSkips(mSkips);
         }
 
         // General attributes of a widget

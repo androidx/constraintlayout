@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.compose
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -38,6 +37,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Tests for the Grid Helper (Row / Column)
+ */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 class RowColumnTest {
@@ -58,12 +60,10 @@ class RowColumnTest {
     fun testRows() {
         val rootSize = 200.dp
         val boxesCount = 4
-        val rows = 0
-        val columns = 1
         rule.setContent {
             RowColumnComposableTest(
                 modifier = Modifier.size(rootSize),
-                type = "'Row'",
+                type = "'row'",
                 width = "'parent'",
                 height = "'parent'",
                 boxesCount = boxesCount,
@@ -86,11 +86,11 @@ class RowColumnTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box0").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
-        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
+        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
     }
 
@@ -98,12 +98,10 @@ class RowColumnTest {
     fun testColumns() {
         val rootSize = 200.dp
         val boxesCount = 4
-        val rows = 1
-        val columns = 0
         rule.setContent {
             RowColumnComposableTest(
                 modifier = Modifier.size(rootSize),
-                type = "'Column'",
+                type = "'column'",
                 width = "'parent'",
                 height = "'parent'",
                 boxesCount = boxesCount,
@@ -126,11 +124,11 @@ class RowColumnTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box0").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
-        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
+        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
     }
 

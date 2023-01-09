@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.compose
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -29,6 +28,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertPositionInRootIsEqualTo
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -38,6 +38,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Tests for the Grid Helper
+ */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 class GridTest {
@@ -79,8 +82,8 @@ class GridTest {
         }
         var leftX = 0.dp
         var topY = 0.dp
-        var rightX = 0.dp
-        var bottomY = 0.dp
+        var rightX: Dp
+        var bottomY: Dp
 
         // 10.dp is the size of a singular box
         val gapSize = (rootSize - (10.dp * 2f)) / (columns * 2f)
@@ -120,8 +123,8 @@ class GridTest {
         }
         var leftX = 0.dp
         var topY = 0.dp
-        var rightX = 0.dp
-        var bottomY = 0.dp
+        var rightX: Dp
+        var bottomY: Dp
 
         // 10.dp is the size of a singular box
         val gapSize = (rootSize - (10.dp * 2f)) / (columns * 2f)
@@ -135,7 +138,6 @@ class GridTest {
         rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(leftX, bottomY)
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(rightX, bottomY)
     }
-
 
     @Test
     fun testRows() {
@@ -170,11 +172,11 @@ class GridTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box0").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
-        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
+        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedY += vGapSize + vGapSize + 10.dp;
+        expectedY += vGapSize + vGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
     }
 
@@ -211,11 +213,11 @@ class GridTest {
         expectedX += hGapSize
         expectedY += vGapSize
         rule.onNodeWithTag("box0").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
-        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX , expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
+        rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedX, expectedY)
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box2").assertPositionInRootIsEqualTo(expectedX, expectedY)
-        expectedX += hGapSize + hGapSize + 10.dp;
+        expectedX += hGapSize + hGapSize + 10.dp
         rule.onNodeWithTag("box3").assertPositionInRootIsEqualTo(expectedX, expectedY)
     }
 
@@ -244,8 +246,8 @@ class GridTest {
         }
         var leftX = 0.dp
         var topY = 0.dp
-        var rightX = 0.dp
-        var bottomY = 0.dp
+        var rightX: Dp
+        var bottomY: Dp
 
         // 10.dp is the size of a singular box
         val gapSize = (rootSize - (10.dp * 2f)) / (columns * 2f)
@@ -284,8 +286,8 @@ class GridTest {
         }
         var leftX = 0.dp
         var topY = 0.dp
-        var rightX = 0.dp
-        var bottomY = 0.dp
+        var rightX: Dp
+        var bottomY: Dp
 
         // 10.dp is the size of a singular box
         var spanLeft = (rootSize - 10.dp) / 2f
@@ -336,7 +338,6 @@ class GridTest {
         rule.onNodeWithTag("box0").assertPositionInRootIsEqualTo(expectedLeft, expectedTop)
         expectedTop += 10.dp + firstGapSize + secondGapSize
         rule.onNodeWithTag("box1").assertPositionInRootIsEqualTo(expectedLeft, expectedTop)
-
     }
 
     @Test
@@ -433,7 +434,7 @@ class GridTest {
             grid: {
                 width: $width,
                 height: $height,
-                type: 'Grid',
+                type: 'grid',
                 rows: $rows,
                 columns $columns,
                 vGap: $vGap,
@@ -480,7 +481,7 @@ class GridTest {
             grid: {
                 width: $width,
                 height: $height,
-                type: 'Grid',
+                type: 'grid',
                 rows: 2,
                 columns: 2,
                 vGap: $vGap,
