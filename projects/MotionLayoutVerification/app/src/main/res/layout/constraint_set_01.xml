@@ -10,9 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:logTo="log"
-        app:logMode="delayed"
-        app:logDuration="10000"
+        app:logJsonTo="log"
+        app:logJsonMode="delayed"
+        app:logJsonDelay="1000"
         />
 
     <androidx.constraintlayout.widget.Group

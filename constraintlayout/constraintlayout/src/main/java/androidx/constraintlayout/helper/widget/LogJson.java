@@ -54,8 +54,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class LogJson extends ConstraintHelper {
     private static final String TAG = "JSON5";
-    private int mDuration = 10000;
-    private int mMode = 0;
+    private int mDelay = 1000;
+    private int mMode = LOG_DELAYED;
     private String mLogToFile = null;
     private boolean mLogConsole = true;
 
@@ -88,11 +88,11 @@ public class LogJson extends ConstraintHelper {
             final int count = a.getIndexCount();
             for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
-                if (attr == R.styleable.LogJson_logDuration) {
-                    mDuration = a.getInt(attr, mDuration);
-                } else if (attr == R.styleable.LogJson_logMode) {
+                if (attr == R.styleable.LogJson_logJsonDelay) {
+                    mDelay = a.getInt(attr, mDelay);
+                } else if (attr == R.styleable.LogJson_logJsonMode) {
                     mMode = a.getInt(attr, mMode);
-                } else if (attr == R.styleable.LogJson_logTo) {
+                } else if (attr == R.styleable.LogJson_logJsonTo) {
                     TypedValue v = a.peekValue(attr);
                     if (v.type == TypedValue.TYPE_STRING) {
                         String value = a.getString(attr);
@@ -113,10 +113,10 @@ public class LogJson extends ConstraintHelper {
         switch (mMode) {
             case LOG_PERIODIC:
                 mPeriodic = true;
-                this.postDelayed(this::periodic, mDuration);
+                this.postDelayed(this::periodic, mDelay);
                 break;
             case LOG_DELAYED:
-                this.postDelayed(this::writeLog, mDuration);
+                this.postDelayed(this::writeLog, mDelay);
                 break;
             case LOG_LAYOUT:
                 ConstraintLayout cl = (ConstraintLayout) getParent();
@@ -136,7 +136,7 @@ public class LogJson extends ConstraintHelper {
      * @param duration the time in ms between writing files
      */
     public void setPeriodicDuration(int duration) {
-        mDuration = duration;
+        mDelay = duration;
     }
 
     /**
@@ -144,7 +144,7 @@ public class LogJson extends ConstraintHelper {
      */
     public void periodicStart() {
         mPeriodic = true;
-        this.postDelayed(this::periodic, mDuration);
+        this.postDelayed(this::periodic, mDelay);
     }
 
     /**
@@ -157,7 +157,7 @@ public class LogJson extends ConstraintHelper {
     private void periodic() {
         if (mPeriodic) {
             writeLog();
-            this.postDelayed(this::periodic, mDuration);
+            this.postDelayed(this::periodic, mDelay);
         }
     }
 
