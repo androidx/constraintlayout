@@ -18,6 +18,7 @@ package androidx.constraintlayout.helper.widget;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import static androidx.constraintlayout.widget.ConstraintSet.Layout.UNSET_GONE_MARGIN;
 
 import android.annotation.SuppressLint;
@@ -234,7 +235,7 @@ public class LogJson extends ConstraintHelper {
 
     private static class JsonWriter {
         public static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
-        ConstraintSet set;
+        ConstraintSet mSet;
         Writer mWriter;
         ConstraintLayout mLayout;
         Context mContext;
@@ -251,11 +252,11 @@ public class LogJson extends ConstraintHelper {
         HashMap<Integer, String> mIdMap = new HashMap<>();
         private static final String LOG_JSON = LogJson.class.getSimpleName();
          private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
-        HashMap<Integer, String> names = new HashMap<>();
+        HashMap<Integer, String> mNames = new HashMap<>();
 
         private static int generateViewId() {
             final int max_id = 0x00FFFFFF;
-            for (; ; ) {
+            for (;;) {
                 final int result = sNextGeneratedId.get();
                 int newValue = result + 1;
                 if (newValue > max_id) {
@@ -285,9 +286,9 @@ public class LogJson extends ConstraintHelper {
                     if (!LOG_JSON.equals(name)) {
                         name = "noid_" + name;
                     }
-                    names.put(id, name);
+                    mNames.put(id, name);
                 } else if (LOG_JSON.equals(name)) {
-                    names.put(id, name);
+                    mNames.put(id, name);
                 }
             }
             writer.append("{\n");
@@ -320,7 +321,7 @@ public class LogJson extends ConstraintHelper {
                 if (LOG_JSON.equals(v.getClass().getSimpleName())) {
                     continue;
                 }
-                String name = (names.containsKey(id)) ? names.get(id)
+                String name = (mNames.containsKey(id)) ? mNames.get(id)
                         : ((i == -1) ? "parent" : Debug.getName(v));
                 String cname = v.getClass().getSimpleName();
                 String bounds = ", bounds: [" + v.getLeft() + ", " + v.getTop()
@@ -342,7 +343,8 @@ public class LogJson extends ConstraintHelper {
                     } catch (Exception e) { }
                 } else if (cname.contains("Text")) {
                     if (v instanceof TextView) {
-                        writer.append("type: 'Text', label: '" + escape(((TextView) v).getText().toString()) + "'");
+                        writer.append("type: 'Text', label: '"
+                                + escape(((TextView) v).getText().toString()) + "'");
                     } else {
                         writer.append("type: 'Text' },\n");
                     }
@@ -375,16 +377,16 @@ public class LogJson extends ConstraintHelper {
             this.mWriter = writer;
             this.mLayout = layout;
             this.mContext = layout.getContext();
-            this.set = set;
+            this.mSet = set;
             set.getConstraint(2);
         }
 
         private int[] getIDs() {
-            return set.getKnownIds();
+            return mSet.getKnownIds();
         }
 
         private ConstraintSet.Constraint getConstraint(int id) {
-            return set.getConstraint(id);
+            return mSet.getConstraint(id);
         }
 
         private void writeLayout() throws IOException {
@@ -398,7 +400,8 @@ public class LogJson extends ConstraintHelper {
                 mWriter.write(SMALL_INDENT + idName + ":{\n");
                 ConstraintSet.Layout l = c.layout;
                 if (l.mReferenceIds != null) {
-                    StringBuilder ref = new StringBuilder("type: '_" + idName + "_' , contains: [");
+                    StringBuilder ref =
+                            new StringBuilder("type: '_" + idName + "_' , contains: [");
                     for (int r = 0; r < l.mReferenceIds.length; r++) {
                         int rid = l.mReferenceIds[r];
                         ref.append((r == 0) ? "" : ", ").append(getName(rid));
@@ -406,7 +409,8 @@ public class LogJson extends ConstraintHelper {
                     mWriter.write(ref + "]\n");
                 }
                 if (l.mReferenceIdString != null) {
-                    StringBuilder ref = new StringBuilder(SMALL_INDENT + "type: '???' , contains: [");
+                    StringBuilder ref =
+                            new StringBuilder(SMALL_INDENT + "type: '???' , contains: [");
                     String[] rids = l.mReferenceIdString.split(",");
                     for (int r = 0; r < rids.length; r++) {
                         String rid = rids[r];
@@ -605,8 +609,8 @@ public class LogJson extends ConstraintHelper {
 
         private String lookup(int id) {
             try {
-                if (names.containsKey(id)) {
-                    return names.get(id);
+                if (mNames.containsKey(id)) {
+                    return mNames.get(id);
                 }
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
