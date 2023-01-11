@@ -51,7 +51,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * This is a class is a debugging/logging utility to write out the constraints in JSON
  * This is used for debugging purposes
- *
  */
 public class LogJson extends ConstraintHelper {
     private static final String TAG = "JSON5";
@@ -66,17 +65,19 @@ public class LogJson extends ConstraintHelper {
     public static final int LOG_API = 4;
     private boolean mPeriodic = false;
 
-    public LogJson(Context context) {
+    public LogJson(@androidx.annotation.NonNull Context context) {
         super(context);
     }
 
-    public LogJson(Context context, AttributeSet attrs) {
+    public LogJson(@androidx.annotation.NonNull Context context,
+                   @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
         initLogJson(attrs);
 
     }
 
-    public LogJson(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LogJson(@androidx.annotation.NonNull Context context,
+                   @androidx.annotation.Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initLogJson(attrs);
     }
@@ -220,6 +221,7 @@ public class LogJson extends ConstraintHelper {
             i = k;
         }
     }
+
     /**
      * Get a JSON5 String that represents the Constraints in a running ConstraintLayout
      *
@@ -251,7 +253,7 @@ public class LogJson extends ConstraintHelper {
         private static final String SMALL_INDENT = "  ";
         HashMap<Integer, String> mIdMap = new HashMap<>();
         private static final String LOG_JSON = LogJson.class.getSimpleName();
-         private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+        private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
         HashMap<Integer, String> mNames = new HashMap<>();
 
         private static int generateViewId() {
@@ -277,7 +279,8 @@ public class LogJson extends ConstraintHelper {
                 String name = v.getClass().getSimpleName();
                 int id = v.getId();
                 if (id == -1) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (android.os.Build.VERSION.SDK_INT
+                            >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         id = View.generateViewId();
                     } else {
                         id = generateViewId();
@@ -297,11 +300,12 @@ public class LogJson extends ConstraintHelper {
             writer.append("  ConstraintSet:{\n");
             ConstraintSet set = new ConstraintSet();
             set.clone(constraintLayout);
-            String name = (constraintLayout.getId() == -1) ? "cset" : Debug.getName(constraintLayout);
+            String name =
+                    (constraintLayout.getId() == -1) ? "cset" : Debug.getName(constraintLayout);
             try {
                 writer.append(name + ":");
                 setup(writer, set, constraintLayout);
-                 writeLayout();
+                writeLayout();
                 writer.append("\n");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -332,15 +336,16 @@ public class LogJson extends ConstraintHelper {
 
                     try {
                         ViewGroup.LayoutParams p = (ViewGroup.LayoutParams) v.getLayoutParams();
-                        String wrap =  "'WRAP_CONTENT'";
-                        String match =  "'MATCH_PARENT'";
+                        String wrap = "'WRAP_CONTENT'";
+                        String match = "'MATCH_PARENT'";
                         String w = p.width == MATCH_PARENT ? match :
                                 (p.width == WRAP_CONTENT) ? wrap : p.width + "";
                         writer.append("width: " + w + ", ");
                         String h = p.height == MATCH_PARENT ? match :
                                 (p.height == WRAP_CONTENT) ? wrap : p.height + "";
                         writer.append("height: ").append(h);
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                 } else if (cname.contains("Text")) {
                     if (v instanceof TextView) {
                         writer.append("type: 'Text', label: '"
@@ -368,12 +373,14 @@ public class LogJson extends ConstraintHelper {
         private static String escape(String str) {
             return str.replaceAll("'", "\\'");
         }
+
         JsonWriter() {
 
         }
-         void setup(Writer writer,
-                        ConstraintSet set,
-                        ConstraintLayout layout) throws IOException {
+
+        void setup(Writer writer,
+                   ConstraintSet set,
+                   ConstraintLayout layout) throws IOException {
             this.mWriter = writer;
             this.mLayout = layout;
             this.mContext = layout.getContext();
