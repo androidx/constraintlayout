@@ -679,6 +679,463 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     }
 
     /**
+     * Grid helpers make build a Row representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param padding sets padding around the content
+     */
+    fun createRow(
+        vararg elements: LayoutReference?,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String,
+        columnWeights: String,
+        orientation: Int = 0,
+        skips: String,
+        spans: String,
+        padding: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            columns = 1,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = padding,
+            paddingTop = padding,
+            paddingRight = padding,
+            paddingBottom = padding,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Row representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingHorizontal sets paddingLeft and paddingRight of the content
+     * @param paddingVertical sets paddingTop and paddingBottom of the content
+     */
+    fun createRow(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingHorizontal: Dp = 0.dp,
+        paddingVertical: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            columns = 1,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = paddingHorizontal,
+            paddingTop = paddingVertical,
+            paddingRight = paddingHorizontal,
+            paddingBottom = paddingVertical,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Row representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingLeft sets paddingLeft of the content
+     * @param paddingTop sets paddingTop of the content
+     * @param paddingRight sets paddingRight of the content
+     * @param paddingBottom sets paddingBottom of the content
+     */
+    fun createRow(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingLeft: Dp = 0.dp,
+        paddingTop: Dp = 0.dp,
+        paddingRight: Dp = 0.dp,
+        paddingBottom: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        val ref = ConstrainedLayoutReference(createHelperId())
+        val elementArray = CLArray(charArrayOf())
+        elements.forEach {
+            if (it != null) {
+                elementArray.add(CLString.from(it.id.toString()))
+            }
+        }
+        val paddingArray = CLArray(charArrayOf()).apply {
+            add(CLNumber(paddingLeft.value))
+            add(CLNumber(paddingTop.value))
+            add(CLNumber(paddingRight.value))
+            add(CLNumber(paddingBottom.value))
+        }
+        ref.asCLContainer().apply {
+            put("contains", elementArray)
+            putString("type", "grid")
+            putNumber("orientation", orientation.toFloat())
+            putNumber("columns", 1f)
+            putNumber("vGap", verticalGap.value)
+            putNumber("hGap", horizontalGap.value)
+            put("padding", paddingArray)
+            putString("rowWeights", rowWeights)
+            putString("columnWeights", columnWeights)
+            putString("skips", skips)
+            putString("spans", spans)
+        }
+        updateHelpersHashCode(18)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+        return ref
+    }
+
+    /**
+     * Grid helpers make build a Column representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param padding sets padding around the content
+     */
+    fun createColumn(
+        vararg elements: LayoutReference?,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String,
+        columnWeights: String,
+        orientation: Int = 0,
+        skips: String,
+        spans: String,
+        padding: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            rows = 1,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = padding,
+            paddingTop = padding,
+            paddingRight = padding,
+            paddingBottom = padding,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Column representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingHorizontal sets paddingLeft and paddingRight of the content
+     * @param paddingVertical sets paddingTop and paddingBottom of the content
+     */
+    fun createColumn(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingHorizontal: Dp = 0.dp,
+        paddingVertical: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            rows = 1,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = paddingHorizontal,
+            paddingTop = paddingVertical,
+            paddingRight = paddingHorizontal,
+            paddingBottom = paddingVertical,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Grid representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingLeft sets paddingLeft of the content
+     * @param paddingTop sets paddingTop of the content
+     * @param paddingRight sets paddingRight of the content
+     * @param paddingBottom sets paddingBottom of the content
+     */
+    fun createColumn(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingLeft: Dp = 0.dp,
+        paddingTop: Dp = 0.dp,
+        paddingRight: Dp = 0.dp,
+        paddingBottom: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        val ref = ConstrainedLayoutReference(createHelperId())
+        val elementArray = CLArray(charArrayOf())
+        elements.forEach {
+            if (it != null) {
+                elementArray.add(CLString.from(it.id.toString()))
+            }
+        }
+        val paddingArray = CLArray(charArrayOf()).apply {
+            add(CLNumber(paddingLeft.value))
+            add(CLNumber(paddingTop.value))
+            add(CLNumber(paddingRight.value))
+            add(CLNumber(paddingBottom.value))
+        }
+        ref.asCLContainer().apply {
+            put("contains", elementArray)
+            putString("type", "grid")
+            putNumber("orientation", orientation.toFloat())
+            putNumber("rows", 1f)
+            putNumber("vGap", verticalGap.value)
+            putNumber("hGap", horizontalGap.value)
+            put("padding", paddingArray)
+            putString("rowWeights", rowWeights)
+            putString("columnWeights", columnWeights)
+            putString("skips", skips)
+            putString("spans", spans)
+        }
+        updateHelpersHashCode(18)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+        return ref
+    }
+
+    /**
+     * Grid helpers make build a Grid representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param rows sets the number of rows in Grid
+     * @param columns sets the number of columns in Grid
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param padding sets padding around the content
+     */
+    fun createGrid(
+        vararg elements: LayoutReference?,
+        rows: Int = 0,
+        columns: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String,
+        columnWeights: String,
+        orientation: Int = 0,
+        skips: String,
+        spans: String,
+        padding: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            rows = rows,
+            columns = columns,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = padding,
+            paddingTop = padding,
+            paddingRight = padding,
+            paddingBottom = padding,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Grid representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param rows sets the number of rows in Grid
+     * @param columns sets the number of columns in Grid
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingHorizontal sets paddingLeft and paddingRight of the content
+     * @param paddingVertical sets paddingTop and paddingBottom of the content
+     */
+    fun createGrid(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        rows: Int = 0,
+        columns: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingHorizontal: Dp = 0.dp,
+        paddingVertical: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        return createGrid(
+            elements = elements,
+            orientation = orientation,
+            rows = rows,
+            columns = columns,
+            horizontalGap = horizontalGap,
+            verticalGap = verticalGap,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
+            skips = skips,
+            spans = spans,
+            paddingLeft = paddingHorizontal,
+            paddingTop = paddingVertical,
+            paddingRight = paddingHorizontal,
+            paddingBottom = paddingVertical,
+        )
+    }
+
+    /**
+     * Grid helpers make build a Grid representation more intuitively.
+     *
+     * @param elements [LayoutReference]s to be laid out by the Flow helper
+     * @param orientation 0 if horizontal and 1 if vertical
+     * @param rows sets the number of rows in Grid
+     * @param columns sets the number of columns in Grid
+     * @param verticalGap defines the gap between views in the y axis
+     * @param horizontalGap defines the gap between views in the x axis
+     * @param rowWeights defines the weight of each row
+     * @param columnWeights defines the weight of each column
+     * @param skips defines the positions in a Grid to be skipped
+     * @param spans defines the spanned area(s) in Grid
+     * @param paddingLeft sets paddingLeft of the content
+     * @param paddingTop sets paddingTop of the content
+     * @param paddingRight sets paddingRight of the content
+     * @param paddingBottom sets paddingBottom of the content
+     */
+    fun createGrid(
+        vararg elements: LayoutReference?,
+        orientation: Int = 0,
+        rows: Int = 0,
+        columns: Int = 0,
+        verticalGap: Dp = 0.dp,
+        horizontalGap: Dp = 0.dp,
+        rowWeights: String = "",
+        columnWeights: String = "",
+        skips: String = "",
+        spans: String = "",
+        paddingLeft: Dp = 0.dp,
+        paddingTop: Dp = 0.dp,
+        paddingRight: Dp = 0.dp,
+        paddingBottom: Dp = 0.dp,
+    ): ConstrainedLayoutReference {
+        val ref = ConstrainedLayoutReference(createHelperId())
+        val elementArray = CLArray(charArrayOf())
+        elements.forEach {
+            if (it != null) {
+                elementArray.add(CLString.from(it.id.toString()))
+            }
+        }
+        val paddingArray = CLArray(charArrayOf()).apply {
+            add(CLNumber(paddingLeft.value))
+            add(CLNumber(paddingTop.value))
+            add(CLNumber(paddingRight.value))
+            add(CLNumber(paddingBottom.value))
+        }
+        ref.asCLContainer().apply {
+            put("contains", elementArray)
+            putString("type", "grid")
+            putNumber("orientation", orientation.toFloat())
+            putNumber("rows", rows.toFloat())
+            putNumber("columns", columns.toFloat())
+            putNumber("vGap", verticalGap.value)
+            putNumber("hGap", horizontalGap.value)
+            put("padding", paddingArray)
+            putString("rowWeights", rowWeights)
+            putString("columnWeights", columnWeights)
+            putString("skips", skips)
+            putString("spans", spans)
+        }
+        updateHelpersHashCode(18)
+        elements.forEach { updateHelpersHashCode(it.hashCode()) }
+
+        return ref
+    }
+
+
+    /**
      * Creates a horizontal chain including the referenced layouts.
      *
      * Use [constrain] with the resulting [HorizontalChainReference] to modify the start/left and

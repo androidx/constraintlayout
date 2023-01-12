@@ -50,7 +50,7 @@ fun GridDemo1() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 margin: 20,
                 orientation: 0,
                 vGap: 25,
@@ -142,7 +142,7 @@ fun GridDemo2() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 vGap: 10,
                 hGap: 10,
                 orientation: 0,
@@ -173,7 +173,7 @@ fun GridDemo3() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 vGap: 10,
                 hGap: 10,
                 orientation: 0,
@@ -204,7 +204,7 @@ fun GridDemo4() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 vGap: 10,
                 hGap: 10,
                 orientation: 0,
@@ -283,7 +283,7 @@ fun GridDemo5() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 vGap: 10,
                 hGap: 10,
                 orientation: 0,
@@ -337,7 +337,7 @@ fun GridDemo6() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 skips: "1:1x1,4:1x1,6:1x1",
                 rows: 3,
@@ -347,7 +347,7 @@ fun GridDemo6() {
               grid2: { 
                 height: "spread",
                 width: "spread",
-                type: "Grid",
+                type: "grid",
                 skips: "0:1x2,4:1x1,6:1x1",
                 orientation: 0,
                 rows: 3,
