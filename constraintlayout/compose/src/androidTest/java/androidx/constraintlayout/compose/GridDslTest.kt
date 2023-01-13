@@ -411,13 +411,13 @@ class GridDslTest {
         ConstraintLayout(
             ConstraintSet {
                 val ids = (0 until boxesCount).map { "box$it" }.toTypedArray()
-                val elem = arrayOfNulls<LayoutReference>(ids.size)
+                val elem = arrayListOf<LayoutReference>()
                 for (i in ids.indices) {
-                    elem[i] = createRefFor(ids[i])
+                    elem.add(createRefFor(ids[i]))
                 }
 
                 val g1 = createGrid(
-                    elements = *elem,
+                    elements = *elem.toTypedArray(),
                     orientation = gridOrientation,
                     skips = gridSkips,
                     spans = gridSpans,

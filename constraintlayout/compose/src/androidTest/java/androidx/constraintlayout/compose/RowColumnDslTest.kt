@@ -64,13 +64,11 @@ class RowColumnDslTest {
             RowComposableTest(
                 modifier = Modifier.size(rootSize),
                 boxesCount = boxesCount,
-                gridOrientation = 0,
                 hGap = 0,
                 vGap = 0,
-                gridSpans = "''",
-                gridSkips = "''",
-                gridRowWeights = "''",
-                gridColumnWeights = "''"
+                gridSpans = "",
+                gridSkips = "",
+                gridRowWeights = "",
             )
         }
         var expectedX = 0.dp
@@ -99,13 +97,11 @@ class RowColumnDslTest {
             ColumnComposableTest(
                 modifier = Modifier.size(rootSize),
                 boxesCount = boxesCount,
-                gridOrientation = 0,
                 hGap = 0,
                 vGap = 0,
-                gridSpans = "''",
-                gridSkips = "''",
-                gridRowWeights = "''",
-                gridColumnWeights = "''"
+                gridSpans = "",
+                gridSkips = "",
+                gridColumnWeights = ""
             )
         }
         var expectedX = 0.dp
@@ -132,29 +128,25 @@ class RowColumnDslTest {
         gridSpans: String,
         gridSkips: String,
         gridRowWeights: String,
-        gridColumnWeights: String,
         boxesCount: Int,
-        gridOrientation: Int,
         vGap: Int,
         hGap: Int,
     ) {
         ConstraintLayout(
             ConstraintSet {
                 val ids = (0 until boxesCount).map { "box$it" }.toTypedArray()
-                val elem = arrayOfNulls<LayoutReference>(ids.size)
+                val elem = arrayListOf<LayoutReference>()
                 for (i in ids.indices) {
-                    elem[i] = createRefFor(ids[i])
+                    elem.add(createRefFor(ids[i]))
                 }
 
                 val g1 = createRow(
-                    elements = *elem,
-                    orientation = gridOrientation,
+                    elements = *elem.toTypedArray(),
                     skips = gridSkips,
                     spans = gridSpans,
                     verticalGap = vGap.dp,
                     horizontalGap = hGap.dp,
                     rowWeights = gridRowWeights,
-                    columnWeights = gridColumnWeights,
                 )
                 constrain(g1) {
                     width = Dimension.matchParent
@@ -181,29 +173,25 @@ class RowColumnDslTest {
         modifier: Modifier = Modifier,
         gridSpans: String,
         gridSkips: String,
-        gridRowWeights: String,
         gridColumnWeights: String,
         boxesCount: Int,
-        gridOrientation: Int,
         vGap: Int,
         hGap: Int,
     ) {
         ConstraintLayout(
             ConstraintSet {
                 val ids = (0 until boxesCount).map { "box$it" }.toTypedArray()
-                val elem = arrayOfNulls<LayoutReference>(ids.size)
+                val elem = arrayListOf<LayoutReference>()
                 for (i in ids.indices) {
-                    elem[i] = createRefFor(ids[i])
+                    elem.add(createRefFor(ids[i]))
                 }
 
                 val g1 = createColumn(
-                    elements = *elem,
-                    orientation = gridOrientation,
+                    elements = *elem.toTypedArray(),
                     skips = gridSkips,
                     spans = gridSpans,
                     verticalGap = vGap.dp,
                     horizontalGap = hGap.dp,
-                    rowWeights = gridRowWeights,
                     columnWeights = gridColumnWeights,
                 )
                 constrain(g1) {
