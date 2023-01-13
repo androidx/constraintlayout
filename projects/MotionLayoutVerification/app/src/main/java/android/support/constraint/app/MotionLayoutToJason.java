@@ -78,7 +78,7 @@ public class MotionLayoutToJason {
         return null;
     }
 
-    public static void setMotionLayout(MotionLayout motionLayout) {
+    public static void logMotionLayout(MotionLayout motionLayout) {
         MotionLayoutToJason m = new MotionLayoutToJason();
 
         Log.v(TAG, m.motionLayoutToJson(motionLayout));

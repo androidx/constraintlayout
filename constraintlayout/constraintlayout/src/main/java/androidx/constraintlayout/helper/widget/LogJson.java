@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.clanalyst;
+
+package androidx.constraintlayout.helper.widget;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import static androidx.constraintlayout.widget.ConstraintSet.Layout.UNSET_GONE_MARGIN;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Environment;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,8 +35,10 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,26 +46,179 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * This class is a self contained tool for dumping a JSON5 representation of the constraints
- * of a running ConstraintLayout.
- * <p>
- * It is useful for debugging and inspecting ConstraintLayout
- * <p>
- * DumpCL.toFile(cl,fileName) outputs to the devices download directory
- * DumpCL.log(tag, cl) output the Log.v(...)
- * DumpCL.asString(cl) returns a json5 string
+ * This is a class is a debugging/logging utility to write out the constraints in JSON
+ * This is used for debugging purposes
+ * <ul>
+ *     <li>logJsonTo - defines the output log console or "fileName"</li>
+ *     <li>logJsonMode - mode one of:
+ *     <b>periodic</b>, <b>delayed</b>, <b>layout</b> or <b>api</b></li>
+ *     <li>logJsonDelay - the duration of the delay or the delay between repeated logs</li>
+ * </ul>
+ * logJsonTo supports:
+ * <ul>
+ *     <li>log - logs using log.v("JSON5", ...)</li>
+ *     <li>console - logs using System.out.println(...)</li>
+ *     <li>[fileName] - will write to /storage/emulated/0/Download/[fileName].json5</li>
+ * </ul>
+ * logJsonMode modes are:
+ * <ul>
+ *     <li>periodic - after window is attached will log every delay ms</li>
+ *     <li>delayed - log once after delay ms</li>
+ *     <li>layout - log every time there is a layout call</li>
+ *     <li>api - do not automatically log developer will call writeLog</li>
+ * </ul>
+ *
+ * The defaults are:
+ * <ul>
+ *     <li>logJsonTo="log"</li>
+ *     <li>logJsonMode="delayed"</li>
+ *     <li>logJsonDelay="1000"</li>
+ * </ul>
+ *  Usage:
+ *  <p></p>
+ *  <pre>
+ *  {@code
+ *      <androidx.constraintlayout.helper.widget.LogJson
+ *         android:layout_width="0dp"
+ *         android:layout_height="0dp"
+ *         android:visibility="gone"
+ *         app:logJsonTo="log"
+ *         app:logJsonMode="delayed"
+ *         app:logJsonDelay="1000"
+ *         />
+ *  }
+ * </pre>
+ * </p>
  */
-public class DumpCL {
-    private static String TAG = "ML_DEBUG";
-    HashMap<Integer, String> names = new HashMap<>();
+public class LogJson extends ConstraintHelper {
+    private static final String TAG = "JSON5";
+    private int mDelay = 1000;
+    private int mMode = LOG_DELAYED;
+    private String mLogToFile = null;
+    private boolean mLogConsole = true;
 
-    private DumpCL() {
+    public static final int LOG_PERIODIC = 1;
+    public static final int LOG_DELAYED = 2;
+    public static final int LOG_LAYOUT = 3;
+    public static final int LOG_API = 4;
+    private boolean mPeriodic = false;
+
+    public LogJson(@androidx.annotation.NonNull Context context) {
+        super(context);
     }
 
-    private static String escape(String str) {
-        return str.replaceAll("\'", "\\'");
+    public LogJson(@androidx.annotation.NonNull Context context,
+                   @androidx.annotation.Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initLogJson(attrs);
+
+    }
+
+    public LogJson(@androidx.annotation.NonNull Context context,
+                   @androidx.annotation.Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initLogJson(attrs);
+    }
+
+    private void initLogJson(AttributeSet attrs) {
+
+        if (attrs != null) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.LogJson);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.LogJson_logJsonDelay) {
+                    mDelay = a.getInt(attr, mDelay);
+                } else if (attr == R.styleable.LogJson_logJsonMode) {
+                    mMode = a.getInt(attr, mMode);
+                } else if (attr == R.styleable.LogJson_logJsonTo) {
+                    TypedValue v = a.peekValue(attr);
+                    if (v.type == TypedValue.TYPE_STRING) {
+                        String value = a.getString(attr);
+                    } else {
+                        int value = a.getInt(attr, 0);
+                        mLogConsole = value == 2;
+                    }
+                }
+            }
+            a.recycle();
+        }
+        setVisibility(GONE);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        switch (mMode) {
+            case LOG_PERIODIC:
+                mPeriodic = true;
+                this.postDelayed(this::periodic, mDelay);
+                break;
+            case LOG_DELAYED:
+                this.postDelayed(this::writeLog, mDelay);
+                break;
+            case LOG_LAYOUT:
+                ConstraintLayout cl = (ConstraintLayout) getParent();
+                cl.addOnLayoutChangeListener((v, a, b, c, d, e, f, g, h) -> logOnLayout());
+        }
+    }
+
+    private void logOnLayout() {
+        if (mMode == LOG_LAYOUT) {
+            writeLog();
+        }
+    }
+
+    /**
+     * Set the duration of periodic logging of constraints
+     *
+     * @param duration the time in ms between writing files
+     */
+    public void setPeriodicDuration(int duration) {
+        mDelay = duration;
+    }
+
+    /**
+     * Start periodic sampling
+     */
+    public void periodicStart() {
+        mPeriodic = true;
+        this.postDelayed(this::periodic, mDelay);
+    }
+
+    /**
+     * Stop periodic sampling
+     */
+    public void periodicStop() {
+        mPeriodic = false;
+    }
+
+    private void periodic() {
+        if (mPeriodic) {
+            writeLog();
+            this.postDelayed(this::periodic, mDelay);
+        }
+    }
+
+    /**
+     * This writes a JSON5 representation of the constraintSet
+     */
+    public void writeLog() {
+        String str = asString((ConstraintLayout) this.getParent());
+        if (mLogToFile == null) {
+            if (mLogConsole) {
+                System.out.println(str);
+            } else {
+                logBigString(str);
+            }
+        } else {
+            String name = toFile(str, mLogToFile);
+            Log.v("JSON", "\"" + name + "\" written!");
+        }
     }
 
     /**
@@ -63,19 +226,21 @@ public class DumpCL {
      * in the download directory which can be pulled with:
      * "adb pull "/storage/emulated/0/Download/" ."
      *
-     * @param constraintLayout
-     * @param fileName
-     * @return
+     * @param str      String to write as a file
+     * @param fileName file name
+     * @return full path name of file
      */
-    public static String toFile(ConstraintLayout constraintLayout, String fileName) {
+    private static String toFile(String str, String fileName) {
         FileOutputStream outputStream;
-        DumpCL c = new DumpCL();
+        if (!fileName.endsWith(".json5")) {
+            fileName += ".json5";
+        }
         try {
-            File down = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-            File file = new File(down, fileName + ".json5");
+            File down =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File file = new File(down, fileName);
             outputStream = new FileOutputStream(file);
-            outputStream.write(c.constraintLayoutToJson(constraintLayout).getBytes());
+            outputStream.write(str.getBytes());
             outputStream.close();
             return file.getCanonicalPath();
         } catch (IOException e) {
@@ -84,111 +249,7 @@ public class DumpCL {
         return null;
     }
 
-    /**
-     * This Logs the json to the LOG
-     *
-     * @param tag              The tag use in Log
-     * @param constraintLayout
-     */
-    public static void log(String tag, ConstraintLayout constraintLayout) {
-        DumpCL c = new DumpCL();
-        Log.v(tag, c.constraintLayoutToJson(constraintLayout));
-    }
-
-    /**
-     * Get a JSON5 String that represents the Constraints in a running ConstraintLayout
-     *
-     * @param constraintLayout
-     * @return
-     */
-    public static String asString(ConstraintLayout constraintLayout) {
-        DumpCL c = new DumpCL();
-        return c.constraintLayoutToJson(constraintLayout);
-    }
-
-    private String constraintLayoutToJson(ConstraintLayout constraintLayout) {
-        StringWriter writer = new StringWriter();
-
-        int count = constraintLayout.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View v = constraintLayout.getChildAt(i);
-            if (v.getId() == -1) {
-                int id = View.generateViewId();
-                v.setId(id);
-                names.put(id, "noid_" + v.getClass().getSimpleName());
-            }
-        }
-        writer.append("{\n");
-
-        writeWidgets(writer, constraintLayout);
-        writer.append("  ConstraintSet:{\n");
-        ConstraintSet set = new ConstraintSet();
-        set.clone(constraintLayout);
-        String name = (constraintLayout.getId() == -1) ? "cset" : Debug.getName(constraintLayout);
-        try {
-            writer.append(name + ":");
-            new WriteJsonEngine(writer, set, constraintLayout, names, 0).writeLayout();
-            writer.append("\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        writer.append("  }\n");
-        writer.append("}\n");
-        return writer.toString();
-    }
-
-    private void writeWidgets(StringWriter writer, ConstraintLayout constraintLayout) {
-        writer.append("Widgets:{\n");
-        int count = constraintLayout.getChildCount();
-
-        for (int i = -1; i < count; i++) {
-            View v = (i == -1) ? constraintLayout : constraintLayout.getChildAt(i);
-            int id = v.getId();
-            String name = (names.containsKey(id)) ? names.get(id)
-                    : ((i == -1) ? "parent" : Debug.getName(v));
-            String cname = v.getClass().getSimpleName();
-            String bounds = ", bounds: [" + v.getLeft() + ", " + v.getTop()
-                    + ", " + v.getRight() + ", " + v.getBottom() + "]},\n";
-            writer.append("  " + name + ": { ");
-            if (i == -1) {
-                writer.append("type: '" + v.getClass().getSimpleName() + "' , ");
-
-                try {
-                    ViewGroup.LayoutParams p = (ViewGroup.LayoutParams) v.getLayoutParams();
-
-                    String w = p.width == -1 ? "'MATCH_PARENT'" :
-                            (p.width == -2) ? "'WRAP_CONTENT'" : p.width + "";
-                    writer.append("width: " + w + ", ");
-                    String h = p.height == -1 ? "'MATCH_PARENT'" :
-                            (p.height == -2) ? "'WRAP_CONTENT'" : p.height + "";
-                    writer.append("height: ").append(h);
-                } catch (Exception e) {
-
-                }
-            } else if (cname.contains("Text")) {
-                if (v instanceof TextView) {
-                    writer.append("type: 'Text', label: '" + escape(((TextView) v).getText().toString()) + "'");
-                } else {
-                    writer.append("type: 'Text' },\n");
-                }
-            } else if (cname.contains("Button")) {
-                if (v instanceof Button) {
-                    writer.append("type: 'Button', label: '" + ((Button) v).getText()+"'");
-                } else
-                    writer.append("type: 'Button'");
-            } else if (cname.contains("Image")) {
-                writer.append("type: 'Image'");
-            } else if (cname.contains("View")) {
-                writer.append("type: 'Box'");
-            } else {
-                writer.append("type: '" + v.getClass().getSimpleName() + "'");
-            }
-            writer.append(bounds);
-        }
-        writer.append("},\n");
-    }
-
+    @SuppressLint("LogConditional")
     private void logBigString(String str) {
         int len = str.length();
         for (int i = 0; i < len; i++) {
@@ -202,15 +263,25 @@ public class DumpCL {
         }
     }
 
+    /**
+     * Get a JSON5 String that represents the Constraints in a running ConstraintLayout
+     *
+     * @param constraintLayout its constraints are converted to a string
+     * @return JSON5 string
+     */
+    private static String asString(ConstraintLayout constraintLayout) {
+        JsonWriter c = new JsonWriter();
+        return c.constraintLayoutToJson(constraintLayout);
+    }
 
-    // ================================== JSON ===============================================
-    static class WriteJsonEngine {
+    // ================================== JSON writer==============================================
+
+    private static class JsonWriter {
         public static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
-        ConstraintSet set;
+        ConstraintSet mSet;
         Writer mWriter;
         ConstraintLayout mLayout;
         Context mContext;
-        int mFlags;
         int mUnknownCount = 0;
         final String mLEFT = "left";
         final String mRIGHT = "right";
@@ -221,28 +292,149 @@ public class DumpCL {
         final String mEND = "end";
         private static final String INDENT = "    ";
         private static final String SMALL_INDENT = "  ";
-        HashMap<Integer, String> names;
+        HashMap<Integer, String> mIdMap = new HashMap<>();
+        private static final String LOG_JSON = LogJson.class.getSimpleName();
+        private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+        HashMap<Integer, String> mNames = new HashMap<>();
 
-        WriteJsonEngine(Writer writer,
-                        ConstraintSet set,
-                        ConstraintLayout layout,
-                        HashMap<Integer, String> names,
-                        int flags) throws IOException {
+        private static int generateViewId() {
+            final int max_id = 0x00FFFFFF;
+            for (;;) {
+                final int result = sNextGeneratedId.get();
+                int newValue = result + 1;
+                if (newValue > max_id) {
+                    newValue = 1;
+                }
+                if (sNextGeneratedId.compareAndSet(result, newValue)) {
+                    return result;
+                }
+            }
+        }
+
+        private String constraintLayoutToJson(ConstraintLayout constraintLayout) {
+            StringWriter writer = new StringWriter();
+
+            int count = constraintLayout.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View v = constraintLayout.getChildAt(i);
+                String name = v.getClass().getSimpleName();
+                int id = v.getId();
+                if (id == -1) {
+                    if (android.os.Build.VERSION.SDK_INT
+                            >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        id = View.generateViewId();
+                    } else {
+                        id = generateViewId();
+                    }
+                    v.setId(id);
+                    if (!LOG_JSON.equals(name)) {
+                        name = "noid_" + name;
+                    }
+                    mNames.put(id, name);
+                } else if (LOG_JSON.equals(name)) {
+                    mNames.put(id, name);
+                }
+            }
+            writer.append("{\n");
+
+            writeWidgets(writer, constraintLayout);
+            writer.append("  ConstraintSet:{\n");
+            ConstraintSet set = new ConstraintSet();
+            set.clone(constraintLayout);
+            String name =
+                    (constraintLayout.getId() == -1) ? "cset" : Debug.getName(constraintLayout);
+            try {
+                writer.append(name + ":");
+                setup(writer, set, constraintLayout);
+                writeLayout();
+                writer.append("\n");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            writer.append("  }\n");
+            writer.append("}\n");
+            return writer.toString();
+        }
+
+        private void writeWidgets(StringWriter writer, ConstraintLayout constraintLayout) {
+            writer.append("Widgets:{\n");
+            int count = constraintLayout.getChildCount();
+
+            for (int i = -1; i < count; i++) {
+                View v = (i == -1) ? constraintLayout : constraintLayout.getChildAt(i);
+                int id = v.getId();
+                if (LOG_JSON.equals(v.getClass().getSimpleName())) {
+                    continue;
+                }
+                String name = (mNames.containsKey(id)) ? mNames.get(id)
+                        : ((i == -1) ? "parent" : Debug.getName(v));
+                String cname = v.getClass().getSimpleName();
+                String bounds = ", bounds: [" + v.getLeft() + ", " + v.getTop()
+                        + ", " + v.getRight() + ", " + v.getBottom() + "]},\n";
+                writer.append("  " + name + ": { ");
+                if (i == -1) {
+                    writer.append("type: '" + v.getClass().getSimpleName() + "' , ");
+
+                    try {
+                        ViewGroup.LayoutParams p = (ViewGroup.LayoutParams) v.getLayoutParams();
+                        String wrap = "'WRAP_CONTENT'";
+                        String match = "'MATCH_PARENT'";
+                        String w = p.width == MATCH_PARENT ? match :
+                                (p.width == WRAP_CONTENT) ? wrap : p.width + "";
+                        writer.append("width: " + w + ", ");
+                        String h = p.height == MATCH_PARENT ? match :
+                                (p.height == WRAP_CONTENT) ? wrap : p.height + "";
+                        writer.append("height: ").append(h);
+                    } catch (Exception e) {
+                    }
+                } else if (cname.contains("Text")) {
+                    if (v instanceof TextView) {
+                        writer.append("type: 'Text', label: '"
+                                + escape(((TextView) v).getText().toString()) + "'");
+                    } else {
+                        writer.append("type: 'Text' },\n");
+                    }
+                } else if (cname.contains("Button")) {
+                    if (v instanceof Button) {
+                        writer.append("type: 'Button', label: '" + ((Button) v).getText() + "'");
+                    } else
+                        writer.append("type: 'Button'");
+                } else if (cname.contains("Image")) {
+                    writer.append("type: 'Image'");
+                } else if (cname.contains("View")) {
+                    writer.append("type: 'Box'");
+                } else {
+                    writer.append("type: '" + v.getClass().getSimpleName() + "'");
+                }
+                writer.append(bounds);
+            }
+            writer.append("},\n");
+        }
+
+        private static String escape(String str) {
+            return str.replaceAll("'", "\\'");
+        }
+
+        JsonWriter() {
+
+        }
+
+        void setup(Writer writer,
+                   ConstraintSet set,
+                   ConstraintLayout layout) throws IOException {
             this.mWriter = writer;
             this.mLayout = layout;
-            this.names = names;
             this.mContext = layout.getContext();
-            this.mFlags = flags;
-            this.set = set;
+            this.mSet = set;
             set.getConstraint(2);
         }
 
         private int[] getIDs() {
-            return set.getKnownIds();
+            return mSet.getKnownIds();
         }
 
         private ConstraintSet.Constraint getConstraint(int id) {
-            return set.getConstraint(id);
+            return mSet.getConstraint(id);
         }
 
         private void writeLayout() throws IOException {
@@ -250,22 +442,27 @@ public class DumpCL {
             for (Integer id : getIDs()) {
                 ConstraintSet.Constraint c = getConstraint(id);
                 String idName = getSimpleName(id);
+                if (LOG_JSON.equals(idName)) { // skip LogJson it is for used to log
+                    continue;
+                }
                 mWriter.write(SMALL_INDENT + idName + ":{\n");
                 ConstraintSet.Layout l = c.layout;
                 if (l.mReferenceIds != null) {
-                    String ref = "type: '_" + idName + "_' , contains: [";
+                    StringBuilder ref =
+                            new StringBuilder("type: '_" + idName + "_' , contains: [");
                     for (int r = 0; r < l.mReferenceIds.length; r++) {
                         int rid = l.mReferenceIds[r];
-                        ref += ((r == 0) ? "" : ", ") + getName(rid);
+                        ref.append((r == 0) ? "" : ", ").append(getName(rid));
                     }
                     mWriter.write(ref + "]\n");
                 }
                 if (l.mReferenceIdString != null) {
-                    String ref = SMALL_INDENT + "type: '???' , contains: [";
+                    StringBuilder ref =
+                            new StringBuilder(SMALL_INDENT + "type: '???' , contains: [");
                     String[] rids = l.mReferenceIdString.split(",");
                     for (int r = 0; r < rids.length; r++) {
                         String rid = rids[r];
-                        ref += ((r == 0) ? "" : ", ") + "`" + rid + "`";
+                        ref.append((r == 0) ? "" : ", ").append("`").append(rid).append("`");
                     }
                     mWriter.write(ref + "]\n");
                 }
@@ -319,12 +516,10 @@ public class DumpCL {
                 writeTransform(c.transform);
                 writeCustom(c.mCustomConstraints);
 
-
                 mWriter.write("  },\n");
             }
             mWriter.write("},\n");
         }
-
 
         private void writeTransform(ConstraintSet.Transform transform) throws IOException {
             if (transform.applyElevation) {
@@ -344,8 +539,10 @@ public class DumpCL {
             if (cset != null && cset.size() > 0) {
                 mWriter.write(INDENT + "custom: {\n");
                 for (String s : cset.keySet()) {
-
                     ConstraintAttribute attr = cset.get(s);
+                    if (attr == null) {
+                        continue;
+                    }
                     String custom = INDENT + SMALL_INDENT + attr.getName() + ": ";
                     switch (attr.getType()) {
                         case INT_TYPE:
@@ -361,7 +558,7 @@ public class DumpCL {
                             custom += "'" + attr.getStringValue() + "'";
                             break;
                         case DIMENSION_TYPE:
-                            custom += attr.getFloatValue();
+                            custom = custom + attr.getFloatValue();
                             break;
                         case REFERENCE_TYPE:
                         case COLOR_DRAWABLE_TYPE:
@@ -389,9 +586,7 @@ public class DumpCL {
             writeVariable("guideBegin", guideBegin);
             writeVariable("guideEnd", guideEnd);
             writeVariable("guidePercent", guidePercent);
-
         }
-
 
         private void writeDimension(String dimString,
                                     int dim,
@@ -444,8 +639,6 @@ public class DumpCL {
             }
         }
 
-        HashMap<Integer, String> mIdMap = new HashMap<>();
-
         private String getSimpleName(int id) {
             if (mIdMap.containsKey(id)) {
                 return "" + mIdMap.get(id);
@@ -464,8 +657,8 @@ public class DumpCL {
 
         private String lookup(int id) {
             try {
-                if (names.containsKey(id)) {
-                    return names.get(id);
+                if (mNames.containsKey(id)) {
+                    return mNames.get(id);
                 }
                 if (id != -1) {
                     return mContext.getResources().getResourceEntryName(id);
@@ -539,15 +732,6 @@ public class DumpCL {
             mWriter.write(",\n");
         }
 
-        private void writeVariable(String name, boolean value) throws IOException {
-            if (!value) {
-                return;
-            }
-            mWriter.write(INDENT + name);
-            mWriter.write(": " + value);
-            mWriter.write(",\n");
-        }
-
         private void writeVariable(String name, boolean value, boolean def) throws IOException {
             if (value == def) {
                 return;
@@ -578,5 +762,4 @@ public class DumpCL {
             mWriter.write("',\n");
         }
     }
-
 }

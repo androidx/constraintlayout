@@ -23,7 +23,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -75,7 +74,7 @@ public class CheckDumpJson extends AppCompatActivity {
         if (mLayout instanceof MotionLayout) {
             fileName = MotionLayoutToJason.writeJSonToFile((MotionLayout) mLayout, layout_name);
         } else {
-            fileName = ConstraintLayoutToJason.writeJSonToFile(mLayout, layout_name);
+            fileName = ConstraintLayoutToJason.toFile(mLayout, layout_name);
         }
         allFiles.add(fileName);
         current++;

@@ -4,8 +4,16 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
+
+    <androidx.constraintlayout.helper.widget.LogJson
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:logJsonTo="log"
+        app:logJsonMode="delayed"
+        app:logJsonDelay="1000"
+        />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/contentGroup"

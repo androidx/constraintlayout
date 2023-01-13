@@ -74,6 +74,13 @@ public class Transition implements TypedValues {
         mToPixel = dpToPixel;
     }
 
+    /**
+     * Create transition with a 1 to 1 DP to pixel (usually used in testing
+     */
+    public Transition() {
+        this((dp) -> dp);
+    }
+
     // @TODO: add description
     @SuppressWarnings("HiddenTypeParameter")
     OnSwipe createOnSwipe() {
