@@ -51,6 +51,47 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * This is a class is a debugging/logging utility to write out the constraints in JSON
  * This is used for debugging purposes
+ * <ul>
+ *     <li>logJsonTo - defines the output log console or "fileName"</li>
+ *     <li>logJsonMode - mode one of:
+ *     <b>periodic</b>, <b>delayed</b>, <b>layout</b> or <b>api</b></li>
+ *     <li>logJsonDelay - the duration of the delay or the delay between repeated logs</li>
+ * </ul>
+ * logJsonTo supports:
+ * <ul>
+ *     <li>log - logs using log.v("JSON5", ...)</li>
+ *     <li>console - logs using System.out.println(...)</li>
+ *     <li>[fileName] - will write to /storage/emulated/0/Download/[fileName].json5</li>
+ * </ul>
+ * logJsonMode modes are:
+ * <ul>
+ *     <li>periodic - after window is attached will log every delay ms</li>
+ *     <li>delayed - log once after delay ms</li>
+ *     <li>layout - log every time there is a layout call</li>
+ *     <li>api - do not automatically log developer will call writeLog</li>
+ * </ul>
+ *
+ * The defaults are:
+ * <ul>
+ *     <li>logJsonTo="log"</li>
+ *     <li>logJsonMode="delayed"</li>
+ *     <li>logJsonDelay="1000"</li>
+ * </ul>
+ *  Usage:
+ *  <p></p>
+ *  <pre>
+ *  {@code
+ *      <androidx.constraintlayout.helper.widget.LogJson
+ *         android:layout_width="0dp"
+ *         android:layout_height="0dp"
+ *         android:visibility="gone"
+ *         app:logJsonTo="log"
+ *         app:logJsonMode="delayed"
+ *         app:logJsonDelay="1000"
+ *         />
+ *  }
+ * </pre>
+ * </p>
  */
 public class LogJson extends ConstraintHelper {
     private static final String TAG = "JSON5";
@@ -142,7 +183,7 @@ public class LogJson extends ConstraintHelper {
     }
 
     /**
-     * Start sampling periodically sampling
+     * Start periodic sampling
      */
     public void periodicStart() {
         mPeriodic = true;
@@ -150,7 +191,7 @@ public class LogJson extends ConstraintHelper {
     }
 
     /**
-     * Stop sampling periodically sampling
+     * Stop periodic sampling
      */
     public void periodicStop() {
         mPeriodic = false;
