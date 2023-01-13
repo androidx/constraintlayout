@@ -683,7 +683,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param verticalGap defines the gap between views in the y axis
-     * @param horizontalGap defines the gap between views in the x axis
      * @param rowWeights defines the weight of each row
      *        the format of input string is "w1,w2,w3, ..."
      * @param skips defines the positions in a Grid to be skipped
@@ -701,7 +700,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     fun createRow(
         vararg elements: LayoutReference,
         verticalGap: Dp = 0.dp,
-        horizontalGap: Dp = 0.dp,
         rowWeights: String = "",
         skips: String = "",
         spans: String = "",
@@ -710,7 +708,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         return createGrid(
             elements = elements,
             columns = 1,
-            horizontalGap = horizontalGap,
             verticalGap = verticalGap,
             rowWeights = rowWeights,
             skips = skips,
@@ -727,7 +724,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param verticalGap defines the gap between views in the y axis
-     * @param horizontalGap defines the gap between views in the x axis
      * @param rowWeights defines the weight of each row
      *        the format of input string is "w1,w2,w3, ..."
      * @param skips defines the positions in a Grid to be skipped
@@ -746,7 +742,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     fun createRow(
         vararg elements: LayoutReference,
         verticalGap: Dp = 0.dp,
-        horizontalGap: Dp = 0.dp,
         rowWeights: String = "",
         skips: String = "",
         spans: String = "",
@@ -756,7 +751,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         return createGrid(
             elements = elements,
             columns = 1,
-            horizontalGap = horizontalGap,
             verticalGap = verticalGap,
             rowWeights = rowWeights,
             skips = skips,
@@ -773,7 +767,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param verticalGap defines the gap between views in the y axis
-     * @param horizontalGap defines the gap between views in the x axis
      * @param rowWeights defines the weight of each row
      *        the format of input string is "w1,w2,w3, ..."
      * @param skips defines the positions in a Grid to be skipped
@@ -794,7 +787,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     fun createRow(
         vararg elements: LayoutReference,
         verticalGap: Dp = 0.dp,
-        horizontalGap: Dp = 0.dp,
         rowWeights: String = "",
         skips: String = "",
         spans: String = "",
@@ -822,10 +814,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             putNumber("orientation", 0f)
             putNumber("columns", 1f)
             putNumber("vGap", verticalGap.value)
-            putNumber("hGap", horizontalGap.value)
             put("padding", paddingArray)
             putString("rowWeights", rowWeights)
-            putString("columnWeights", "")
             putString("skips", skips)
             putString("spans", spans)
         }
@@ -837,7 +827,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * Creates a Grid based helper that lays out its elements in a single Column.
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
      * @param columnWeights defines the weight of each column
      *        the format of input string is "w1,w2,w3, ..."
@@ -855,7 +844,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      */
     fun createColumn(
         vararg elements: LayoutReference,
-        verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
         columnWeights: String = "",
         skips: String = "",
@@ -866,7 +854,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             elements = elements,
             rows = 1,
             horizontalGap = horizontalGap,
-            verticalGap = verticalGap,
             columnWeights = columnWeights,
             skips = skips,
             spans = spans,
@@ -881,7 +868,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * Creates a Grid based helper that lays out its elements in a single Column.
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
      * @param columnWeights defines the weight of each column
      *        the format of input string is "w1,w2,w3, ..."
@@ -900,7 +886,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      */
     fun createColumn(
         vararg elements: LayoutReference,
-        verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
         columnWeights: String = "",
         skips: String = "",
@@ -912,7 +897,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             elements = elements,
             rows = 1,
             horizontalGap = horizontalGap,
-            verticalGap = verticalGap,
             columnWeights = columnWeights,
             skips = skips,
             spans = spans,
@@ -927,7 +911,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * Creates a Grid based helper that lays out its elements in a single Column.
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
      * @param columnWeights defines the weight of each column
      *        the format of input string is "w1,w2,w3, ..."
@@ -948,7 +931,6 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      */
     fun createColumn(
         vararg elements: LayoutReference,
-        verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
         columnWeights: String = "",
         skips: String = "",
@@ -976,10 +958,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             putString("type", "grid")
             putNumber("orientation", 0f)
             putNumber("rows", 1f)
-            putNumber("vGap", verticalGap.value)
             putNumber("hGap", horizontalGap.value)
             put("padding", paddingArray)
-            putString("rowWeights", "")
             putString("columnWeights", columnWeights)
             putString("skips", skips)
             putString("spans", spans)

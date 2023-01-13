@@ -145,7 +145,6 @@ class RowColumnDslTest {
                     skips = gridSkips,
                     spans = gridSpans,
                     verticalGap = vGap.dp,
-                    horizontalGap = hGap.dp,
                     rowWeights = gridRowWeights,
                 )
                 constrain(g1) {
@@ -190,7 +189,6 @@ class RowColumnDslTest {
                     elements = *elem.toTypedArray(),
                     skips = gridSkips,
                     spans = gridSpans,
-                    verticalGap = vGap.dp,
                     horizontalGap = hGap.dp,
                     columnWeights = gridColumnWeights,
                 )
