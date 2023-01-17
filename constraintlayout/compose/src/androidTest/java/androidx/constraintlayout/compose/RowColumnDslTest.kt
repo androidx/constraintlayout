@@ -64,11 +64,8 @@ class RowColumnDslTest {
             RowComposableTest(
                 modifier = Modifier.size(rootSize),
                 boxesCount = boxesCount,
-                hGap = 0,
                 vGap = 0,
-                gridSpans = "",
-                gridSkips = "",
-                gridRowWeights = "",
+                gridRowWeights = emptyArray(),
             )
         }
         var expectedX = 0.dp
@@ -98,10 +95,7 @@ class RowColumnDslTest {
                 modifier = Modifier.size(rootSize),
                 boxesCount = boxesCount,
                 hGap = 0,
-                vGap = 0,
-                gridSpans = "",
-                gridSkips = "",
-                gridColumnWeights = ""
+                gridColumnWeights = emptyArray()
             )
         }
         var expectedX = 0.dp
@@ -125,12 +119,9 @@ class RowColumnDslTest {
     @Composable
     private fun RowComposableTest(
         modifier: Modifier = Modifier,
-        gridSpans: String,
-        gridSkips: String,
-        gridRowWeights: String,
+        gridRowWeights: Array<Int>,
         boxesCount: Int,
         vGap: Int,
-        hGap: Int,
     ) {
         ConstraintLayout(
             ConstraintSet {
@@ -142,10 +133,7 @@ class RowColumnDslTest {
 
                 val g1 = createRow(
                     elements = *elem.toTypedArray(),
-                    skips = gridSkips,
-                    spans = gridSpans,
                     verticalGap = vGap.dp,
-                    rowWeights = gridRowWeights,
                 )
                 constrain(g1) {
                     width = Dimension.matchParent
@@ -170,11 +158,8 @@ class RowColumnDslTest {
     @Composable
     private fun ColumnComposableTest(
         modifier: Modifier = Modifier,
-        gridSpans: String,
-        gridSkips: String,
-        gridColumnWeights: String,
+        gridColumnWeights: Array<Int>,
         boxesCount: Int,
-        vGap: Int,
         hGap: Int,
     ) {
         ConstraintLayout(
@@ -187,10 +172,7 @@ class RowColumnDslTest {
 
                 val g1 = createColumn(
                     elements = *elem.toTypedArray(),
-                    skips = gridSkips,
-                    spans = gridSpans,
                     horizontalGap = hGap.dp,
-                    columnWeights = gridColumnWeights,
                 )
                 constrain(g1) {
                     width = Dimension.matchParent

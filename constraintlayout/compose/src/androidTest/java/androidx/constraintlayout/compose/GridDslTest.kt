@@ -78,8 +78,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null,
             )
         }
         var leftX = 0.dp
@@ -117,8 +117,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null
             )
         }
         var leftX = 0.dp
@@ -156,8 +156,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null
             )
         }
         var expectedX = 0.dp
@@ -195,8 +195,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null
             )
         }
         var expectedX = 0.dp
@@ -234,8 +234,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "0:1x1",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null
             )
         }
         var leftX = 0.dp
@@ -272,8 +272,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "0:1x2",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = ""
+                gridRowWeights = null,
+                gridColumnWeights = null
             )
         }
         var leftX = 0.dp
@@ -300,6 +300,7 @@ class GridDslTest {
         val boxesCount = 2
         val rows = 0
         val columns = 1
+        val weights = intArrayOf(1, 3)
         rule.setContent {
             gridComposableTest(
                 modifier = Modifier.size(rootSize),
@@ -311,8 +312,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "1,3",
-                gridColumnWeights = ""
+                gridRowWeights = weights,
+                gridColumnWeights = null
             )
         }
         var expectedLeft = (rootSize - 10.dp) / 2f
@@ -336,6 +337,7 @@ class GridDslTest {
         val boxesCount = 2
         val rows = 1
         val columns = 0
+        val weights = intArrayOf(1, 3)
         rule.setContent {
             gridComposableTest(
                 modifier = Modifier.size(rootSize),
@@ -347,8 +349,8 @@ class GridDslTest {
                 vGap = 0,
                 gridSpans = "",
                 gridSkips = "",
-                gridRowWeights = "",
-                gridColumnWeights = "1,3"
+                gridRowWeights = null,
+                gridColumnWeights = weights
             )
         }
         var expectedLeft = 0.dp
@@ -401,8 +403,8 @@ class GridDslTest {
         numColumns: Int,
         gridSpans: String,
         gridSkips: String,
-        gridRowWeights: String,
-        gridColumnWeights: String,
+        gridRowWeights: IntArray?,
+        gridColumnWeights: IntArray?,
         boxesCount: Int,
         gridOrientation: Int,
         vGap: Int,

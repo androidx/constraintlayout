@@ -684,34 +684,20 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param verticalGap defines the gap between views in the y axis
      * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
      * @param padding sets padding around the content
      */
     fun createRow(
         vararg elements: LayoutReference,
         verticalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        skips: String = "",
-        spans: String = "",
+        rowWeights: IntArray? = null,
         padding: Dp = 0.dp,
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
+            rowWeights = rowWeights,
             columns = 1,
             verticalGap = verticalGap,
-            rowWeights = rowWeights,
-            skips = skips,
-            spans = spans,
+            columnWeights = null,
             paddingLeft = padding,
             paddingTop = padding,
             paddingRight = padding,
@@ -725,26 +711,13 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param verticalGap defines the gap between views in the y axis
      * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
      * @param paddingHorizontal sets paddingLeft and paddingRight of the content
      * @param paddingVertical sets paddingTop and paddingBottom of the content
      */
     fun createRow(
         vararg elements: LayoutReference,
         verticalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        skips: String = "",
-        spans: String = "",
+        rowWeights: IntArray? = null,
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
     ): ConstrainedLayoutReference {
@@ -753,8 +726,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             columns = 1,
             verticalGap = verticalGap,
             rowWeights = rowWeights,
-            skips = skips,
-            spans = spans,
+            columnWeights = null,
             paddingLeft = paddingHorizontal,
             paddingTop = paddingVertical,
             paddingRight = paddingHorizontal,
@@ -763,100 +735,25 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     }
 
     /**
-     * Creates a Grid based helper that lays out its elements in a single Row.
-     *
-     * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param verticalGap defines the gap between views in the y axis
-     * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
-     * @param paddingLeft sets paddingLeft of the content
-     * @param paddingTop sets paddingTop of the content
-     * @param paddingRight sets paddingRight of the content
-     * @param paddingBottom sets paddingBottom of the content
-     */
-    fun createRow(
-        vararg elements: LayoutReference,
-        verticalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        skips: String = "",
-        spans: String = "",
-        paddingLeft: Dp = 0.dp,
-        paddingTop: Dp = 0.dp,
-        paddingRight: Dp = 0.dp,
-        paddingBottom: Dp = 0.dp,
-    ): ConstrainedLayoutReference {
-        val ref = ConstrainedLayoutReference(createHelperId())
-        val elementArray = CLArray(charArrayOf())
-        elements.forEach {
-            if (it != null) {
-                elementArray.add(CLString.from(it.id.toString()))
-            }
-        }
-        val paddingArray = CLArray(charArrayOf()).apply {
-            add(CLNumber(paddingLeft.value))
-            add(CLNumber(paddingTop.value))
-            add(CLNumber(paddingRight.value))
-            add(CLNumber(paddingBottom.value))
-        }
-        ref.asCLContainer().apply {
-            put("contains", elementArray)
-            putString("type", "grid")
-            putNumber("orientation", 0f)
-            putNumber("columns", 1f)
-            putNumber("vGap", verticalGap.value)
-            put("padding", paddingArray)
-            putString("rowWeights", rowWeights)
-            putString("skips", skips)
-            putString("spans", spans)
-        }
-
-        return ref
-    }
-
-    /**
      * Creates a Grid based helper that lays out its elements in a single Column.
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param horizontalGap defines the gap between views in the x axis
      * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
      * @param padding sets padding around the content
      */
     fun createColumn(
         vararg elements: LayoutReference,
+        columnWeights: IntArray? = null,
         horizontalGap: Dp = 0.dp,
-        columnWeights: String = "",
-        skips: String = "",
-        spans: String = "",
         padding: Dp = 0.dp,
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
             rows = 1,
             horizontalGap = horizontalGap,
+            rowWeights = null,
             columnWeights = columnWeights,
-            skips = skips,
-            spans = spans,
             paddingLeft = padding,
             paddingTop = padding,
             paddingRight = padding,
@@ -870,26 +767,13 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * @param elements [LayoutReference]s to be laid out by the Grid helper
      * @param horizontalGap defines the gap between views in the x axis
      * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
      * @param paddingHorizontal sets paddingLeft and paddingRight of the content
      * @param paddingVertical sets paddingTop and paddingBottom of the content
      */
     fun createColumn(
         vararg elements: LayoutReference,
         horizontalGap: Dp = 0.dp,
-        columnWeights: String = "",
-        skips: String = "",
-        spans: String = "",
+        columnWeights: IntArray? = null,
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
     ): ConstrainedLayoutReference {
@@ -897,75 +781,13 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             elements = elements,
             rows = 1,
             horizontalGap = horizontalGap,
+            rowWeights = null,
             columnWeights = columnWeights,
-            skips = skips,
-            spans = spans,
             paddingLeft = paddingHorizontal,
             paddingTop = paddingVertical,
             paddingRight = paddingHorizontal,
             paddingBottom = paddingVertical,
         )
-    }
-
-    /**
-     * Creates a Grid based helper that lays out its elements in a single Column.
-     *
-     * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param horizontalGap defines the gap between views in the x axis
-     * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
-     * @param skips defines the positions in a Grid to be skipped
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to skip
-     *        col- the number of columns to skip
-     * @param spans defines the spanned area(s) in Grid
-     *        the format of the input string is "index:rowxcol"
-     *        index - the index of the starting position
-     *        row - the number of rows to span
-     *        col- the number of columns to span
-     * @param paddingLeft sets paddingLeft of the content
-     * @param paddingTop sets paddingTop of the content
-     * @param paddingRight sets paddingRight of the content
-     * @param paddingBottom sets paddingBottom of the content
-     */
-    fun createColumn(
-        vararg elements: LayoutReference,
-        horizontalGap: Dp = 0.dp,
-        columnWeights: String = "",
-        skips: String = "",
-        spans: String = "",
-        paddingLeft: Dp = 0.dp,
-        paddingTop: Dp = 0.dp,
-        paddingRight: Dp = 0.dp,
-        paddingBottom: Dp = 0.dp,
-    ): ConstrainedLayoutReference {
-        val ref = ConstrainedLayoutReference(createHelperId())
-        val elementArray = CLArray(charArrayOf())
-        elements.forEach {
-            if (it != null) {
-                elementArray.add(CLString.from(it.id.toString()))
-            }
-        }
-        val paddingArray = CLArray(charArrayOf()).apply {
-            add(CLNumber(paddingLeft.value))
-            add(CLNumber(paddingTop.value))
-            add(CLNumber(paddingRight.value))
-            add(CLNumber(paddingBottom.value))
-        }
-        ref.asCLContainer().apply {
-            put("contains", elementArray)
-            putString("type", "grid")
-            putNumber("orientation", 0f)
-            putNumber("rows", 1f)
-            putNumber("hGap", horizontalGap.value)
-            put("padding", paddingArray)
-            putString("columnWeights", columnWeights)
-            putString("skips", skips)
-            putString("spans", spans)
-        }
-
-        return ref
     }
 
     /**
@@ -978,9 +800,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
      * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
      * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
      * @param skips defines the positions in a Grid to be skipped
      *        the format of the input string is "index:rowxcol"
      *        index - the index of the starting position
@@ -1000,8 +820,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         columns: Int = 0,
         verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        columnWeights: String = "",
+        rowWeights: IntArray? = null,
+        columnWeights: IntArray? = null,
         skips: String = "",
         spans: String = "",
         padding: Dp = 0.dp,
@@ -1028,15 +848,13 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * Creates a Grid representation with a Grid Helper.
      *
      * @param elements [LayoutReference]s to be laid out by the Grid helper
-     * @param orientation 0 if horizontal and 1 if vertical
+     * @param rowWeights defines the weight of each row
      * @param rows sets the number of rows in Grid
      * @param columns sets the number of columns in Grid
      * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
-     * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
      * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
+     * @param orientation 0 if horizontal and 1 if vertical
      * @param skips defines the positions in a Grid to be skipped
      *        the format of the input string is "index:rowxcol"
      *        index - the index of the starting position
@@ -1057,8 +875,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         columns: Int = 0,
         verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        columnWeights: String = "",
+        rowWeights: IntArray? = null,
+        columnWeights: IntArray? = null,
         skips: String = "",
         spans: String = "",
         paddingHorizontal: Dp = 0.dp,
@@ -1066,13 +884,13 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
+            rowWeights = rowWeights,
+            columnWeights = columnWeights,
             orientation = orientation,
             rows = rows,
             columns = columns,
             horizontalGap = horizontalGap,
             verticalGap = verticalGap,
-            rowWeights = rowWeights,
-            columnWeights = columnWeights,
             skips = skips,
             spans = spans,
             paddingLeft = paddingHorizontal,
@@ -1092,9 +910,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
      * @param verticalGap defines the gap between views in the y axis
      * @param horizontalGap defines the gap between views in the x axis
      * @param rowWeights defines the weight of each row
-     *        the format of input string is "w1,w2,w3, ..."
      * @param columnWeights defines the weight of each column
-     *        the format of input string is "w1,w2,w3, ..."
      * @param skips defines the positions in a Grid to be skipped
      *        the format of the input string is "index:rowxcol"
      *        index - the index of the starting position
@@ -1117,8 +933,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         columns: Int = 0,
         verticalGap: Dp = 0.dp,
         horizontalGap: Dp = 0.dp,
-        rowWeights: String = "",
-        columnWeights: String = "",
+        rowWeights: IntArray? = null,
+        columnWeights: IntArray? = null,
         skips: String = "",
         spans: String = "",
         paddingLeft: Dp = 0.dp,
@@ -1129,9 +945,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         val ref = ConstrainedLayoutReference(createHelperId())
         val elementArray = CLArray(charArrayOf())
         elements.forEach {
-            if (it != null) {
-                elementArray.add(CLString.from(it.id.toString()))
-            }
+            elementArray.add(CLString.from(it.id.toString()))
         }
         val paddingArray = CLArray(charArrayOf()).apply {
             add(CLNumber(paddingLeft.value))
@@ -1139,6 +953,15 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             add(CLNumber(paddingRight.value))
             add(CLNumber(paddingBottom.value))
         }
+        var strRowWeights = ""
+        var strColumnWeights = ""
+        if (rowWeights != null && rowWeights.size > 1) {
+            strRowWeights = rowWeights.joinToString(",")
+        }
+        if (columnWeights != null && columnWeights.size > 1) {
+            strColumnWeights = columnWeights.joinToString(",")
+        }
+
         ref.asCLContainer().apply {
             put("contains", elementArray)
             putString("type", "grid")
@@ -1148,8 +971,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             putNumber("vGap", verticalGap.value)
             putNumber("hGap", horizontalGap.value)
             put("padding", paddingArray)
-            putString("rowWeights", rowWeights)
-            putString("columnWeights", columnWeights)
+            putString("rowWeights", strRowWeights)
+            putString("columnWeights", strColumnWeights)
             putString("skips", skips)
             putString("spans", spans)
         }

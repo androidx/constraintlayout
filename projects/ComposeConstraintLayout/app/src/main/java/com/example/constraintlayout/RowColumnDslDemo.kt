@@ -56,7 +56,62 @@ public fun RowDslDemo() {
             val g1 = createRow(
                 a, b, c, d, e,
                 verticalGap = 10.dp,
-                horizontalGap = 10.dp,
+            )
+
+            constrain(g1) {
+                width = Dimension.matchParent
+                height = Dimension.matchParent
+            }
+            constrain(a) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(b) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(c) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(d) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(e) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val numArray = arrayOf("1", "2", "3", "4", "5")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num).width(120.dp),
+                onClick = {},
+            ) {
+                Text(text = String.format("btn%s", num))
+            }
+        }
+    }
+}
+
+@Preview(group = "row")
+@Composable
+public fun RowWeightsDslDemo() {
+    ConstraintLayout(
+        ConstraintSet {
+            val a = createRefFor("1")
+            val b = createRefFor("2")
+            val c = createRefFor("3")
+            val d = createRefFor("4")
+            val e = createRefFor("5")
+            val weights = arrayOf(3, 3, 2, 2, 1)
+            val g1 = createRow(
+                a, b, c, d, e,
+                verticalGap = 10.dp,
+                rowWeights = weights,
             )
 
             constrain(g1) {
@@ -110,8 +165,62 @@ public fun ColumnDslDemo() {
             val e = createRefFor("5")
             val g1 = createColumn(
                 a, b, c, d, e,
-                verticalGap = 10.dp,
                 horizontalGap = 10.dp,
+            )
+
+            constrain(g1) {
+                width = Dimension.matchParent
+                height = Dimension.matchParent
+            }
+            constrain(a) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(b) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(c) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(d) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(e) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val numArray = arrayOf("1", "2", "3", "4", "5")
+        for (num in numArray) {
+            Button(
+                modifier = Modifier.layoutId(num).width(120.dp),
+                onClick = {},
+            ) {
+                Text(text = String.format("btn%s", num))
+            }
+        }
+    }
+}
+@Preview(group = "column")
+@Composable
+public fun ColumnWeightsDslDemo() {
+    ConstraintLayout(
+        ConstraintSet {
+            val a = createRefFor("1")
+            val b = createRefFor("2")
+            val c = createRefFor("3")
+            val d = createRefFor("4")
+            val e = createRefFor("5")
+            val weights = arrayOf(3, 3, 2, 2, 1)
+            val g1 = createColumn(
+                a, b, c, d, e,
+                horizontalGap = 10.dp,
+                columnWeights = weights,
             )
 
             constrain(g1) {

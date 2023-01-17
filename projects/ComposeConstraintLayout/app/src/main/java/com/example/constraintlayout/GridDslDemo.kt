@@ -65,6 +65,8 @@ public fun GridDslDemo1() {
             val j = createRefFor("btn0")
             val k = createRefFor("box")
 
+            val weights = arrayOf(3, 2, 2, 2)
+
             val g1 = createGrid(
                 k, a, b, c, d, e, f, g, h, i, j, k,
                 rows = 5,
@@ -73,7 +75,7 @@ public fun GridDslDemo1() {
                 horizontalGap = 25.dp,
                 spans = "0:1x3",
                 skips = "12:1x1",
-                rowWeights = "3,2,2,2,2",
+                rowWeights = weights,
             )
 
 
