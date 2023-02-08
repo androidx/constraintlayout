@@ -252,7 +252,7 @@ public class ConstraintSet {
     public static final int START = ConstraintLayout.LayoutParams.START;
 
     /**
-     * The right side of a view in right to left languages.
+     * The right side of a view in left to right languages.
      * In right to left languages it corresponds to the left side of the view
      */
     public static final int END = ConstraintLayout.LayoutParams.END;
@@ -1045,9 +1045,6 @@ public class ConstraintSet {
         }
 
         int equalIndex = value.indexOf('=');
-        if (equalIndex < 1) {
-            return;
-        }
         int len = value.length();
         if (equalIndex > 0 && equalIndex < len - 1) {
             String key = value.substring(0, equalIndex);
