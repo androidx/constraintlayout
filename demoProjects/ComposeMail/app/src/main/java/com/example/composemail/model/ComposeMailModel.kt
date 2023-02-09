@@ -20,44 +20,42 @@ import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.composemail.model.data.MailEntryInfo
-import com.example.composemail.model.paging.MailsSource
+import com.example.composemail.model.data.MailInfoFull
+import com.example.composemail.model.data.MailInfoPeek
+import com.example.composemail.model.paging.createMailPager
 import com.example.composemail.model.repo.MailRepository
 import com.example.composemail.model.repo.OfflineRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-
-private const val LOAD_LIMIT = 15
-private const val REFRESH_THRESHOLD = 5
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ComposeMailModel(application: Application) : AndroidViewModel(application) {
     private val mailRepo: MailRepository =
         OfflineRepository(getApplication<Application>().resources)
 
-    private var _openedMail: MutableState<MailEntryInfo?> = mutableStateOf(null)
+    private var _openedMail: MutableState<MailInfoFull?> = mutableStateOf(null)
 
-    val openedMail: MailEntryInfo?
+    val openedMail: MailInfoFull?
         get() = _openedMail.value
 
-    val conversations: Flow<PagingData<MailEntryInfo>> = Pager(
-        config = PagingConfig(
-            pageSize = LOAD_LIMIT,
-            // Enable placeholders when loading indicators are supported, see MailItem.kt
-            enablePlaceholders = true,
-            prefetchDistance = REFRESH_THRESHOLD,
-            initialLoadSize = LOAD_LIMIT
-        )
-    ) {
-        MailsSource(mailRepo)
-    }.flow
+    val conversations: Flow<PagingData<MailInfoPeek>> = createMailPager(mailRepo).flow
+
+    fun isMailOpen(): Boolean = _openedMail.value != null
 
     fun openMail(id: Int) {
-        // TODO: Support opening a mail/thread
+        viewModelScope.launch {
+            var openedMailInfo: MailInfoFull?
+            withContext(Dispatchers.IO) {
+                openedMailInfo = mailRepo.getFullMail(id)
+            }
+            _openedMail.value = openedMailInfo
+        }
     }
 
     fun closeMail() {
-        // TODO: Support opening a mail/thread
+        _openedMail.value = null
     }
 }

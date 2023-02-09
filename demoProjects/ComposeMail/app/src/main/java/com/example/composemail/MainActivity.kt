@@ -22,17 +22,30 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
+import com.example.composemail.ui.compositionlocal.FoldableInfo
+import com.example.composemail.ui.compositionlocal.LocalFoldableInfo
 import com.example.composemail.ui.compositionlocal.LocalHeightSizeClass
 import com.example.composemail.ui.compositionlocal.LocalWidthSizeClass
 import com.example.composemail.ui.home.ComposeMailHome
 import com.example.composemail.ui.theme.ComposeMailTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3WindowSizeClassApi
 class MainActivity : ComponentActivity() {
@@ -40,10 +53,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val windowSizeClass = calculateWindowSizeClass(activity = this)
-            println(windowSizeClass)
+            val foldableInfo by collectFoldableInfoAsState(activity = this)
             CompositionLocalProvider(
                 LocalWidthSizeClass provides windowSizeClass.widthSizeClass,
-                LocalHeightSizeClass provides windowSizeClass.heightSizeClass
+                LocalHeightSizeClass provides windowSizeClass.heightSizeClass,
+                LocalFoldableInfo provides foldableInfo
             ) {
                 ComposeMailTheme {
                     // A surface container using the 'background' color from the theme
@@ -51,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        ComposeMailHome()
+                        ComposeMailHome(Modifier.fillMaxSize())
                     }
                 }
             }
@@ -60,14 +74,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+private fun collectFoldableInfoAsState(activity: ComponentActivity): State<FoldableInfo> {
+    val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
+    val foldableInfo = remember { mutableStateOf(FoldableInfo.Default) }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeMailTheme {
-        Greeting("Android")
+    LaunchedEffect(lifecycleScope, activity) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WindowInfoTracker.getOrCreate(activity)
+                    .windowLayoutInfo(activity)
+                    .collect { newLayoutInfo ->
+                        foldableInfo.value = FoldableInfo(
+                            isHalfOpen = newLayoutInfo.displayFeatures
+                                .filterIsInstance<FoldingFeature>()
+                                .map { it.state }
+                                .contains(FoldingFeature.State.HALF_OPENED)
+                        )
+                    }
+            }
+        }
     }
+    return foldableInfo
 }
