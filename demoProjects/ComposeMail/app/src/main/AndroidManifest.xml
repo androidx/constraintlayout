@@ -32,8 +32,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize"
+            android:configChanges="screenLayout|orientation"
             android:theme="@style/Theme.ComposeMail">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

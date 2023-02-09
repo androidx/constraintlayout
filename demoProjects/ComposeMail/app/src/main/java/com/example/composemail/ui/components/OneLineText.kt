@@ -31,11 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
- * [Text] Composable constrained to one line for better animation performance.
+ * [Text] Composable constrained to one line with default Clip overflow behavior for better
+ * animation performance.
  */
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun CheapText(
+fun OneLineText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
@@ -54,7 +54,7 @@ inline fun CheapText(
 
 @Preview
 @Composable
-private fun CheapTextPreview() {
+private fun OneLineTextPreview() {
     Column(Modifier.fillMaxSize()) {
         Text(text = "Normal")
         Column(
@@ -71,8 +71,8 @@ private fun CheapTextPreview() {
                 .width(40.dp)
                 .background(Color.LightGray)
         ) {
-            CheapText(text = "Hello \nWorld!")
-            CheapText(text = "This is a very very long text")
+            OneLineText(text = "Hello \nWorld!")
+            OneLineText(text = "This is a very very long text")
         }
     }
 }

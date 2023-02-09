@@ -25,9 +25,7 @@ import androidx.compose.runtime.remember
 inline fun rememberNewMailState(
     key: Any = Unit,
     initialLayoutState: NewMailLayoutState
-): NewMailState {
-    return remember(key) { NewMailState(initialLayoutState) }
-}
+): NewMailState = remember(key) { NewMailState(initialLayoutState) }
 
 class NewMailState(initialLayoutState: NewMailLayoutState) {
     private var _currentState = mutableStateOf(initialLayoutState)
@@ -52,4 +50,7 @@ enum class NewMailLayoutState {
     Full,
     Mini,
     Fab
+    // MiniExpanded
 }
+
+// Reply, Forward, Archive, Delete

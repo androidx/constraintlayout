@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.composemail.ui.home.toptoolbar
+package com.example.composemail.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -34,12 +30,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.composemail.ui.theme.textBackgroundColor
 
 @Composable
 fun SearchBar(
@@ -48,8 +41,6 @@ fun SearchBar(
     var placeholder: String by remember { mutableStateOf("Search in mails") }
     OutlinedTextField(
         modifier = modifier
-            .clip(RoundedCornerShape(32.dp))
-            .background(MaterialTheme.colors.textBackgroundColor)
             .onFocusChanged {
                 placeholder = if (it.isFocused) {
                     "I'm not implemented yet!"
@@ -57,10 +48,9 @@ fun SearchBar(
                     "Search in mails"
                 }
             },
-
         value = "",
-        onValueChange = { newText ->
-
+        onValueChange = {
+            // Do Nothing
         },
         placeholder = {
             Text(text = placeholder)
@@ -69,22 +59,16 @@ fun SearchBar(
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         },
         singleLine = true,
-        shape = MaterialTheme.shapes.small,
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
-        )
+        ),
+        shape = MaterialTheme.shapes.small.copy(CornerSize(50))
     )
 }
 
 @Preview
 @Composable
 private fun SearchBarPreview() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .height(400.dp)
-    ) {
-        SearchBar(Modifier.fillMaxWidth())
-    }
+    SearchBar()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.example.composemail.model.repo
+package com.example.composemail.ui.compositionlocal
 
-import com.example.composemail.model.data.MailInfoFull
-import com.example.composemail.model.data.MailInfoPeek
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 
-interface MailRepository {
-    suspend fun connect()
+val LocalFoldableInfo: ProvidableCompositionLocal<FoldableInfo> =
+    compositionLocalOf { FoldableInfo.Default }
 
-    suspend fun getNextSetOfConversations(amount: Int): MailConversationsResponse
-
-    suspend fun getFullMail(id: Int): MailInfoFull?
+data class FoldableInfo(
+    val isHalfOpen: Boolean
+) {
+    companion object {
+        val Default = FoldableInfo(isHalfOpen = false)
+    }
 }
-
-data class MailConversationsResponse(
-    val conversations: List<MailInfoPeek>,
-    val page: Int
-)

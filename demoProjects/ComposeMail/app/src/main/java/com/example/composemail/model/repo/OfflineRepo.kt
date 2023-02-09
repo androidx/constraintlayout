@@ -16,18 +16,22 @@
 
 package com.example.composemail.model.repo
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.res.Resources
 import android.net.Uri
+import android.util.Log
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import com.example.composemail.R
+import com.example.composemail.model.data.Attachment
 import com.example.composemail.model.data.Contact
-import com.example.composemail.model.data.MailEntryInfo
+import com.example.composemail.model.data.MailInfoFull
+import com.example.composemail.model.data.MailInfoPeek
 import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
 import java.time.Instant
-import java.util.Date
+
+private const val TAG = "OfflineRepo"
+
+private const val DELAY_PER_MAIL_MS = 100L
 
 private val names = listOf(
     "Jacob",
@@ -51,18 +55,28 @@ private val names = listOf(
     "Daniel",
 )
 
-private val contentLines = LoremIpsum(100).values.first().filter { it != '\n' }.split(" ")
+private val fileExtensions = listOf(
+    "png",
+    "mp3",
+    "mp4",
+    "pdf"
+)
+
+/**
+ * LoremIpsum deconstructed into words without line breaks.
+ */
+private val loremIpsumWords = LoremIpsum(100).values.first().filter { it != '\n' }.split(" ")
 
 class OfflineRepository(
     private val resources: Resources
 ) : MailRepository {
+    private val loadedMails: MutableMap<Int, MailInfoFull> = mutableMapOf()
+
     private var isFirstRequest = true
 
     private var currentId = 0
 
-    private val startTime = Instant.now().epochSecond
-
-    private var lastTime = startTime
+    private var lastTime = Instant.now().epochSecond
 
     private val samplePictures: List<Int> =
         listOf(
@@ -85,17 +99,21 @@ class OfflineRepository(
         )
 
     override suspend fun connect() {
+        // Consider it something similar as to establishing a connection with a Mail API, where you
+        // might need to authenticate or verify tokens, start a session, etc.
         TODO("Not yet implemented")
     }
 
     private var pageCounter = 0
 
     override suspend fun getNextSetOfConversations(amount: Int): MailConversationsResponse {
-        val conversations = ArrayList<MailEntryInfo>(amount)
-        val delayAmount = if (isFirstRequest) 0L else 200L
+        val conversations = ArrayList<MailInfoPeek>(amount)
+
         for (i in 0..amount) {
-            conversations.add(i, createNewConversation())
-            delay(delayAmount)
+            val newMail = createNewMailWithThread()
+            loadedMails[newMail.id] = newMail
+            conversations.add(i, newMail.toMailInfoPeek())
+            delay(DELAY_PER_MAIL_MS)
         }
         isFirstRequest = false
         return MailConversationsResponse(
@@ -104,31 +122,66 @@ class OfflineRepository(
         )
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun createNewTimestamp(): String {
-        val range = IntRange(1800, 3600 * 4)
-        lastTime -= range.random()
-        return SimpleDateFormat("hh:mma").format(Date.from(Instant.ofEpochSecond(lastTime)))
+    @Suppress("RedundantNullableReturnType") // Inherited nullability
+    override suspend fun getFullMail(id: Int): MailInfoFull? {
+        // TODO: Add delay?
+        return loadedMails[id] ?: kotlin.run {
+            Log.w(TAG, "findMail: no mails with id = $id")
+            MailInfoFull.Default
+        }
     }
 
-    private fun createNewConversation(): MailEntryInfo {
+    private fun createNewTimestamp(): Instant {
+        val range = IntRange(1800, 3600 * 4)
+        lastTime -= range.random()
+        return Instant.ofEpochSecond(lastTime)
+    }
+
+    private fun createNewMailWithThread(): MailInfoFull {
+        val previousMailId: Int? = if (loadedMails.size > 1) {
+            null // TODO: Add a logic to create Threads between Mails
+        } else {
+            null
+        }
         val name = names.random()
-        val shortContent = contentLines.shuffled().take(10).joinToString(" ")
-        return MailEntryInfo(
+        val attachments = mutableListOf<Attachment>()
+        for (i in 0 until IntRange(0, 4).random()) {
+            attachments.add(
+                Attachment(
+                    fileName = "myFile" + (i + 1) + "." + fileExtensions.random(),
+                    uri = Uri.EMPTY
+                )
+            )
+        }
+        return MailInfoFull(
             id = currentId++,
             from = Contact(
                 name = "$name Smith",
-                profilePic = fetchSampleUri(),
+                profilePic = randomSampleImageUri(),
                 email = "$name@smith.com",
                 phone = "123 456 789"
             ),
+            to = listOf(Contact.Me),
             timestamp = createNewTimestamp(),
-            subject = "Subject of this mail",
-            shortContent = shortContent
+            subject = "Mail Subject",
+            content = generateRandomContent(),
+            previousMailId = previousMailId,
+            attachments = attachments
         )
     }
 
-    private fun fetchSampleUri(): Uri {
+    private fun generateRandomContent(): String {
+        // 10 to 200 words
+        val wordCount = IntRange(10, (200).coerceAtMost(loremIpsumWords.size)).random()
+
+        // Pick a random offset from available words
+        val wordOffset = IntRange(0, loremIpsumWords.size - wordCount).random()
+
+        // Rebuild it into a continuous String
+        return loremIpsumWords.subList(wordOffset, wordOffset + wordCount).joinToString(" ")
+    }
+
+    private fun randomSampleImageUri(): Uri {
         val pictureId = samplePictures.random()
         return Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -137,4 +190,14 @@ class OfflineRepository(
             .appendPath(resources.getResourceEntryName(pictureId))
             .build()
     }
+
+    private fun MailInfoFull.toMailInfoPeek(): MailInfoPeek =
+        MailInfoPeek(
+            id = this.id,
+            from = this.from,
+            timestamp = this.timestamp,
+            subject = this.subject,
+            // Shorten to up to 20 words
+            shortContent = this.content.split(" ").take(20).joinToString(" ")
+        )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,12 @@
 
 package com.example.composemail.ui.utils
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.ConstraintSetScope
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.Date
+import java.util.Locale
 
-
-@Composable
-fun rememberConstraintSet(
-    key: Any = Unit,
-    constraints: ConstraintSetScope.() -> Unit
-): ConstraintSet {
-    val constraintSet = remember(key) {
-        ConstraintSet(constraints)
-    }
-    return constraintSet
-}
+/**
+ * E.g: 10:30AM
+ */
+internal fun Instant.toHourMinutes() = SimpleDateFormat("hh:mma", Locale.US).format(Date.from(this))

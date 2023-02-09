@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.example.composemail.ui.home.toptoolbar
+package com.example.composemail.ui.components
 
+import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import com.example.composemail.R
-
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun ProfileButton(modifier: Modifier = Modifier) {
+fun ContactImage(modifier: Modifier, uri: Uri, onClick: () -> Unit) {
     Image(
-        modifier = modifier,
-        painter = painterResource(id = R.drawable.ic_no_profile_pic),
-        contentDescription = "Profile button"
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(onClick = onClick),
+        painter = rememberAsyncImagePainter(model = uri.toString()),
+        contentDescription = null
     )
 }

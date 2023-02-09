@@ -56,7 +56,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
-import com.example.composemail.ui.components.CheapText
+import com.example.composemail.ui.components.OneLineText
 
 @Preview
 @Composable
@@ -94,6 +94,8 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
     val primary = MaterialTheme.colors.primary.toHexString()
     val primaryVariant = MaterialTheme.colors.primaryVariant.toHexString()
     val onPrimary = MaterialTheme.colors.onPrimary.toHexString()
+    val secondary = MaterialTheme.colors.secondary.toHexString()
+    val onSecondary = MaterialTheme.colors.onSecondary.toHexString()
     val surface = MaterialTheme.colors.surface.toHexString()
     val onSurface = MaterialTheme.colors.onSurface.toHexString()
 
@@ -108,7 +110,7 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
                 end: ['parent', 'end', 12],
                 bottom: ['parent', 'bottom', 12],
                 custom: {
-                  background: '#$primary'
+                  background: '#$secondary'
                 }
               },
               minIcon: {
@@ -125,7 +127,7 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
                 centerHorizontally: 'box',
                 centerVertically: 'box',
                 custom: {
-                  content: '#$onPrimary'
+                  content: '#$onSecondary'
                 }
               },
               title: {
@@ -203,7 +205,7 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
                 bottom: ['parent', 'bottom', 12],
                 end: ['parent', 'end', 12],
                 custom: {
-                  background: '#$primaryVariant'
+                  background: '#$primary'
                 }
               },
               minIcon: {
@@ -256,9 +258,8 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
     )
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-internal inline fun MotionLayoutScope.MotionMessageContent(
+internal fun MotionLayoutScope.MotionMessageContent(
     state: NewMailState
 ) {
     val currentState = state.currentState
@@ -271,28 +272,42 @@ internal inline fun MotionLayoutScope.MotionMessageContent(
     }
     Surface(
         modifier = Modifier.layoutId("box"),
-        color = motionColor(id = "box", name = "background"),
+        color = customColor(id = "box", name = "background"),
         elevation = 4.dp,
         shape = RoundedCornerShape(8.dp)
     ) {}
-    ColorableIconButton(
-        modifier = Modifier.layoutId("editClose"),
-        imageVector = when (currentState) {
-            NewMailLayoutState.Fab -> Icons.Default.Edit
-            else -> Icons.Default.Close
-        },
-        color = motionColor("editClose", "content"),
-        enabled = true
-    ) {
+    val iconColor = customColor("editClose", "content")
+    Row(Modifier.layoutId("editClose")) {
         when (currentState) {
-            NewMailLayoutState.Fab -> state.setToFull()
-            else -> state.setToFab()
+            NewMailLayoutState.Fab -> {
+                ColorableIconButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f, true),
+                    imageVector = Icons.Default.Edit,
+                    color = iconColor,
+                    enabled = true
+                ) {
+                    state.setToFull()
+                }
+            }
+
+            else -> {
+                ColorableIconButton(
+                    modifier = Modifier.fillMaxSize(),
+                    imageVector = Icons.Default.Close,
+                    color = iconColor,
+                    enabled = true
+                ) {
+                    state.setToFab()
+                }
+            }
         }
     }
     ColorableIconButton(
         modifier = Modifier.layoutId("minIcon"),
         imageVector = Icons.Default.KeyboardArrowDown,
-        color = motionColor("minIcon", "content"),
+        color = customColor("minIcon", "content"),
         enabled = true
     ) {
         when (currentState) {
@@ -300,16 +315,19 @@ internal inline fun MotionLayoutScope.MotionMessageContent(
             else -> state.setToFull()
         }
     }
-    CheapText(
+    OneLineText(
         text = dialogName,
         modifier = Modifier.layoutId("title"),
-        color = motionColor("title", "content"),
+        color = customColor("title", "content"),
         style = MaterialTheme.typography.h6
     )
-    MessageWidget(modifier = Modifier.layoutId("content"), onDelete = {
-        focusManager.clearFocus()
-        state.setToFab()
-    })
+    MessageWidget(
+        modifier = Modifier.layoutId("content"),
+        onDelete = {
+            focusManager.clearFocus()
+            state.setToFab()
+        }
+    )
 //            MessageWidgetCol(
 //                modifier = Modifier
 //                    .layoutId("content")
@@ -333,14 +351,13 @@ fun NewMailButton(
     }
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-internal inline fun ColorableIconButton(
+internal fun ColorableIconButton(
     modifier: Modifier,
     imageVector: ImageVector,
     color: Color,
     enabled: Boolean,
-    noinline onClick: () -> Unit
+    onClick: () -> Unit
 ) {
     Surface(
         modifier = modifier,
@@ -358,9 +375,8 @@ internal inline fun ColorableIconButton(
 }
 
 // With column
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-internal inline fun MessageWidgetCol(modifier: Modifier) {
+internal fun MessageWidgetCol(modifier: Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -476,7 +492,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                CheapText("To")
+                OneLineText("To")
             }
         )
         OutlinedTextField(
@@ -484,7 +500,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                CheapText("Subject")
+                OneLineText("Subject")
             }
         )
         OutlinedTextField(
@@ -494,7 +510,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                CheapText("Message")
+                OneLineText("Message")
             }
         )
         Button(
@@ -502,7 +518,7 @@ internal inline fun MessageWidget(
             onClick = onDelete // TODO: Do something different for Send onClick
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                CheapText(text = "Send")
+                OneLineText(text = "Send")
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "Send Mail",
