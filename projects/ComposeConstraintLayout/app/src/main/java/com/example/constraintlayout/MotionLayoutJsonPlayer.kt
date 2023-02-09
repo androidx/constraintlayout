@@ -44,7 +44,7 @@ import androidx.fragment.app.Fragment
 import com.google.accompanist.coil.rememberCoilPainter
 
 
-class Bug01Activity : AppCompatActivity() {
+class Bug03Activity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 45
 

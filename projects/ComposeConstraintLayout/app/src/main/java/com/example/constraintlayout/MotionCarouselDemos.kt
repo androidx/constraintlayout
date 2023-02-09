@@ -541,7 +541,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
                 centerVerticallyTo(parent)
             }
         }
-        transition("forward", startState, nextState) {
+        transition(name="forward", to=startState, from=nextState) {
             keyAttributes(slot0, slot1, slot2) {
                 frame(50) {
                     scaleX = .3f
@@ -549,7 +549,7 @@ fun MySimpleCarouselDSL(content: MotionCarouselScope.() -> Unit) {
                 }
             }
         }
-        transition("backward", startState, previousState) {
+        transition(name="backward", to= startState, from=previousState) {
             keyAttributes(slot0, slot1, slot2) {
                 frame(50) {
                     scaleX = .3f
@@ -640,7 +640,7 @@ fun MySimpleCarouselDSL2(content: MotionCarouselScope.() -> Unit) {
                 centerVerticallyTo(parent)
             }
         }
-        transition("forward", startState, nextState) {
+        transition(name="forward", to=startState, from=nextState) {
             keyAttributes(slot0, slot1, slot2) {
                 frame(50) {
                     scaleX = .3f
@@ -648,7 +648,7 @@ fun MySimpleCarouselDSL2(content: MotionCarouselScope.() -> Unit) {
                 }
             }
         }
-        transition("backward", startState, previousState) {
+        transition(name="backward", to=startState, from=previousState) {
             keyAttributes(slot0, slot1, slot2) {
                 frame(50) {
                     scaleX = .3f
@@ -802,8 +802,8 @@ fun MyCarouselDSL(content: MotionCarouselScope.() -> Unit) {
                 customColor("mainColor", Color.Blue)
             }
         }
-        transition("forward", startState, nextState) {}
-        transition("backward", startState, previousState) {}
+        transition(name="forward", to=startState, from=nextState) {}
+        transition(name="backward",to= startState, from=previousState) {}
     }
     MotionCarousel(motionScene, 2, 5, content = content)
 }
