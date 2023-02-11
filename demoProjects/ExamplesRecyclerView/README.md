@@ -219,10 +219,11 @@ This uses a trick to have have the horizontal recycler view not get the vertical
 </table>
 
  ---------------------------
+## Expanding RecyclerView Item
 
 <table border="0">
  <tr>
-    <td colspan="2"><b style="font-size:30px">This demos a recycler view expanding into detail view</b></td>
+    <td colspan="2"><b style="font-size:30px">This demos a RecyclerView expanding into detail view</b></td>
  </tr>
  <tr>
     <td> 
