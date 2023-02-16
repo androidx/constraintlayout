@@ -6,7 +6,7 @@ Includes an example of how to use MotionLayout with the paging library.
 -----------------------------
 
 ### App Demo
-https://user-images.githubusercontent.com/61845568/176751838-834cdd38-e942-45b6-84a6-92e9d51adf0f.mp4
+https://user-images.githubusercontent.com/61845568/217963382-eea1768d-1439-4259-8910-028f41c5e9d1.webm
 
 ### Mail Item - [Composable](https://github.com/androidx/constraintlayout/blob/229131491d82ff88cfe65bcaa0de436e9aeb4650/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/mails/MailItem.kt#L70)
 https://user-images.githubusercontent.com/61845568/176752054-d8791336-244e-4037-83f3-1d7204fd7562.mp4
