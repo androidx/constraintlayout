@@ -77,7 +77,7 @@ private val homeMotionScene = MotionScene {
     // Mail toolbar constraints for whenever a Mail is open
     val setVisibleMailToolbarConstraints: ConstraintSetScope.() -> Unit = {
         constrain(mailToolbarRef) {
-            end.linkTo(parent.end, 16.dp)
+            end.linkTo(parent.end, 12.dp)
             bottom.linkTo(parent.bottom, 16.dp)
         }
     }
