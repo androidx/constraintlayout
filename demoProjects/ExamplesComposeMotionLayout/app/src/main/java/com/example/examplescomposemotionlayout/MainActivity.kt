@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
         get("MotionInLazyColumn JSON") { MotionInLazyColumn() },
         get("DynamicGraph") { ManyGraphs() },
         get("ReactionSelector") { ReactionSelector() },
-        )
+        get("MotionPager") { MotionPager() }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,20 +76,22 @@ fun ComposableMenu(map: List<ComposeFunc>, act: (act: ComposeFunc) -> Unit) {
             .fillMaxWidth()
             .padding(10.dp)
     ) {
-        for (i in 0..(map.size-1)/2) {
-            val cFunc1 = map[i*2]
-            val cFunc2 = if ((i*2+1 < map.size)) map[i*2+1] else null
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
+        for (i in 0..(map.size - 1) / 2) {
+            val cFunc1 = map[i * 2]
+            val cFunc2 = if ((i * 2 + 1 < map.size)) map[i * 2 + 1] else null
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Button(onClick = { act(cFunc1) }) {
                     Text(cFunc1.toString(), modifier = Modifier.padding(2.dp))
                 }
-           if (cFunc2 != null) {
-               Button(onClick = { act(cFunc2) }) {
-                   val s = cFunc2.toString().substring(cFunc2.toString().indexOf(' ')+1)
-                   Text(s, modifier = Modifier.padding(2.dp))
-               }
-           }
+                if (cFunc2 != null) {
+                    Button(onClick = { act(cFunc2) }) {
+                        val s = cFunc2.toString().substring(cFunc2.toString().indexOf(' ') + 1)
+                        Text(s, modifier = Modifier.padding(2.dp))
+                    }
+                }
             }
         }
 

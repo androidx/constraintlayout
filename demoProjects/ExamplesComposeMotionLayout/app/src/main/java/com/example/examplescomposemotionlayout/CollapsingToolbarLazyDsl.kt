@@ -83,7 +83,7 @@ fun ToolBarLazyExampleDsl() {
                 start.linkTo(image.start, 16.dp)
             }
         }
-        transition("default", start1, end1) {}
+        transition( start1, end1, "default") {}
     }
 
     val maxPx = with(LocalDensity.current) { big.roundToPx().toFloat() }

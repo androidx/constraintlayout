@@ -74,7 +74,7 @@ fun ToolBarExampleDsl() {
                 start.linkTo(image.start, 16.dp)
             }
         }
-        transition("default", start1, end1) {}
+        transition(start1, end1,"default") {}
     }
 
     Column(
