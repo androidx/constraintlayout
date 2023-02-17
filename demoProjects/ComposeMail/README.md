@@ -1,7 +1,12 @@
 ## ComposeMail Sample
 Sample project that demonstrates the use of MotionLayout for a Mail client application.
 
-Includes an example of how to use MotionLayout with the paging library.
+Includes MotionLayout examples for:
+- Foldable Support
+  - MotionSceneDsl + MotionLayout: [MotionScene](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/home/Home.kt#L55), [MotionLayout()](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/home/Home.kt#L237), [resolveConstraintSet()](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/home/Home.kt#L283)
+  - Collect Foldable Info and provide as State: [LocalFoldableInfo](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/compositionlocal/FoldableInfo.kt#L22), [collectFoldableInfoAsState()](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/MainActivity.kt#L77)
+- Usage with Paging Library
+  - Handle Placeholders as Loading Indicators: [MailItem()](https://github.com/androidx/constraintlayout/blob/7fed594bbbd3d244767d093534dc5ed6ba3ce3e3/demoProjects/ComposeMail/app/src/main/java/com/example/composemail/ui/mails/MailItem.kt#L74)
 ## ComposeMail Overview
 -----------------------------
 
