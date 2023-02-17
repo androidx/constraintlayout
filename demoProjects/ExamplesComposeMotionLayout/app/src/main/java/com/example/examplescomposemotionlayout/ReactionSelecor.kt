@@ -67,7 +67,7 @@ fun ReactionSelector() {
             }
         }
         ends.mapIndexed { index, end ->
-            transition("transition$index", start1, end) {
+            transition(start1, end,"transition$index") {
             }
         }
     }

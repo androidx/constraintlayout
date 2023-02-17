@@ -72,7 +72,7 @@ fun MotionInLazyColumnDsl() {
                 start.linkTo(parent.start, 16.dp)
             }
         }
-        transition("default", start1, end1) {}
+        transition( start1, end1,"default") {}
     }
 
     val model = remember { BooleanArray(100) }

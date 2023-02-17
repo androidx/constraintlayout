@@ -84,7 +84,7 @@ fun DynamicGraph(values: List<Float> = listOf<Float>(12f, 32f, 21f, 32f, 2f), ma
                 }
             }
         }
-        transition("default", start1, end1) {
+        transition(start1, end1,"default") {
         }
     }
     var animateToEnd by remember { mutableStateOf(true) }
