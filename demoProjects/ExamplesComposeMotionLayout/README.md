@@ -117,6 +117,13 @@ This demos using the DSL to simply create complex interactions
 
 ![emoji_selector_crop](https://user-images.githubusercontent.com/15019413/197297375-9a2463dc-8a40-48d7-8526-6b9424f9ec46.gif)
 
+### Integration with HorizontalPager 
+
+The demo show how to animate the content of a horizontal pager. Using MotionLayout.
+[MotionPager.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/MotionPager.kt) 
+
+![Motion horizontal Pager](https://user-images.githubusercontent.com/15019413/219705130-94ec8bff-3411-4de6-bb42-3d4723908c2a.mp4)
+
 
 ## Contributing
 
