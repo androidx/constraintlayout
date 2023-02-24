@@ -2,18 +2,22 @@ package com.example.examplescomposemotionlayout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+ 
 import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+ 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+ 
 import androidx.compose.ui.unit.sp
+ 
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
@@ -47,7 +51,6 @@ fun MotionPager() {
         // Our page content
         val pageOffset = calculateCurrentOffsetForPage(page)
         DynamicPages(graphs[page], pagerProgress = pageOffset, pageNumber = page)
-
     }
 }
 
@@ -59,16 +62,18 @@ fun DynamicPages(
     max: Int = 100,
     pagerProgress: Float = 1f,
             pageNumber:Int  = 1
+ 
 ) {
-
     val boxId = "box"
     var scene = MotionScene() {
         val box = createRefFor(boxId)
         val start1 = constraintSet {
             constrain(box) {
+ 
                 width = Dimension.percent(.5f)
                 height = Dimension.percent(.5f)
                 rotationZ = 360f
+ 
                 centerTo(parent)
             }
         }
@@ -81,7 +86,6 @@ fun DynamicPages(
 
                 centerTo(parent)
             }
-
         }
         transition(start1, end1, "default") {
         }
