@@ -40,7 +40,7 @@ fun testTwoByTwoDemo() {
             grid: { 
                 width: 200,
                 height: 200,
-                type: "Grid",
+                type: "grid",
                 boxesCount: 4,
                 orientation: 0,
                 rows: 2,
@@ -78,7 +78,7 @@ fun testOrientationDemo() {
             grid: { 
                 width: 200,
                 height: 200,
-                type: "Grid",
+                type: "grid",
                 boxesCount: 4,
                 orientation: 1,
                 rows: 2,
@@ -116,7 +116,7 @@ fun testRowsDemo() {
             grid: { 
                 width: 200,
                 height: 200,
-                type: "Grid",
+                type: "grid",
                 boxesCount: 4,
                 orientation: 0,
                 rows: 0,
@@ -154,7 +154,7 @@ fun testColumnsDemo() {
             grid: { 
                 width: 200,
                 height: 200,
-                type: "Grid",
+                type: "grid",
                 boxesCount: 4,
                 orientation: 0,
                 rows: 1,
@@ -192,7 +192,7 @@ fun testSpansDemo() {
             grid: { 
                 height: 200,
                 width: 200,
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 rows: 2,
                 columns: 2,
@@ -227,7 +227,7 @@ fun testSkipsDemo() {
             grid: { 
                 height: 200,
                 width: 200,
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 rows: 2,
                 columns: 2,
@@ -262,7 +262,7 @@ fun testRowWeightsDemo() {
             grid: { 
                 height: 200,
                 width: 200,
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 rows: 0,
                 columns: 1,
@@ -299,7 +299,7 @@ fun testColumnWeightsDemo() {
             grid: { 
                 height: 200,
                 width: 200,
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 rows: 1,
                 columns: 0,
@@ -340,7 +340,7 @@ fun testGapsDemo() {
             grid: { 
                 height: 200,
                 width: 200,
-                type: "Grid",
+                type: "grid",
                 orientation: 0,
                 rows: 2,
                 columns: 2,

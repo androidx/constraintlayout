@@ -62,7 +62,7 @@ public fun rowToColumnGridDemo() {
                     grid1: { 
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 0,
                         columns: 1,
@@ -79,7 +79,7 @@ public fun rowToColumnGridDemo() {
                     grid2: { 
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 1,
                         columns: 0,
@@ -151,7 +151,7 @@ public fun wrapToSpreadGridDemo() {
                     grid1: { 
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 2,
                         columns: 2,
@@ -168,7 +168,7 @@ public fun wrapToSpreadGridDemo() {
                     grid2: { 
                         width: 200,
                         height: 200,
-                        type: "Grid",
+                        type: "grid",
                         orientation: 0,
                         rows: 2,
                         columns: 2,

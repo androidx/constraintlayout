@@ -36,8 +36,7 @@ fun RowDemo() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Row",
-                vGap: 10,
+                type: "row",
                 hGap: 10,
                 contains: ["btn1", "btn2", "btn3", "btn4", "btn5"],
               },
@@ -65,9 +64,8 @@ fun ColumnDemo() {
             grid: { 
                 height: "parent",
                 width: "parent",
-                type: "Column",
+                type: "column",
                 vGap: 10,
-                hGap: 10,
                 contains: ["btn1", "btn2", "btn3", "btn4", "btn5"],
               },
         }
