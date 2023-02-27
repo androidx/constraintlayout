@@ -62,7 +62,7 @@ public fun MotionGridDemo() {
                     split: { 
                         height: 'parent',
                         width: 'parent',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 0,
                         vGap: 10,
                         hGap: 15,
@@ -76,7 +76,7 @@ public fun MotionGridDemo() {
                     split: { 
                         height: 'parent',
                         width: 'parent',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 1,
                         rows: 3,
                         columns: 2,
@@ -144,7 +144,7 @@ public fun MotionGridDemo2() {
                     split1: { 
                         height: 'parent',
                         width: 'parent',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 0,
                         hGap: 10,
                         columns: 1,
@@ -153,7 +153,7 @@ public fun MotionGridDemo2() {
                       split2: { 
                         height: 'spread',
                         width: 'spread',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 0,
                         hGap: 15,
                         rows: 1,
@@ -193,7 +193,7 @@ public fun MotionGridDemo2() {
                     split1: { 
                         height: 'parent',
                         width: 'parent',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 0,
                         vGap: 10,
                         hGap: 15,
@@ -203,7 +203,7 @@ public fun MotionGridDemo2() {
                       split2: { 
                         height: 'spread',
                         width: 'spread',
-                        type: 'Grid',
+                        type: 'grid',
                         orientation: 0,
                         hGap: 15,
                         columns: 1,
