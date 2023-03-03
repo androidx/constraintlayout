@@ -26,7 +26,11 @@ class MainActivity : ComponentActivity() {
         get("MotionInLazyColumn JSON") { MotionInLazyColumn() },
         get("DynamicGraph") { ManyGraphs() },
         get("ReactionSelector") { ReactionSelector() },
-        get("MotionPager") { MotionPager() }
+        get("MotionPager") { MotionPager() },
+        get("Puzzle") { Puzzle() },
+        get("MPuzzle") { MPuzzle() },
+
+
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
