@@ -125,6 +125,23 @@ The demo show how to animate the content of a horizontal pager. Using MotionLayo
 ![MotionPager](https://user-images.githubusercontent.com/15019413/219712219-7cb99bf3-8760-4df6-8189-53b20287f614.gif)
 
 
+### Working with images
+
+The demo show how to animate the content of a horizontal pager. Using MotionLayout.
+[Puzzle.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/Puzzle.kt) 
+
+
+https://user-images.githubusercontent.com/15019413/222793899-b0e4c8ad-e75c-4c9d-9c10-bef7b7ba387f.mp4
+
+
+
+
+
+
+
+
+
+
 ## Contributing
 
 If you'd like to get involved and contribute please read [CONTRIBUTING](https://github.com/androidx/constraintlayout/blob/main/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
