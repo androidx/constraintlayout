@@ -71,6 +71,50 @@ public fun GridDslKeypad() {
                 start.linkTo(parent.start, 20.dp)
                 end.linkTo(parent.end, 20.dp)
             }
+            constrain(btn1) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn2) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn3) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn4) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn5) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn6) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn7) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn8) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn9) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(btn0) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            constrain(box) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
         },
 
         modifier = Modifier.fillMaxSize()
