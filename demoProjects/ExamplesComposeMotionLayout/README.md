@@ -29,7 +29,7 @@ https://user-images.githubusercontent.com/15019413/195418373-5a92e2b7-9ff1-4a8a-
 
 #### Motion Layout as Collapsing toolbar for Lazy column
 
-This is based on using
+This is based on using a Box to capture the scrolls of the LazyColumn within.
 ```kotlin
         Box(
             Modifier
@@ -42,6 +42,10 @@ This is based on using
             }
         }
 ```
+A NestedScrollConnection object is passed to a Box Composable via a modifier ( Modifier.nestedScroll(nestedScrollConnection)). The Box contains the LazyColumn.
+The Box provides callbacks from the scrolling LazyColumn within. 
+
+When the onPreScroll of the NestedScrollConnection is called It returns the amount of "offset" to absorb and uses the offset to collapse the MotionLayout.
 
 * [Code for Collapsing Toolbar over Lazycolumn DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyDsl.kt)
 * [Code for Collapsing Toolbar over Lazycolumn JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyJson.kt)
