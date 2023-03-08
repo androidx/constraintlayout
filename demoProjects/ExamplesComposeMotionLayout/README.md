@@ -4,8 +4,6 @@ Sample project that demonstrates various uses of MotionLayout in Compose
 ## Overview
 -----------------------------
 
-### App Demo
-
 #### MotionLayout as a Collapsing toolbar for a Column
 
 This is based on using 
@@ -27,6 +25,8 @@ As the user scrolls up the MotionLayout shrinks with the scrolling Spacer then s
 
 https://user-images.githubusercontent.com/15019413/195418373-5a92e2b7-9ff1-4a8a-851e-09951557147b.mp4
 
+-----------------------------
+
 #### Motion Layout as Collapsing toolbar for Lazy column
 
 This is based on using
@@ -47,6 +47,8 @@ This is based on using
 * [Code for Collapsing Toolbar over Lazycolumn JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarLazyJson.kt)
 
 https://user-images.githubusercontent.com/15019413/195679372-153f6ccf-d263-4085-9441-c29c105360e7.mp4
+
+-----------------------------
 
 #### Motion Layout in a Lazy column
 
