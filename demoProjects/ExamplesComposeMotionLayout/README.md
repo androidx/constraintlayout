@@ -6,7 +6,7 @@ Sample project that demonstrates various uses of MotionLayout in Compose
 
 ### App Demo
 
-#### Motion Layout as Collapsing toolbar for Column
+#### MotionLayout as a Collapsing toolbar for a Column
 
 This is based on using 
 ```kotlin
@@ -15,6 +15,12 @@ Column(
         modifier = Modifier.verticalScroll(scroll)
     )
 ```
+
+The Column's modifier  ```Modifier.verticalScroll(scroll)``` will modify ```scroll.value``` as it scrolls.
+We can use this value with a little math to calculate the appropriate progress. 
+
+When the Column is at the start the MotionLayout sits on top of the Spacer.
+As the user scrolls up the MotionLayout shrinks with the scrolling Spacer then stops.
 
 * [Code for Collapsing Toolbar over Column DSL Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarDsl.kt)
 * [Code for Collapsing Toolbar over Column JSON Version](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/CollapsingToolbarJson.kt)
