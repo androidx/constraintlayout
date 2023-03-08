@@ -139,7 +139,20 @@ The demo show how to animate the content of a horizontal pager. Using MotionLayo
 
 ### Working with images
 
-The demo show how to animate the content of a horizontal pager. Using MotionLayout.
+Ths demo show how you can work with a large collection of composables in MotionLayout.
+A Flow is used to layout proportions of the image broken up into 25 Composables. ```PuzzlePiece()```
+
+The DSL allows use to itterate across many refrences and set constraints
+ ```kolin
+ref.forEach {
+      constrain(it) {
+           width = Dimension.percent(1f / grid)
+           height = Dimension.ratio("1:1")
+       }
+}
+```
+
+
 [Puzzle.kt](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/Puzzle.kt) 
 
 
