@@ -1,5 +1,11 @@
 # ConstraintLayout 🗜️📏
 
+# Sample Code
+* [MotionLayout Compose Examples](https://github.com/androidx/constraintlayout/tree/main/demoProjects/ExamplesComposeMotionLayout#motionlayout-for-compose-examples)
+* [ConstraintLayout Compose Examples](https://github.com/androidx/constraintlayout/tree/main/demoProjects/ExamplesComposeConstraintLayout#constraintlayout-for-compose-examples)
+* [MotionLayout & RecyclerView Examples](https://github.com/androidx/constraintlayout/tree/main/demoProjects/ExamplesRecyclerView#motionlayout-recyclerview-sample)
+* [Compose Grid Helper Examples](https://github.com/androidx/constraintlayout/tree/main/demoProjects/ExampleComposeGrid#grid-for-compose-examples)
+
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 <img src="https://img.shields.io/badge/stable-2.1.4-blue"/><img src="https://img.shields.io/badge/compose-1.0.1-blue"/> 
