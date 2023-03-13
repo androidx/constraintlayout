@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
         get("DynamicGraph") { ManyGraphs() },
         get("ReactionSelector") { ReactionSelector() },
         get("MotionPager") { MotionPager() }
-
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
