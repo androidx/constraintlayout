@@ -25,24 +25,30 @@ import kotlin.random.Random
 
 
 /**
- * A demo of using MotionLayout as a collapsing Toolbar using JSON to define the MotionScene
+ * Shows how to use MotionLayout to have animated graphs in a LazyColumn, where each graph is
+ * animated as it's revealed.
+ *
+ * Demonstrates how to dynamically create constraints based on input. See [DynamicGraph]. Where
+ * constraints are created to lay out the given values into a single graph layout.
  */
-
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
 @Composable
 fun ManyGraphs() {
-    val rand = Random
-    val count = 100
-    val graphs = mutableListOf<List<Float>>()
-    for (i in 0..100) {
-        val values = FloatArray(10) { rand.nextInt(100).toFloat() + 10f }.asList()
-        graphs.add(values)
+    val graphs = remember {
+        mutableListOf<List<Float>>().apply {
+            for (i in 0..100) {
+                val values = FloatArray(10) { Random.nextInt(100).toFloat() + 10f }.asList()
+                add(values)
+            }
+        }
     }
-    LazyColumn() {
+    LazyColumn {
         items(100) {
-            Box(modifier = Modifier
-                .padding(3.dp)
-                .height(200.dp)) {
+            Box(
+                modifier = Modifier
+                    .padding(3.dp)
+                    .height(200.dp)
+            ) {
                 DynamicGraph(graphs[it])
             }
         }
@@ -61,7 +67,7 @@ fun DynamicGraph(values: List<Float> = listOf<Float>(12f, 32f, 21f, 32f, 2f), ma
         tmpNames[i] = "foo$i"
     }
     val names: List<String> = tmpNames.filterNotNull()
-    var scene = MotionScene() {
+    val scene = MotionScene {
         val cols = names.map { createRefFor(it) }.toTypedArray()
         val start1 = constraintSet {
             createHorizontalChain(elements = cols)
@@ -84,21 +90,28 @@ fun DynamicGraph(values: List<Float> = listOf<Float>(12f, 32f, 21f, 32f, 2f), ma
                 }
             }
         }
-        transition(start1, end1,"default") {
+        transition(start1, end1, "default") {
         }
     }
     var animateToEnd by remember { mutableStateOf(true) }
+    val animateToEndFlow = remember { snapshotFlow { animateToEnd } }
     val progress = remember { Animatable(0f) }
-    LaunchedEffect(animateToEnd) {
-        progress.animateTo(
-            if (animateToEnd) 1f else 0f,
-            animationSpec = tween(800)
-        )
+
+    // Animate on reveal
+    LaunchedEffect(Unit) {
+        animateToEndFlow.collect {
+            progress.animateTo(
+                if (animateToEnd) 1f else 0f,
+                animationSpec = tween(800)
+            )
+        }
     }
+
     MotionLayout(
         modifier = Modifier
             .background(Color(0xFF221010))
-            .fillMaxSize().clickable{animateToEnd = !animateToEnd}
+            .fillMaxSize()
+            .clickable { animateToEnd = !animateToEnd }
             .padding(1.dp),
         motionScene = scene,
         progress = progress.value
@@ -108,10 +121,8 @@ fun DynamicGraph(values: List<Float> = listOf<Float>(12f, 32f, 21f, 32f, 2f), ma
                 modifier = Modifier
                     .layoutId("foo$i")
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Color.hsv(i*240f/count,0.6f,0.6f))
+                    .background(Color.hsv(i * 240f / count, 0.6f, 0.6f))
             )
-
         }
     }
-
 }

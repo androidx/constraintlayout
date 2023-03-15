@@ -25,7 +25,21 @@ import androidx.constraintlayout.compose.MotionScene
 import java.lang.Float.min
 
 /**
- * A demo of using MotionLayout as a collapsing Toolbar using the DSL to define the MotionScene
+ * A demo of using MotionLayout as a collapsing Toolbar using the DSL to define the MotionScene.
+ *
+ * This is based on using
+ *
+ * ```
+ * Column(
+ *  horizontalAlignment = Alignment.CenterHorizontally,
+ *  modifier = Modifier.verticalScroll(scroll)
+ * )
+ * ```
+ * The Column's modifier  Modifier.verticalScroll(scroll) will modify scroll.value as it scrolls.
+ * We can use this value with a little math to calculate the appropriate progress.
+ *
+ * When the Column is at the start the MotionLayout sits on top of the Spacer. As the user scrolls
+ * up the MotionLayout shrinks with the scrolling Spacer then, stops.
  */
 @OptIn(ExperimentalMotionApi::class)
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
@@ -34,10 +48,9 @@ fun ToolBarExampleDsl() {
     val scroll = rememberScrollState(0)
     val big = 250.dp
     val small = 50.dp
-    var scene = MotionScene() {
-        val title = createRefFor("title")
-        val image = createRefFor("image")
-        val icon = createRefFor("icon")
+    val scene = MotionScene {
+        val (title, image, icon) = createRefsFor("title", "image", "icon")
+
         val start1 = constraintSet {
             constrain(title) {
                 bottom.linkTo(image.bottom)
@@ -74,7 +87,7 @@ fun ToolBarExampleDsl() {
                 start.linkTo(image.start, 16.dp)
             }
         }
-        transition(start1, end1,"default") {}
+        transition(start1, end1, "default") {}
     }
 
     Column(
@@ -91,8 +104,8 @@ fun ToolBarExampleDsl() {
             )
         }
     }
-    val gap =  with(LocalDensity.current){big.toPx() - small.toPx()}
-    val progress = min(scroll.value / gap, 1f);
+    val gap = with(LocalDensity.current) { big.toPx() - small.toPx() }
+    val progress = minOf(scroll.value / gap, 1f)
 
     MotionLayout(
         modifier = Modifier.fillMaxSize(),
@@ -100,15 +113,13 @@ fun ToolBarExampleDsl() {
         progress = progress
     ) {
         Image(
-            modifier = Modifier.layoutId("image"),
+            modifier = Modifier
+                .layoutId("image")
+                .background(customColor("image", "cover")),
             painter = painterResource(R.drawable.bridge),
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
-        Box(modifier = Modifier
-            .layoutId("image")
-            .background(motionProperties("image").value.color("cover"))) {
-        }
         Image(
             modifier = Modifier.layoutId("icon"),
             painter = painterResource(R.drawable.menu),

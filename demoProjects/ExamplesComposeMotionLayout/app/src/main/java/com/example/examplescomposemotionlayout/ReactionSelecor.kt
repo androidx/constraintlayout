@@ -26,28 +26,30 @@ import androidx.constraintlayout.compose.MotionScene
 fun ReactionSelector() {
     var selected by remember { mutableStateOf(3) }
     val transitionName = remember { mutableStateOf("transition1") }
-    val emojis = "😀 🙂 🤨 😐 😒 😬".split(' ')
-    val emojiNames = listOf<String>(
-        "Grinning Face",
-        "Slightly Smiling Face",
-        "Face with Raised Eyebrow",
-        "Neutral Face",
-        "Unamused Face",
-        "Grimacing Face"
-    )
+    val emojis = remember { "😀 🙂 🤨 😐 😒 😬".split(' ') }
+    val emojiNames = remember {
+        listOf<String>(
+            "Grinning Face",
+            "Slightly Smiling Face",
+            "Face with Raised Eyebrow",
+            "Neutral Face",
+            "Unamused Face",
+            "Grimacing Face"
+        )
+    }
 
-    var scene = MotionScene() {
+    val scene = MotionScene {
         val emojiIds = emojis.map { createRefFor(it) }.toTypedArray()
         val titleIds = emojiNames.map { createRefFor(it) }.toTypedArray()
 
         val start1 = constraintSet {
             createHorizontalChain(elements = emojiIds)
-            emojiIds.map {
+            emojiIds.forEach {
                 constrain(it) {
                     top.linkTo(parent.top, 10.dp)
                 }
             }
-            titleIds.mapIndexed { index, title ->
+            titleIds.forEachIndexed { index, title ->
                 constrain(title) {
                     top.linkTo(emojiIds[0].bottom, 10.dp)
                     start.linkTo(emojiIds[index].start)
@@ -67,19 +69,22 @@ fun ReactionSelector() {
             }
         }
         ends.mapIndexed { index, end ->
-            transition(start1, end,"transition$index") {
+            transition(start1, end, "transition$index") {
             }
         }
     }
-
     val progress = remember { Animatable(0f) }
-    LaunchedEffect(selected) {
-        progress.snapTo(0f)
-        transitionName.value = "transition$selected"
-        progress.animateTo(
-            1f,
-            animationSpec = tween(800)
-        )
+    val selectedFlow = snapshotFlow { selected }
+
+    LaunchedEffect(Unit) {
+        selectedFlow.collect {
+            progress.snapTo(0f)
+            transitionName.value = "transition$it"
+            progress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(800)
+            )
+        }
     }
 
     Column {
@@ -91,16 +96,20 @@ fun ReactionSelector() {
             transitionName = transitionName.value,
             progress = progress.value
         ) {
-            emojis.mapIndexed { index, icon ->
-                Text(text = icon, modifier = Modifier
-                    .layoutId(icon)
-                    .clickable() {
-                        selected = index
-                    })
-            }
-            emojiNames.mapIndexed { index, name ->
+            emojis.forEachIndexed { index, icon ->
                 Text(
-                    text = name, color = Color.White,
+                    text = icon,
+                    modifier = Modifier
+                        .layoutId(icon)
+                        .clickable {
+                            selected = index
+                        }
+                )
+            }
+            emojiNames.forEach { name ->
+                Text(
+                    text = name,
+                    color = Color.White,
                     modifier = Modifier.layoutId(name)
                 )
             }

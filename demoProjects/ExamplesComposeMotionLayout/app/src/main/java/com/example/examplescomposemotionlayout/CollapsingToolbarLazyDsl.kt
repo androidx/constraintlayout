@@ -31,17 +31,34 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 
 /**
- * A demo of using MotionLayout as a collapsing Toolbar using JSON to define the MotionScene
+ * A demo using MotionLayout as a collapsing Toolbar using the DSL to define the MotionScene, where
+ * the scrolling of the LazyColumn is obtained with a NestedScrollConnection.
+ *
+ * ```
+ * LazyColumn(
+ *   Modifier
+ *     .fillMaxWidth()
+ *     .nestedScroll(nestedScrollConnection)
+ * ) {
+ *   items(100) {
+ *     Text(text = "item $it", modifier = Modifier.padding(4.dp))
+ *   }
+ * }
+ * ```
+ *
+ * A NestedScrollConnection object is passed to a LazyColumn Composable via a modifier
+ * (Modifier.nestedScroll(nestedScrollConnection)).
+ *
+ * When the onPreScroll of the NestedScrollConnection is called It returns the amount of "offset" to
+ * absorb and uses the offset to collapse the MotionLayout.
  */
 @OptIn(ExperimentalMotionApi::class)
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
 @Composable
 fun ToolBarLazyExampleDsl() {
-    val scroll = rememberScrollState(0)
-
     val big = 250.dp
     val small = 50.dp
-    var scene = MotionScene() {
+    val scene = MotionScene {
         val title = createRefFor("title")
         val image = createRefFor("image")
         val icon = createRefFor("icon")
@@ -83,7 +100,7 @@ fun ToolBarLazyExampleDsl() {
                 start.linkTo(image.start, 16.dp)
             }
         }
-        transition( start1, end1, "default") {}
+        transition(start1, end1, "default") {}
     }
 
     val maxPx = with(LocalDensity.current) { big.roundToPx().toFloat() }
@@ -93,7 +110,7 @@ fun ToolBarLazyExampleDsl() {
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val height = toolbarHeight.value;
+                val height = toolbarHeight.value
 
                 if (height + available.y > maxPx) {
                     toolbarHeight.value = maxPx
@@ -108,30 +125,24 @@ fun ToolBarLazyExampleDsl() {
                 toolbarHeight.value += available.y
                 return Offset(0f, available.y)
             }
-
         }
     }
 
-    val progress = 1 - (toolbarHeight.value - minPx) / (maxPx - minPx);
+    val progress = 1 - (toolbarHeight.value - minPx) / (maxPx - minPx)
 
     Column {
         MotionLayout(
-            modifier = Modifier.background(Color.Green),
             motionScene = scene,
             progress = progress
         ) {
             Image(
-                modifier = Modifier.layoutId("image"),
+                modifier = Modifier
+                    .layoutId("image")
+                    .background(customColor("image", "cover")),
                 painter = painterResource(R.drawable.bridge),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
-            Box(
-                modifier = Modifier
-                    .layoutId("image")
-                    .background(motionProperties("image").value.color("cover"))
-            ) {
-            }
             Image(
                 modifier = Modifier.layoutId("icon"),
                 painter = painterResource(R.drawable.menu),
@@ -144,14 +155,13 @@ fun ToolBarLazyExampleDsl() {
                 color = Color.White
             )
         }
-        Box(
+        LazyColumn(
             Modifier
                 .fillMaxWidth()
-                .nestedScroll(nestedScrollConnection)) {
-            LazyColumn() {
-                items(100) {
-                    Text(text = "item $it", modifier = Modifier.padding(4.dp))
-                }
+                .nestedScroll(nestedScrollConnection)
+        ) {
+            items(100) {
+                Text(text = "item $it", modifier = Modifier.padding(4.dp))
             }
         }
     }

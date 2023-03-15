@@ -1,6 +1,6 @@
 package com.example.examplescomposemotionlayout
 
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -10,14 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.*
 
-@OptIn(ExperimentalMotionApi::class)
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
 @Composable
 fun Puzzle() {
@@ -31,9 +30,9 @@ fun Puzzle() {
         mutableStateOf(true)
     }
 
-    val refId = data.map { "w$it" }
+    val refId = remember(data) { data.map { "w$it" } }
     val set = remember(data) {
-        ConstraintSet() {
+        ConstraintSet {
             val ref = refId.map { createRefFor(it) }.toTypedArray()
             val flow = createFlow(
                 elements = ref,
@@ -54,57 +53,63 @@ fun Puzzle() {
         }
     }
 
-    Column() {
-        // Recreate ids for current Array order
-
-        ConstraintLayout(
-            set,
-            animateChanges = true,
-            animationSpec = tween(1000),
-            modifier = Modifier
-                .background(Color.Red)
-                .clickable {
-                    data = data.clone()
-                    if (toggle) {
-                        data.shuffle()
-                    } else {
-                        data.sort()
-                    }
-                    toggle = !toggle
+    // Recreate ids for current Array order
+    ConstraintLayout(
+        set,
+        animateChanges = true,
+        animationSpec = tween(1000),
+        modifier = Modifier
+            .background(Color.Red)
+            .clickable {
+                data = data.clone()
+                if (toggle) {
+                    data.shuffle()
+                } else {
+                    data.sort()
                 }
-        ) {
-            val painter = painterResource(id = R.drawable.pepper)
-            data.forEachIndexed { i, id ->
-                PuzzlePiece(
-                    x = i % grid,
-                    y = i / grid,
-                    grid = grid,
-                    painter,
-                    modifier = Modifier.layoutId(refId[id])
-                )
+                toggle = !toggle
             }
+    ) {
+        val painter = painterResource(id = R.drawable.pepper)
+        data.forEachIndexed { i, id ->
+            PuzzlePiece(
+                x = i % grid,
+                y = i / grid,
+                gridSize = grid,
+                painter = painter,
+                modifier = Modifier.layoutId(refId[id])
+            )
         }
     }
 }
 
+/**
+ * Shows how to animate moving pieces of a puzzle using MotionLayout.
+ *
+ * &nbsp;
+ *
+ * The [PuzzlePiece]s are laid out using the [ConstraintLayoutBaseScope.createFlow] helper.
+ *
+ * And the animation is achieved by creating two ConstraintSets. One providing ordered IDs to Flow,
+ * and the other providing a shuffled list of the same IDs.
+ *
+ * @see PuzzlePiece
+ */
 @OptIn(ExperimentalMotionApi::class)
-@Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
+@Preview
 @Composable
 fun MPuzzle() {
     val grid = 5
     val blocks = grid * grid
 
+    var animateToEnd by remember { mutableStateOf(true) }
 
-    val index = remember {
-        val b = Array(blocks) { it }
-        b.shuffle()
-        b
-    }
-    Column() {
+    val index = remember { Array(blocks) { it }.apply { shuffle() } }
+    val refId = remember { Array(blocks) { "W$it" } }
 
-        val refId = Array(blocks) { "W$it" }
-        // Recreate ids for current Array order
-        val scene = MotionScene() {
+    // Recreate scene when order changes (which is driven by toggling `animateToEnd`)
+    val scene = remember(animateToEnd) {
+        MotionScene {
             val ordered = refId.map { createRefFor(it) }.toTypedArray()
             val shuffle = index.map { ordered[it] }.toTypedArray()
             val set1 = constraintSet {
@@ -140,7 +145,6 @@ fun MPuzzle() {
                     constrain(it) {
                         width = Dimension.percent(1f / grid)
                         height = Dimension.ratio("1:1")
-
                     }
                 }
             }
@@ -161,60 +165,57 @@ fun MPuzzle() {
                 }
             }
         }
-        var animateToEnd by remember { mutableStateOf(true) }
-        val progress = remember { Animatable(0f) }
-        LaunchedEffect(animateToEnd) {
-            progress.animateTo(
-                if (animateToEnd) 1f else 0f,
-                animationSpec = tween(800)
-            )
-        }
+    }
 
-        MotionLayout(scene, modifier = Modifier
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(800)
+    )
+
+    MotionLayout(
+        motionScene = scene,
+        modifier = Modifier
             .clickable {
                 animateToEnd = !animateToEnd
                 index.shuffle()
             }
             .background(Color.Red)
             .fillMaxSize(),
-            progress = progress.value) {
-            val painter = painterResource(id = R.drawable.pepper)
-            index.forEachIndexed { i, id ->
-                PuzzlePiece(
-                    x = i % grid,
-                    y = i / grid,
-                    grid = grid,
-                    painter,
-                    modifier = Modifier.layoutId(refId[id])
-                )
-
-            }
+        progress = progress
+    ) {
+        val painter = painterResource(id = R.drawable.pepper)
+        index.forEachIndexed { i, id ->
+            PuzzlePiece(
+                x = i % grid,
+                y = i / grid,
+                gridSize = grid,
+                painter = painter,
+                modifier = Modifier.layoutId(refId[id])
+            )
         }
     }
 }
 
-@OptIn(ExperimentalMotionApi::class)
+/**
+ * Composable that displays a fragment of the given surface (provided through [painter]) based on
+ * the given position ([x], [y]) of a square grid of size [gridSize].
+ */
 @Composable
 fun PuzzlePiece(
-    x: Int = 1,
-    y: Int = 1,
-    grid: Int = 5,
+    x: Int,
+    y: Int,
+    gridSize: Int,
     painter: Painter,
-    modifier: Modifier = Modifier.fillMaxSize()
+    modifier: Modifier = Modifier
 ) {
-
-    Canvas(modifier) {
+    Canvas(modifier.fillMaxSize()) {
         clipRect {
-            withTransform({
-                scale(scaleY = grid.toFloat(), scaleX = grid.toFloat())
-                translate(
-                    left = -(x - grid / 2) * size.width / grid,
-                    top = -(y - grid / 2) * size.height / grid
-                )
-            })
-            {
+            translate(
+                left = -x * size.width,
+                top = -y * size.height
+            ) {
                 with(painter) {
-                    draw(size)
+                    draw(size.times(gridSize.toFloat()))
                 }
             }
         }
