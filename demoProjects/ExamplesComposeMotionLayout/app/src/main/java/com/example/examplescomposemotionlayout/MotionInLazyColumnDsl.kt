@@ -1,6 +1,6 @@
 package com.example.examplescomposemotionlayout
 
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,14 +25,15 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 
 /**
- * A demo of using MotionLayout in a Lazy Column written using DSL Syntax
+ * Shows how to use MotionLayout to have animated expandable items in a LazyColumn.
+ *
+ * Where the MotionScene is defined using the DSL.
  */
 @OptIn(ExperimentalMotionApi::class)
 @Preview(group = "scroll", device = "spec:shape=Normal,width=480,height=800,unit=dp,dpi=440")
 @Composable
 fun MotionInLazyColumnDsl() {
-
-    var scene = MotionScene() {
+    val scene = MotionScene {
         val title = createRefFor("title")
         val image = createRefFor("image")
         val icon = createRefFor("icon")
@@ -72,30 +73,28 @@ fun MotionInLazyColumnDsl() {
                 start.linkTo(parent.start, 16.dp)
             }
         }
-        transition( start1, end1,"default") {}
+        transition(start1, end1, "default") {}
     }
 
     val model = remember { BooleanArray(100) }
 
-    LazyColumn() {
+    LazyColumn {
         items(100) {
-            // Text(text = "item $it", modifier = Modifier.padding(4.dp))
             Box(modifier = Modifier.padding(3.dp)) {
                 var animateToEnd by remember { mutableStateOf(model[it]) }
-                val progress = remember { Animatable(if (model[it]) 1f else 0f) }
-                LaunchedEffect(animateToEnd) {
-                    progress.animateTo(
-                        if (animateToEnd) 1f else 0f,
-                        animationSpec = tween(700)
-                    )
-                }
+
+                val progress by animateFloatAsState(
+                    targetValue = if (animateToEnd) 1f else 0f,
+                    animationSpec = tween(700)
+                )
+
                 MotionLayout(
                     modifier = Modifier
                         .background(Color(0xFF331B1B))
                         .fillMaxWidth()
                         .padding(1.dp),
                     motionScene = scene,
-                    progress = progress.value
+                    progress = progress
                 ) {
                     Image(
                         modifier = Modifier.layoutId("image"),
@@ -108,12 +107,11 @@ fun MotionInLazyColumnDsl() {
                             .layoutId("icon")
                             .clickable {
                                 animateToEnd = !animateToEnd
-                                model[it] = animateToEnd;
+                                model[it] = animateToEnd
                             },
                         painter = painterResource(R.drawable.menu),
                         contentDescription = null
                     )
-
                     Text(
                         modifier = Modifier.layoutId("title"),
                         text = "San Francisco $it",
@@ -124,5 +122,4 @@ fun MotionInLazyColumnDsl() {
             }
         }
     }
-
 }
