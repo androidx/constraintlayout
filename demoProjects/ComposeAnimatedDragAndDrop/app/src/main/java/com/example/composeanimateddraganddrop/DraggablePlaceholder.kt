@@ -45,7 +45,7 @@ fun DraggablePlaceholder(
                 .size(dragHandler.draggedSize.toDpSize())
                 .zIndex(1f)
                 .graphicsLayer {
-                    val offset = dragHandler.draggingOffset.value
+                    val offset = dragHandler.placeholderOffset.value
                     translationX = offset.x
                     translationY = offset.y
                 }
