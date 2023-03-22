@@ -63,6 +63,7 @@ class LayoutDragHandler(
     private val scope: CoroutineScope,
     private val onMove: (from: Int, to: Int) -> Unit
 ) {
+    /* Ignore the bounds of the currently dragged item. To avoid "replacing" with self. */
     private var ignoreBounds = Rect.Zero
     private var draggedIndex: Int = -1
     private var lastScrollPosition = 0
@@ -92,15 +93,13 @@ class LayoutDragHandler(
 
     /**
      * Offset of the dragged item with respect to the root bounds.
-     *
-     * Meant to be used for overlays on the layout, such as a draggable placeholder.
      */
-    val draggingOffset: Animatable<Offset, AnimationVector2D> =
+    val placeholderOffset: Animatable<Offset, AnimationVector2D> =
         Animatable(Offset.Zero, Offset.VectorConverter)
 
     init {
         scope.launch {
-            // Check if the offset corresponds to an existing item
+            // Check and process collisions
             draggedOffsetFlow.collect { offset ->
                 if (offset.isUnspecified) {
                     // Reset when unspecified
@@ -113,7 +112,10 @@ class LayoutDragHandler(
                     return@collect
                 }
 
+                // If we are hovering over a different item, obtain its index
                 val targetIndex = boundsById.firstNotNullOfOrNull { (id, bounds) ->
+                    // Consider some extra padding when checking for a "collision" to avoid possibly
+                    // undesired layout changes
                     if (draggedId != id && bounds.containsCloseToCenter(
                             offset,
                             CONTAINS_FROM_CENTER_PERCENT
@@ -129,11 +131,15 @@ class LayoutDragHandler(
                 }
 
                 if (targetIndex != null) {
+                    // Item index change, trigger callback
                     val initialIndex = draggedIndex
                     draggedIndex = targetIndex
                     onMove(initialIndex, targetIndex)
                 }
-                val scrollInto = Rect(draggingOffset.value, ignoreBounds.size)
+
+                // Scroll the viewport if needed to fit the current dragged item, this is to allow
+                // scrolling when hovering over the edge of the viewport
+                val scrollInto = Rect(placeholderOffset.value, ignoreBounds.size)
                 scope.launch {
                     scrollIntoIfNeeded(scrollInto)
                 }
@@ -165,6 +171,9 @@ class LayoutDragHandler(
         )
     }
 
+    /**
+     * Find dragged item, initialize placeholder offset.
+     */
     private fun onStartDrag(offset: Offset) {
         val currContentOffset = contentOffset
         lastScrollPosition = scrollPosition
@@ -172,7 +181,8 @@ class LayoutDragHandler(
             if (bounds.contains(offset)) {
                 val topLeft = bounds.topLeft
                 scope.launch {
-                    draggingOffset.snapTo(topLeft + Offset(0f, currContentOffset))
+                    // The offset of the dragged item should account for the content offset
+                    placeholderOffset.snapTo(topLeft + Offset(0f, currContentOffset))
                 }
                 draggedIndex = orderedIds.indexOf(id)
                 ignoreBounds = bounds
@@ -183,31 +193,43 @@ class LayoutDragHandler(
         }
     }
 
+    /**
+     * Update placeholder offset.
+     *
+     * Update accumulated offset flow so that it's handled separately.
+     */
     private fun onDrag(dragAmount: Offset) {
         if (draggedIndex == -1 || draggedId == -1) {
             Log.i("RowDndDemo", "onDrag: Unspecified dragged element or offset")
             return
         }
         scope.launch {
-            draggingOffset.snapTo(draggingOffset.value + dragAmount)
+            placeholderOffset.snapTo(placeholderOffset.value + dragAmount)
         }
         val scrollChange = Offset(0f, (scrollPosition - lastScrollPosition).toFloat())
         lastScrollPosition = scrollPosition
+
+        // Accumulate the total offset for the Flow, this is necessary since it's possible for a
+        // slow collector to miss intermediate updates
         draggedOffsetFlow.update { old ->
             old + dragAmount + scrollChange
         }
     }
 
+    /**
+     * End drag by animating the placeholder towards its origin, note that the origin position may
+     * have changed if a dragged was performed over a different item.
+     */
     private fun onEndDrag() {
         if (draggedId != -1) {
             val currContentOffset = contentOffset
             boundsById[draggedId]?.topLeft?.let { targetOffset ->
                 scope.launch {
-                    draggingOffset.animateTo(targetOffset + Offset(0f, currContentOffset))
+                    placeholderOffset.animateTo(targetOffset + Offset(0f, currContentOffset))
 
                     // Reset after animation is done
                     draggedOffsetFlow.value = Offset.Unspecified
-                    draggingOffset.snapTo(Offset.Zero)
+                    placeholderOffset.snapTo(Offset.Zero)
                 }
             }
         }

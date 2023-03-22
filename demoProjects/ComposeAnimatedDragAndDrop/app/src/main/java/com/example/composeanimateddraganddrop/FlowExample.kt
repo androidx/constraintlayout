@@ -71,18 +71,28 @@ internal fun FlowDragAndDropExample() {
     val itemModel = remember {
         List(ITEM_COUNT) { ItemState() }
     }
-    val gridOrderByIndex: SnapshotStateList<Int> =
+
+    /**
+     * Observable mutable list, holds the desired item order for the Flow layout.
+     *
+     * Note that as this List is modified, recompositions are triggered.
+     */
+    val itemOrderByIndex: SnapshotStateList<Int> =
         remember { mutableStateListOf(elements = List(itemCount) { it }.toTypedArray()) }
 
     val constraintSet = ConstraintSet {
+        // Create the references for ConstraintLayout
         val itemRefs = List(itemCount) { createRefFor("item$it") }
 
+        // Provide the flow with the references in the order that reflects the current layout
+        // Since the list is observable, changes on it will cause the ConstraintSet to be recreated
+        // on recomposition. Triggering the layout animation in AnimatedConstraintLayout
         val flow = createFlow(
-            elements = gridOrderByIndex.map { itemRefs[it] }.toTypedArray(),
+            elements = itemOrderByIndex.map { itemRefs[it] }.toTypedArray(),
             flowVertically = false,
             maxElement = columnCount,
             horizontalStyle = FlowStyle.Spread,
-            horizontalFlowBias = 0.5f,
+            horizontalFlowBias = 0.5f, // centerVertically
             horizontalAlign = HorizontalAlign.Center,
             wrapMode = Wrap.Chain
         )
@@ -93,6 +103,9 @@ internal fun FlowDragAndDropExample() {
         }
 
         itemRefs.forEachIndexed { index, itemRef ->
+            // Define the items dimensions, note that since `isHorizontallyExpanded` is an
+            // observable State, changes to it will cause the ConstraintSet to be recreated and so
+            // the change wil be animated by AnimatedConstraintLayout
             val widthDp =
                 if (itemModel[index].isHorizontallyExpanded) BASE_ITEM_SIZE * 2 else BASE_ITEM_SIZE
             constrain(itemRef) {
@@ -109,12 +122,12 @@ internal fun FlowDragAndDropExample() {
     val boundsById: MutableMap<Int, Rect> = remember { mutableMapOf() }
     val onMove: (Int, Int) -> Unit = { from, to ->
         // TODO: Implement a way that moves items directionally (moving up pushes items down) instead of in a Flow
-        gridOrderByIndex.add(to, gridOrderByIndex.removeAt(from))
+        itemOrderByIndex.add(to, itemOrderByIndex.removeAt(from))
     }
     val dragHandler = remember {
         LayoutDragHandler(
             boundsById = boundsById,
-            orderedIds = gridOrderByIndex,
+            orderedIds = itemOrderByIndex,
             listBounds = listBounds,
             windowBounds = windowBounds,
             scrollState = scrollState,
@@ -123,7 +136,11 @@ internal fun FlowDragAndDropExample() {
         )
     }
 
+    // Common Container for the placeholder and the actual layout
     Box(modifier = Modifier.fillMaxWidth()) {
+        // Composables that represent the actual content of each Item, since the content may be
+        // handed-off to the DraggablePlaceholder we need to define it before-hand, that way it may
+        // be emitted in the ConstraintLayout node or the DraggablePlaceholder node as it's needed
         val movableItems = remember {
             List(itemCount) { it }.map { id ->
                 movableContentOf {
@@ -139,6 +156,7 @@ internal fun FlowDragAndDropExample() {
                 .fillMaxSize()
                 .verticalScroll(scrollState, true)
         ) {
+            // Controls and layout
             Column(
                 modifier = Modifier.align(Alignment.End),
                 verticalArrangement = Arrangement.spacedBy(0.dp),
@@ -147,7 +165,7 @@ internal fun FlowDragAndDropExample() {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(onClick = {
                         columnCount = INITIAL_COLUMN_COUNT
-                        gridOrderByIndex.sort()
+                        itemOrderByIndex.sort()
                         itemModel.forEach {
                             it.isHorizontallyExpanded = false
                             it.isVerticallyExpanded = false
@@ -157,7 +175,7 @@ internal fun FlowDragAndDropExample() {
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { gridOrderByIndex.shuffle() }) {
+                    Button(onClick = { itemOrderByIndex.shuffle() }) {
                         Text(text = "Shuffle")
                     }
                     Button(onClick = {
@@ -177,10 +195,12 @@ internal fun FlowDragAndDropExample() {
                         .fillMaxWidth()
                         .background(Color.LightGray)
                         .onGloballyPositioned {
+                            // Full bounds of the ConstraintLayout-based list
                             listBounds.value =
                                 it
                                     .findRootCoordinates()
                                     .localBoundingBoxOf(it, false)
+                            // Clipped (window) bounds of the list
                             windowBounds.value =
                                 it
                                     .findRootCoordinates()
@@ -194,6 +214,9 @@ internal fun FlowDragAndDropExample() {
                             modifier = Modifier
                                 .layoutId(name)
                                 .onStartEndBoundsChanged(name) { _, endBounds ->
+                                    // We need bounds that will always represent the static state of
+                                    // the layout, we use the End bounds since
+                                    // AnimatedConstraintLayout always animates towards the End.
                                     boundsById[i] = endBounds
                                 }
                                 .clickable {
@@ -202,10 +225,11 @@ internal fun FlowDragAndDropExample() {
                                 }
                         ) {
                             if (i != dragHandler.draggedId) {
+                                // Show content when not dragging
                                 movableItems[i]()
                             } else {
-                                // Leave a border so that it's clear where the Item will end up when the
-                                // drag interaction finishes
+                                // Leave a border so that it's clear where the Item will end up when
+                                // the drag interaction finishes
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
