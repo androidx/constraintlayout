@@ -59,8 +59,8 @@ public fun GridDslKeypad() {
                 columns = 3,
                 verticalGap = 25.dp,
                 horizontalGap = 25.dp,
-                spans = "0:1x3",
-                skips = "12:1x1",
+                spans = arrayOf(Span(0, 1, 3)),
+                skips = arrayOf(Skip(12, 1, 1)),
                 rowWeights = weights,
             )
 
@@ -156,7 +156,7 @@ public fun GridDslMediumCalculator() {
                 columns = 4,
                 verticalGap = 10.dp,
                 horizontalGap = 10.dp,
-                spans = "0:2x4,24:1x2",
+                spans = arrayOf(Span(0, 2, 4), Span(24, 1, 2)),
             )
 
             constrain(g1) {
@@ -288,14 +288,14 @@ public fun GridDslMediumNested() {
                 btn5, btn6, btn7, btn8,
                 rows = 3,
                 columns = 3,
-                skips= "0:1x2,4:1x1,6:1x1",
+                skips = arrayOf(Skip(0, 1, 2), Skip(4, 1, 1), Skip(6, 1, 1))
             )
 
             val g2 = createGrid(
                 g1, btn1, btn2, btn3, btn4,
                 rows = 3,
                 columns = 3,
-                skips = "1:1x1,4:1x1,6:1x1",
+                skips = arrayOf(Skip(1, 1, 1), Skip(4, 1, 1), Skip(6, 1, 1))
             )
 
             constrain(g1) {
