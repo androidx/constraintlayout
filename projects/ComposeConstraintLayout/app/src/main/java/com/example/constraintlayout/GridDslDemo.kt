@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.Skip
+import androidx.constraintlayout.compose.Span
 
 @Preview(group = "grid1")
 @Composable
@@ -65,8 +67,8 @@ public fun GridDslDemo1() {
                 columns = 3,
                 verticalGap = 25.dp,
                 horizontalGap = 25.dp,
-                spans = "0:1x3",
-                skips = "12:1x1",
+                spans = arrayOf(Span(0,1,3)),
+                skips = arrayOf(Skip(12, 1, 1)),
                 rowWeights = weights,
             )
 
@@ -270,14 +272,14 @@ public fun GridDslDemo4() {
                 e, f, g, h,
                 rows = 3,
                 columns = 3,
-                skips= "0:1x2,4:1x1,6:1x1",
+                skips = arrayOf(Skip(0, 1, 2), Skip(4, 1, 1), Skip(6, 1,1))
             )
 
             val g2 = createGrid(
                 g1, a, b, c, d,
                 rows = 3,
                 columns = 3,
-                skips = "1:1x1,4:1x1,6:1x1",
+                skips = arrayOf(Skip(1, 1, 1), Skip(4, 1, 1), Skip(6, 1,1)),
             )
 
 
