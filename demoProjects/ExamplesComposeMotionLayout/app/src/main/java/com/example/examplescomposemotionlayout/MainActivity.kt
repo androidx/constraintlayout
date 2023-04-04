@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         get("Puzzle") { Puzzle() },
         get("MPuzzle") { MPuzzle() },
         get("FlyIn") { M1FlyIn() },
-
+        get("DragReveal") { M1DragReveal() },
 
     )
 

@@ -51,7 +51,7 @@ fun MotionImage(
     panX: Float = 0.0f,
     panY: Float = 0.0f,
     zoom: Float = 1f,
-    rotate: Float = 45f,
+    rotate: Float = 0f,
     contrast: Float = 1f,
     brightness: Float = 1f,
     saturation: Float = 1f,
