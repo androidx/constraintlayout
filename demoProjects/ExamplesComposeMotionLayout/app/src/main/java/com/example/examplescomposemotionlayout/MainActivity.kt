@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
         get("MotionPager") { MotionPager() },
         get("Puzzle") { Puzzle() },
         get("MPuzzle") { MPuzzle() },
+        get("FlyIn") { M1FlyIn() },
 
 
     )
