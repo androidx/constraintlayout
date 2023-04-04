@@ -1,8 +1,6 @@
 package com.example.examplescomposemotionlayout
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,14 +18,13 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.*
-import kotlin.math.abs
 
 // A simple fly in effect
 @SuppressLint("Range")
 @OptIn(ExperimentalMotionApi::class)
 @Preview(group = "motion101")
 @Composable
-fun M1DragReveal() {
+fun M2DragReveal() {
     val imageId = "image"
     val titleId = "title"
     val wordsId = "words"
