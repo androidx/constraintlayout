@@ -30,34 +30,45 @@ fun M3MultiState() {
         val titleRef = createRefFor(titleId)
         val a = constraintSet {
             constrain(titleRef) {
-                centerHorizontallyTo(parent,0f)
-                centerVerticallyTo(parent,0f)
+                centerHorizontallyTo(parent, 0f)
+                centerVerticallyTo(parent, 0f)
             }
         }
 
-        val b = constraintSet {
+        val b = constraintSet(extendConstraintSet = a) {
             constrain(titleRef) {
-                centerHorizontallyTo(parent,1f)
-                 centerVerticallyTo(parent,0f)
+                horizontalBias = 1f
             }
         }
-        val c = constraintSet {
+        val c = constraintSet(extendConstraintSet = b) {
             constrain(titleRef) {
-                centerHorizontallyTo(parent,1f)
-                centerVerticallyTo(parent,1f)
+                verticalBias = 1f
             }
         }
-        transition(  a,b,"loading") {
-            keyAttributes(titleRef){
+        val d = constraintSet(extendConstraintSet = c) {
+            constrain(titleRef) {
+                horizontalBias = 0f
+            }
+        }
+        transition(a, b, "right") {
+            keyAttributes(titleRef) {
                 frame(50) {
                     rotationY = 50f
                 }
             }
         }
-        transition(  b,c,"normal") {
-            keyAttributes(titleRef){
+        transition(b, c, "down") {
+            keyAttributes(titleRef) {
                 frame(50) {
                     rotationZ = 90f
+                }
+            }
+        }
+        transition(c, d, "left") {
+            keyAttributes(titleRef) {
+                frame(50) {
+                    rotationX = 45f
+                    scaleX = 2f
                 }
             }
         }
@@ -65,20 +76,26 @@ fun M3MultiState() {
     val painter = painterResource(id = R.drawable.pepper)
 
     var transitionName by remember {
-        mutableStateOf("loading")
+        mutableStateOf("right")
     }
     var animateToEnd by remember { mutableStateOf(true) }
     val progress = remember { Animatable(0f) }
     LaunchedEffect(animateToEnd) {
         val result = progress.animateTo(
             if (animateToEnd) 1f else 0f,
-            animationSpec = tween(5000)
+            animationSpec = tween(3000)
         )
-        transitionName = "normal"
+        transitionName = "down"
         progress.snapTo(0f)
         progress.animateTo(
             if (animateToEnd) 1f else 0f,
-            animationSpec = tween(5000)
+            animationSpec = tween(3000)
+        )
+        transitionName = "left"
+        progress.snapTo(0f)
+        progress.animateTo(
+            if (animateToEnd) 1f else 0f,
+            animationSpec = tween(3000)
         )
     }
     MotionLayout(
