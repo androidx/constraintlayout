@@ -29,8 +29,9 @@ class MainActivity : ComponentActivity() {
         get("MotionPager") { MotionPager() },
         get("Puzzle") { Puzzle() },
         get("MPuzzle") { MPuzzle() },
-
-
+        get("FlyIn") { M1FlyIn() },
+        get("DragReveal") { M2DragReveal() },
+        get("MultiState") { M3MultiState() },
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
