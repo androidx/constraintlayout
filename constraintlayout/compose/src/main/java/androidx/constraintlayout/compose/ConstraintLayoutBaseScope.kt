@@ -740,6 +740,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         horizontalGap: Dp = 0.dp,
         columnWeights: IntArray = intArrayOf(),
         padding: Dp = 0.dp,
+        horizontalChainStyle: ChainStyle = ChainStyle.None,
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
@@ -752,6 +753,7 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             paddingTop = padding,
             paddingRight = padding,
             paddingBottom = padding,
+            chainStyle = horizontalChainStyle,
         )
     }
 
@@ -808,6 +810,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         columnWeights: IntArray = intArrayOf(),
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
+        horizontalChainStyle: ChainStyle = ChainStyle.None,
+        horizontalChainBias: Float = 0.5f,
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
@@ -820,6 +824,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             paddingTop = paddingVertical,
             paddingRight = paddingHorizontal,
             paddingBottom = paddingVertical,
+            chainStyle = horizontalChainStyle,
+            chainBias = horizontalChainBias
         )
     }
 
@@ -873,6 +879,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         rowWeights: IntArray = intArrayOf(),
         verticalGap: Dp = 0.dp,
         padding: Dp = 0.dp,
+        verticalChainStyle: ChainStyle = ChainStyle.None,
+        verticalChainBias: Float = 0.5f,
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
@@ -885,6 +893,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             paddingTop = padding,
             paddingRight = padding,
             paddingBottom = padding,
+            chainStyle = verticalChainStyle,
+            chainBias = verticalChainBias
         )
     }
 
@@ -940,6 +950,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         rowWeights: IntArray = intArrayOf(),
         paddingHorizontal: Dp = 0.dp,
         paddingVertical: Dp = 0.dp,
+        verticalChainStyle: ChainStyle = ChainStyle.Spread,
+        verticalChainBias: Float = 0.5f
     ): ConstrainedLayoutReference {
         return createGrid(
             elements = elements,
@@ -952,6 +964,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             paddingTop = paddingVertical,
             paddingRight = paddingHorizontal,
             paddingBottom = paddingVertical,
+            chainStyle = verticalChainStyle,
+            chainBias = verticalChainBias,
         )
     }
 
@@ -1299,6 +1313,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
         paddingRight: Dp = 0.dp,
         paddingBottom: Dp = 0.dp,
         flags: Array<GridFlag> = arrayOf(),
+        chainStyle: ChainStyle = ChainStyle.None,
+        chainBias: Float = 0.5f
     ): ConstrainedLayoutReference {
         val ref = ConstrainedLayoutReference(createHelperId())
         val elementArray = CLArray(charArrayOf())
@@ -1338,6 +1354,8 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
             putString("skips", skips)
             putString("spans", spans)
             put("flags", flagArray)
+            put("chainStyle", CLString.from(chainStyle.name))
+            put("chainBias", CLNumber(chainBias))
         }
 
         return ref
@@ -1798,6 +1816,12 @@ class ChainStyle internal constructor(
     internal val bias: Float? = null
 ) {
     companion object {
+        /**
+         * Not apply chain style
+         */
+        @Stable
+        val None = ChainStyle("none")
+
         /**
          * A chain style that evenly distributes the contained layouts.
          */

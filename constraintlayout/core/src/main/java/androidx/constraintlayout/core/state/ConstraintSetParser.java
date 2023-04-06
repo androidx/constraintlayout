@@ -1051,6 +1051,18 @@ public class ConstraintSetParser {
                         }
                     }
                     break;
+                case "chainStyle":
+                    String chainStyle = element.get(param).content();
+                    if (chainStyle != null && chainStyle.length() > 0) {
+                        grid.setChainStyle(chainStyle);
+                    }
+                    break;
+                case "chainBias":
+                    float chainBias = element.get(param).getFloat();
+                    if (chainBias >= 0 && chainBias <= 1) {
+                        grid.setChainBias(chainBias);
+                    }
+                    break;
                 default:
                     ConstraintReference reference = state.constraints(name);
                     applyAttribute(state, layoutVariables, reference, element, param);
