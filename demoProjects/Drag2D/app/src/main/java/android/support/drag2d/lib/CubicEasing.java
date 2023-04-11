@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package android.support.drag2d.lib;
 
 public class CubicEasing implements MaterialVelocity.Easing {
@@ -16,11 +31,11 @@ public class CubicEasing implements MaterialVelocity.Easing {
     public static final String ANTICIPATE_NAME = "anticipate";
     public static final String OVERSHOOT_NAME = "overshoot";
 
-   // public static final CubicEasing STANDARD = new CubicEasing(STANDARD_COEFFICIENTS);
-   // public static final CubicEasing ACCELERATE = new CubicEasing(ACCELERATE_COEFFICIENTS);
+    // public static final CubicEasing STANDARD = new CubicEasing(STANDARD_COEFFICIENTS);
+    // public static final CubicEasing ACCELERATE = new CubicEasing(ACCELERATE_COEFFICIENTS);
     public static final CubicEasing DECELERATE = new CubicEasing(DECELERATE_COEFFICIENTS);
     public static final CubicEasing LINEAR = new CubicEasing(LINEAR_COEFFICIENTS);
-   // public static final CubicEasing ANTICIPATE = new CubicEasing(ANTICIPATE_COEFFICIENTS);
+    // public static final CubicEasing ANTICIPATE = new CubicEasing(ANTICIPATE_COEFFICIENTS);
     public static final CubicEasing OVERSHOOT = new CubicEasing(OVERSHOOT_COEFFICIENTS);
     public static final CubicEasing EASE_OUT_SINE = new CubicEasing(new float[]{0.61f, 1f, 0.88f, 1f});
     public static final CubicEasing EASE_OUT_CUBIC = new CubicEasing(new float[]{0.33f, 1f, 0.68f, 1f});
@@ -30,10 +45,11 @@ public class CubicEasing implements MaterialVelocity.Easing {
     public static final CubicEasing EASE_OUT_QUART = new CubicEasing(new float[]{0.25f, 1f, 0.5f, 1f});
     public static final CubicEasing EASE_OUT_EXPO = new CubicEasing(new float[]{0.16f, 1f, 0.3f, 1f});
     public static final CubicEasing EASE_OUT_BACK = new CubicEasing(new float[]{0.34f, 1.56f, 0.64f, 1f});
-    public static final MaterialVelocity.Easing EASE_OUT_ELASTIC =  new EaseOutElastic();
+    public static final MaterialVelocity.Easing EASE_OUT_ELASTIC = new EaseOutElastic();
 
 
-    static class  EaseOutElastic implements MaterialVelocity.Easing {
+    static class EaseOutElastic implements MaterialVelocity.Easing {
+
         double c4 = (2 * Math.PI) / 3;
         double TWENTY_PI = 20 * Math.PI;
         double log8 = Math.log(8);
@@ -62,29 +78,32 @@ public class CubicEasing implements MaterialVelocity.Easing {
         }
 
         @Override
-        public EaseOutElastic  clone() {
+        public EaseOutElastic clone() {
             return new EaseOutElastic();
         }
-    };
+    }
+
+    ;
     public static final MaterialVelocity.Easing EASE_OUT_BOUNCE = new EaseOutBounce();
 
 
-    static class  EaseOutBounce implements MaterialVelocity.Easing {
+    static class EaseOutBounce implements MaterialVelocity.Easing {
         double n1 = 7.5625;
         double d1 = 2.75;
+
         @Override
         public double get(double t) {
 
-            if (t<0) {
+            if (t < 0) {
                 return 0;
             }
             if (t < 1 / d1) {
-                return (1/(1+1/d1))*(n1 * t * t + t);
+                return (1 / (1 + 1 / d1)) * (n1 * t * t + t);
             } else if (t < 2 / d1) {
                 return n1 * (t -= 1.5 / d1) * t + 0.75;
             } else if (t < 2.5 / d1) {
                 return n1 * (t -= 2.25 / d1) * t + 0.9375;
-            } else if (t<=1){
+            } else if (t <= 1) {
                 return n1 * (t -= 2.625 / d1) * t + 0.984375;
             }
             return 1;
@@ -93,27 +112,29 @@ public class CubicEasing implements MaterialVelocity.Easing {
         @Override
         public double getDiff(double t) {
             double result;
-            if (t<0) {
+            if (t < 0) {
                 return 0;
             }
             if (t < 1 / d1) {
-                return 2 * n1 * (t)/(1+1/d1)+ 1/(1+1/d1);
+                return 2 * n1 * (t) / (1 + 1 / d1) + 1 / (1 + 1 / d1);
             } else if (t < 2 / d1) {
-                return 2 * n1 * (t - 1.5 / d1) ;
+                return 2 * n1 * (t - 1.5 / d1);
             } else if (t < 2.5 / d1) {
-                return 2 * n1 * (t - 2.25 / d1) ;
-            } else if (t <=  1)  {
-                return 2 * n1 * (t - 2.625 / d1) ;
+                return 2 * n1 * (t - 2.25 / d1);
+            } else if (t <= 1) {
+                return 2 * n1 * (t - 2.625 / d1);
             }
-           return 0;
+            return 0;
+
         }
 
         @Override
         public EaseOutBounce clone() {
             return new EaseOutBounce();
         }
-    };
+    }
 
+    ;
 
 
     private static double sError = 0.001;
@@ -143,9 +164,11 @@ public class CubicEasing implements MaterialVelocity.Easing {
         setup(x1, y1, x2, y2);
     }
 
+
     public CubicEasing clone() {
         return new CubicEasing(mX1, mY1, mX2, mY2);
     }
+
     void setup(double x1, double y1, double x2, double y2) {
         this.mX1 = x1;
         this.mY1 = y1;

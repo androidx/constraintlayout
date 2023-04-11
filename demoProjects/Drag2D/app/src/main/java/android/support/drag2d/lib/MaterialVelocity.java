@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package android.support.drag2d.lib;
 
 public class MaterialVelocity {
@@ -14,12 +29,15 @@ public class MaterialVelocity {
     public float getDuration() {
         return mDuration;
     }
+
     public float getEndPos() {
         return mEndPos;
     }
+
     public float getStartPos() {
         return mStartPos;
     }
+
     protected static class Stage {
         float mStartV;
         float mStartPos;
@@ -98,18 +116,22 @@ public class MaterialVelocity {
             return mEndPos;
         }
 
-        int lastStages = mNumberOfStages-1;
+
+        int lastStages = mNumberOfStages - 1;
+
         for (int i = 0; i < lastStages; i++) {
             if (mStage[i].mEndTime > t) {
                 return mStage[i].getPos(t);
             }
         }
-       float ret =  (float) getEasing(t - mStage[lastStages].mStartTime);
-        System.out.println(">>>>>>>>>>>>>>> easing= "+ret);
 
-        ret+=mStage[lastStages].mStartPos;
-        System.out.println(">>>>>>>>>>>>>>> offset "+ret);
+        float ret = (float) getEasing(t - mStage[lastStages].mStartTime);
+        System.out.println(">>>>>>>>>>>>>>> easing= " + ret);
+
+        ret += mStage[lastStages].mStartPos;
+        System.out.println(">>>>>>>>>>>>>>> offset " + ret);
         return ret;
+
     }
 
     @Override
@@ -124,19 +146,24 @@ public class MaterialVelocity {
 
     public interface Easing {
         double get(double t);
+
         double getDiff(double t);
+
         Easing clone();
+
     }
 
     public void config(float currentPos, float destination, float currentVelocity,
                        float maxTime, float maxAcceleration, float maxVelocity, Easing easing) {
         mStartPos = currentPos;
         mEndPos = destination;
-        if (easing!=null) {
+
+        if (easing != null) {
             mEasing = easing.clone();
         } else {
             mEasing = null;
         }
+
 
         float dir = Math.signum(destination - currentPos);
         float maxV = maxVelocity * dir;
@@ -156,7 +183,9 @@ public class MaterialVelocity {
             }
         }
         if (oneDimension) {
+
             configureEasingAdapter();
+
         }
     }
 
@@ -213,12 +242,15 @@ public class MaterialVelocity {
     private void rampUpCruseRampDown(float currentPos, float destination, float currentVelocity,
                                      float maxA, float maxV) {
 
-        float t1 =  (maxV - currentVelocity) / maxA;
+
+        float t1 = (maxV - currentVelocity) / maxA;
         float d1 = (maxV + currentVelocity) * t1 / 2 + currentPos;
-        float t3 =  maxV / maxA;
+        float t3 = maxV / maxA;
         float d3 = (maxV) * t3 / 2;
         float d2 = destination - d1 - d3;
-        float t2 =  d2 / maxV;
+        float t2 = d2 / maxV;
+
+
         mNumberOfStages = 3;
         mStage[0].setUp(currentVelocity, currentPos, 0, maxV, d1, t1);
         mStage[1].setUp(maxV, d1, t1, maxV, d2 + d1, t2 + t1);
@@ -227,33 +259,37 @@ public class MaterialVelocity {
     }
 
 
-        public double getEasing(double t) {
-            double gx = t * t * mEasingAdapterA + t * mEasingAdapterB;
-            if (gx > 1) {
-                return mEasingAdapterDistance;
-            }
-            return mEasing.get(gx) * mEasingAdapterDistance;
-        }
+    public double getEasing(double t) {
+        double gx = t * t * mEasingAdapterA + t * mEasingAdapterB;
+        if (gx > 1) {
 
-        private double getEasingDiff(double t) {
-            double gx = t * t * mEasingAdapterA + t * mEasingAdapterB;
-            if (gx > 1) {
-                return 0;
-            }
-            return mEasing.getDiff(gx) * mEasingAdapterDistance;
-        }
+            return mEasingAdapterDistance;
 
-        protected void configureEasingAdapter() {
-            if (mEasing == null) {
-                return;
-            }
-            float initialVelocity = mStage[mNumberOfStages-1].mStartV;
-            float distance = mStage[mNumberOfStages-1].mEndTime-mStage[mNumberOfStages-1].mStartTime;
-            double baseVel = mEasing.getDiff(0);
-            mEasingAdapterB = initialVelocity / (baseVel * distance);
-            mEasingAdapterA = 1 - mEasingAdapterB;
-            mEasingAdapterDistance = distance;
         }
+        return mEasing.get(gx) * mEasingAdapterDistance;
+    }
+
+    private double getEasingDiff(double t) {
+        double gx = t * t * mEasingAdapterA + t * mEasingAdapterB;
+        if (gx > 1) {
+            return 0;
+        }
+        return mEasing.getDiff(gx) * mEasingAdapterDistance;
+    }
+
+
+    protected void configureEasingAdapter() {
+        if (mEasing == null) {
+            return;
+        }
+        float initialVelocity = mStage[mNumberOfStages - 1].mStartV;
+        float distance = mStage[mNumberOfStages - 1].mEndTime - mStage[mNumberOfStages - 1].mStartTime;
+        double baseVel = mEasing.getDiff(0);
+
+        mEasingAdapterB = initialVelocity / (baseVel * distance);
+        mEasingAdapterA = 1 - mEasingAdapterB;
+        mEasingAdapterDistance = distance;
+    }
 
 
 }
