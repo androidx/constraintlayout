@@ -27,7 +27,6 @@ public class Velocity2D {
                           float destinationY,
                           float duration,
                           float maxV,
-
                           float maxA, MaterialVelocity.Easing easing) {
         double speed = Math.hypot(velocityX, velocityY);
         if (speed > maxV) {
@@ -104,7 +103,7 @@ public class Velocity2D {
     }
 
     public boolean isStillMoving(float t) {
-        return mvX.getDuration() > t;
+        return mvX.getDuration() > t && mvY.getDuration() > t;
     }
 
     public void getCurves(float[] points, int w, int h) {

@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.drag2d.lib.CubicEasing;
 import android.support.drag2d.lib.Velocity2D;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onDraw(Canvas canvas) {
+            canvas.drawRGB(200,200,230);
             if (startAnimationTime != 0) {
 
                 long timeMillis = SystemClock.uptimeMillis() - startAnimationTime;
@@ -140,7 +142,11 @@ public class MainActivity extends AppCompatActivity {
                     float velocityY = velocityTracker.getYVelocity();
                     System.out.println("initial velocity " + velocityX + "," + velocityY);
                     startAnimationTime = event.getEventTime();
-                    velocity2D.configure(ballX, ballY, velocityX, velocityY, getWidth() / 2, getHeight() / 2, 4, 1000, 1000, null);
+                    velocity2D.configure(ballX, ballY,
+                            velocityX, velocityY,
+                            getWidth() / 2, getHeight() / 2,
+                            4, 1000, 1000,
+                            null);
                     velocity2D.getCurves(points, getWidth(), getHeight());
                     invalidate();
                     break;

@@ -223,10 +223,9 @@ public class MaterialVelocity {
 
     private boolean rampUpRampDown(float currentPos, float destination, float currentVelocity,
                                    float maxA, float maxVelocity) {
-        float peak_v = (float) Math.sqrt(maxA * Math.abs(destination - currentPos) + currentVelocity * currentVelocity / 2);
+        float peak_v = Math.signum(maxA)*(float) Math.sqrt(maxA *  (destination - currentPos) + currentVelocity * currentVelocity / 2);
 
-        if (peak_v < maxVelocity) {
-            peak_v *= Math.signum(destination - currentPos);
+        if (maxVelocity/peak_v > 1) {
             float t1 = (peak_v - currentVelocity) / maxA;
             float d1 = (peak_v + currentVelocity) * t1 / 2 + currentPos;
             float t2 = peak_v / maxA;
@@ -241,15 +240,12 @@ public class MaterialVelocity {
 
     private void rampUpCruseRampDown(float currentPos, float destination, float currentVelocity,
                                      float maxA, float maxV) {
-
-
-        float t1 = (maxV - currentVelocity) / maxA;
+        float t1 =  (maxV - currentVelocity) / maxA;
         float d1 = (maxV + currentVelocity) * t1 / 2 + currentPos;
-        float t3 = maxV / maxA;
+        float t3 =  maxV / maxA;
         float d3 = (maxV) * t3 / 2;
         float d2 = destination - d1 - d3;
-        float t2 = d2 / maxV;
-
+        float t2 =  d2 / maxV;
 
         mNumberOfStages = 3;
         mStage[0].setUp(currentVelocity, currentPos, 0, maxV, d1, t1);
