@@ -68,12 +68,19 @@ public class State {
         TOP_TO_TOP,
         TOP_TO_BOTTOM,
         TOP_TO_BASELINE,
+        TOP_TO_LASTBASELINE,
         BOTTOM_TO_TOP,
         BOTTOM_TO_BOTTOM,
         BOTTOM_TO_BASELINE,
+        BOTTOM_TO_LASTBASELINE,
         BASELINE_TO_BASELINE,
+        BASELINE_TO_LASTBASELINE,
         BASELINE_TO_TOP,
+        LASTBASELINE_TO_TOP,
         BASELINE_TO_BOTTOM,
+        LASTBASELINE_TO_BOTTOM,
+        LASTBASELINE_TO_BASELINE,
+        LASTBASELINE_TO_LASTBASELINE,
         CENTER_HORIZONTALLY,
         CENTER_VERTICALLY,
         CIRCULAR_CONSTRAINT
@@ -687,5 +694,36 @@ public class State {
             mDirtyBaselineNeededWidgets = false;
         }
         return mBaselineNeededWidgets.contains(constraintWidget);
+    }
+
+    // ================= add lastBaseline code================================
+    ArrayList<Object> mLastBaselineNeeded = new ArrayList<>();
+    ArrayList<ConstraintWidget> mLastBaselineNeededWidgets = new ArrayList<>();
+    boolean mDirtyLastBaselineNeededWidgets = true;
+
+    /**
+     * Baseline is needed for this object
+     */
+    public void lastBaselineNeededFor(Object id) {
+        mLastBaselineNeeded.add(id);
+        mDirtyLastBaselineNeededWidgets = true;
+    }
+
+    /**
+     * Does this constraintWidget need a lastBaseline
+     *
+     * @return true if the constraintWidget needs a lastBaseline
+     */
+    public boolean isLastBaselineNeeded(ConstraintWidget constraintWidget) {
+        if (mDirtyLastBaselineNeededWidgets) {
+            mLastBaselineNeededWidgets.clear();
+            for (Object id : mLastBaselineNeeded) {
+                ConstraintWidget widget = mReferences.get(id).getConstraintWidget();
+                if (widget != null) mLastBaselineNeededWidgets.add(widget);
+            }
+
+            mDirtyLastBaselineNeededWidgets = false;
+        }
+        return mLastBaselineNeededWidgets.contains(constraintWidget);
     }
 }

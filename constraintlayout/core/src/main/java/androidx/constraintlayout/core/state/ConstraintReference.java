@@ -87,7 +87,9 @@ public class ConstraintReference implements Reference {
     protected int mMarginBottomGone = 0;
 
     int mMarginBaseline = 0;
+    int mMarginLastBaseline = 0;
     int mMarginBaselineGone = 0;
+    int mMarginLastBaselineGone = 0;
 
     float mPivotX = Float.NaN;
     float mPivotY = Float.NaN;
@@ -118,12 +120,19 @@ public class ConstraintReference implements Reference {
     protected Object mTopToTop = null;
     protected Object mTopToBottom = null;
     @Nullable Object mTopToBaseline = null;
+    @Nullable Object mTopToLastBaseline = null;
     protected Object mBottomToTop = null;
     protected Object mBottomToBottom = null;
     @Nullable Object mBottomToBaseline = null;
+    @Nullable Object mBottomToLastBaseline = null;
     Object mBaselineToBaseline = null;
+    Object mBaselineToLastBaseline = null;
     Object mBaselineToTop = null;
     Object mBaselineToBottom = null;
+    Object mLastBaselineToTop = null;
+    Object mLastBaselineToBottom = null;
+    Object mLastBaselineToBaseline = null;
+    Object mLastBaselineToLastBaseline = null;
     Object mCircularConstraint = null;
     private float mCircularAngle;
     private float mCircularDistance;
@@ -292,6 +301,7 @@ public class ConstraintReference implements Reference {
     public ConstraintReference clearVertical() {
         top().clear();
         baseline().clear();
+        lastBaseline().clear();
         bottom().clear();
         return this;
     }
@@ -488,6 +498,12 @@ public class ConstraintReference implements Reference {
     }
 
     // @TODO: add description
+    public ConstraintReference lastBaseline() {
+        mLast = State.Constraint.LASTBASELINE_TO_LASTBASELINE;
+        return this;
+    }
+
+    // @TODO: add description
     public void addCustomColor(String name, int color) {
         mCustomColors.put(name, color);
     }
@@ -514,8 +530,13 @@ public class ConstraintReference implements Reference {
         mBottomToTop = get(mBottomToTop);
         mBottomToBottom = get(mBottomToBottom);
         mBaselineToBaseline = get(mBaselineToBaseline);
+        mBaselineToLastBaseline = get(mBaselineToLastBaseline);
         mBaselineToTop = get(mBaselineToTop);
         mBaselineToBottom = get(mBaselineToBottom);
+        mLastBaselineToBaseline = get(mLastBaselineToBaseline);
+        mLastBaselineToLastBaseline = get(mLastBaselineToLastBaseline);
+        mLastBaselineToTop = get(mLastBaselineToTop);
+        mLastBaselineToBottom = get(mLastBaselineToBottom);
     }
 
     // @TODO: add description
@@ -594,6 +615,12 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
+    ConstraintReference topToLastBaseline(Object reference) {
+        mLast = State.Constraint.TOP_TO_LASTBASELINE;
+        mTopToLastBaseline = reference;
+        return this;
+    }
+
     // @TODO: add description
     public ConstraintReference bottomToTop(Object reference) {
         mLast = State.Constraint.BOTTOM_TO_TOP;
@@ -614,10 +641,23 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
+    ConstraintReference bottomToLastBaseline(Object reference) {
+        mLast = State.Constraint.BOTTOM_TO_LASTBASELINE;
+        mBottomToLastBaseline = reference;
+        return this;
+    }
+
     // @TODO: add description
     public ConstraintReference baselineToBaseline(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
         mBaselineToBaseline = reference;
+        return this;
+    }
+
+    // @TODO: add description
+    public ConstraintReference baselineToLastBaseline(Object reference) {
+        mLast = State.Constraint.BASELINE_TO_LASTBASELINE;
+        mBaselineToLastBaseline = reference;
         return this;
     }
 
@@ -632,6 +672,34 @@ public class ConstraintReference implements Reference {
     public ConstraintReference baselineToBottom(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BOTTOM;
         mBaselineToBottom = reference;
+        return this;
+    }
+
+    // @TODO: add description
+    public ConstraintReference lastBaselineToTop(Object reference) {
+        mLast = State.Constraint.LASTBASELINE_TO_TOP;
+        mLastBaselineToTop = reference;
+        return this;
+    }
+
+    // @TODO: add description
+    public ConstraintReference lastBaselineToBottom(Object reference) {
+        mLast = State.Constraint.LASTBASELINE_TO_BOTTOM;
+        mLastBaselineToBottom = reference;
+        return this;
+    }
+
+    // @TODO: add description
+    public ConstraintReference lastBaselineToBaseline(Object reference) {
+        mLast = State.Constraint.LASTBASELINE_TO_BASELINE;
+        mLastBaselineToBaseline = reference;
+        return this;
+    }
+
+    // @TODO: add description
+    public ConstraintReference lastBaselineToLastBaseline(Object reference) {
+        mLast = State.Constraint.LASTBASELINE_TO_LASTBASELINE;
+        mLastBaselineToLastBaseline = reference;
         return this;
     }
 
@@ -731,20 +799,30 @@ public class ConstraintReference implements Reference {
                 break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM:
-                case TOP_TO_BASELINE: {
+                case TOP_TO_BASELINE:
+                case TOP_TO_LASTBASELINE: {
                     mMarginTop = value;
                 }
                 break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM:
-                case BOTTOM_TO_BASELINE: {
+                case BOTTOM_TO_BASELINE:
+                case BOTTOM_TO_LASTBASELINE: {
                     mMarginBottom = value;
                 }
                 break;
                 case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_TOP:
-                case BASELINE_TO_BASELINE: {
+                case BASELINE_TO_BASELINE:
+                case BASELINE_TO_LASTBASELINE: {
                     mMarginBaseline = value;
+                }
+                break;
+                case LASTBASELINE_TO_BOTTOM:
+                case LASTBASELINE_TO_TOP:
+                case LASTBASELINE_TO_BASELINE:
+                case LASTBASELINE_TO_LASTBASELINE: {
+                    mMarginLastBaseline = value;
                 }
                 break;
                 case CIRCULAR_CONSTRAINT: {
@@ -791,20 +869,30 @@ public class ConstraintReference implements Reference {
                 break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM:
-                case TOP_TO_BASELINE: {
+                case TOP_TO_BASELINE:
+                case TOP_TO_LASTBASELINE: {
                     mMarginTopGone = value;
                 }
                 break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM:
-                case BOTTOM_TO_BASELINE: {
+                case BOTTOM_TO_BASELINE:
+                case BOTTOM_TO_LASTBASELINE: {
                     mMarginBottomGone = value;
                 }
                 break;
                 case BASELINE_TO_TOP:
                 case BASELINE_TO_BOTTOM:
-                case BASELINE_TO_BASELINE: {
+                case BASELINE_TO_BASELINE:
+                case BASELINE_TO_LASTBASELINE: {
                     mMarginBaselineGone = value;
+                }
+                break;
+                case LASTBASELINE_TO_TOP:
+                case LASTBASELINE_TO_BOTTOM:
+                case LASTBASELINE_TO_BASELINE:
+                case LASTBASELINE_TO_LASTBASELINE: {
+                    mMarginLastBaselineGone = value;
                 }
                 break;
                 default:
@@ -855,9 +943,11 @@ public class ConstraintReference implements Reference {
             case TOP_TO_TOP:
             case TOP_TO_BOTTOM:
             case TOP_TO_BASELINE:
+            case TOP_TO_LASTBASELINE:
             case BOTTOM_TO_TOP:
             case BOTTOM_TO_BOTTOM:
-            case BOTTOM_TO_BASELINE: {
+            case BOTTOM_TO_BASELINE:
+            case BOTTOM_TO_LASTBASELINE: {
                 mVerticalBias = value;
             }
             break;
@@ -890,6 +980,11 @@ public class ConstraintReference implements Reference {
         mBottomToBottom = null;
         mMarginBottom = 0;
         mBaselineToBaseline = null;
+        mLastBaselineToTop = null;
+        mLastBaselineToBottom = null;
+        mLastBaselineToLastBaseline = null;
+        mLastBaselineToBaseline = null;
+        mMarginLastBaseline = 0;
         mCircularConstraint = null;
         mHorizontalBias = 0.5f;
         mVerticalBias = 0.5f;
@@ -940,26 +1035,46 @@ public class ConstraintReference implements Reference {
                 break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM:
-                case TOP_TO_BASELINE: {
+                case TOP_TO_BASELINE:
+                case TOP_TO_LASTBASELINE: {
                     mTopToTop = null;
                     mTopToBottom = null;
                     mTopToBaseline = null;
+                    mTopToLastBaseline = null;
                     mMarginTop = 0;
                     mMarginTopGone = 0;
                 }
                 break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM:
-                case BOTTOM_TO_BASELINE: {
+                case BOTTOM_TO_BASELINE:
+                case BOTTOM_TO_LASTBASELINE: {
                     mBottomToTop = null;
                     mBottomToBottom = null;
                     mBottomToBaseline = null;
+                    mBottomToLastBaseline = null;
                     mMarginBottom = 0;
                     mMarginBottomGone = 0;
                 }
                 break;
                 case BASELINE_TO_BASELINE: {
                     mBaselineToBaseline = null;
+                }
+                break;
+                case LASTBASELINE_TO_LASTBASELINE: {
+                    mLastBaselineToLastBaseline = null;
+                }
+                break;
+                case LASTBASELINE_TO_BASELINE: {
+                    mLastBaselineToBaseline = null;
+                }
+                break;
+                case LASTBASELINE_TO_TOP: {
+                    mLastBaselineToTop = null;
+                }
+                break;
+                case LASTBASELINE_TO_BOTTOM: {
+                    mLastBaselineToBottom = null;
                 }
                 break;
                 case CIRCULAR_CONSTRAINT: {
@@ -1046,7 +1161,8 @@ public class ConstraintReference implements Reference {
                         ConstraintAnchor.Type.BOTTOM), mMarginTop, mMarginTopGone, false);
             }
             break;
-            case TOP_TO_BASELINE: {
+            case TOP_TO_BASELINE:
+            case TOP_TO_LASTBASELINE: {
                 widget.immediateConnect(ConstraintAnchor.Type.TOP, target,
                         ConstraintAnchor.Type.BASELINE, mMarginTop, mMarginTopGone);
             }
@@ -1061,22 +1177,28 @@ public class ConstraintReference implements Reference {
                         ConstraintAnchor.Type.BOTTOM), mMarginBottom, mMarginBottomGone, false);
             }
             break;
-            case BOTTOM_TO_BASELINE: {
+            case BOTTOM_TO_BASELINE:
+            case BOTTOM_TO_LASTBASELINE: {
                 widget.immediateConnect(ConstraintAnchor.Type.BOTTOM, target,
                         ConstraintAnchor.Type.BASELINE, mMarginBottom, mMarginBottomGone);
             }
             break;
-            case BASELINE_TO_BASELINE: {
+            case BASELINE_TO_BASELINE:
+            case BASELINE_TO_LASTBASELINE:
+            case LASTBASELINE_TO_BASELINE:
+            case LASTBASELINE_TO_LASTBASELINE: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
                         ConstraintAnchor.Type.BASELINE, mMarginBaseline, mMarginBaselineGone);
             }
             break;
-            case BASELINE_TO_TOP: {
+            case BASELINE_TO_TOP:
+            case LASTBASELINE_TO_TOP: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE,
                         target, ConstraintAnchor.Type.TOP, mMarginBaseline, mMarginBaselineGone);
             }
             break;
-            case BASELINE_TO_BOTTOM: {
+            case BASELINE_TO_BOTTOM:
+            case LASTBASELINE_TO_BOTTOM: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
                         ConstraintAnchor.Type.BOTTOM, mMarginBaseline, mMarginBaselineGone);
             }
@@ -1105,13 +1227,27 @@ public class ConstraintReference implements Reference {
         applyConnection(mConstraintWidget, mTopToTop, State.Constraint.TOP_TO_TOP);
         applyConnection(mConstraintWidget, mTopToBottom, State.Constraint.TOP_TO_BOTTOM);
         applyConnection(mConstraintWidget, mTopToBaseline, State.Constraint.TOP_TO_BASELINE);
+        applyConnection(mConstraintWidget, mTopToLastBaseline,
+                State.Constraint.TOP_TO_LASTBASELINE);
         applyConnection(mConstraintWidget, mBottomToTop, State.Constraint.BOTTOM_TO_TOP);
         applyConnection(mConstraintWidget, mBottomToBottom, State.Constraint.BOTTOM_TO_BOTTOM);
         applyConnection(mConstraintWidget, mBottomToBaseline, State.Constraint.BOTTOM_TO_BASELINE);
+        applyConnection(mConstraintWidget, mBottomToLastBaseline,
+                State.Constraint.BOTTOM_TO_LASTBASELINE);
         applyConnection(mConstraintWidget, mBaselineToBaseline,
                 State.Constraint.BASELINE_TO_BASELINE);
+        applyConnection(mConstraintWidget, mBaselineToLastBaseline,
+                State.Constraint.BASELINE_TO_LASTBASELINE);
         applyConnection(mConstraintWidget, mBaselineToTop, State.Constraint.BASELINE_TO_TOP);
         applyConnection(mConstraintWidget, mBaselineToBottom, State.Constraint.BASELINE_TO_BOTTOM);
+        applyConnection(mConstraintWidget, mLastBaselineToBaseline,
+                State.Constraint.LASTBASELINE_TO_BASELINE);
+        applyConnection(mConstraintWidget, mLastBaselineToLastBaseline,
+                State.Constraint.LASTBASELINE_TO_LASTBASELINE);
+        applyConnection(mConstraintWidget, mLastBaselineToTop,
+                State.Constraint.LASTBASELINE_TO_TOP);
+        applyConnection(mConstraintWidget, mLastBaselineToBottom,
+                State.Constraint.LASTBASELINE_TO_BOTTOM);
         applyConnection(mConstraintWidget, mCircularConstraint,
                 State.Constraint.CIRCULAR_CONSTRAINT);
     }

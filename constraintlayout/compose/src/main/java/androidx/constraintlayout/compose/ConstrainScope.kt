@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLArray
@@ -82,6 +83,11 @@ class ConstrainScope internal constructor(
      * The [FirstBaseline] of the layout - can be constrained using [BaselineAnchorable.linkTo].
      */
     val baseline: BaselineAnchorable = ConstraintBaselineAnchorable(containerObject)
+
+    /**
+     * The [LastBaseline] of the layout - can be constrained using [LastBaselineAnchorable.linkTo].
+     */
+    val lastBaseline: LastBaselineAnchorable = ConstraintLastBaselineAnchorable(containerObject)
 
     /**
      * The width of the [ConstraintLayout] child.
@@ -399,6 +405,7 @@ class ConstrainScope internal constructor(
         containerObject.remove("top")
         containerObject.remove("bottom")
         containerObject.remove("baseline")
+        containerObject.remove("lastBaseline")
     }
 
     /**
@@ -524,6 +531,23 @@ private class ConstraintBaselineAnchorable constructor(
     }
 
     /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.LastBaselineAnchor].
+     */
+    override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
+        val constraintArray = CLArray(charArrayOf()).apply {
+            add(CLString.from(anchor.id.toString()))
+            add(CLString.from("lastBaseline"))
+            add(CLNumber(margin.value))
+            add(CLNumber(goneMargin.value))
+        }
+        containerObject.put("baseline", constraintArray)
+    }
+
+    /**
      * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
      */
     override fun linkTo(
@@ -539,5 +563,65 @@ private class ConstraintBaselineAnchorable constructor(
             add(CLNumber(goneMargin.value))
         }
         containerObject.put("baseline", constraintArray)
+    }
+}
+
+/**
+ * Represents the [LastBaseline] of a layout that can be anchored
+ * using [linkTo] in their `Modifier.constrainAs` blocks.
+ */
+private class ConstraintLastBaselineAnchorable constructor(
+    private val containerObject: CLObject
+) : LastBaselineAnchorable {
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.BaselineAnchor].
+     */
+    override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.BaselineAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
+        val constraintArray = CLArray(charArrayOf()).apply {
+            add(CLString.from(anchor.id.toString()))
+            add(CLString.from("baseline"))
+            add(CLNumber(margin.value))
+            add(CLNumber(goneMargin.value))
+        }
+        containerObject.put("lastBaseline", constraintArray)
+    }
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.LastBaselineAnchor].
+     */
+    override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
+        val constraintArray = CLArray(charArrayOf()).apply {
+            add(CLString.from(anchor.id.toString()))
+            add(CLString.from("lastBaseline"))
+            add(CLNumber(margin.value))
+            add(CLNumber(goneMargin.value))
+        }
+        containerObject.put("lastBaseline", constraintArray)
+    }
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
+     */
+    override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.HorizontalAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
+        val targetAnchorName = AnchorFunctions.horizontalAnchorIndexToAnchorName(anchor.index)
+        val constraintArray = CLArray(charArrayOf()).apply {
+            add(CLString.from(anchor.id.toString()))
+            add(CLString.from(targetAnchorName))
+            add(CLNumber(margin.value))
+            add(CLNumber(goneMargin.value))
+        }
+        containerObject.put("lastBaseline", constraintArray)
     }
 }

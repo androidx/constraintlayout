@@ -100,7 +100,8 @@ public class ConstraintAnchor {
     /**
      * Define the type of anchor
      */
-    public enum Type {NONE, LEFT, TOP, RIGHT, BOTTOM, BASELINE, CENTER, CENTER_X, CENTER_Y}
+    public enum Type {NONE, LEFT, TOP, RIGHT, BOTTOM, BASELINE,
+        LAST_BASELINE, CENTER, CENTER_X, CENTER_Y}
 
     private static final int UNSET_GONE_MARGIN = Integer.MIN_VALUE;
 
@@ -286,14 +287,17 @@ public class ConstraintAnchor {
             if (mType == Type.BASELINE
                     && (!anchor.getOwner().hasBaseline() || !getOwner().hasBaseline())) {
                 return false;
+            } else if (mType == Type.LAST_BASELINE
+                    && (!anchor.getOwner().hasLastBaseline() || !getOwner().hasLastBaseline())) {
+                return false;
             }
             return true;
         }
         switch (mType) {
             case CENTER: {
                 // allow everything but baseline and center_x/center_y
-                return target != Type.BASELINE && target != Type.CENTER_X
-                        && target != Type.CENTER_Y;
+                return target != Type.BASELINE && target != Type.LAST_BASELINE
+                        && target != Type.CENTER_X && target != Type.CENTER_Y;
             }
             case LEFT:
             case RIGHT: {
@@ -311,7 +315,8 @@ public class ConstraintAnchor {
                 }
                 return isCompatible;
             }
-            case BASELINE: {
+            case BASELINE:
+            case LAST_BASELINE: {
                 if (target == Type.LEFT || target == Type.RIGHT) {
                     return false;
                 }
@@ -338,6 +343,7 @@ public class ConstraintAnchor {
             case BOTTOM:
                 return true;
             case BASELINE:
+            case LAST_BASELINE:
             case CENTER:
             case CENTER_X:
             case CENTER_Y:
@@ -361,7 +367,7 @@ public class ConstraintAnchor {
         }
         switch (mType) {
             case CENTER: {
-                return target != Type.BASELINE;
+                return target != Type.BASELINE && target != Type.LAST_BASELINE;
             }
             case LEFT:
             case RIGHT:
@@ -371,9 +377,10 @@ public class ConstraintAnchor {
             case TOP:
             case BOTTOM:
             case CENTER_Y:
-            case BASELINE: {
-                return target == Type.TOP || target == Type.BOTTOM
-                        || target == Type.CENTER_Y || target == Type.BASELINE;
+            case BASELINE:
+            case LAST_BASELINE: {
+                return target == Type.TOP || target == Type.BOTTOM || target == Type.CENTER_Y
+                        || target == Type.BASELINE || target == Type.LAST_BASELINE;
             }
             case NONE:
                 return false;
@@ -419,6 +426,7 @@ public class ConstraintAnchor {
             case TOP:
             case BOTTOM:
             case BASELINE:
+            case LAST_BASELINE:
             case NONE:
                 return true;
         }
@@ -525,6 +533,7 @@ public class ConstraintAnchor {
                 return mOwner.mTop;
             }
             case BASELINE:
+            case LAST_BASELINE:
             case CENTER:
             case CENTER_X:
             case CENTER_Y:

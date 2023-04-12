@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.layout.LayoutIdParentData
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
@@ -1210,6 +1211,8 @@ internal open class Measurer(
         val baseline =
             if (currentPlaceable != null && state.isBaselineNeeded(constraintWidget)) {
                 currentPlaceable[FirstBaseline]
+            } else if (currentPlaceable != null && state.isLastBaselineNeeded(constraintWidget)) {
+                currentPlaceable[LastBaseline]
             } else {
                 AlignmentLine.Unspecified
             }

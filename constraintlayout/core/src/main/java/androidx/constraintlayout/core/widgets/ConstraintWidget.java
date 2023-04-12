@@ -190,6 +190,9 @@ public class ConstraintWidget {
         if (mHasBaseline) {
             mBaseline.setFinalValue(y1 + mBaselineDistance);
         }
+        if (mHasLastBaseline) {
+            mLastBaseline.setFinalValue(y1 + mLastBaselineDistance);
+        }
         mResolvedVertical = true;
         if (LinearSystem.FULL_DEBUG) {
             System.out.println("*** SET FINAL VERTICAL FOR " + getDebugName()
@@ -208,6 +211,20 @@ public class ConstraintWidget {
         mTop.setFinalValue(y1);
         mBottom.setFinalValue(y2);
         mBaseline.setFinalValue(baselineValue);
+        mResolvedVertical = true;
+    }
+
+    // @TODO: add description
+    public void setFinalLastBaseline(int lastBaselineValue) {
+        if (!mHasLastBaseline) {
+            return;
+        }
+        int y1 = lastBaselineValue - mLastBaselineDistance;
+        int y2 = y1 + mHeight;
+        mY = y1;
+        mTop.setFinalValue(y1);
+        mBottom.setFinalValue(y2);
+        mLastBaseline.setFinalValue(lastBaselineValue);
         mResolvedVertical = true;
     }
 
@@ -255,7 +272,8 @@ public class ConstraintWidget {
             return horizontalTargets < 2;
         } else {
             int verticalTargets = (mTop.mTarget != null ? 1 : 0)
-                    + (mBottom.mTarget != null ? 1 : 0) + (mBaseline.mTarget != null ? 1 : 0);
+                    + (mBottom.mTarget != null ? 1 : 0)
+                    + (mBaseline.mTarget != null || mLastBaseline.mTarget != null ? 1 : 0);
             return verticalTargets < 2;
         }
     }
@@ -333,6 +351,7 @@ public class ConstraintWidget {
     private int[] mMaxDimension = {Integer.MAX_VALUE, Integer.MAX_VALUE};
     public float mCircleConstraintAngle = Float.NaN;
     private boolean mHasBaseline = false;
+    private boolean mHasLastBaseline = false;
     private boolean mInPlaceholder;
 
     private boolean mInVirtualLayout = false;
@@ -383,6 +402,14 @@ public class ConstraintWidget {
 
     public boolean getHasBaseline() {
         return mHasBaseline;
+    }
+
+    public boolean getHasLastBaseline() {
+        return mHasLastBaseline;
+    }
+
+    public void setHasLastBaseline(boolean hasLastBaseline) {
+        this.mHasLastBaseline = hasLastBaseline;
     }
 
     public boolean isInPlaceholder() {
@@ -457,6 +484,8 @@ public class ConstraintWidget {
     public ConstraintAnchor mRight = new ConstraintAnchor(this, ConstraintAnchor.Type.RIGHT);
     public ConstraintAnchor mBottom = new ConstraintAnchor(this, ConstraintAnchor.Type.BOTTOM);
     public ConstraintAnchor mBaseline = new ConstraintAnchor(this, ConstraintAnchor.Type.BASELINE);
+    public ConstraintAnchor mLastBaseline = new ConstraintAnchor(this,
+            ConstraintAnchor.Type.LAST_BASELINE);
     ConstraintAnchor mCenterX = new ConstraintAnchor(this, ConstraintAnchor.Type.CENTER_X);
     ConstraintAnchor mCenterY = new ConstraintAnchor(this, ConstraintAnchor.Type.CENTER_Y);
     public ConstraintAnchor mCenter = new ConstraintAnchor(this, ConstraintAnchor.Type.CENTER);
@@ -499,6 +528,9 @@ public class ConstraintWidget {
 
     // Baseline distance relative to the top of the widget
     int mBaselineDistance = 0;
+
+    // LastBaseline distance relative to the top of the widget
+    int mLastBaselineDistance = 0;
 
     // Minimum sizes for the widget
     protected int mMinWidth;
@@ -730,6 +762,7 @@ public class ConstraintWidget {
         serializeAnchor(ret, "right", mRight);
         serializeAnchor(ret, "bottom", mBottom);
         serializeAnchor(ret, "baseline", mBaseline);
+        serializeAnchor(ret, "lastBaseline", mLastBaseline);
         serializeAnchor(ret, "centerX", mCenterX);
         serializeAnchor(ret, "centerY", mCenterY);
         serializeCircle(ret, mCenter, mCircleConstraintAngle);
@@ -1330,6 +1363,15 @@ public class ConstraintWidget {
      */
     public boolean hasBaseline() {
         return mHasBaseline;
+    }
+
+    /**
+     * Return true if this widget has a lastBaseline
+     *
+     * @return true if the widget has a lastBaseline, false otherwise
+     */
+    public boolean hasLastBaseline() {
+        return mHasLastBaseline;
     }
 
     /**
@@ -2233,7 +2275,8 @@ public class ConstraintWidget {
     /**
      * Given a type of anchor, returns the corresponding anchor.
      *
-     * @param anchorType type of the anchor (LEFT, TOP, RIGHT, BOTTOM, BASELINE, CENTER_X, CENTER_Y)
+     * @param anchorType type of the anchor (LEFT, TOP, RIGHT, BOTTOM, BASELINE, LAST_BASELINE,
+     *                   CENTER_X, CENTER_Y)
      * @return the matching anchor
      */
     public ConstraintAnchor getAnchor(ConstraintAnchor.Type anchorType) {
@@ -2252,6 +2295,9 @@ public class ConstraintWidget {
             }
             case BASELINE: {
                 return mBaseline;
+            }
+            case LAST_BASELINE: {
+                return mLastBaseline;
             }
             case CENTER_X: {
                 return mCenterX;
@@ -3763,6 +3809,7 @@ public class ConstraintWidget {
         getSceneString(ret, "right", mRight);
         getSceneString(ret, "bottom", mBottom);
         getSceneString(ret, "baseline", mBaseline);
+        serializeAnchor(ret, "lastBaseline", mLastBaseline);
         getSceneString(ret, "centerX", mCenterX);
         getSceneString(ret, "centerY", mCenterY);
         getSceneString(ret, "    width",
