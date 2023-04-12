@@ -15,7 +15,7 @@
  */
 package android.support.drag2d.lib;
 
-public class CubicEasing implements MaterialVelocity.Easing {
+public class MaterialEasing implements MaterialVelocity.Easing {
 
     private static final float[] STANDARD_COEFFICIENTS = {0.4f, 0.0f, 0.2f, 1f};
     private static final float[] ACCELERATE_COEFFICIENTS = {0.4f, 0.05f, 0.8f, 0.7f};
@@ -33,18 +33,18 @@ public class CubicEasing implements MaterialVelocity.Easing {
 
     // public static final CubicEasing STANDARD = new CubicEasing(STANDARD_COEFFICIENTS);
     // public static final CubicEasing ACCELERATE = new CubicEasing(ACCELERATE_COEFFICIENTS);
-    public static final CubicEasing DECELERATE = new CubicEasing(DECELERATE_COEFFICIENTS);
-    public static final CubicEasing LINEAR = new CubicEasing(LINEAR_COEFFICIENTS);
+    public static final MaterialEasing DECELERATE = new MaterialEasing(DECELERATE_COEFFICIENTS);
+    public static final MaterialEasing LINEAR = new MaterialEasing(LINEAR_COEFFICIENTS);
     // public static final CubicEasing ANTICIPATE = new CubicEasing(ANTICIPATE_COEFFICIENTS);
-    public static final CubicEasing OVERSHOOT = new CubicEasing(OVERSHOOT_COEFFICIENTS);
-    public static final CubicEasing EASE_OUT_SINE = new CubicEasing(new float[]{0.61f, 1f, 0.88f, 1f});
-    public static final CubicEasing EASE_OUT_CUBIC = new CubicEasing(new float[]{0.33f, 1f, 0.68f, 1f});
-    public static final CubicEasing EASE_OUT_QUINT = new CubicEasing(new float[]{0.22f, 1f, 0.36f, 1f});
-    public static final CubicEasing EASE_OUT_CIRC = new CubicEasing(new float[]{0.02f, 0.55f, 0.45f, 1f});
-    public static final CubicEasing EASE_OUT_QUAD = new CubicEasing(new float[]{0.5f, 1f, 0.89f, 1f});
-    public static final CubicEasing EASE_OUT_QUART = new CubicEasing(new float[]{0.25f, 1f, 0.5f, 1f});
-    public static final CubicEasing EASE_OUT_EXPO = new CubicEasing(new float[]{0.16f, 1f, 0.3f, 1f});
-    public static final CubicEasing EASE_OUT_BACK = new CubicEasing(new float[]{0.34f, 1.56f, 0.64f, 1f});
+    public static final MaterialEasing OVERSHOOT = new MaterialEasing(OVERSHOOT_COEFFICIENTS);
+    public static final MaterialEasing EASE_OUT_SINE = new MaterialEasing(new float[]{0.61f, 1f, 0.88f, 1f});
+    public static final MaterialEasing EASE_OUT_CUBIC = new MaterialEasing(new float[]{0.33f, 1f, 0.68f, 1f});
+    public static final MaterialEasing EASE_OUT_QUINT = new MaterialEasing(new float[]{0.22f, 1f, 0.36f, 1f});
+    public static final MaterialEasing EASE_OUT_CIRC = new MaterialEasing(new float[]{0.02f, 0.55f, 0.45f, 1f});
+    public static final MaterialEasing EASE_OUT_QUAD = new MaterialEasing(new float[]{0.5f, 1f, 0.89f, 1f});
+    public static final MaterialEasing EASE_OUT_QUART = new MaterialEasing(new float[]{0.25f, 1f, 0.5f, 1f});
+    public static final MaterialEasing EASE_OUT_EXPO = new MaterialEasing(new float[]{0.16f, 1f, 0.3f, 1f});
+    public static final MaterialEasing EASE_OUT_BACK = new MaterialEasing(new float[]{0.34f, 1.56f, 0.64f, 1f});
     public static final MaterialVelocity.Easing EASE_OUT_ELASTIC = new EaseOutElastic();
 
 
@@ -142,7 +142,7 @@ public class CubicEasing implements MaterialVelocity.Easing {
     private String mConfigString;
     double mX1, mY1, mX2, mY2;
 
-    CubicEasing(String configString) {
+    MaterialEasing(String configString) {
         // done this way for efficiency
         mConfigString = configString;
         int start = configString.indexOf('(');
@@ -156,17 +156,17 @@ public class CubicEasing implements MaterialVelocity.Easing {
         mY2 = Double.parseDouble(configString.substring(off3 + 1, end).trim());
     }
 
-    CubicEasing(float[] c) {
+    MaterialEasing(float[] c) {
         this(c[0], c[1], c[2], c[3]);
     }
 
-    CubicEasing(double x1, double y1, double x2, double y2) {
+    MaterialEasing(double x1, double y1, double x2, double y2) {
         setup(x1, y1, x2, y2);
     }
 
 
-    public CubicEasing clone() {
-        return new CubicEasing(mX1, mY1, mX2, mY2);
+    public MaterialEasing clone() {
+        return new MaterialEasing(mX1, mY1, mX2, mY2);
     }
 
     void setup(double x1, double y1, double x2, double y2) {

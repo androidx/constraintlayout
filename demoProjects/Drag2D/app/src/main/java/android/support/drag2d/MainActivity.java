@@ -19,28 +19,89 @@ package android.support.drag2d;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.drag2d.lib.CubicEasing;
+import android.support.drag2d.lib.MaterialEasing;
+import android.support.drag2d.lib.MaterialVelocity;
 import android.support.drag2d.lib.Velocity2D;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    int backgroundColor = 0xFF000000|(200*256+250)*256+200;
+    static String []sEasingNames = {
+            "DECELERATE",
+            "LINEAR",
+            "OVERSHOOT",
+            "EASE_OUT_SINE",
+            "EASE_OUT_CUBIC",
+            "EASE_OUT_QUINT",
+            "EASE_OUT_CIRC",
+            "EASE_OUT_QUAD",
+            "EASE_OUT_QUART",
+            "EASE_OUT_EXPO",
+            "EASE_OUT_BACK",
+            "EASE_OUT_ELASTIC",
+            "EASE_OUT_BOUNCE"
+    };
+    static MaterialVelocity.Easing[] sEasings = {
+            MaterialEasing.DECELERATE,
+            MaterialEasing.LINEAR,
+            MaterialEasing.OVERSHOOT,
+            MaterialEasing.EASE_OUT_SINE,
+            MaterialEasing.EASE_OUT_CUBIC,
+            MaterialEasing.EASE_OUT_QUINT,
+            MaterialEasing.EASE_OUT_CIRC,
+            MaterialEasing.EASE_OUT_QUAD,
+            MaterialEasing.EASE_OUT_QUART,
+            MaterialEasing.EASE_OUT_EXPO,
+            MaterialEasing.EASE_OUT_BACK,
+            MaterialEasing.EASE_OUT_ELASTIC,
+            MaterialEasing.EASE_OUT_BOUNCE
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new BallMover(getApplicationContext()));
+        requestWindowFeature(Window.FEATURE_ACTION_BAR);
+        LinearLayout row = new LinearLayout(this);
+        LinearLayout col = new LinearLayout(this);
+        col.setOrientation(LinearLayout.VERTICAL);
+        ScrollView scrollView = new ScrollView(this);
+        BallMover m = new BallMover(this);
+        for (int i = 0; i < sEasingNames.length; i++) {
+            AppCompatButton b = new AppCompatButton(this);
+            b.setText(sEasingNames[i]);
+            MaterialVelocity.Easing easing = sEasings[i];
+            b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+            b.setPadding(1,1,5,5);
+            col.addView(b);
+            b.setOnClickListener(c->{m.setEasing(easing);});
+
+        }
+        col.setBackgroundColor(backgroundColor);
+        scrollView.addView(col);
+        row.addView(scrollView);
+        row.addView(m);
+        setContentView(row);
+
     }
 
     static class BallMover extends View {
@@ -49,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
         Velocity2D velocity2D = new Velocity2D();
         int ballX;
         int ballY;
-        int ballW = 64;
-        int ballH = 64;
-
+        int ballW = 128;
+        int ballH = 128;
+         MaterialVelocity.Easing easing = null;
         float[] points = new float[10000];
         Paint paint = new Paint();
 
@@ -76,10 +137,12 @@ public class MainActivity extends AppCompatActivity {
             ball = ResourcesCompat.getDrawable(context.getResources(), R.drawable.volleyball, null);
             paint.setStrokeWidth(3);
         }
-
+        public void setEasing(MaterialVelocity.Easing easing) {
+            this.easing = easing;
+        }
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawRGB(200,200,230);
+            canvas.drawRGB(200,250,200);
             if (startAnimationTime != 0) {
 
                 long timeMillis = SystemClock.uptimeMillis() - startAnimationTime;
@@ -94,12 +157,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 canvas.drawLines(points, paint);
             }
-            ball.setBounds(ballX, ballY, ballW + ballX, ballH + ballY);
-            ball.draw(canvas);
+
             ball.setBounds(getWidth() / 2, getHeight() / 2, ballW + getWidth() / 2, ballH + getHeight() / 2);
+            ball.setTint(Color.CYAN);
             ball.draw(canvas);
-
-
+            ball.setBounds(ballX, ballY, ballW + ballX, ballH + ballY);
+            ball.setTint(Color.BLACK);
+            ball.draw(canvas);
         }
 
         float touchDownX;
@@ -146,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                             velocityX, velocityY,
                             getWidth() / 2, getHeight() / 2,
                             4, 1000, 1000,
-                            null);
+                            easing);
                     velocity2D.getCurves(points, getWidth(), getHeight());
                     invalidate();
                     break;

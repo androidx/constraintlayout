@@ -103,7 +103,7 @@ public class Velocity2D {
     }
 
     public boolean isStillMoving(float t) {
-        return mvX.getDuration() > t && mvY.getDuration() > t;
+        return mvX.getDuration() > t || mvY.getDuration() > t;
     }
 
     public void getCurves(float[] points, int w, int h) {
