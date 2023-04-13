@@ -32,15 +32,11 @@ public class Velocity2D {
         if (speed > maxV) {
             velocityX *= maxV / speed;
             velocityY *= maxV / speed;
-            System.out.println(" rescale velocity to " + velocityX + " ," + velocityY);
         }
         mvX.config(posX, destinationX, velocityX, duration, maxA, maxV, easing);
         mvY.config(posY, destinationY, velocityY, duration, maxA, maxV, easing);
-        System.out.println(" p duration " + mvX.getDuration() + " " + mvY.getDuration());
 
         mvX.sync(mvY);
-        System.out.println(" a duration " + mvX.getDuration() + " " + mvY.getDuration());
-        checkCurves();
     }
 
     private void checkCurves() {
@@ -106,15 +102,45 @@ public class Velocity2D {
         return mvX.getDuration() > t || mvY.getDuration() > t;
     }
 
-    public void getCurves(float[] points, int w, int h) {
+    public float getDuration() {
+        return Math.max(mvX.getDuration(), mvY.mDuration);
+    }
+
+    public int getPointOffsetX(int len, float fraction) {
+        int lines = (len  - 5 * 4)/8;
+        int off = (int) (((len - 20) / 8) * fraction);
+
+        if (off >= lines) {
+             off = lines-2;
+        }
+        return 20 + 4*off;
+    }
+
+    public int getPointOffsetY(int len, float fraction) {
+
+        int lines = (len  - 5 * 4)/8;
+        int off = (int) (((len - 20) / 8) * fraction);
+
+        if (off >= lines) {
+            off = lines-2;
+        }
+        return 20 + 4*(lines+off);
+    }
+
+    /**
+     * This builds a curves that can be displayed on the screen for debugging
+     *
+     * @param points        in the form (x1,y1,x2,y2),... as supported by canvas.drawLines()
+     * @param w
+     * @param h
+     * @param velocity_mode
+     */
+    public void getCurves(float[] points, int w, int h, boolean velocity_mode) {
         int len = points.length;
-        float duration = mvX.getDuration();
-        int lines = len / 8 - 5 * 4;
+        float duration = getDuration();
+        int lines = (len  - 5 * 4)/8;
         int p = 0;
-        float startX = mvX.getStartPos();
-        float startY = mvY.getStartPos();
-        float endX = mvX.getEndPos();
-        float endY = mvY.getEndPos();
+
         int inset = 40;
         int regionW = w - inset * 2;
         int regionH = h - inset * 2;
@@ -128,57 +154,109 @@ public class Velocity2D {
         points[p++] = inset + regionW;
         points[p++] = inset + regionH;
 
+        points[p++] = inset;
+        points[p++] = inset + regionH;
+        points[p++] = inset + regionW;
+        points[p++] = inset + regionH;
 
         float min = 0, max = 1;
         float v;
-        for (int i = 0; i < lines; i++) {
-            float t = i * duration / lines;
-            v = (mvY.getPos(t) - startY) / (endY - startY);
-            min = Math.min(v, min);
-            max = Math.max(v, max);
-            v = (mvX.getPos(t) - startX) / (endX - startX);
-            min = Math.min(v, min);
-            max = Math.max(v, max);
+        if (velocity_mode) {
+            float startX = mvX.getStartV();
+            float startY = mvY.getStartV();
+            float endX = 0;
+            float endY = 0;
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                v = (mvY.getV(t) - startY) / (endY - startY);
+                min = Math.min(v, min);
+                max = Math.max(v, max);
+                v = (mvX.getV(t) - startX) / (endX - startX);
+                min = Math.min(v, min);
+                max = Math.max(v, max);
+            }
+
+            float y0 = inset + regionH - regionH * ((0.0f - min) / (max - min));
+            points[p++] = inset;
+            points[p++] = y0;
+            points[p++] = inset + regionW;
+            points[p++] = y0;
+            y0 = inset + regionH - regionH * ((1.0f - min) / (max - min));
+            points[p++] = inset;
+            points[p++] = y0;
+            points[p++] = inset + regionW;
+            points[p++] = y0;
+
+
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                float t2 = (i + 1) * duration / lines;
+                float xp1 = i / (float) lines;
+                float xp2 = (i + 1) / (float) lines;
+                points[p++] = inset + regionW * (xp1);
+                points[p++] = inset + regionH - regionH * ((mvY.getV(t) - startY) / (endY - startY) - min) / (max - min);
+                points[p++] = inset + regionW * (xp2);
+                points[p++] = inset + regionH - regionH * ((mvY.getV(t2) - startY) / (endY - startY) - min) / (max - min);
+            }
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                float t2 = (i + 1) * duration / lines;
+                float xp1 = i / (float) lines;
+                float xp2 = (i + 1) / (float) lines;
+                points[p++] = inset + regionW * (xp1);
+                points[p++] = inset + regionH - regionH * ((mvX.getV(t) - startX) / (endX - startX) - min) / (max - min);
+                points[p++] = inset + regionW * (xp2);
+                points[p++] = inset + regionH - regionH * ((mvX.getV(t2) - startX) / (endX - startX) - min) / (max - min);
+            }
+
+        } else {
+            float startX = mvX.getStartPos();
+            float startY = mvY.getStartPos();
+            float endX = mvX.getEndPos();
+            float endY = mvY.getEndPos();
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                v = (mvY.getPos(t) - startY) / (endY - startY);
+                min = Math.min(v, min);
+                max = Math.max(v, max);
+                v = (mvX.getPos(t) - startX) / (endX - startX);
+                min = Math.min(v, min);
+                max = Math.max(v, max);
+            }
+
+            float y0 = inset + regionH - regionH * ((0.0f - min) / (max - min));
+            points[p++] = inset;
+            points[p++] = y0;
+            points[p++] = inset + regionW;
+            points[p++] = y0;
+            y0 = inset + regionH - regionH * ((1.0f - min) / (max - min));
+            points[p++] = inset;
+            points[p++] = y0;
+            points[p++] = inset + regionW;
+            points[p++] = y0;
+
+
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                float t2 = (i + 1) * duration / lines;
+                float xp1 = i / (float) lines;
+                float xp2 = (i + 1) / (float) lines;
+                points[p++] = inset + regionW * (xp1);
+                points[p++] = inset + regionH - regionH * ((mvY.getPos(t) - startY) / (endY - startY) - min) / (max - min);
+                points[p++] = inset + regionW * (xp2);
+                points[p++] = inset + regionH - regionH * ((mvY.getPos(t2) - startY) / (endY - startY) - min) / (max - min);
+            }
+            for (int i = 0; i < lines; i++) {
+                float t = i * duration / lines;
+                float t2 = (i + 1) * duration / lines;
+                float xp1 = i / (float) lines;
+                float xp2 = (i + 1) / (float) lines;
+                points[p++] = inset + regionW * (xp1);
+                points[p++] = inset + regionH - regionH * ((mvX.getPos(t) - startX) / (endX - startX) - min) / (max - min);
+                points[p++] = inset + regionW * (xp2);
+                points[p++] = inset + regionH - regionH * ((mvX.getPos(t2) - startX) / (endX - startX) - min) / (max - min);
+            }
+
         }
-
-        float y0 = inset + regionH - regionH * ((0.0f - min) / (max - min));
-        points[p++] = inset;
-        points[p++] = y0;
-        points[p++] = inset + regionW;
-        points[p++] = y0;
-        y0 = inset + regionH - regionH * ((1.0f - min) / (max - min));
-        points[p++] = inset;
-        points[p++] = y0;
-        points[p++] = inset + regionW;
-        points[p++] = y0;
-
-        points[p++] = inset;
-        points[p++] = inset + regionH;
-        points[p++] = inset + regionW;
-        points[p++] = inset + regionH;
-
-
-        for (int i = 0; i < lines; i++) {
-            float t = i * duration / lines;
-            float t2 = (i + 1) * duration / lines;
-            float xp1 = i / (float) lines;
-            float xp2 = (i + 1) / (float) lines;
-            points[p++] = inset + regionW * (xp1);
-            points[p++] = inset + regionH - regionH * ((mvY.getPos(t) - startY) / (endY - startY) - min) / (max - min);
-            points[p++] = inset + regionW * (xp2);
-            points[p++] = inset + regionH - regionH * ((mvY.getPos(t2) - startY) / (endY - startY) - min) / (max - min);
-        }
-        for (int i = 0; i < lines; i++) {
-            float t = i * duration / lines;
-            float t2 = (i + 1) * duration / lines;
-            float xp1 = i / (float) lines;
-            float xp2 = (i + 1) / (float) lines;
-            points[p++] = inset + regionW * (xp1);
-            points[p++] = inset + regionH - regionH * ((mvX.getPos(t) - startX) / (endX - startX) - min) / (max - min);
-            points[p++] = inset + regionW * (xp2);
-            points[p++] = inset + regionH - regionH * ((mvX.getPos(t2) - startX) / (endX - startX) - min) / (max - min);
-        }
-
-
     }
 }

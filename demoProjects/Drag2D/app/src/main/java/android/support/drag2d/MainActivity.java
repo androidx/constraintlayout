@@ -32,7 +32,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -41,12 +40,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.google.android.material.button.MaterialButton;
-
 
 public class MainActivity extends AppCompatActivity {
-    int backgroundColor = 0xFF000000|(200*256+250)*256+200;
-    static String []sEasingNames = {
+    int backgroundColor = 0xFF000000 | (200 * 256 + 250) * 256 + 200;
+    static String[] sEasingNames = {
             "DECELERATE",
             "LINEAR",
             "OVERSHOOT",
@@ -76,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             MaterialEasing.EASE_OUT_ELASTIC,
             MaterialEasing.EASE_OUT_BOUNCE
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +89,22 @@ public class MainActivity extends AppCompatActivity {
             MaterialVelocity.Easing easing = sEasings[i];
             b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            b.setPadding(1,1,5,5);
+            b.setPadding(1, 1, 5, 5);
             col.addView(b);
-            b.setOnClickListener(c->{m.setEasing(easing);});
+            b.setOnClickListener(c -> {
+                m.setEasing(easing);
+            });
 
         }
+
+        AppCompatButton b = new AppCompatButton(this);
+        b.setText("graph mode");
+        b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        col.addView(b);
+        b.setOnClickListener(c -> {
+            m.mGraphMode = !m.mGraphMode;
+        });
+
         col.setBackgroundColor(backgroundColor);
         scrollView.addView(col);
         row.addView(scrollView);
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static class BallMover extends View {
+        public boolean mGraphMode = false;
         Drawable ball;
         VelocityTracker velocityTracker = VelocityTracker.obtain();
         Velocity2D velocity2D = new Velocity2D();
@@ -112,9 +122,11 @@ public class MainActivity extends AppCompatActivity {
         int ballY;
         int ballW = 128;
         int ballH = 128;
-         MaterialVelocity.Easing easing = null;
+        MaterialVelocity.Easing easing = null;
         float[] points = new float[10000];
         Paint paint = new Paint();
+        Paint paintDot = new Paint();
+        private float mDuration;
 
 
         public BallMover(Context context) {
@@ -136,13 +148,16 @@ public class MainActivity extends AppCompatActivity {
         void setup(Context context) {
             ball = ResourcesCompat.getDrawable(context.getResources(), R.drawable.volleyball, null);
             paint.setStrokeWidth(3);
+            paintDot.setColor(Color.RED);
         }
+
         public void setEasing(MaterialVelocity.Easing easing) {
             this.easing = easing;
         }
+
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawRGB(200,250,200);
+            canvas.drawRGB(200, 250, 200);
             if (startAnimationTime != 0) {
 
                 long timeMillis = SystemClock.uptimeMillis() - startAnimationTime;
@@ -156,6 +171,14 @@ public class MainActivity extends AppCompatActivity {
                     startAnimationTime = 0;
                 }
                 canvas.drawLines(points, paint);
+                int xPos = velocity2D.getPointOffsetX(points.length, time / mDuration);
+                int yPos = velocity2D.getPointOffsetY(points.length, time / mDuration);
+                float x = points[xPos], y = points[xPos + 1];
+                canvas.drawRoundRect(x - 10, y - 10, x + 10, y + 10, 20, 20, paintDot);
+                x = points[yPos];
+                y = points[yPos + 1];
+                canvas.drawRoundRect(x - 10, y - 10, x + 10, y + 10, 20, 20, paintDot);
+
             }
 
             ball.setBounds(getWidth() / 2, getHeight() / 2, ballW + getWidth() / 2, ballH + getHeight() / 2);
@@ -179,8 +202,6 @@ public class MainActivity extends AppCompatActivity {
             switch (event.getAction()) {
 
                 case MotionEvent.ACTION_DOWN:
-                    System.out.println("------- down ---------");
-
                     startAnimationTime = 0;
                     touchDownX = event.getX();
                     touchDownY = event.getY();
@@ -189,8 +210,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    System.out.println("------- move ---------");
-
                     touchDeltaX = event.getX() - touchDownX;
                     touchDeltaY = event.getY() - touchDownY;
                     ballX = (int) (ballDownX + touchDeltaX);
@@ -199,19 +218,17 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case MotionEvent.ACTION_UP:
-                    System.out.println("------- UP ---------");
-
                     velocityTracker.computeCurrentVelocity(1000);
                     float velocityX = velocityTracker.getXVelocity();
                     float velocityY = velocityTracker.getYVelocity();
-                    System.out.println("initial velocity " + velocityX + "," + velocityY);
                     startAnimationTime = event.getEventTime();
                     velocity2D.configure(ballX, ballY,
                             velocityX, velocityY,
                             getWidth() / 2, getHeight() / 2,
                             4, 1000, 1000,
                             easing);
-                    velocity2D.getCurves(points, getWidth(), getHeight());
+                    velocity2D.getCurves(points, getWidth(), getHeight(), mGraphMode);
+                    mDuration = velocity2D.getDuration();
                     invalidate();
                     break;
 
