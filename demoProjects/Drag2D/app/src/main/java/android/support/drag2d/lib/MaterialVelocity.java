@@ -41,7 +41,9 @@ public class MaterialVelocity {
     public float getStartPos() {
         return mStartPos;
     }
-
+    public float getStartV() {
+        return mStartVel;
+    }
     protected static class Stage {
         float mStartV;
         float mStartPos;
@@ -101,7 +103,7 @@ public class MaterialVelocity {
             }
             return 0;
         }
-        int lastStages = mNumberOfStages;
+        int lastStages = mNumberOfStages-1;
         for (int i = 0; i < lastStages; i++) {
             if (mStage[i].mEndTime > t) {
                 return mStage[i].getVel(t);
@@ -130,10 +132,7 @@ public class MaterialVelocity {
         }
 
         float ret = (float) getEasing(t - mStage[lastStages].mStartTime);
-        System.out.println(">>>>>>>>>>>>>>> easing= " + ret);
-
         ret += mStage[lastStages].mStartPos;
-        System.out.println(">>>>>>>>>>>>>>> offset " + ret);
         return ret;
 
     }
@@ -272,7 +271,7 @@ public class MaterialVelocity {
         if (gx > 1) {
             return 0;
         }
-        return mEasing.getDiff(gx) * mEasingAdapterDistance;
+        return mEasing.getDiff(gx) * mEasingAdapterDistance*(t*mEasingAdapterA+mEasingAdapterB);
     }
 
 
