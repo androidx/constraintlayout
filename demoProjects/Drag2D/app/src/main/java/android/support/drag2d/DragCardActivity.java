@@ -18,11 +18,9 @@ package android.support.drag2d;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -36,14 +34,21 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.widget.AppCompatSeekBar;
+
+import com.google.android.material.slider.Slider;
+
+import java.text.DecimalFormat;
 
 
-public class MainActivity extends AppCompatActivity {
+public class DragCardActivity extends AppCompatActivity {
     int backgroundColor = 0xFF000000 | (200 * 256 + 250) * 256 + 200;
     static String[] sEasingNames = {
             "DECELERATE",
@@ -76,17 +81,19 @@ public class MainActivity extends AppCompatActivity {
             MaterialEasing.EASE_OUT_BOUNCE
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
+        LinearLayout topCol = new LinearLayout(this);
         LinearLayout row = new LinearLayout(this);
         LinearLayout col = new LinearLayout(this);
+        topCol.setOrientation(LinearLayout.VERTICAL);
         col.setOrientation(LinearLayout.VERTICAL);
         ScrollView scrollView = new ScrollView(this);
-        BallMover m = new BallMover(this);
+        CardMover m = new CardMover(this);
         AppCompatButton[]buttons = new AppCompatButton[sEasingNames.length];
-
         for (int i = 0; i < sEasingNames.length; i++) {
             AppCompatButton b = new AppCompatButton(this);
             buttons[i] = b;
@@ -94,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             int mode = i;
             Drawable d = b.getBackground();
             d = d.mutate();
-            d.setTint(0xffAAAAAA);
+            d.setTint(0xffAA88AA);
             b.setBackgroundDrawable(d);
             b.setPadding(1, 1, 5, 5);
             col.addView(b);
@@ -102,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int j = 0; j < buttons.length; j++) {
                     Drawable draw = buttons[j].getBackground();
                     draw = draw.mutate();
-                    draw.setTint((mode == j)?Color.CYAN:0xffAAAAAA);
+                    draw.setTint((mode == j)?0xff328855:0xffAA88AA);
                     buttons[j].setBackgroundDrawable(draw);
                 }
 
@@ -110,48 +117,67 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
+        String[] name = {"Max V: ", "Max A: ", "time:"};
+        float[] min = {400, 400, 0.1f};
+        float[] max = {8000, 8000, 10f};
+        float[] val = {800, 800, 0.2f};
 
+        DecimalFormat df = new DecimalFormat("##0.0");
+        for (int i = 0; i < name.length; i++) {
+            int sno = i;
+            LinearLayout slidePack = new LinearLayout(this);
+
+            Slider slider = new Slider(this);
+            TextView tv = new TextView(this);
+            tv.setWidth(340);
+            tv.setText(name[sno] + min[sno]);
+            slidePack.addView(tv);
+            slidePack.addView(slider);
+
+            slider.setValue(val[sno]);
+            slider.setValueTo(max[sno]);
+            slider.setValueFrom(min[sno]);
+            slider.addOnChangeListener(new Slider.OnChangeListener() {
+                @Override
+                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                    float v = value;
+                    tv.setText(name[sno] + df.format(v));
+                    m.setParam(sno, v);
+                }
+            });
+            topCol.addView(slidePack);
+
+        }
         AppCompatButton b = new AppCompatButton(this);
-        // mode
         b.setText("plot Position");
         b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         col.addView(b);
-         Drawable d = b.getBackground();
-         d = d.mutate();
-         d.setTint(0xff328832);
+        Drawable d = b.getBackground();
+        d = d.mutate();
+        d.setTint(0xff328832);
         b.setBackgroundDrawable(d);
         b.setOnClickListener(c -> {
             m.mGraphMode = !m.mGraphMode;
             b.setText("plot " + (m.mGraphMode ? "velocity" : "Position"));
         });
-        // mode
-        AppCompatButton app = new AppCompatButton(this);
-        app.setText("card demo...");
-        app.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        col.addView(app);
-        app.setOnClickListener(c -> {
-            Intent intent = new Intent(this, DragCardActivity.class);
-            startActivity(intent);
-        });
-
 
         col.setBackgroundColor(backgroundColor);
         scrollView.addView(col);
         row.addView(scrollView);
         row.addView(m);
-        setContentView(row);
+        topCol.addView(row);
+        setContentView(topCol);
 
     }
 
-    static class BallMover extends View {
+    static class CardMover extends View {
         public boolean mGraphMode = false;
         Drawable ball;
         VelocityTracker velocityTracker = VelocityTracker.obtain();
         Velocity2D velocity2D = new Velocity2D();
-        int ballX;
-        int ballY;
-        int ballW = 128;
-        int ballH = 128;
+        int mCardX = -30;
+        int mCardY = 0;
+        Paint mCardPaint = new Paint();
         MaterialVelocity.Easing easing = null;
         float[] points = new float[10000];
         Paint paint = new Paint();
@@ -159,17 +185,17 @@ public class MainActivity extends AppCompatActivity {
         private float mDuration;
 
 
-        public BallMover(Context context) {
+        public CardMover(Context context) {
             super(context);
             setup(context);
         }
 
-        public BallMover(Context context, @Nullable AttributeSet attrs) {
+        public CardMover(Context context, @Nullable AttributeSet attrs) {
             super(context, attrs);
             setup(context);
         }
 
-        public BallMover(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        public CardMover(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
             setup(context);
         }
@@ -179,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             ball = ResourcesCompat.getDrawable(context.getResources(), R.drawable.volleyball, null);
             paint.setStrokeWidth(3);
             paintDot.setColor(Color.RED);
+            mCardPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            mCardPaint.setColor(0x55FF8800);
         }
 
         public void setEasing(MaterialVelocity.Easing easing) {
@@ -187,15 +215,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawRGB(200, 250, 200);
+            canvas.drawRGB(230, 210, 200);
+            int rounding = touchDown ? 128 : 0;
             if (startAnimationTime != 0) {
 
                 long timeMillis = SystemClock.uptimeMillis() - startAnimationTime;
                 float time = timeMillis / 1000f;
-                ballX = (int) velocity2D.getX(time);
-                ballY = (int) velocity2D.getY(time);
+                mCardX = (int) velocity2D.getX(time);
+                mCardY = (int) velocity2D.getY(time);
 
                 if (velocity2D.isStillMoving(time)) {
+                    rounding = 48;
                     invalidate();
                 } else {
                     startAnimationTime = 0;
@@ -208,14 +238,15 @@ public class MainActivity extends AppCompatActivity {
                 x = points[yPos];
                 y = points[yPos + 1];
                 canvas.drawRoundRect(x - 10, y - 10, x + 10, y + 10, 20, 20, paintDot);
-
             }
+            // draw card
 
-            ball.setBounds(getWidth() / 2, getHeight() / 2, ballW + getWidth() / 2, ballH + getHeight() / 2);
+            canvas.drawRoundRect(mCardX, mCardY, mCardX + getWidth() / 2, getHeight() + mCardY, rounding, rounding, mCardPaint);
+            int scale = 128;
+            int ballX = mCardX + getWidth() / 4 - scale/2;
+            int ballY = mCardY + getHeight() / 2 - scale/2;
+            ball.setBounds(ballX, ballY, ballX + scale, ballY + scale);
             ball.setTint(Color.CYAN);
-            ball.draw(canvas);
-            ball.setBounds(ballX, ballY, ballW + ballX, ballH + ballY);
-            ball.setTint(Color.BLACK);
             ball.draw(canvas);
         }
 
@@ -224,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         float touchDeltaX, touchDeltaY;
         int ballDownX, ballDownY;
         long startAnimationTime;
-
+        boolean touchDown = false;
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
@@ -235,15 +266,19 @@ public class MainActivity extends AppCompatActivity {
                     startAnimationTime = 0;
                     touchDownX = event.getX();
                     touchDownY = event.getY();
-                    ballDownX = ballX;
-                    ballDownY = ballY;
+                    ballDownX = mCardX;
+                    ballDownY = mCardY;
+                    touchDown = true;
                     break;
 
                 case MotionEvent.ACTION_MOVE:
                     touchDeltaX = event.getX() - touchDownX;
                     touchDeltaY = event.getY() - touchDownY;
-                    ballX = (int) (ballDownX + touchDeltaX);
-                    ballY = (int) (ballDownY + touchDeltaY);
+                    mCardX = (int) (ballDownX + touchDeltaX);
+                    mCardY = (int) (ballDownY + touchDeltaY);
+                    int slop = 300;
+                    mCardY = Math.max(-slop, Math.min(slop, mCardY));
+                    mCardY = (int) softClamp(mCardY, -slop, +slop);
                     invalidate();
 
                     break;
@@ -252,10 +287,12 @@ public class MainActivity extends AppCompatActivity {
                     float velocityX = velocityTracker.getXVelocity();
                     float velocityY = velocityTracker.getYVelocity();
                     startAnimationTime = event.getEventTime();
-                    velocity2D.configure(ballX, ballY,
-                            velocityX, velocityY,
-                            getWidth() / 2, getHeight() / 2,
-                            4, 1000, 1000,
+                    touchDown = false;
+                    boolean dir = mCardX + velocityX < getWidth() / 4;
+                    velocity2D.configure(mCardX, mCardY,
+                            velocityX, 0,
+                            dir ? 0 : getWidth() / 2, 0,
+                            duration, maxV, maxA,
                             easing);
                     velocity2D.getCurves(points, getWidth(), getHeight(), mGraphMode);
                     mDuration = velocity2D.getDuration();
@@ -265,5 +302,30 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+
+        float maxV = 800;
+        float maxA = 800;
+        float duration = 0.2f;
+
+        public void setParam(int param, float v) {
+            switch (param) {
+                case 0:
+                    maxV = v;
+                    break;
+                case 1:
+                    maxA = v;
+                    break;
+                case 2:
+                    duration = v;
+            }
+        }
+    }
+
+    public static float softClamp(float x, float min, float max) {
+        float halfWidth = (max - min) / 2;
+        x = (x - (min + max) / 2) / halfWidth;
+
+        return (max + min) / 2 + halfWidth * (float) (1 / (1 + Math.exp(-x)) - 0.5f);
+
     }
 }
