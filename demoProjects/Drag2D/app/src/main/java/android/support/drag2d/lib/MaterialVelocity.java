@@ -158,6 +158,9 @@ public class MaterialVelocity {
 
     public void config(float currentPos, float destination, float currentVelocity,
                        float maxTime, float maxAcceleration, float maxVelocity, Easing easing) {
+        if (currentPos  == destination) {
+            currentPos += 1;
+        }
         mStartPos = currentPos;
         mEndPos = destination;
 
@@ -180,8 +183,8 @@ public class MaterialVelocity {
 
         if (!rampDown(currentPos, destination, currentVelocity, maxTime)) {
             if (!(oneDimension && cruseThenRampDown(currentPos, destination, currentVelocity, maxTime, maxA, maxV))) {
-                if (!rampUpRampDown(currentPos, destination, currentVelocity, maxA, maxV)) {
-                    rampUpCruseRampDown(currentPos, destination, currentVelocity, maxA, maxV);
+                if (!rampUpRampDown(currentPos, destination, currentVelocity, maxA, maxV, maxTime)) {
+                    rampUpCruseRampDown(currentPos, destination, currentVelocity, maxA, maxV, maxTime);
                 }
             }
         }
@@ -225,9 +228,9 @@ public class MaterialVelocity {
     }
 
     private boolean rampUpRampDown(float currentPos, float destination, float currentVelocity,
-                                   float maxA, float maxVelocity) {
+                                   float maxA, float maxVelocity, float maxTime) {
         float peak_v = Math.signum(maxA) * (float) Math.sqrt(maxA * (destination - currentPos) + currentVelocity * currentVelocity / 2);
-
+        System.out.println(">>>>>>>>>  peak "+peak_v + " " +  maxVelocity);
         if (maxVelocity / peak_v > 1) {
             float t1 = (peak_v - currentVelocity) / maxA;
             float d1 = (peak_v + currentVelocity) * t1 / 2 + currentPos;
@@ -236,25 +239,73 @@ public class MaterialVelocity {
             mStage[0].setUp(currentVelocity, currentPos, 0, peak_v, d1, t1);
             mStage[1].setUp(peak_v, d1, t1, 0, destination, t2 + t1);
             mDuration = t2 + t1;
+            if (mDuration > maxTime) {
+                return false;
+            }
+            System.out.println(">>>>>>>>>  rampUpRampDown "+mDuration+ "  "+maxTime);
+
+            if (mDuration < maxTime/2) {
+
+                  t1 = mDuration/2;
+                  t2 = t1;
+                  peak_v = (2*(destination-currentPos) / t1 - currentVelocity)/2;
+                  d1 = (peak_v + currentVelocity) * t1 / 2 + currentPos;
+
+                mNumberOfStages = 2;
+                mStage[0].setUp(currentVelocity, currentPos, 0, peak_v, d1, t1);
+                mStage[1].setUp(peak_v, d1, t1, 0, destination, t2 + t1);
+                mDuration = t2 + t1;
+                System.out.println(">>>>>>>>>f rampUpRampDown "+mDuration+ "  "+maxTime);
+                System.out.println(">>>>>>>>>f           peak "+peak_v + " " +  maxVelocity);
+
+                if (mDuration > maxTime) {
+                    System.out.println(" fail ");
+                    return false;
+                }
+            }
+
             return true;
         }
         return false;
     }
 
-    private void rampUpCruseRampDown(float currentPos, float destination, float currentVelocity,
-                                     float maxA, float maxV) {
-        float t1 = (maxV - currentVelocity) / maxA;
-        float d1 = (maxV + currentVelocity) * t1 / 2 + currentPos;
-        float t3 = maxV / maxA;
-        float d3 = (maxV) * t3 / 2;
-        float d2 = destination - d1 - d3;
-        float t2 = d2 / maxV;
 
+    private void rampUpCruseRampDown(float currentPos, float destination, float currentVelocity,
+                                     float maxA, float maxV, float maxTime) {
+//        float t1 = (maxV - currentVelocity) / maxA;
+//        float d1 = (maxV + currentVelocity) * t1 / 2 + currentPos;
+//        float t3 = maxV / maxA;
+//        float d3 = (maxV) * t3 / 2;
+//        float d2 = destination - d1 - d3;
+//        float t2 = d2 / maxV;
+//
+//        mNumberOfStages = 3;
+//        mStage[0].setUp(currentVelocity, currentPos, 0, maxV, d1, t1);
+//        mStage[1].setUp(maxV, d1, t1, maxV, d2 + d1, t2 + t1);
+//        mStage[2].setUp(maxV, d1 + d2, t1 + t2, 0, destination, t2 + t1 + t3);
+//        mDuration = t3 + t2 + t1;
+        float t1 = maxTime/3;
+        float t2  = t1 * 2;
+        float duration = maxTime;
+        float distance = destination - currentPos;
+        float dt1 = t1;
+        float dt2 = t2 - t1;
+        float dt3 = duration - t2;
+        float v1 = (2 * distance - currentVelocity * dt1) / (dt1 + 2 * dt2 + dt3);
+        float peakV1 = v1, peakV2 = v1;
+        mDuration = duration;
+        float d1 = (currentVelocity + peakV1) * t1 / 2;
+        float d2 = (peakV1 + peakV2) * (t2 - t1) / 2;
         mNumberOfStages = 3;
-        mStage[0].setUp(currentVelocity, currentPos, 0, maxV, d1, t1);
-        mStage[1].setUp(maxV, d1, t1, maxV, d2 + d1, t2 + t1);
-        mStage[2].setUp(maxV, d1 + d2, t1 + t2, 0, destination, t2 + t1 + t3);
-        mDuration = t3 + t2 + t1;
+        float acc = (v1-currentVelocity)/t1;
+        float dec = (v1)/dt3;
+        System.out.println(" >>>>>> "+acc+" /  "+v1+" \\ "+ dec);
+
+
+        mStage[0].setUp(currentVelocity, currentPos, 0, peakV1, currentPos + d1, t1);
+        mStage[1].setUp(peakV1, currentPos + d1, t1, peakV2, currentPos + d1 + d2, t2);
+        mStage[2].setUp(peakV2, currentPos + d1 + d2, t2, 0, destination, duration);
+        mDuration = duration;
     }
 
 
