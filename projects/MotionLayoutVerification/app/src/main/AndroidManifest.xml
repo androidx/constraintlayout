@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.support.constraint.app">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="android.support.constraint.app">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -13,7 +12,8 @@
 
         <activity android:name=".CheckSharedValues"/>
 
-        <activity android:name=".VerificationActivity" >
+        <activity android:name=".VerificationActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +46,8 @@
         <activity android:name=".Bug010" />
         <activity android:name=".FullScreenActivity" />
         <activity android:name=".CheckSetProgress" />
-        <activity android:name=".CheckDumpJson" >
+        <activity android:name=".CheckDumpJson"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
