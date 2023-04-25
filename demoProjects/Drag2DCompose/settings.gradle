@@ -12,6 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Drag2D"
+rootProject.name = "Drag2DCompose"
 include ':app'
 include ':engine'
+include ':compose-impl'
