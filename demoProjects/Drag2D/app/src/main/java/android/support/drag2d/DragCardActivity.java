@@ -41,7 +41,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.appcompat.widget.AppCompatSeekBar;
 
 import com.google.android.material.slider.Slider;
 
