@@ -402,9 +402,12 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     *
+     * Set the angles for the views in the CircularFlow.
+     * The comma separated string should match the order of the views in the CircularFlow.
+     * @param idList comma separated angles in string
+     * @return
      */
-    private void setAngles(String idList) {
+    public void setAngles(String idList) {
         if (idList == null) {
             return;
         }
