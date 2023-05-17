@@ -100,6 +100,14 @@ public class Velocity2D {
         return mvY.getPos(t);
     }
 
+    public float getVX(float t) {
+        return mvX.getV(t);
+    }
+
+    public float getVY(float t) {
+        return mvY.getV(t);
+    }
+
     public boolean isStillMoving(float t) {
         return mvX.getDuration() > t || mvY.getDuration() > t;
     }

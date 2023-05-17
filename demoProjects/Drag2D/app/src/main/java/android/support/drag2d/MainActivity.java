@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         ScrollView scrollView = new ScrollView(this);
         BallMover m = new BallMover(this);
+
         AppCompatButton[] buttons = new AppCompatButton[sEasingNames.length];
 
         { // slides
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     Drawable draw = buttons[j].getBackground();
                     draw = draw.mutate();
                     draw.setTint((mode == j) ? Color.CYAN : 0xffAAAAAA);
+
                     buttons[j].setBackgroundDrawable(draw);
                 }
 
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         b.setText("plot Position");
         b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         col.addView(b);
+
         Drawable d = b.getBackground();
         d = d.mutate();
         d.setTint(0xff328832);
@@ -179,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             m.mGraphMode = (m.mGraphMode + 1) % 3;
             String[] s = {"velocity", "Position", "FPS"};
             b.setText("plot " + s[m.mGraphMode]);
+
         });
         // mode
         AppCompatButton app = new AppCompatButton(this);

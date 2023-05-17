@@ -29,6 +29,7 @@ import android.support.drag2d.lib.MaterialVelocity;
 import android.support.drag2d.lib.Velocity2D;
 import android.util.AttributeSet;
 import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -87,6 +88,7 @@ public class DragCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         int orientation = getResources().getConfiguration().orientation;
         Log.v("MAIN","orientation =  "+orientation);
+
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         LinearLayout topCol = new LinearLayout(this);
         LinearLayout row = new LinearLayout(this);
@@ -96,6 +98,7 @@ public class DragCardActivity extends AppCompatActivity {
         ScrollView scrollView = new ScrollView(this);
         CardMover m = new CardMover(this);
         AppCompatButton[] buttons = new AppCompatButton[sEasingNames.length];
+
         for (int i = 0; i < sEasingNames.length; i++) {
             AppCompatButton b = new AppCompatButton(this);
             buttons[i] = b;
@@ -112,6 +115,7 @@ public class DragCardActivity extends AppCompatActivity {
                     Drawable draw = buttons[j].getBackground();
                     draw = draw.mutate();
                     draw.setTint((mode == j) ? 0xff328855 : 0xffAA88AA);
+
                     buttons[j].setBackgroundDrawable(draw);
                 }
 
@@ -184,6 +188,7 @@ public class DragCardActivity extends AppCompatActivity {
         float[] points = new float[10000];
         float[] mSegTime1 = new float[4];
         float[] mSegTime2 = new float[4];
+
         Paint paint = new Paint();
         Paint paintDot = new Paint();
         private float mDuration;
@@ -236,6 +241,7 @@ public class DragCardActivity extends AppCompatActivity {
                 }
                 canvas.drawLines(points, paint);
 
+
                 for (int i = 0; i < mSegTime1.length; i++) {
                     float t = mSegTime1[i];
                     if (Float.isNaN(t)) {
@@ -256,6 +262,7 @@ public class DragCardActivity extends AppCompatActivity {
                     float x = points[mark], y = points[mark + 1];
                     canvas.drawRoundRect(x - 10, y - 10, x + 10, y + 10, 20, 20, paint);
                 }
+
                 int xPos = velocity2D.getPointOffsetX(points.length, time / mDuration);
                 int yPos = velocity2D.getPointOffsetY(points.length, time / mDuration);
                 float x = points[xPos], y = points[xPos + 1];
@@ -268,8 +275,10 @@ public class DragCardActivity extends AppCompatActivity {
 
             canvas.drawRoundRect(mCardX, mCardY, mCardX + getWidth() / 2, getHeight() + mCardY, rounding, rounding, mCardPaint);
             int scale = 128;
+
             int ballX = mCardX + getWidth() / 4 - scale / 2;
             int ballY = mCardY + getHeight() / 2 - scale / 2;
+
             ball.setBounds(ballX, ballY, ballX + scale, ballY + scale);
             ball.setTint(Color.CYAN);
             ball.draw(canvas);

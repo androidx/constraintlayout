@@ -3,6 +3,26 @@ Sample project that demonstrates various uses of MotionLayout in Compose
 
 ## Overview
 -----------------------------
+#### MotionLayout to achive a complex Fly In
+* [Code for M1FlyIn](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/M1FlyIn.kt)
+
+
+https://user-images.githubusercontent.com/15019413/235739332-731b1dc4-bc63-4247-ac18-966fc50081b7.mp4
+
+
+#### MotionLayout Transitioning between mulitple states
+[Code demonstrating multiple states in MotionLayout](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/M3MultState.kt)
+
+
+https://user-images.githubusercontent.com/15019413/235739796-33d701bd-197f-4051-85de-17a545d0ea70.mp4
+
+
+#### MotionLayout simple colapasing toolbar
+[Code demoing a simple colapasing toolbar](https://github.com/androidx/constraintlayout/blob/main/demoProjects/ExamplesComposeMotionLayout/app/src/main/java/com/example/examplescomposemotionlayout/M2DragReveal.kt)
+
+
+https://user-images.githubusercontent.com/15019413/235739753-d22c322a-85ca-4932-ae2b-ab73942bcde6.mp4
+
 
 #### MotionLayout as a Collapsing toolbar for a Column
 
