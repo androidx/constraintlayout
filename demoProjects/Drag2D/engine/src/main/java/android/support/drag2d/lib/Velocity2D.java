@@ -15,6 +15,8 @@
  */
 package android.support.drag2d.lib;
 
+import java.util.Arrays;
+
 public class Velocity2D {
     MaterialVelocity2D mvX = new MaterialVelocity2D();
     MaterialVelocity2D mvY = new MaterialVelocity2D();
@@ -134,7 +136,18 @@ public class Velocity2D {
         }
         return 20 + 4*(lines+off);
     }
+    public void getCurvesSegments(float[]t1,float[]t2) {
+        Arrays.fill(t1,Float.NaN);
+        Arrays.fill(t2,Float.NaN);
+        for (int i = 0; i <  mvY.mNumberOfStages; i++) {
+           t2[i] = mvY.mStage[i].mStartTime;
 
+        }
+        for (int i = 0; i <  mvX.mNumberOfStages; i++) {
+            t1[i] = mvX.mStage[i].mStartTime;
+
+        }
+    }
     /**
      * This builds a curves that can be displayed on the screen for debugging
      *
