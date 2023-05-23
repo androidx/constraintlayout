@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MAIN";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ConstraintLayout cl = findConstraintLayout(this);
         if (cl != null) {
-            cl.postDelayed( ()->{DumpCL.log("MAIN",cl);},2000);
+            cl.postDelayed( ()->{DumpCL.log(TAG,cl);},2000);
         }
     }
 
