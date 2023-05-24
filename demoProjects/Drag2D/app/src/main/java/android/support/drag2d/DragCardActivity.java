@@ -81,13 +81,13 @@ public class DragCardActivity extends AppCompatActivity {
             MaterialEasing.EASE_OUT_ELASTIC,
             MaterialEasing.EASE_OUT_BOUNCE
     };
-
+    private static final String TAG = "MAIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int orientation = getResources().getConfiguration().orientation;
-        Log.v("MAIN","orientation =  "+orientation);
+        Log.v(TAG,"orientation =  "+orientation);
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         LinearLayout topCol = new LinearLayout(this);
