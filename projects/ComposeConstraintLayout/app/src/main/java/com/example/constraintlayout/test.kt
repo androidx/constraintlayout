@@ -270,7 +270,8 @@ public fun Screen4() {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(modifier = Modifier.layoutId("image"),
+        Image(
+            modifier = Modifier.layoutId("image"),
             painter = painterResource(id = R.drawable.intercom_snooze),
             contentDescription = null
         )
@@ -279,13 +280,16 @@ public fun Screen4() {
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h5,
         )
-        Text(modifier = Modifier.layoutId("tag1"),
+        Text(
+            modifier = Modifier.layoutId("tag1"),
             text = stringResource(id = R.string.welcome_tagline1)
         )
-        Text(modifier = Modifier.layoutId("tag2"),
+        Text(
+            modifier = Modifier.layoutId("tag2"),
             text = stringResource(id = R.string.welcome_tagline2)
         )
-        Text(modifier = Modifier.layoutId("tag3"),
+        Text(
+            modifier = Modifier.layoutId("tag3"),
             text = stringResource(id = R.string.welcome_tagline3)
         )
         Button(modifier = Modifier.layoutId("bSignup"),
@@ -361,7 +365,8 @@ public fun Screen5() {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(modifier = Modifier.layoutId("image"),
+        Image(
+            modifier = Modifier.layoutId("image"),
             painter = painterResource(id = R.drawable.intercom_snooze),
             contentDescription = null
         )
@@ -370,13 +375,16 @@ public fun Screen5() {
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h5,
         )
-        Text(modifier = Modifier.layoutId("tag1"),
+        Text(
+            modifier = Modifier.layoutId("tag1"),
             text = stringResource(id = R.string.welcome_tagline1)
         )
-        Text(modifier = Modifier.layoutId("tag2"),
+        Text(
+            modifier = Modifier.layoutId("tag2"),
             text = stringResource(id = R.string.welcome_tagline2)
         )
-        Text(modifier = Modifier.layoutId("tag3"),
+        Text(
+            modifier = Modifier.layoutId("tag3"),
             text = stringResource(id = R.string.welcome_tagline3)
         )
         Button(modifier = Modifier.layoutId("bSignup"),
@@ -466,7 +474,8 @@ public fun ScreenExample2() {
 @Composable
 public fun ScreenExample3() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
                 Header: { exportAs: 'example 3'},
                 g1: { type: 'vGuideline', start: 80 },
@@ -479,7 +488,8 @@ public fun ScreenExample3() {
                   start: ['g1', 'start']
                 }
             }
-        """),
+        """
+        ),
         modifier = Modifier.fillMaxSize()
     ) {
         Button(
@@ -500,7 +510,8 @@ public fun ScreenExample3() {
 @Composable
 public fun ScreenExample4() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
                 Header: { exportAs: 'example 4'},
                 g1: { type: 'vGuideline', percent: 0.5 },
@@ -508,7 +519,8 @@ public fun ScreenExample4() {
                   start: ['g1', 'start']
                 }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -526,7 +538,8 @@ public fun ScreenExample4() {
 @Composable
 public fun ScreenExample5() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               m1 : 100,
               barrier: { type: 'barrier', direction: 'end', contains: ['a','b'] },
@@ -545,7 +558,8 @@ public fun ScreenExample5() {
                 top : ['b', 'bottom', 'm1' ]
               }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -574,7 +588,8 @@ public fun ScreenExample5() {
 @Composable
 public fun ScreenExample6() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               Variables: {
                 bottom: 20
@@ -607,7 +622,8 @@ public fun ScreenExample6() {
                 top: ['b', 'bottom']
               }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -659,7 +675,7 @@ public fun ScreenExample7() {
         animationSpec = tween(2000)
     )
     Column {
-     MotionLayout(
+        MotionLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
@@ -725,7 +741,8 @@ public fun ScreenExample7() {
 @Composable
 public fun ScreenExample8() {
 
-    var cs1 = ConstraintSet("""
+    var cs1 = ConstraintSet(
+        """
             {
               a: {
                 rotationZ: -30,
@@ -734,8 +751,10 @@ public fun ScreenExample8() {
                 top: ['parent', 'top', 16]
               }
             }
-    """)
-    var cs2 = ConstraintSet("""
+    """
+    )
+    var cs2 = ConstraintSet(
+        """
             {
               a: {
                 rotationZ: 30,
@@ -743,23 +762,28 @@ public fun ScreenExample8() {
                 top: ['parent', 'top', 16]
               }
             }
-    """)
-    var cs3 = ConstraintSet("""
+    """
+    )
+    var cs3 = ConstraintSet(
+        """
             {
               a: {
                 end: ['parent', 'end', 16],
                 bottom: ['parent', 'bottom', 16]
               }
             }
-    """)
-    var cs4 = ConstraintSet("""
+    """
+    )
+    var cs4 = ConstraintSet(
+        """
             {
               a: {
                 start: ['parent', 'start', 16],
                 bottom: ['parent', 'bottom', 16]
               } 
             }
-    """)
+    """
+    )
 
     var start by remember { mutableStateOf(cs1) }
     var end by remember { mutableStateOf(cs2) }
@@ -842,7 +866,8 @@ public fun ScreenExample8() {
 @Composable
 public fun ScreenExample9() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
                 center: {
                   center: 'parent'
@@ -860,7 +885,8 @@ public fun ScreenExample9() {
                 h11: { circular: ['center', 330, 100] },
                 h12: { circular: ['center', 0, 100] }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -884,7 +910,8 @@ public fun ScreenExample9() {
 @Composable
 public fun ScreenExample10() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
                 h1: { circular: ['parent', 0, 100] },
                 h2: { circular: ['parent', 40, 100], rotationZ: 40 },
@@ -896,55 +923,74 @@ public fun ScreenExample10() {
                 h8: { circular: ['parent', 280, 100], rotationZ: 280  },
                 h9: { circular: ['parent', 320, 100], rotationZ: 320  }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Box(modifier = Modifier
-            .layoutId("h1")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Red))
-        Box(modifier = Modifier
-            .layoutId("h2")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Green))
-        Box(modifier = Modifier
-            .layoutId("h3")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Blue))
-        Box(modifier = Modifier
-            .layoutId("h4")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Gray))
-        Box(modifier = Modifier
-            .layoutId("h5")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Yellow))
-        Box(modifier = Modifier
-            .layoutId("h6")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Cyan))
-        Box(modifier = Modifier
-            .layoutId("h7")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Magenta))
-        Box(modifier = Modifier
-            .layoutId("h8")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.Red))
-        Box(modifier = Modifier
-            .layoutId("h9")
-            .width(100.dp)
-            .height(60.dp)
-            .background(Color.DarkGray))
+        Box(
+            modifier = Modifier
+                .layoutId("h1")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h2")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Green)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h3")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Blue)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h4")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Gray)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h5")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Yellow)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h6")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Cyan)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h7")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Magenta)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h8")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("h9")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.DarkGray)
+        )
     }
 }
 
@@ -961,7 +1007,8 @@ public fun ScreenExample11() {
             Text(text = "Run")
         }
         MotionLayout(
-            ConstraintSet("""
+            ConstraintSet(
+                """
             {
                 h1: { circular: ['parent', 0, 100] },
                 h2: { circular: ['parent', 40, 100], rotationZ: 40 },
@@ -973,8 +1020,10 @@ public fun ScreenExample11() {
                 h8: { circular: ['parent', 280, 100], rotationZ: 280  },
                 h9: { circular: ['parent', 320, 100], rotationZ: 320  }
             }
-        """),
-            ConstraintSet("""
+        """
+            ),
+            ConstraintSet(
+                """
             {
                 h1: { circular: ['parent', 0, 100], rotationZ: 360 },
                 h2: { circular: ['parent', 40, 100], rotationZ: 400 },
@@ -986,57 +1035,76 @@ public fun ScreenExample11() {
                 h8: { circular: ['parent', 280, 100], rotationZ: 640  },
                 h9: { circular: ['parent', 320, 100], rotationZ: 680  }
             }
-        """),
+        """
+            ),
             progress = progress,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Box(modifier = Modifier
-                .layoutId("h1")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("h2")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Green))
-            Box(modifier = Modifier
-                .layoutId("h3")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Blue))
-            Box(modifier = Modifier
-                .layoutId("h4")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Gray))
-            Box(modifier = Modifier
-                .layoutId("h5")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Yellow))
-            Box(modifier = Modifier
-                .layoutId("h6")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Cyan))
-            Box(modifier = Modifier
-                .layoutId("h7")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Magenta))
-            Box(modifier = Modifier
-                .layoutId("h8")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("h9")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.DarkGray))
+            Box(
+                modifier = Modifier
+                    .layoutId("h1")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Red)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h2")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Green)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h3")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Blue)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h4")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Gray)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h5")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Yellow)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h6")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Cyan)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h7")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Magenta)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h8")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.Red)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("h9")
+                    .width(100.dp)
+                    .height(60.dp)
+                    .background(Color.DarkGray)
+            )
         }
     }
 }
@@ -1078,18 +1146,22 @@ public fun ScreenExample12() {
         Button(onClick = { animateToEnd = !animateToEnd }) {
             Text(text = "Run ScreenExample12")
         }
-        MotionLayout(cs1, cs2,
+        MotionLayout(
+            cs1, cs2,
             progress = progress,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
+            var colors =
+                arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
             for (i in 1..36) {
-                Box(modifier = Modifier
-                    .layoutId("h$i", "box")
-                    .background(colors[i % colors.size]))
+                Box(
+                    modifier = Modifier
+                        .layoutId("h$i", "box")
+                        .background(colors[i % colors.size])
+                )
             }
         }
     }
@@ -1109,8 +1181,9 @@ public fun ScreenExample13() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .background(Color.White) ,
-            start = ConstraintSet("""
+                .background(Color.White),
+            start = ConstraintSet(
+                """
             {
               a: {
                 start: ['parent', 'start', 16],
@@ -1141,12 +1214,15 @@ public fun ScreenExample13() {
             """
             ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = cprogress) {
+            progress = cprogress
+        ) {
             var properties = motionProperties("a")
-            Text(text = "Hello", modifier = Modifier
-                .layoutId(properties.value.id())
-                .background(properties.value.color("background"))
-                ,color = properties.value.color("textColor")
+            Text(
+                text = "Hello",
+                modifier = Modifier
+                    .layoutId(properties.value.id())
+                    .background(properties.value.color("background")),
+                color = properties.value.color("textColor")
                 //,fontSize = properties.value.fontSize("textSize")
             )
         }
@@ -1171,8 +1247,9 @@ public fun ScreenExample14() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .background(Color.White) ,
-            start = ConstraintSet("""
+                .background(Color.White),
+            start = ConstraintSet(
+                """
             {
               a: {
                 width: 40,
@@ -1195,7 +1272,8 @@ public fun ScreenExample14() {
             }
             """
             ),
-            transition = Transition("""
+            transition = Transition(
+                """
             {
               KeyFrames: {
                 KeyPositions: [
@@ -1208,12 +1286,16 @@ public fun ScreenExample14() {
                 ]
               }
             }
-            """),
+            """
+            ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
-            Box(modifier = Modifier
-                .layoutId("a")
-                .background(Color.Red))
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("a")
+                    .background(Color.Red)
+            )
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1237,8 +1319,9 @@ public fun ScreenExample15() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .background(Color.White) ,
-            start = ConstraintSet("""
+                .background(Color.White),
+            start = ConstraintSet(
+                """
             {
               a: {
                 width: 40,
@@ -1262,7 +1345,8 @@ public fun ScreenExample15() {
             }
             """
             ),
-            transition = Transition("""
+            transition = Transition(
+                """
             {
               KeyFrames: {
                 KeyPositions: [
@@ -1275,9 +1359,11 @@ public fun ScreenExample15() {
                 ]
               }
             }
-            """),
+            """
+            ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
+            progress = progress
+        ) {
             Box(modifier = Modifier
                 .onPlaced {
                     vpSend("width", it.size.width.toFloat())
@@ -1286,7 +1372,7 @@ public fun ScreenExample15() {
                     val matrix = Matrix()
 
                     it.transformFrom(it.parentCoordinates!!, matrix);
-                    val rot = 180.0f*calculateZRotation(matrix.values)/ PI.toFloat()
+                    val rot = 180.0f * calculateZRotation(matrix.values) / PI.toFloat()
                     println(rot)
                     vpSend("rot", rot)
                 }
@@ -1297,20 +1383,22 @@ public fun ScreenExample15() {
         Button(onClick = { animateToEnd = !animateToEnd }) {
             Text(text = "Run ScreenExample15")
         }
-         vpSend("progress",progress*1000)
-        VpGraph(modifier = Modifier.fillMaxSize(),"rot","progress","x","width")
+        vpSend("progress", progress * 1000)
+        VpGraph(modifier = Modifier.fillMaxSize(), "rot", "progress", "x", "width")
     }
 }
-fun calculateZRotation(matrix:  FloatArray): Float {
+
+fun calculateZRotation(matrix: FloatArray): Float {
     // Extract the values from the matrix
     val m00 = matrix[0]
     val m01 = matrix[1]
-    val m10 = matrix[1*3+0]
-    val m11 = matrix[1*3+1]
+    val m10 = matrix[1 * 3 + 0]
+    val m11 = matrix[1 * 3 + 1]
 
     // Calculate the z-rotation angle
     return -atan2(m01, m00)
 }
+
 @Preview(group = "motion8")
 @Composable
 public fun ScreenExample16() {
@@ -1326,7 +1414,8 @@ public fun ScreenExample16() {
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(Color.White),
-            motionScene = MotionScene("""{
+            motionScene = MotionScene(
+                """{
                 Header: {
                   exportAs: 'motion8'
                 },
@@ -1365,12 +1454,16 @@ public fun ScreenExample16() {
                     }
                   }
                 }
-            }"""),
+            }"""
+            ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
-            Box(modifier = Modifier
-                .layoutId("a")
-                .background(Color.Red))
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("a")
+                    .background(Color.Red)
+            )
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1393,8 +1486,9 @@ public fun ScreenExample17() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .background(Color.White) ,
-            start = ConstraintSet("""
+                .background(Color.White),
+            start = ConstraintSet(
+                """
             {
               a: {
                 width: 40,
@@ -1431,13 +1525,18 @@ public fun ScreenExample17() {
             """
             ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
-            Box(modifier = Modifier
-                .layoutId("a")
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("b")
-                .background(Color.Blue))
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("a")
+                    .background(Color.Red)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("b")
+                    .background(Color.Blue)
+            )
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1461,7 +1560,8 @@ public fun ScreenExample18() {
                 .fillMaxWidth()
                 .height(400.dp)
                 .background(Color.White),
-            motionScene = MotionScene("""{
+            motionScene = MotionScene(
+                """{
   Header: {
     exportAs: 'example 18'
   },
@@ -1504,15 +1604,21 @@ public fun ScreenExample18() {
       }
   }
 }
-"""),
+"""
+            ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress) {
-            Box(modifier = Modifier
-                .layoutId("a")
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("b")
-                .background(Color.Green))
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("a")
+                    .background(Color.Red)
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("b")
+                    .background(Color.Green)
+            )
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1534,7 +1640,9 @@ public fun ScreenExample19() {
         Button(onClick = { animateToEnd = !animateToEnd }) {
             Text(text = "Run exemple19")
         }
-        MotionLayout(motionScene = MotionScene("""{
+        MotionLayout(
+            motionScene = MotionScene(
+                """{
                 Header: {
                   exportAs: 'exemple19'
                 },
@@ -1567,18 +1675,21 @@ public fun ScreenExample19() {
                     }                    
                   }
                 }
-            }"""),
+            }"""
+            ),
             progress = progress,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
+            var colors =
+                arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
             for (i in 1..36) {
-                Box(modifier = Modifier
-                    .layoutId("h$i", "box")
-                    .background(colors[i % colors.size])
+                Box(
+                    modifier = Modifier
+                        .layoutId("h$i", "box")
+                        .background(colors[i % colors.size])
                 )
             }
         }
@@ -1632,7 +1743,8 @@ public fun ScreenExample21() {
 @Composable
 public fun ScreenExample20() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
         {
           Header: {
             exportAs: 'guidelines'
@@ -1671,7 +1783,8 @@ public fun ScreenExample20() {
             end: ['g5', 'end', 'margin']
           }
         }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -1689,13 +1802,15 @@ public fun ScreenExample20() {
 @Composable
 fun Playground() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
         {
           Header: {
             exportAs: 'Playground'
           }
         }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -1707,7 +1822,8 @@ fun Playground() {
 @Composable
 public fun ChainNew1() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               Variables: {
                 bottom: 20
@@ -1749,7 +1865,8 @@ public fun ChainNew1() {
                 top: ['b', 'bottom']
               }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -1797,7 +1914,8 @@ public fun ChainNew1() {
 @Composable
 public fun ChainNew2() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               Variables: {
                 bottom: 20
@@ -1841,7 +1959,8 @@ public fun ChainNew2() {
                  bottom: ['b', 'bottom' ]
               }
             }
-        """),
+        """
+        ),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -1890,7 +2009,8 @@ public fun ChainNew2() {
 @Composable
 public fun ChainNew3() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               Variables: {
                 bottom: 20
@@ -1964,7 +2084,7 @@ public fun ChainNew3() {
               
             }
         """
-         ),
+        ),
         modifier = Modifier
             .fillMaxSize()
             .background(Color.LightGray)
@@ -1989,14 +2109,12 @@ public fun ChainNew3() {
 }
 
 
-
-
-
 @Preview(group = "new4")
 @Composable
 public fun ChainNew4() {
     ConstraintLayout(
-        ConstraintSet("""
+        ConstraintSet(
+            """
             {
               Variables: {
                 bottom: 20

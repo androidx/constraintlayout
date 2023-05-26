@@ -18,16 +18,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-
-fun vpSend(channel:String, value:Float) {
-    Vp.send(channel,value)
+fun vpSend(channel: String, value: Float) {
+    Vp.send(channel, value)
 }
 
-fun vpSend(channel:String,time:Long, value:Float) {
-    Vp.send(channel,time,value)
+fun vpSend(channel: String, time: Long, value: Float) {
+    Vp.send(channel, time, value)
 }
 
-fun vpFps(channel: String){
+fun vpFps(channel: String) {
     Vp.fps(channel);
 }
 
@@ -49,7 +48,7 @@ fun VpGraph(
     val scope = rememberCoroutineScope()
 
     val uiDelegate = remember {
-        object : UiDelegate{
+        object : UiDelegate {
             override fun post(runnable: Runnable?): Boolean {
                 scope.launch {
                     runnable?.run()
@@ -98,8 +97,7 @@ fun VpGraph(
             }
             .motionEventSpy {
                 graphCore.onTouchEvent(it)
-            }
-        ,
+            },
         onDraw = {
             invalidator.value
             graphCore.onDraw(this.drawContext.canvas.nativeCanvas)

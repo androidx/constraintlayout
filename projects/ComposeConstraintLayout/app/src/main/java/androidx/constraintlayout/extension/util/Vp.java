@@ -68,7 +68,7 @@ public class Vp {
         }
 
         void add(long time, float value) {
-           int  last = getLast();
+            int last = getLast();
             mTime[last] = time;
             mData[last] = value;
             increment();
@@ -111,13 +111,15 @@ public class Vp {
             int pos = -1;
             while (low <= high) {
                 pos = low + (high - low) / 2;
-                if (arr[pos] == key)
+                if (arr[pos] == key) {
                     return pos;
+                }
 
-                if (arr[pos] < key)
+                if (arr[pos] < key) {
                     low = pos + 1;
-                else
+                } else {
                     high = pos - 1;
+                }
             }
             return pos;
         }
@@ -237,7 +239,8 @@ public class Vp {
                 float[] value = new float[100];
                 for (int i = 0; i < 100000000; i++) {
                     long nt = System.nanoTime();
-                    float v = (float) (Math.sin(nt * 1E-9 * Math.PI) * Math.sin(nt * 1E-9 * Math.PI / 40));
+                    float v = (float) (Math.sin(nt * 1E-9 * Math.PI) * Math.sin(
+                            nt * 1E-9 * Math.PI / 40));
                     Vp.send(channel, nt, v);
 
                     try {
@@ -295,7 +298,8 @@ public class Vp {
                         continue;
                     }
                     long current = System.nanoTime();
-                    System.out.println("                       " + len + " " + (current - time[len - 1]) * 1E-6f + "ms " + value[len - 1]);
+                    System.out.println("                       " + len + " "
+                            + (current - time[len - 1]) * 1E-6f + "ms " + value[len - 1]);
 
                     try {
                         Thread.sleep(1000);
