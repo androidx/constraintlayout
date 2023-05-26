@@ -40,13 +40,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.*
+import androidx.constraintlayout.extension.util.VpGraph
+import androidx.constraintlayout.extension.util.vpSend
 import java.util.EnumSet
+import kotlin.math.PI
+import kotlin.math.atan2
 
 @Preview
 @Composable
@@ -267,7 +274,8 @@ public fun Screen4() {
             painter = painterResource(id = R.drawable.intercom_snooze),
             contentDescription = null
         )
-        Text(modifier = Modifier.layoutId("header"),
+        Text(
+            modifier = Modifier.layoutId("header"),
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h5,
         )
@@ -285,12 +293,14 @@ public fun Screen4() {
         ) {
             Text(text = stringResource(id = R.string.sign_up))
         }
-        Button(modifier = Modifier.layoutId("bLogin"),
+        Button(
+            modifier = Modifier.layoutId("bLogin"),
             onClick = {},
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("disclaimer"),
+        Text(
+            modifier = Modifier.layoutId("disclaimer"),
             text = stringResource(id = R.string.trial_disclaimer),
             style = MaterialTheme.typography.caption,
         )
@@ -355,7 +365,8 @@ public fun Screen5() {
             painter = painterResource(id = R.drawable.intercom_snooze),
             contentDescription = null
         )
-        Text(modifier = Modifier.layoutId("header"),
+        Text(
+            modifier = Modifier.layoutId("header"),
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h5,
         )
@@ -373,12 +384,14 @@ public fun Screen5() {
         ) {
             Text(text = stringResource(id = R.string.sign_up))
         }
-        Button(modifier = Modifier.layoutId("bLogin"),
+        Button(
+            modifier = Modifier.layoutId("bLogin"),
             onClick = {},
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("disclaimer"),
+        Text(
+            modifier = Modifier.layoutId("disclaimer"),
             text = stringResource(id = R.string.trial_disclaimer),
             style = MaterialTheme.typography.caption,
         )
@@ -404,10 +417,11 @@ public fun ScreenExample() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.constrainAs(title) {
-            centerVerticallyTo(parent)
-            start.linkTo(g1)
-        },
+        Text(
+            modifier = Modifier.constrainAs(title) {
+                centerVerticallyTo(parent)
+                start.linkTo(g1)
+            },
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h2,
         )
@@ -440,7 +454,8 @@ public fun ScreenExample2() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("title"),
+        Text(
+            modifier = Modifier.layoutId("title"),
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h2,
         )
@@ -473,7 +488,8 @@ public fun ScreenExample3() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("title"),
+        Text(
+            modifier = Modifier.layoutId("title"),
             text = stringResource(id = R.string.welcome_header),
             style = MaterialTheme.typography.h2,
         )
@@ -1263,6 +1279,17 @@ public fun ScreenExample15() {
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
             progress = progress) {
             Box(modifier = Modifier
+                .onPlaced {
+                    vpSend("width", it.size.width.toFloat())
+                    vpSend("x", it.positionInParent().x)
+
+                    val matrix = Matrix()
+
+                    it.transformFrom(it.parentCoordinates!!, matrix);
+                    val rot = 180.0f*calculateZRotation(matrix.values)/ PI.toFloat()
+                    println(rot)
+                    vpSend("rot", rot)
+                }
                 .layoutId("a")
                 .background(Color.Red))
         }
@@ -1270,9 +1297,20 @@ public fun ScreenExample15() {
         Button(onClick = { animateToEnd = !animateToEnd }) {
             Text(text = "Run ScreenExample15")
         }
+         vpSend("progress",progress*1000)
+        VpGraph(modifier = Modifier.fillMaxSize(),"rot","progress","x","width")
     }
 }
+fun calculateZRotation(matrix:  FloatArray): Float {
+    // Extract the values from the matrix
+    val m00 = matrix[0]
+    val m01 = matrix[1]
+    val m10 = matrix[1*3+0]
+    val m11 = matrix[1*3+1]
 
+    // Calculate the z-rotation angle
+    return -atan2(m01, m00)
+}
 @Preview(group = "motion8")
 @Composable
 public fun ScreenExample16() {
@@ -1928,7 +1966,8 @@ public fun ChainNew3() {
         """
          ),
         modifier = Modifier
-            .fillMaxSize().background(Color.LightGray)
+            .fillMaxSize()
+            .background(Color.LightGray)
     ) {
         Text(text = "chain2.3!")
         for (k in 1..5) {
@@ -2033,7 +2072,8 @@ public fun ChainNew4() {
         """
         ),
         modifier = Modifier
-            .fillMaxSize().background(Color.LightGray)
+            .fillMaxSize()
+            .background(Color.LightGray)
     ) {
         Text(text = "chain2.3!")
         for (k in 1..5) {
