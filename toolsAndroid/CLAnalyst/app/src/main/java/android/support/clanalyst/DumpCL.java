@@ -48,7 +48,7 @@ import java.util.HashMap;
  * DumpCL.asString(cl) returns a json5 string
  */
 public class DumpCL {
-    private static String TAG = "ML_DEBUG";
+    private static final String TAG = "ML_DEBUG";
     HashMap<Integer, String> names = new HashMap<>();
 
     private DumpCL() {
