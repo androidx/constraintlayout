@@ -16,17 +16,20 @@
 
 package com.support.constraintlayout.extlib.graph3d;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * This renders a 3 Dimentional surface of a function.
  */
-public class SurfaceGen {
+public class Scene3D {
     private static final String TAG = "SurfaceGen";
     ViewMatrix mMatrix = new ViewMatrix();
     Matrix mInverse = new Matrix();
     Object3D mObject3D;
-    float[] zbuff;
+    ArrayList<Object3D> mPreObjects = new ArrayList();
+    ArrayList<Object3D> mPostObjects = new ArrayList();
+    float[] zBuff;
     int[] img;
     float[] light = {0, -1, -1}; // The direction of the light source
     int width, height;
@@ -87,6 +90,12 @@ public class SurfaceGen {
 
     public void transform(Matrix m) {
         mObject3D.transform(m);
+        for (Object3D obj : mPreObjects) {
+            obj.transform(m);
+        }
+        for (Object3D obj : mPostObjects) {
+            obj.transform(m);
+        }
     }
 
     public double getScreenWidth() {
@@ -116,6 +125,10 @@ public class SurfaceGen {
         mMatrix.invers(mInverse);
     }
 
+    public void update() {
+        mMatrix.invers(mInverse);
+        transform(mInverse);
+    }
     public void panDown(float x, float y) {
         mMatrix.panDown(x, y);
         mMatrix.invers(mInverse);
@@ -150,8 +163,6 @@ public class SurfaceGen {
         double[] look_point = mObject3D.center();
         double diagonal = mObject3D.size();
         mMatrix.setLookPoint(look_point);
-        System.out.println(Arrays.toString(look_point));
-        System.out.println(diagonal);
         if (resetOrientation) {
             double[] eye_point = {look_point[0] - diagonal, look_point[1] - diagonal, look_point[2] + diagonal};
             mMatrix.setEyePoint(eye_point);
@@ -182,52 +193,23 @@ public class SurfaceGen {
         float eval(float x, float y);
     }
 
-    public void setZoomZ(float zoom) {
-        mZoomZ = zoom;
-        float centerX = mObject3D.centerX();
-        float centerY = mObject3D.centerY();
-        float rangeX = mObject3D.rangeX();
-        float rangeY = mObject3D.rangeY();
-        calcSurface(centerX - rangeX, centerX + rangeX, centerY - rangeY, centerY + rangeY, false, mFunction);
+
+    public void addPreObject(Object3D obj) {
+        mPreObjects.add(obj);
     }
 
-    public float getZoomZ() {
-        return mZoomZ;
+    public void setObject(Object3D obj) {
+        mObject3D = obj;
     }
 
-    public void rescaleRnge() {
-        float centerX = mObject3D.centerX();
-        float centerY = mObject3D.centerY();
-        float rangeX = mObject3D.rangeX();
-        float rangeY = mObject3D.rangeY();
-
-        double orig_ScreenWidth = 2 * mObject3D.size();
-        double factor = getScreenWidth() / orig_ScreenWidth;
-        rangeX *= factor;
-        rangeY *= factor;
-        calcSurface(centerX - rangeX, centerX + rangeX, centerY - rangeY, centerY + rangeY, false, mFunction);
+    public void addPostObject(Object3D obj) {
+        mPostObjects.add(obj);
     }
 
-    public void computeSurface(boolean resetZ, Function func) {
-        if (mObject3D instanceof Object3D.Surface) {
-            ((Object3D.Surface) mObject3D).computeSurface(resetZ, (x, y) -> func.eval(x, y));
-        } else {
-            mObject3D = new Object3D.Surface(resetZ, (x, y) -> func.eval(x, y));
-        }
-    }
-
-    public void calcSurface(float minX, float maxX, float minY, float maxY, boolean resetOrientation, Function func) {
-        if (mObject3D == null) {
-            mObject3D = new Object3D.Surface(true, (x, y) -> func.eval(x, y));
-        }
-        mObject3D.mMinX = minX;
-        mObject3D.mMaxX = maxX;
-        mObject3D.mMinY = minY;
-        mObject3D.mMaxY = maxY;
-        computeSurface(true, func);
-        setUpMatrix(width, height, resetOrientation);
+    public void resetCamera() {
+        setUpMatrix(width, height, true);
         transform(mInverse);
-    }
+}
 
     private final static int min(int x1, int x2, int x3) {
         return (x1 > x2) ? ((x2 > x3) ? x3 : x2) : ((x1 > x3) ? x3 : x1);
@@ -241,20 +223,26 @@ public class SurfaceGen {
         width = w;
         height = h;
         this.background = background;
-        zbuff = new float[w * h];
+        zBuff = new float[w * h];
         this.img = img;
-        Arrays.fill(zbuff, Float.MAX_VALUE);
+        Arrays.fill(zBuff, Float.MAX_VALUE);
         Arrays.fill(img, background);
     }
 
     void render(int type) {
-        if (zbuff == null) {
+        if (zBuff == null) {
             return;
         }
-        Arrays.fill(zbuff, Float.MAX_VALUE);
+        Arrays.fill(zBuff, Float.MAX_VALUE);
         Arrays.fill(img, background);
-        mObject3D.render(this, type, zbuff, img, width, height);
 
+        for (Object3D mPreObject : mPreObjects) {
+            mPreObject.render(this, zBuff, img, width, height);
+        }
+        mObject3D.render(this,  zBuff, img, width, height);
+        for (Object3D mPreObject : mPostObjects) {
+            mPreObject.render(this,  zBuff, img, width, height);
+        }
     }
 
     public static int hsvToRgb(float hue, float saturation, float value) {
@@ -283,7 +271,7 @@ public class SurfaceGen {
     }
 
 
-    static void drawline(float[] zbuff, int[] img, int color, int w, int h,
+    public static void drawline(float[] zbuff, int[] img, int color, int w, int h,
                          float fx1, float fy1, float fz1,
                          float fx2, float fy2, float fz2
     ) {
