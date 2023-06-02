@@ -180,7 +180,7 @@ public class ViewMatrix extends Matrix {
         v.calcMatrix();
     }
 
-    private void calcLook(SurfaceGen tri, float[] voxelDim, int w, int h) {
+    private void calcLook(Object3D tri, float[] voxelDim, int w, int h) {
         float minx = Float.MAX_VALUE, miny = Float.MAX_VALUE, minz = Float.MAX_VALUE;
         float maxx = -Float.MAX_VALUE, maxy = -Float.MAX_VALUE, maxz = -Float.MAX_VALUE;
 
@@ -198,7 +198,7 @@ public class ViewMatrix extends Matrix {
         mScreenWidth = Math.max(voxelDim[0] * (maxx - minx), Math.max(voxelDim[1] * (maxy - miny), voxelDim[2] * (maxz - minz))) * 2;
     }
 
-    private void calcLook(SurfaceGen triW, int w, int h) {
+    private void calcLook(Object3D triW, int w, int h) {
         float minx = Float.MAX_VALUE, miny = Float.MAX_VALUE, minz = Float.MAX_VALUE;
         float maxx = -Float.MAX_VALUE, maxy = -Float.MAX_VALUE, maxz = -Float.MAX_VALUE;
 
@@ -215,7 +215,7 @@ public class ViewMatrix extends Matrix {
         mScreenWidth = Math.max((maxx - minx), Math.max((maxy - miny), (maxz - minz)));
     }
 
-    public void look(char dir, SurfaceGen tri, float[] voxelDim, int w, int h) {
+    public void look(char dir, Object3D tri, float[] voxelDim, int w, int h) {
         calcLook(tri, w, h);
         int dx = ((dir >> 4) & 0xF);
         int dy = ((dir >> 8) & 0xF);
@@ -246,7 +246,7 @@ public class ViewMatrix extends Matrix {
         calcMatrix();
     }
 
-    public void lookAt(SurfaceGen tri, float[] voxelDim, int w, int h) {
+    public void lookAt(Object3D tri, float[] voxelDim, int w, int h) {
         calcLook(tri, voxelDim, w, h);
 
         mEyePoint = new double[]{mLookPoint[0] + mScreenWidth, mLookPoint[1] + mScreenWidth, mLookPoint[2] + mScreenWidth};

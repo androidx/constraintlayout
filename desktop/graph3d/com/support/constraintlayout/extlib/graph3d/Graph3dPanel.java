@@ -24,9 +24,11 @@ public class Graph3dPanel extends JPanel {
 
     public Graph3dPanel() {
 
-        mSurfaceGen.calcSurface(-20, 20, -20, 20, true, (x, y) -> {
-            double d = Math.sqrt(x * x + y * y);
-            return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
+        mSurfaceGen.calcSurface(-20, 20, -20, 20, true, new SurfaceGen.Function() {
+            public float eval(float x, float y) {
+                double d = Math.sqrt(x * x + y * y);
+                return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
+            }
         });
 
         addComponentListener(new ComponentAdapter() {
@@ -65,7 +67,7 @@ public class Graph3dPanel extends JPanel {
         }
         mImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         mImageBuff = ((DataBufferInt) (mImage.getRaster().getDataBuffer())).getData();
-        mSurfaceGen.setScreenDim(width, height, mImageBuff, 0x00FFFFFF);
+        mSurfaceGen.setScreenDim(width, height, mImageBuff, 0x00FFEEFF);
     }
 
     public void onMouseDown(MouseEvent ev) {
