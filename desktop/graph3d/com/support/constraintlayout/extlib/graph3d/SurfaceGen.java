@@ -16,9 +16,6 @@
 
 package com.support.constraintlayout.extlib.graph3d;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 /**
@@ -28,21 +25,18 @@ public class SurfaceGen {
     private static final String TAG = "SurfaceGen";
     ViewMatrix mMatrix = new ViewMatrix();
     Matrix mInverse = new Matrix();
-    final int SIZE = 100; // the number of point on the side total points = SIZE*SIZE
-    protected float[] vert;
-    protected int[] index;
-    protected float[] tvert;
+    Object3D mObject3D;
     float[] zbuff;
     int[] img;
     float[] light = {0, -1, -1}; // The direction of the light source
     int width, height;
     float[] tmpVec = new float[3];
     int lineColor = 0xFF000000;
-    float mMinX, mMaxX, mMinY, mMaxY, mMinZ, mMaxZ;
     private final float epslonX = 0.000005232f;
     private final float epslonY = 0.00000898f;
     private Function mFunction;
     private float mZoomZ = 1;
+    int background;
 
     public int getLineColor() {
         return lineColor;
@@ -50,41 +44,6 @@ public class SurfaceGen {
 
     public void setLineColor(int lineColor) {
         this.lineColor = lineColor;
-    }
-
-    public void serializeView(ObjectOutputStream stream) throws IOException {
-        stream.writeFloat(mMinX);
-        stream.writeFloat(mMaxX);
-        stream.writeFloat(mMinY);
-        stream.writeFloat(mMaxY);
-        stream.writeFloat(mZoomZ);
-
-        stream.writeFloat(mMinZ);
-        stream.writeFloat(mMaxZ);
-
-        stream.writeObject(mMatrix.getLookPoint());
-        stream.writeObject(mMatrix.getEyePoint());
-        stream.writeObject(mMatrix.getUpVector());
-        stream.writeDouble(mMatrix.getScreenWidth());
-    }
-
-    public void deserializeView(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        mMinX = stream.readFloat();
-        mMaxX = stream.readFloat();
-        mMinY = stream.readFloat();
-        mMaxY = stream.readFloat();
-        mZoomZ = stream.readFloat();
-
-        calcSurface(mMinX, mMaxX, mMinX, mMaxX, false, mFunction);
-        mMinZ = stream.readFloat();
-        mMaxZ = stream.readFloat();
-        mMatrix.setLookPoint((double[]) stream.readObject());
-        mMatrix.setEyePoint((double[]) stream.readObject());
-        mMatrix.setUpVector((double[]) stream.readObject());
-        mMatrix.setScreenWidth(stream.readDouble());
-        mMatrix.calcMatrix();
-        mMatrix.invers(mInverse);
-        transform(mInverse);
     }
 
     class Box {
@@ -117,7 +76,6 @@ public class SurfaceGen {
         }
     }
 
-    private int background;
 
     {
         VectorUtil.normalize(light);
@@ -128,9 +86,7 @@ public class SurfaceGen {
     }
 
     public void transform(Matrix m) {
-        for (int i = 0; i < vert.length; i += 3) {
-            m.mult3(vert, i, tvert, i);
-        }
+        mObject3D.transform(m);
     }
 
     public double getScreenWidth() {
@@ -191,13 +147,13 @@ public class SurfaceGen {
     }
 
     public void setUpMatrix(int width, int height, boolean resetOrientation) {
-        double[] look_point = {
-                (mMinX + mMaxX) / 2, (mMinY + mMaxY) / 2, (mMinZ + mMaxZ) / 2
-        };
-        double diagonal = Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
+        double[] look_point = mObject3D.center();
+        double diagonal = mObject3D.size();
         mMatrix.setLookPoint(look_point);
+        System.out.println(Arrays.toString(look_point));
+        System.out.println(diagonal);
         if (resetOrientation) {
-            double[] eye_point = {look_point[0]- diagonal, look_point[1] - diagonal, look_point[2]+diagonal};
+            double[] eye_point = {look_point[0] - diagonal, look_point[1] - diagonal, look_point[2] + diagonal};
             mMatrix.setEyePoint(eye_point);
             double[] up_vector = {0, 0, 1};
             mMatrix.setUpVector(up_vector);
@@ -228,8 +184,11 @@ public class SurfaceGen {
 
     public void setZoomZ(float zoom) {
         mZoomZ = zoom;
-
-        calcSurface(mMinX, mMaxX, mMinY, mMaxY, false, mFunction);
+        float centerX = mObject3D.centerX();
+        float centerY = mObject3D.centerY();
+        float rangeX = mObject3D.rangeX();
+        float rangeY = mObject3D.rangeY();
+        calcSurface(centerX - rangeX, centerX + rangeX, centerY - rangeY, centerY + rangeY, false, mFunction);
     }
 
     public float getZoomZ() {
@@ -237,12 +196,12 @@ public class SurfaceGen {
     }
 
     public void rescaleRnge() {
-        float centerX = (mMaxX + mMinX) / 2;
-        float centerY = (mMaxY + mMinY) / 2;
-        float rangeX = (mMaxX - mMinX) / 2;
-        float rangeY = (mMaxY - mMinY) / 2;
+        float centerX = mObject3D.centerX();
+        float centerY = mObject3D.centerY();
+        float rangeX = mObject3D.rangeX();
+        float rangeY = mObject3D.rangeY();
 
-        double orig_ScreenWidth = 2 * Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
+        double orig_ScreenWidth = 2 * mObject3D.size();
         double factor = getScreenWidth() / orig_ScreenWidth;
         rangeX *= factor;
         rangeY *= factor;
@@ -250,93 +209,21 @@ public class SurfaceGen {
     }
 
     public void computeSurface(boolean resetZ, Function func) {
-        int n = (SIZE + 1) * (SIZE + 1);
-        vert = new float[n * 3];
-        tvert = new float[n * 3];
-        index = new int[SIZE * SIZE * 6];
-        float min_x = mMinX;
-        float max_x = mMaxX;
-        float min_y = mMinY;
-        float max_y = mMaxY;
-        float min_z = Float.MAX_VALUE;
-        float max_z = -Float.MAX_VALUE;
-
-        mFunction = func;
-        int count = 0;
-        for (int iy = 0; iy <= SIZE; iy++) {
-            float y = min_y + iy * (max_y - min_y) / (SIZE);
-            for (int ix = 0; ix <= SIZE; ix++) {
-                float x = min_x + ix * (max_x - min_x) / (SIZE);
-                vert[count++] = x;
-                vert[count++] = y;
-                float z = func.eval(x, y);
-
-                if (Float.isNaN(z) || Float.isInfinite(z)) {
-                    z = func.eval(x + epslonX, y + epslonY);
-                }
-                vert[count++] = z;
-                if (Float.isNaN(z)) {
-                    continue;
-                }
-
-                if (Float.isInfinite(z)) {
-                    continue;
-                }
-                min_z = Math.min(z, min_z);
-                max_z = Math.max(z, max_z);
-            }
-            if (resetZ) {
-                mMinZ = min_z;
-                mMaxZ = max_z;
-            }
-        }
-        // normalize range in z
-        float xrange = mMaxX - mMinX;
-        float yrange = mMaxY - mMinY;
-        float zrange = max_z - min_z;
-        if (zrange != 0) {
-            float xyrange = (xrange + yrange) / 2;
-            float scalez = xyrange / zrange;
-
-            for (int i = 0; i < vert.length; i += 3) {
-                float z = vert[i + 2];
-                if (Float.isNaN(z) || Float.isInfinite(z)) {
-                    if (i > 3) {
-                        z = vert[i - 1];
-                    } else {
-                        z = vert[i + 5];
-                    }
-                }
-                vert[i + 2] = z * scalez * mZoomZ;
-            }
-            if (resetZ) {
-                mMinZ *= scalez;
-                mMaxZ *= scalez;
-            }
-        }
-        count = 0;
-        for (int iy = 0; iy < SIZE; iy++) {
-            for (int ix = 0; ix < SIZE; ix++) {
-                int p1 = 3 * (ix + iy * (SIZE + 1));
-                int p2 = 3 * (1 + ix + iy * (SIZE + 1));
-                int p3 = 3 * (ix + (iy + 1) * (SIZE + 1));
-                int p4 = 3 * (1 + ix + (iy + 1) * (SIZE + 1));
-                index[count++] = p1;
-                index[count++] = p2;
-                index[count++] = p3;
-
-                index[count++] = p4;
-                index[count++] = p3;
-                index[count++] = p2;
-            }
+        if (mObject3D instanceof Object3D.Surface) {
+            ((Object3D.Surface) mObject3D).computeSurface(resetZ, (x, y) -> func.eval(x, y));
+        } else {
+            mObject3D = new Object3D.Surface(resetZ, (x, y) -> func.eval(x, y));
         }
     }
 
-    public void calcSurface(float min_x, float max_x, float min_y, float max_y, boolean resetOrientation, Function func) {
-        mMinX = min_x;
-        mMaxX = max_x;
-        mMinY = min_y;
-        mMaxY = max_y;
+    public void calcSurface(float minX, float maxX, float minY, float maxY, boolean resetOrientation, Function func) {
+        if (mObject3D == null) {
+            mObject3D = new Object3D.Surface(true, (x, y) -> func.eval(x, y));
+        }
+        mObject3D.mMinX = minX;
+        mObject3D.mMaxX = maxX;
+        mObject3D.mMinY = minY;
+        mObject3D.mMaxY = maxY;
         computeSurface(true, func);
         setUpMatrix(width, height, resetOrientation);
         transform(mInverse);
@@ -366,98 +253,8 @@ public class SurfaceGen {
         }
         Arrays.fill(zbuff, Float.MAX_VALUE);
         Arrays.fill(img, background);
-        switch (type) {
-            case 0:
-                raster_height(zbuff, img, width, height);
-                break;
-            case 1:
-                raster_outline(zbuff, img, width, height);
-                break;
-            case 2:
-                raster_color(zbuff, img, width, height);
-                break;
-        }
-    }
+        mObject3D.render(this, type, zbuff, img, width, height);
 
-    private void raster_height(float[] zbuff, int[] img, int w, int h) {
-        for (int i = 0; i < index.length; i += 3) {
-            int p1 = index[i];
-            int p2 = index[i + 1];
-            int p3 = index[i + 2];
-            float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
-            height = (height - mMinZ) / (mMaxZ - mMinZ);
-            int col = hsvToRgb(height, Math.abs(2 * (height - 0.5f)), (float) Math.sqrt(height));
-            triangle(zbuff, img, col, w, h, tvert[p1], tvert[p1 + 1],
-                    tvert[p1 + 2], tvert[p2], tvert[p2 + 1],
-                    tvert[p2 + 2], tvert[p3], tvert[p3 + 1],
-                    tvert[p3 + 2]);
-        }
-    }
-
-    private void raster_outline(float[] zbuff, int[] img, int w, int h) {
-        for (int i = 0; i < index.length; i += 3) {
-            int p1 = index[i];
-            int p2 = index[i + 1];
-            int p3 = index[i + 2];
-
-            triangle(zbuff, img, background, w, h,
-                    tvert[p1], tvert[p1 + 1], tvert[p1 + 2],
-                    tvert[p2], tvert[p2 + 1], tvert[p2 + 2],
-                    tvert[p3], tvert[p3 + 1], tvert[p3 + 2]);
-
-            drawline(zbuff, img, lineColor, w, h,
-                    tvert[p1], tvert[p1 + 1], tvert[p1 + 2],
-                    tvert[p2], tvert[p2 + 1], tvert[p2 + 2]);
-
-            drawline(zbuff, img, lineColor, w, h,
-                    tvert[p1], tvert[p1 + 1], tvert[p1 + 2],
-                    tvert[p3], tvert[p3 + 1], tvert[p3 + 2]);
-        }
-    }
-
-
-    private void raster_lines(float[] zbuff, int[] img, int w, int h) {
-        for (int i = 0; i < index.length; i += 3) {
-            int p1 = index[i];
-            int p2 = index[i + 1];
-            int p3 = index[i + 2];
-
-            float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
-            int val = (int) (255 * Math.abs(height));
-            triangle(zbuff, img, 0x10001 * val + 0x100 * (255 - val), w, h, tvert[p1], tvert[p1 + 1],
-                    tvert[p1 + 2], tvert[p2], tvert[p2 + 1],
-                    tvert[p2 + 2], tvert[p3], tvert[p3 + 1],
-                    tvert[p3 + 2]);
-
-
-            drawline(zbuff, img, lineColor, w, h,
-                    tvert[p1], tvert[p1 + 1], tvert[p1 + 2] - 0.01f,
-                    tvert[p2], tvert[p2 + 1], tvert[p2 + 2] - 0.01f);
-            drawline(zbuff, img, lineColor, w, h,
-                    tvert[p1], tvert[p1 + 1], tvert[p1 + 2] - 0.01f,
-                    tvert[p3], tvert[p3 + 1], tvert[p3 + 2] - 0.01f);
-        }
-    }
-
-    private void raster_color(float[] zbuff, int[] img, int w, int h) {
-        for (int i = 0; i < index.length; i += 3) {
-            int p1 = index[i];
-            int p2 = index[i + 1];
-            int p3 = index[i + 2];
-
-            VectorUtil.triangleNormal(tvert, p1, p2, p3, tmpVec);
-            float defuse = VectorUtil.dot(tmpVec, light);
-            float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
-            height = (height - mMinZ) / (mMaxZ - mMinZ);
-            float bright = Math.max(0, defuse);
-            float hue = (float) Math.sqrt(height);
-            float sat = Math.max(0.5f, height);
-            int col = hsvToRgb(hue, sat, bright);
-            triangle(zbuff, img, col, w, h, tvert[p1], tvert[p1 + 1],
-                    tvert[p1 + 2], tvert[p2], tvert[p2 + 1],
-                    tvert[p2 + 2], tvert[p3], tvert[p3 + 1],
-                    tvert[p3 + 2]);
-        }
     }
 
     public static int hsvToRgb(float hue, float saturation, float value) {
@@ -486,9 +283,9 @@ public class SurfaceGen {
     }
 
 
-    private void drawline(float[] zbuff, int[] img, int color, int w, int h,
-                          float fx1, float fy1, float fz1,
-                          float fx2, float fy2, float fz2
+    static void drawline(float[] zbuff, int[] img, int color, int w, int h,
+                         float fx1, float fy1, float fz1,
+                         float fx2, float fy2, float fz2
     ) {
         float dx = fx2 - fx1, dy = fy2 - fy1, dz = fz2 - fz1;
         float steps = (float) Math.hypot(dx, Math.hypot(dy, dz));
