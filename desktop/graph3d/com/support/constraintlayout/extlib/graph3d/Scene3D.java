@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This renders a 3 Dimentional surface of a function.
+ * This renders 3Dimensional Objects.
  */
 public class Scene3D {
     private static final String TAG = "SurfaceGen";
