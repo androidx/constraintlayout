@@ -1,18 +1,18 @@
 package com.support.constraintlayout.extlib.graph3d;
 
+import com.support.constraintlayout.extlib.graph3d.objects.AxisBox;
+import com.support.constraintlayout.extlib.graph3d.objects.Surface3D;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 
 public class Graph3dPanel extends JPanel {
 
-    SurfaceGen mSurfaceGen = new SurfaceGen();
+    Scene3D mScene3D = new Scene3D();
     private BufferedImage mImage;
     private int[] mImageBuff;
     int mGraphType = 2;
@@ -21,15 +21,26 @@ public class Graph3dPanel extends JPanel {
     private float mLastTrackBallX;
     private float mLastTrackBallY;
     double mDownScreenWidth;
+    Surface3D mSurface;
+    AxisBox mAxisBox;
+    float range = 20;
+    public void buildSurface() {
+
+        mSurface = new Surface3D((x, y) -> {
+            double d = Math.sqrt(x * x + y * y);
+            return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
+        });
+        mSurface.setRange(-range, range, -range, range);
+        mScene3D.setObject(mSurface);
+        mScene3D.resetCamera();
+        mAxisBox = new AxisBox();
+        mAxisBox.setRange(-range, range, -range, range,-2,20);
+        mScene3D.addPostObject(mAxisBox);
+    }
 
     public Graph3dPanel() {
 
-        mSurfaceGen.calcSurface(-20, 20, -20, 20, true, new SurfaceGen.Function() {
-            public float eval(float x, float y) {
-                double d = Math.sqrt(x * x + y * y);
-                return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
-            }
-        });
+        buildSurface();
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -53,7 +64,13 @@ public class Graph3dPanel extends JPanel {
             public void mouseDragged(MouseEvent e) {
                 onMouseDrag(e);
             }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                onMouseWheel(e);
+            }
         };
+        addMouseWheelListener(mouseAdapter);
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
     }
@@ -67,14 +84,14 @@ public class Graph3dPanel extends JPanel {
         }
         mImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         mImageBuff = ((DataBufferInt) (mImage.getRaster().getDataBuffer())).getData();
-        mSurfaceGen.setScreenDim(width, height, mImageBuff, 0x00FFEEFF);
+        mScene3D.setScreenDim(width, height, mImageBuff, 0x00FFEEFF);
     }
 
     public void onMouseDown(MouseEvent ev) {
-        mDownScreenWidth = mSurfaceGen.getScreenWidth();
+        mDownScreenWidth = mScene3D.getScreenWidth();
         mLastTouchX0 = ev.getX();
         mLastTouchY0 = ev.getY();
-        mSurfaceGen.trackBallDown(mLastTouchX0, mLastTouchY0);
+        mScene3D.trackBallDown(mLastTouchX0, mLastTouchY0);
         mLastTrackBallX = mLastTouchX0;
         mLastTrackBallY = mLastTouchY0;
     }
@@ -88,7 +105,7 @@ public class Graph3dPanel extends JPanel {
         float moveX = (mLastTrackBallX - tx);
         float moveY = (mLastTrackBallY - ty);
         if (moveX * moveX + moveY * moveY < 4000f) {
-            mSurfaceGen.trackBallMove(tx, ty);
+            mScene3D.trackBallMove(tx, ty);
         }
         mLastTrackBallX = tx;
         mLastTrackBallY = ty;
@@ -100,15 +117,24 @@ public class Graph3dPanel extends JPanel {
         mLastTouchY0 = Float.NaN;
     }
 
+    public void onMouseWheel(MouseEvent ev) {
+        MouseWheelEvent we = (MouseWheelEvent)ev;
+        range = range * (float) Math.pow(1.01,we.getWheelRotation());
+        System.out.println(range);
+        mSurface.setRange(-range, range, -range, range);
+        mAxisBox.setRange(-range, range, -range, range,-2,20);
+        mScene3D.update();
+        repaint();
+    }
     public void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
-        if (mSurfaceGen.notSetUp()) {
+        if (mScene3D.notSetUp()) {
             System.out.println("setup");
-            mSurfaceGen.setUpMatrix(w, h);
+            mScene3D.setUpMatrix(w, h);
         }
 
-        mSurfaceGen.render(mGraphType);
+        mScene3D.render(mGraphType);
         if (mImage == null) {
             return;
         }
