@@ -21,7 +21,8 @@ import com.support.constraintlayout.extlib.graph3d.Object3D;
  * Plots a surface based on Z = f(X,Y)
  */
 public class Surface3D extends Object3D {
-    final int SIZE = 100; // the number of point on the side total points = SIZE*SIZE
+
+    private int mSize = 100; // the number of point on the side total points = SIZE*SIZE
     private Function mFunction;
     private float mZoomZ = 1;
 
@@ -41,11 +42,20 @@ public class Surface3D extends Object3D {
         mFunction = func;
     }
 
+
+    public int getArraySize() {
+        return mSize;
+    }
+
+    public void setArraySize(int mSize) {
+        this.mSize = mSize;
+    }
+
     public void computeSurface(boolean resetZ) {
-        int n = (SIZE + 1) * (SIZE + 1);
+        int n = (mSize + 1) * (mSize + 1);
         vert = new float[n * 3];
         tVert = new float[n * 3];
-        index = new int[SIZE * SIZE * 6];
+        index = new int[mSize * mSize * 6];
         float min_x = mMinX;
         float max_x = mMaxX;
         float min_y = mMinY;
@@ -55,10 +65,10 @@ public class Surface3D extends Object3D {
 
 
         int count = 0;
-        for (int iy = 0; iy <= SIZE; iy++) {
-            float y = min_y + iy * (max_y - min_y) / (SIZE);
-            for (int ix = 0; ix <= SIZE; ix++) {
-                float x = min_x + ix * (max_x - min_x) / (SIZE);
+        for (int iy = 0; iy <= mSize; iy++) {
+            float y = min_y + iy * (max_y - min_y) / (mSize);
+            for (int ix = 0; ix <= mSize; ix++) {
+                float x = min_x + ix * (max_x - min_x) / (mSize);
                 vert[count++] = x;
                 vert[count++] = y;
                 float z = mFunction.eval(x, y);
@@ -109,12 +119,12 @@ public class Surface3D extends Object3D {
             }
         }
         count = 0;
-        for (int iy = 0; iy < SIZE; iy++) {
-            for (int ix = 0; ix < SIZE; ix++) {
-                int p1 = 3 * (ix + iy * (SIZE + 1));
-                int p2 = 3 * (1 + ix + iy * (SIZE + 1));
-                int p3 = 3 * (ix + (iy + 1) * (SIZE + 1));
-                int p4 = 3 * (1 + ix + (iy + 1) * (SIZE + 1));
+        for (int iy = 0; iy < mSize; iy++) {
+            for (int ix = 0; ix < mSize; ix++) {
+                int p1 = 3 * (ix + iy * (mSize + 1));
+                int p2 = 3 * (1 + ix + iy * (mSize + 1));
+                int p3 = 3 * (ix + (iy + 1) * (mSize + 1));
+                int p4 = 3 * (1 + ix + (iy + 1) * (mSize + 1));
                 index[count++] = p1;
                 index[count++] = p2;
                 index[count++] = p3;

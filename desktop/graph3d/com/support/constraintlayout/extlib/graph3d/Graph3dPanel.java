@@ -41,6 +41,8 @@ public class Graph3dPanel extends JPanel {
     Surface3D mSurface;
     AxisBox mAxisBox;
     float range = 20;
+    float minZ = -6;
+    float maxZ  = 40;
     public void buildSurface() {
 
         mSurface = new Surface3D((x, y) -> {
@@ -51,7 +53,7 @@ public class Graph3dPanel extends JPanel {
         mScene3D.setObject(mSurface);
         mScene3D.resetCamera();
         mAxisBox = new AxisBox();
-        mAxisBox.setRange(-range, range, -range, range,-2,20);
+        mAxisBox.setRange(-range, range, -range, range,minZ,maxZ);
         mScene3D.addPostObject(mAxisBox);
     }
 
@@ -133,14 +135,22 @@ public class Graph3dPanel extends JPanel {
         mLastTouchX0 = Float.NaN;
         mLastTouchY0 = Float.NaN;
     }
+    float mZoomFactor = 1;
+    public void onMouseWheel(MouseWheelEvent ev) {
+        if (ev.isControlDown()) {
+            mZoomFactor *= (float) Math.pow(1.01, ev.getWheelRotation());
+            mScene3D.setZoom(mZoomFactor);
+            mScene3D.setUpMatrix(getWidth(),getHeight());
+            mScene3D.update();
+        }  else {
 
-    public void onMouseWheel(MouseEvent ev) {
-        MouseWheelEvent we = (MouseWheelEvent)ev;
-        range = range * (float) Math.pow(1.01,we.getWheelRotation());
-        System.out.println(range);
-        mSurface.setRange(-range, range, -range, range);
-        mAxisBox.setRange(-range, range, -range, range,-2,20);
-        mScene3D.update();
+            range = range * (float) Math.pow(1.01, ev.getWheelRotation());
+            mSurface.setArraySize((int) (range * 5));
+            System.out.println(range);
+            mSurface.setRange(-range, range, -range, range);
+            mAxisBox.setRange(-range, range, -range, range, minZ, maxZ);
+            mScene3D.update();
+        }
         repaint();
     }
     public void paintComponent(Graphics g) {
