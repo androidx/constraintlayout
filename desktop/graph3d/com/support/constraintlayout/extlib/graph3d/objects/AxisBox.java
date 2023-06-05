@@ -82,4 +82,57 @@ public class AxisBox extends Object3D {
 //                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
         }
     }
+<<<<<<< Updated upstream
+=======
+    public static void drawTicks(float[] zbuff, int[] img, int color, int w, int h,
+                                float p1x, float p1y, float p1z,
+                                 float p2x, float p2y, float p2z,
+                                 float nx, float ny, float nz
+                                ) {
+
+        float tx = nx/10;
+        float ty = ny/10;
+        float tz = nz/10;
+        for (float f = 0; f <= 1; f+=0.1f) {
+            float px = p1x + f*(p2x-p1x);
+            float py = p1y + f*(p2y-p1y);
+            float pz = p1z + f*(p2z-p1z);
+            Scene3D.drawline(zbuff, img, color, w, h,
+                    px,py,pz - 0.01f,
+                    px+tx,py+ty,pz+tz - 0.01f);
+        }
+    }
+
+
+
+    float[] screen = {0, 0, -1};
+
+    void raster_color(Scene3D s, float[] zbuff, int[] img, int w, int h) {
+        for (int i = 0; i < index.length; i += 3) {
+            int p1 = index[i];
+            int p2 = index[i + 1];
+            int p3 = index[i + 2];
+            boolean back = Scene3D.isBackface(
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2],
+                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2],
+                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2]);
+            if (back) continue;
+
+            VectorUtil.triangleNormal(tVert, p1, p3, p2, s.tmpVec);
+            float ss = VectorUtil.dot(s.tmpVec, screen);
+            float defuse = VectorUtil.dot(s.tmpVec, s.mTransformedLight);
+            float ambient = 0.3f;
+
+            float bright = Math.min(Math.max(0, defuse + ambient), 1);
+            float hue = 0.2f;
+            float sat = 0.5f;
+
+            int col = Scene3D.hsvToRgb(hue, sat, bright);
+            Scene3D.triangle(zbuff, img, col, w, h, tVert[p1], tVert[p1 + 1],
+                    tVert[p1 + 2], tVert[p2], tVert[p2 + 1],
+                    tVert[p2 + 2], tVert[p3], tVert[p3 + 1],
+                    tVert[p3 + 2]);
+        }
+    }
+>>>>>>> Stashed changes
 }

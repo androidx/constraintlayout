@@ -93,7 +93,9 @@ public class VectorUtil {
     public static float dot(float[] a, float[] b) {
         return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
     }
-
+    public static float dot(float[] a,int offset, float[] b) {
+        return a[offset] * b[0] + a[1+offset] * b[1] + a[2+offset] * b[2];
+    }
     public static void cross(float a0, float a1, float a2, float b0, float b1, float b2, float[] out) {
         float out0 = a1 * b2 - b1 * a2;
         float out1 = a2 * b0 - b2 * a0;

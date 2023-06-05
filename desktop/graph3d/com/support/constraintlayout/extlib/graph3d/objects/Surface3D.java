@@ -42,10 +42,16 @@ public class Surface3D extends Object3D {
     }
 
     public void computeSurface(boolean resetZ) {
+<<<<<<< Updated upstream
         int n = (SIZE + 1) * (SIZE + 1);
         vert = new float[n * 3];
         tVert = new float[n * 3];
         index = new int[SIZE * SIZE * 6];
+=======
+        int n = (mSize + 1) * (mSize + 1);
+        makeVert(n);
+        makeIndexes(mSize * mSize * 2);
+>>>>>>> Stashed changes
         float min_x = mMinX;
         float max_x = mMaxX;
         float min_y = mMinY;
@@ -55,12 +61,30 @@ public class Surface3D extends Object3D {
 
 
         int count = 0;
+<<<<<<< Updated upstream
         for (int iy = 0; iy <= SIZE; iy++) {
             float y = min_y + iy * (max_y - min_y) / (SIZE);
             for (int ix = 0; ix <= SIZE; ix++) {
                 float x = min_x + ix * (max_x - min_x) / (SIZE);
+=======
+        for (int iy = 0; iy <= mSize; iy++) {
+            float y = min_y + iy * (max_y - min_y) / (mSize);
+            for (int ix = 0; ix <= mSize; ix++) {
+                float x = min_x + ix * (max_x - min_x) / (mSize);
+                float delta = 0.001f;
+                float dx = (mFunction.eval(x+delta, y)- mFunction.eval(x-delta, y))/(2*delta);
+                float dy = (mFunction.eval(x, y+delta)- mFunction.eval(x, y-delta))/(2*delta);
+                float dz = 1;
+                float norm = (float) Math.sqrt(dz*dz+dx*dx+dy*dy);
+                dx/=norm;
+                dy/=norm;
+                dz/=norm;
+                normal[count] =dx;
+>>>>>>> Stashed changes
                 vert[count++] = x;
+                normal[count] = dy;
                 vert[count++] = y;
+                normal[count] = -dz;
                 float z = mFunction.eval(x, y);
 
                 if (Float.isNaN(z) || Float.isInfinite(z)) {
@@ -69,6 +93,7 @@ public class Surface3D extends Object3D {
                     z = mFunction.eval(x + epslonX, y + epslonY);
                 }
                 vert[count++] = z;
+
                 if (Float.isNaN(z)) {
                     continue;
                 }

@@ -101,7 +101,7 @@ public class Graph3dPanel extends JPanel {
         }
         mImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         mImageBuff = ((DataBufferInt) (mImage.getRaster().getDataBuffer())).getData();
-        mScene3D.setScreenDim(width, height, mImageBuff, 0x00FFEEFF);
+        mScene3D.setScreenDim(width, height, mImageBuff, 0x00AAAAAA);
     }
 
     public void onMouseDown(MouseEvent ev) {
@@ -134,6 +134,7 @@ public class Graph3dPanel extends JPanel {
         mLastTouchY0 = Float.NaN;
     }
 
+<<<<<<< Updated upstream
     public void onMouseWheel(MouseEvent ev) {
         MouseWheelEvent we = (MouseWheelEvent)ev;
         range = range * (float) Math.pow(1.01,we.getWheelRotation());
@@ -141,13 +142,20 @@ public class Graph3dPanel extends JPanel {
         mSurface.setRange(-range, range, -range, range);
         mAxisBox.setRange(-range, range, -range, range,-2,20);
         mScene3D.update();
+=======
+            range = range * (float) Math.pow(1.01, ev.getWheelRotation());
+            mSurface.setArraySize(Math.min(300,(int) (range * 5)));
+            mSurface.setRange(-range, range, -range, range);
+            mAxisBox.setRange(-range, range, -range, range, minZ, maxZ);
+            mScene3D.update();
+        }
+>>>>>>> Stashed changes
         repaint();
     }
     public void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
         if (mScene3D.notSetUp()) {
-            System.out.println("setup");
             mScene3D.setUpMatrix(w, h);
         }
 
