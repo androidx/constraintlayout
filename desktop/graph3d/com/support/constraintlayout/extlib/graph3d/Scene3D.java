@@ -31,14 +31,12 @@ public class Scene3D {
     ArrayList<Object3D> mPostObjects = new ArrayList();
     float[] zBuff;
     int[] img;
-<<<<<<< Updated upstream
-    float[] light = {0, -1, -1}; // The direction of the light source
-=======
+
     private float[] light = {0, -0.3f, 1}; // The direction of the light source
     public float[] mTransformedLight = {0, -1, -1}; // The direction of the light source
->>>>>>> Stashed changes
+
     int width, height;
-    float[] tmpVec = new float[3];
+    public float[] tmpVec = new float[3];
     int lineColor = 0xFF000000;
     private final float epslonX = 0.000005232f;
     private final float epslonY = 0.00000898f;
@@ -170,17 +168,23 @@ public class Scene3D {
         transform();
     }
 
+    public float getZoom() {
+        return mZoomZ;
+    }
+
+    public void setZoom(float zoom) {
+        this.mZoomZ = zoom;
+    }
+
     public void setUpMatrix(int width, int height) {
         setUpMatrix(width, height, false);
     }
 
     public void setUpMatrix(int width, int height, boolean resetOrientation) {
         double[] look_point = mObject3D.center();
-<<<<<<< Updated upstream
-        double diagonal = mObject3D.size();
-=======
+
         double diagonal = mObject3D.size() * mZoomZ;
->>>>>>> Stashed changes
+
         mMatrix.setLookPoint(look_point);
         if (resetOrientation) {
             double[] eye_point = {look_point[0] - diagonal, look_point[1] - diagonal, look_point[2] + diagonal};
@@ -315,9 +319,6 @@ public class Scene3D {
         }
     }
 
-<<<<<<< Updated upstream
-=======
-
     public static boolean isBackface(
             float fx3, float fy3, float fz3,
             float fx2, float fy2, float fz2,
@@ -327,7 +328,7 @@ public class Scene3D {
 
     }
 
->>>>>>> Stashed changes
+
     public static void triangle(float[] zbuff, int[] img, int color, int w, int h,
                                 float fx3, float fy3, float fz3,
                                 float fx2, float fy2, float fz2,
