@@ -24,17 +24,20 @@ public class Surface3D extends Object3D {
     private Function mFunction;
     private float mZoomZ = 1;
     int mSize = 100;
-    public void setRange(float minX, float maxX, float minY, float maxY) {
+
+    public void setRange(float minX, float maxX, float minY, float maxY, float minZ, float maxZ) {
         mMinX = minX;
         mMaxX = maxX;
         mMinY = minY;
         mMaxY = maxY;
-        computeSurface(true);
+        mMinZ = minZ;
+        mMaxZ = maxZ;
+        computeSurface(Float.isNaN(mMinZ));
     }
 
     public void setArraySize(int size) {
         mSize = size;
-        computeSurface(true);
+        computeSurface(false);
     }
 
     public interface Function {
@@ -105,8 +108,8 @@ public class Surface3D extends Object3D {
         // normalize range in z
         float xrange = mMaxX - mMinX;
         float yrange = mMaxY - mMinY;
-        float zrange = max_z - min_z;
-        if (zrange != 0) {
+        float zrange = mMaxZ - mMinZ;
+        if (zrange != 0 && resetZ) {
             float xyrange = (xrange + yrange) / 2;
             float scalez = xyrange / zrange;
 
