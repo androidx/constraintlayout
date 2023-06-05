@@ -31,7 +31,12 @@ public class Scene3D {
     ArrayList<Object3D> mPostObjects = new ArrayList();
     float[] zBuff;
     int[] img;
+<<<<<<< Updated upstream
     float[] light = {0, -1, -1}; // The direction of the light source
+=======
+    private float[] light = {0, -0.3f, 1}; // The direction of the light source
+    public float[] mTransformedLight = {0, -1, -1}; // The direction of the light source
+>>>>>>> Stashed changes
     int width, height;
     float[] tmpVec = new float[3];
     int lineColor = 0xFF000000;
@@ -40,6 +45,7 @@ public class Scene3D {
     private Function mFunction;
     private float mZoomZ = 1;
     int background;
+    private boolean mLightMovesWithCamera = true;
 
     public int getLineColor() {
         return lineColor;
@@ -85,10 +91,18 @@ public class Scene3D {
     }
 
     public void transformTriangles() {
-        transform(mInverse);
+        transform();
     }
 
-    public void transform(Matrix m) {
+    public void transform() {
+        Matrix m = mInverse;
+        if (mLightMovesWithCamera) {
+            m.mult3v(light, mTransformedLight);
+            VectorUtil.normalize(mTransformedLight);
+        } else {
+            System.arraycopy(light, 0, mTransformedLight, 0, 3);
+        }
+
         mObject3D.transform(m);
         for (Object3D obj : mPreObjects) {
             obj.transform(m);
@@ -106,7 +120,7 @@ public class Scene3D {
         mMatrix.setScreenWidth(sw);
         mMatrix.calcMatrix();
         mMatrix.invers(mInverse);
-        transform(mInverse);
+        transform();
     }
 
     public void trackBallDown(float x, float y) {
@@ -117,7 +131,7 @@ public class Scene3D {
     public void trackBallMove(float x, float y) {
         mMatrix.trackBallMove(x, y);
         mMatrix.invers(mInverse);
-        transform(mInverse);
+        transform();
     }
 
     public void trackBallUP(float x, float y) {
@@ -127,8 +141,9 @@ public class Scene3D {
 
     public void update() {
         mMatrix.invers(mInverse);
-        transform(mInverse);
+        transform();
     }
+
     public void panDown(float x, float y) {
         mMatrix.panDown(x, y);
         mMatrix.invers(mInverse);
@@ -137,7 +152,7 @@ public class Scene3D {
     public void panMove(float x, float y) {
         mMatrix.panMove(x, y);
         mMatrix.invers(mInverse);
-        transform(mInverse);
+        transform();
     }
 
     public void panUP() {
@@ -152,7 +167,7 @@ public class Scene3D {
         mMatrix.setScreenDim(width, height);
         setupBuffers(width, height, img, background);
         setUpMatrix(width, height);
-        transform(mInverse);
+        transform();
     }
 
     public void setUpMatrix(int width, int height) {
@@ -161,7 +176,11 @@ public class Scene3D {
 
     public void setUpMatrix(int width, int height, boolean resetOrientation) {
         double[] look_point = mObject3D.center();
+<<<<<<< Updated upstream
         double diagonal = mObject3D.size();
+=======
+        double diagonal = mObject3D.size() * mZoomZ;
+>>>>>>> Stashed changes
         mMatrix.setLookPoint(look_point);
         if (resetOrientation) {
             double[] eye_point = {look_point[0] - diagonal, look_point[1] - diagonal, look_point[2] + diagonal};
@@ -208,8 +227,8 @@ public class Scene3D {
 
     public void resetCamera() {
         setUpMatrix(width, height, true);
-        transform(mInverse);
-}
+        transform();
+    }
 
     private final static int min(int x1, int x2, int x3) {
         return (x1 > x2) ? ((x2 > x3) ? x3 : x2) : ((x1 > x3) ? x3 : x1);
@@ -239,9 +258,9 @@ public class Scene3D {
         for (Object3D mPreObject : mPreObjects) {
             mPreObject.render(this, zBuff, img, width, height);
         }
-        mObject3D.render(this,  zBuff, img, width, height);
+        mObject3D.render(this, zBuff, img, width, height);
         for (Object3D mPreObject : mPostObjects) {
-            mPreObject.render(this,  zBuff, img, width, height);
+            mPreObject.render(this, zBuff, img, width, height);
         }
     }
 
@@ -272,8 +291,8 @@ public class Scene3D {
 
 
     public static void drawline(float[] zbuff, int[] img, int color, int w, int h,
-                         float fx1, float fy1, float fz1,
-                         float fx2, float fy2, float fz2
+                                float fx1, float fy1, float fz1,
+                                float fx2, float fy2, float fz2
     ) {
         float dx = fx2 - fx1, dy = fy2 - fy1, dz = fz2 - fz1;
         float steps = (float) Math.hypot(dx, Math.hypot(dy, dz));
@@ -296,6 +315,19 @@ public class Scene3D {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+
+    public static boolean isBackface(
+            float fx3, float fy3, float fz3,
+            float fx2, float fy2, float fz2,
+            float fx1, float fy1, float fz1) {
+
+        return (((fx1 - fx2) * (fy3 - fy2) - (fy1 - fy2) * (fx3 - fx2)) < 0);
+
+    }
+
+>>>>>>> Stashed changes
     public static void triangle(float[] zbuff, int[] img, int color, int w, int h,
                                 float fx3, float fy3, float fz3,
                                 float fx2, float fy2, float fz2,
@@ -401,6 +433,156 @@ public class Scene3D {
                     if (zbuff[point] > zval) {
                         zbuff[point] = zval;
                         img[point] = color;
+                    }
+                }
+                CX1 -= FDY12;
+                CX2 -= FDY23;
+                CX3 -= FDY31;
+            }
+            CY1 += FDX12;
+            CY2 += FDX23;
+            CY3 += FDX31;
+            off += w;
+        }
+    }
+
+    public static void trianglePhong(float[] zbuff, int[] img,
+                                float h3, float b3,
+                                float h2, float b2,
+                                float h1, float b1,
+                                int w, int h,
+                                float fx3, float fy3, float fz3,
+                                float fx2, float fy2, float fz2,
+                                float fx1, float fy1, float fz1) {
+
+        if (((fx1 - fx2) * (fy3 - fy2) - (fy1 - fy2) * (fx3 - fx2)) < 0) {
+            float tmpx = fx1;
+            float tmpy = fy1;
+            float tmpz = fz1;
+            fx1 = fx2;
+            fy1 = fy2;
+            fz1 = fz2;
+            fx2 = tmpx;
+            fy2 = tmpy;
+            fz2 = tmpz;
+            float tmph = h1;
+            float tmpb = b1;
+
+            h1 = h2;
+            b1 = b2;
+
+            h2 = tmph;
+            b2 = tmpb;
+
+        }
+        // using maxmima
+        // string(solve([x1*dx+y1*dy+zoff=z1,x2*dx+y2*dy+zoff=z2,x3*dx+y3*dy+zoff=z3],[dx,dy,zoff]));
+        double d = (fx1 * (fy3 - fy2) - fx2 * fy3 + fx3 * fy2 + (fx2 - fx3)
+                * fy1);
+
+        if (d == 0) {
+            return;
+        }
+        float dx = (float) (-(fy1 * (fz3 - fz2) - fy2 * fz3 + fy3 * fz2 + (fy2 - fy3)
+                * fz1) / d);
+        float dy = (float) ((fx1 * (fz3 - fz2) - fx2 * fz3 + fx3 * fz2 + (fx2 - fx3)
+                * fz1) / d);
+        float zoff = (float) ((fx1 * (fy3 * fz2 - fy2 * fz3) + fy1
+                * (fx2 * fz3 - fx3 * fz2) + (fx3 * fy2 - fx2 * fy3) * fz1) / d);
+
+        float dhx = (float) (-(fy1 * (h3 - h2) - fy2 * h3 + fy3 * h2 + (fy2 - fy3)
+                * h1) / d);
+        float dhy = (float) ((fx1 * (h3 - h2) - fx2 * h3 + fx3 * h2 + (fx2 - fx3)
+                * h1) / d);
+        float hoff = (float) ((fx1 * (fy3 * h2 - fy2 * h3) + fy1
+                * (fx2 * h3 - fx3 * h2) + (fx3 * fy2 - fx2 * fy3) * h1) / d);
+
+
+        float dbx = (float) (-(fy1 * (b3 - b2) - fy2 * b3 + fy3 * b2 + (fy2 - fy3)
+                * b1) / d);
+        float dby = (float) ((fx1 * (b3 - b2) - fx2 * b3 + fx3 * b2 + (fx2 - fx3)
+                * b1) / d);
+        float boff = (float) ((fx1 * (fy3 * b2 - fy2 * b3) + fy1
+                * (fx2 * b3 - fx3 * b2) + (fx3 * fy2 - fx2 * fy3) * b1) / d);
+
+        // 28.4 fixed-point coordinates
+
+        int Y1 = (int) (16.0f * fy1 + .5f);
+        int Y2 = (int) (16.0f * fy2 + .5f);
+        int Y3 = (int) (16.0f * fy3 + .5f);
+
+        int X1 = (int) (16.0f * fx1 + .5f);
+        int X2 = (int) (16.0f * fx2 + .5f);
+        int X3 = (int) (16.0f * fx3 + .5f);
+
+        int DX12 = X1 - X2;
+        int DX23 = X2 - X3;
+        int DX31 = X3 - X1;
+
+        int DY12 = Y1 - Y2;
+        int DY23 = Y2 - Y3;
+        int DY31 = Y3 - Y1;
+
+        int FDX12 = DX12 << 4;
+        int FDX23 = DX23 << 4;
+        int FDX31 = DX31 << 4;
+
+        int FDY12 = DY12 << 4;
+        int FDY23 = DY23 << 4;
+        int FDY31 = DY31 << 4;
+
+        int minx = (min(X1, X2, X3) + 0xF) >> 4;
+        int maxx = (max(X1, X2, X3) + 0xF) >> 4;
+        int miny = (min(Y1, Y2, Y3) + 0xF) >> 4;
+        int maxy = (max(Y1, Y2, Y3) + 0xF) >> 4;
+
+        if (miny < 0) {
+            miny = 0;
+        }
+        if (minx < 0) {
+            minx = 0;
+        }
+        if (maxx > w) {
+            maxx = w;
+        }
+        if (maxy > h) {
+            maxy = h;
+        }
+        int off = miny * w;
+
+        int C1 = DY12 * X1 - DX12 * Y1;
+        int C2 = DY23 * X2 - DX23 * Y2;
+        int C3 = DY31 * X3 - DX31 * Y3;
+
+        if (DY12 < 0 || (DY12 == 0 && DX12 > 0)) {
+            C1++;
+        }
+        if (DY23 < 0 || (DY23 == 0 && DX23 > 0)) {
+            C2++;
+        }
+        if (DY31 < 0 || (DY31 == 0 && DX31 > 0)) {
+            C3++;
+        }
+        int CY1 = C1 + DX12 * (miny << 4) - DY12 * (minx << 4);
+        int CY2 = C2 + DX23 * (miny << 4) - DY23 * (minx << 4);
+        int CY3 = C3 + DX31 * (miny << 4) - DY31 * (minx << 4);
+
+        for (int y = miny; y < maxy; y++) {
+            int CX1 = CY1;
+            int CX2 = CY2;
+            int CX3 = CY3;
+            float p = zoff + dy * y;
+            float ph = hoff + dhy * y;
+            float pb = boff + dby * y;
+            for (int x = minx; x < maxx; x++) {
+                if (CX1 > 0 && CX2 > 0 && CX3 > 0) {
+                    int point = x + off;
+                    float zval = p + dx * x;
+                    float hue = ph + dhx * x;
+                    float bright = pb + dbx * x;
+                    if (zbuff[point] > zval) {
+                        zbuff[point] = zval;
+                        img[point] = Scene3D.hsvToRgb(hue, 0.8f, bright);;
                     }
                 }
                 CX1 -= FDY12;

@@ -21,10 +21,11 @@ package com.support.constraintlayout.extlib.graph3d;
  */
 public class Object3D {
     protected float[] vert;
+    protected float[] normal;
     protected int[] index;
     protected float[] tVert; // the vertices transformed into screen space
     protected float mMinX, mMaxX, mMinY, mMaxY, mMinZ, mMaxZ; // bounds in x,y & z
-    protected int mType  = 2;
+    protected int mType = 4;
 
     public int getType() {
         return mType;
@@ -34,6 +35,15 @@ public class Object3D {
         this.mType = type;
     }
 
+    public void makeVert(int n) {
+        vert = new float[n * 3];
+        tVert = new float[n * 3];
+        normal = new float[n * 3];
+    }
+
+    public void makeIndexes(int n) {
+        index = new int[n * 3];
+    }
 
     public void transform(Matrix m) {
         for (int i = 0; i < vert.length; i += 3) {
@@ -41,8 +51,8 @@ public class Object3D {
         }
     }
 
-    public void render(Scene3D s,  float[] zbuff, int[] img, int width, int height) {
-         switch (mType) {
+    public void render(Scene3D s, float[] zbuff, int[] img, int width, int height) {
+        switch (mType) {
             case 0:
                 raster_height(s, zbuff, img, width, height);
                 break;
@@ -55,6 +65,10 @@ public class Object3D {
             case 3:
                 raster_lines(s, zbuff, img, width, height);
                 break;
+            case 4:
+                raster_phong(s, zbuff, img, width, height);
+                break;
+
         }
     }
 
@@ -96,7 +110,10 @@ public class Object3D {
         }
     }
 
+    float mAmbient = 0.2f;
+    float mDefuse = 0.82f;
 
+    // float mSpec = 0.2f;
     void raster_color(Scene3D s, float[] zbuff, int[] img, int w, int h) {
         for (int i = 0; i < index.length; i += 3) {
             int p1 = index[i];
@@ -104,17 +121,63 @@ public class Object3D {
             int p3 = index[i + 2];
 
             VectorUtil.triangleNormal(tVert, p1, p2, p3, s.tmpVec);
-            float defuse = VectorUtil.dot(s.tmpVec, s.light);
+            float defuse = VectorUtil.dot(s.tmpVec, s.mTransformedLight);
+
             float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
             height = (height - mMinZ) / (mMaxZ - mMinZ);
-            float bright = Math.max(0, defuse);
-            float hue = (float) Math.sqrt(height);
-            float sat = Math.max(0.5f, height);
+            float bright = Math.min(1, Math.max(0, mDefuse * defuse + mAmbient));
+            float hue = (float) (height - Math.floor(height));
+            float sat = 0.8f;
             int col = Scene3D.hsvToRgb(hue, sat, bright);
             Scene3D.triangle(zbuff, img, col, w, h, tVert[p1], tVert[p1 + 1],
                     tVert[p1 + 2], tVert[p2], tVert[p2 + 1],
                     tVert[p2 + 2], tVert[p3], tVert[p3 + 1],
                     tVert[p3 + 2]);
+        }
+    }
+
+    private int color(float hue, float sat, float bright) {
+        hue = hue(hue);
+        bright = bright(bright);
+        return Scene3D.hsvToRgb(hue, sat, bright);
+    }
+
+    private float hue(float hue) {
+        return (float) (hue - Math.floor(hue));
+    }
+
+    private float bright(float bright) {
+        return Math.min(1, Math.max(0, bright));
+    }
+
+
+    void raster_phong(Scene3D s, float[] zbuff, int[] img, int w, int h) {
+        for (int i = 0; i < index.length; i += 3) {
+            int p1 = index[i];
+            int p2 = index[i + 1];
+            int p3 = index[i + 2];
+
+            //    VectorUtil.triangleNormal(tVert, p1, p2, p3, s.tmpVec);
+
+
+            float defuse1 = VectorUtil.dot(normal, p1, s.mTransformedLight);
+            float defuse2 = VectorUtil.dot(normal, p2, s.mTransformedLight);
+            float defuse3 = VectorUtil.dot(normal, p3, s.mTransformedLight);
+            float col1_hue = hue((vert[p1 + 2] - mMinZ) / (mMaxZ - mMinZ));
+            float col2_hue = hue((vert[p2 + 2] - mMinZ) / (mMaxZ - mMinZ));
+            float col3_hue = hue((vert[p3 + 2] - mMinZ) / (mMaxZ - mMinZ));
+            float col1_bright = bright(mDefuse * defuse1 + mAmbient);
+            float col2_bright = bright(mDefuse * defuse2 + mAmbient);
+            float col3_bright = bright(mDefuse * defuse3 + mAmbient);
+
+            Scene3D.trianglePhong(zbuff, img,
+                    col1_hue, col1_bright,
+                    col2_hue, col2_bright,
+                    col3_hue, col3_bright,
+                    w, h,
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2],
+                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2],
+                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2]);
         }
     }
 
