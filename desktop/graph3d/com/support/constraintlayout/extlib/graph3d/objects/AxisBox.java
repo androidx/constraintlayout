@@ -17,6 +17,7 @@ package com.support.constraintlayout.extlib.graph3d.objects;
 
 import com.support.constraintlayout.extlib.graph3d.Object3D;
 import com.support.constraintlayout.extlib.graph3d.Scene3D;
+import com.support.constraintlayout.extlib.graph3d.VectorUtil;
 
 /**
  * Draws box along the axis
@@ -48,12 +49,12 @@ public class AxisBox extends Object3D {
 
         index = new int[6 * 2* 3]; // 6 sides x 2 triangles x 3 points per triangle
         int []sides = {  // pattern of clockwise triangles around cube
-                0,2,1, 2,3,1,
-                0,1,4, 1,5,4,
-                0,4,2, 4,6,2,
-                7,5,6, 5,4,6,
-                7,6,3, 6,2,3,
-                7,3,5, 3,1,5
+                0, 2, 1, 3, 1, 2,
+                0, 1, 4, 5, 4, 1,
+                0, 4, 2, 6, 2, 4,
+                7, 6, 5, 4, 5, 6,
+                7, 3, 6, 2, 6, 3,
+                7, 5, 3, 1, 3, 5
         };
         index = new int[sides.length];
         for (int i = 0; i < sides.length; i++) {
@@ -61,7 +62,7 @@ public class AxisBox extends Object3D {
         }
     }
 
-    public void render(Scene3D s, float[] zbuff, int[] img, int w, int h) {
+    public void render_old(Scene3D s, float[] zbuff, int[] img, int w, int h) {
         for (int i = 0; i < index.length; i += 3) {
             int p1 = index[i];
             int p2 = index[i + 1];
@@ -82,8 +83,41 @@ public class AxisBox extends Object3D {
 //                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
         }
     }
-<<<<<<< Updated upstream
-=======
+
+    public void render(Scene3D s, float[] zbuff, int[] img, int w, int h) {
+        raster_color(s, zbuff, img, w, h);
+        for (int i = 0; i < index.length; i += 3) {
+            int p1 = index[i];
+            int p2 = index[i + 1];
+            int p3 = index[i + 2];
+
+            boolean back = Scene3D.isBackface(
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2],
+                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2],
+                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2]);
+            if (back) continue;
+
+            Scene3D.drawline(zbuff, img, color, w, h,
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2] - 0.01f);
+            drawTicks(zbuff, img, color, w, h,
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2] - 0.01f,
+                    tVert[p3]-tVert[p1], tVert[p3 + 1]-tVert[p1+1], tVert[p3 + 2] -tVert[p1+2]
+            );
+            Scene3D.drawline(zbuff, img, color, w, h,
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
+            drawTicks(zbuff, img, color, w, h,
+                    tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f,
+                    tVert[p2]-tVert[p1], tVert[p2 + 1]-tVert[p1+1], tVert[p2 + 2] -tVert[p1+2]);
+
+//            Scene3D.drawline(zbuff, img,0x000000, w, h,
+//                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2] - 0.01f,
+//                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
+        }
+    }
     public static void drawTicks(float[] zbuff, int[] img, int color, int w, int h,
                                 float p1x, float p1y, float p1z,
                                  float p2x, float p2y, float p2z,
@@ -134,5 +168,5 @@ public class AxisBox extends Object3D {
                     tVert[p3 + 2]);
         }
     }
->>>>>>> Stashed changes
+
 }

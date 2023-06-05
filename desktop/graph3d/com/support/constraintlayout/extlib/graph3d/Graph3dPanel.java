@@ -41,17 +41,21 @@ public class Graph3dPanel extends JPanel {
     Surface3D mSurface;
     AxisBox mAxisBox;
     float range = 20;
+    float minZ = -6;
+    float maxZ  = 40;
+    float mZoomFactor = 1;
+
     public void buildSurface() {
 
         mSurface = new Surface3D((x, y) -> {
             double d = Math.sqrt(x * x + y * y);
-            return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
+            return 10 * ((d == 0) ? 1f : (float) (Math.sin(d)/(1+d) ));
         });
         mSurface.setRange(-range, range, -range, range);
         mScene3D.setObject(mSurface);
         mScene3D.resetCamera();
         mAxisBox = new AxisBox();
-        mAxisBox.setRange(-range, range, -range, range,-2,20);
+        mAxisBox.setRange(-range, range, -range, range, -2, 20);
         mScene3D.addPostObject(mAxisBox);
     }
 
@@ -134,24 +138,25 @@ public class Graph3dPanel extends JPanel {
         mLastTouchY0 = Float.NaN;
     }
 
-<<<<<<< Updated upstream
-    public void onMouseWheel(MouseEvent ev) {
-        MouseWheelEvent we = (MouseWheelEvent)ev;
-        range = range * (float) Math.pow(1.01,we.getWheelRotation());
-        System.out.println(range);
-        mSurface.setRange(-range, range, -range, range);
-        mAxisBox.setRange(-range, range, -range, range,-2,20);
-        mScene3D.update();
-=======
+
+    public void onMouseWheel(MouseWheelEvent ev) {
+        if (ev.isControlDown()) {
+            mZoomFactor *= (float) Math.pow(1.01, ev.getWheelRotation());
+            mScene3D.setZoom(mZoomFactor);
+            mScene3D.setUpMatrix(getWidth(),getHeight());
+            mScene3D.update();
+        }  else {
+
             range = range * (float) Math.pow(1.01, ev.getWheelRotation());
-            mSurface.setArraySize(Math.min(300,(int) (range * 5)));
+            mSurface.setArraySize((int) (range * 5));
+            System.out.println(range);
             mSurface.setRange(-range, range, -range, range);
             mAxisBox.setRange(-range, range, -range, range, minZ, maxZ);
             mScene3D.update();
         }
->>>>>>> Stashed changes
         repaint();
     }
+
     public void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
