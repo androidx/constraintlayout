@@ -53,7 +53,9 @@ public class Surface3D extends Object3D {
         int n = (mSize + 1) * (mSize + 1);
         makeVert(n);
         makeIndexes(mSize * mSize * 2);
-        System.err.println("index "+index.length);
+        calcSurface(resetZ);
+    }
+    public void calcSurface(boolean resetZ) {
         float min_x = mMinX;
         float max_x = mMaxX;
         float min_y = mMinY;

@@ -23,7 +23,7 @@ import com.support.constraintlayout.extlib.graph3d.VectorUtil;
  * Draws box along the axis
  */
 public class AxisBox extends Object3D {
-    int color = 0xFFFF3233;
+    int color = 0xFF1010FF;
     public AxisBox() {
    mType = 1;
     }
@@ -91,11 +91,19 @@ public class AxisBox extends Object3D {
             int p2 = index[i + 1];
             int p3 = index[i + 2];
 
-            boolean back = Scene3D.isBackface(
+            boolean front = Scene3D.isBackface(
                     tVert[p1], tVert[p1 + 1], tVert[p1 + 2],
                     tVert[p2], tVert[p2 + 1], tVert[p2 + 2],
                     tVert[p3], tVert[p3 + 1], tVert[p3 + 2]);
-            if (back) continue;
+            if (front) {
+                Scene3D.drawline(zbuff, img, color, w, h,
+                        tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                        tVert[p2], tVert[p2 + 1], tVert[p2 + 2] - 0.01f);
+                Scene3D.drawline(zbuff, img, color, w, h,
+                        tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
+                        tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
+                continue;
+            }
 
             Scene3D.drawline(zbuff, img, color, w, h,
                     tVert[p1], tVert[p1 + 1], tVert[p1 + 2] - 0.01f,
@@ -113,9 +121,6 @@ public class AxisBox extends Object3D {
                     tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f,
                     tVert[p2]-tVert[p1], tVert[p2 + 1]-tVert[p1+1], tVert[p2 + 2] -tVert[p1+2]);
 
-//            Scene3D.drawline(zbuff, img,0x000000, w, h,
-//                    tVert[p2], tVert[p2 + 1], tVert[p2 + 2] - 0.01f,
-//                    tVert[p3], tVert[p3 + 1], tVert[p3 + 2] - 0.01f);
         }
     }
     public static void drawTicks(float[] zbuff, int[] img, int color, int w, int h,
@@ -155,11 +160,11 @@ public class AxisBox extends Object3D {
             VectorUtil.triangleNormal(tVert, p1, p3, p2, s.tmpVec);
             float ss = VectorUtil.dot(s.tmpVec, screen);
             float defuse = VectorUtil.dot(s.tmpVec, s.mTransformedLight);
-            float ambient = 0.3f;
+            float ambient = 0.5f;
 
             float bright = Math.min(Math.max(0, defuse + ambient), 1);
-            float hue = 0.2f;
-            float sat = 0.5f;
+            float hue = 0.4f;
+            float sat = 0.1f;
 
             int col = Scene3D.hsvToRgb(hue, sat, bright);
             Scene3D.triangle(zbuff, img, col, w, h, tVert[p1], tVert[p1 + 1],
