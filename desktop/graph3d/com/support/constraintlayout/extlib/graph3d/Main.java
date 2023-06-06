@@ -17,14 +17,38 @@
 package com.support.constraintlayout.extlib.graph3d;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Simple driver for the Graph3dPanel
  */
 public class Main {
+    static class Controls extends JPanel {
+        Graph3dPanel gp;
+        Controls(Graph3dPanel gp) {
+            this.gp = gp;
+            JCheckBox cb1 = new JCheckBox("camera Light",false);
+            cb1.addActionListener((e)->{
+                gp.mScene3D.mLightMovesWithCamera = cb1.isSelected();
+                System.out.println(gp.mScene3D.mLightMovesWithCamera);
+            });
+            add(cb1);
+            JSlider sl1 = new JSlider();
+            sl1.getModel().addChangeListener((e)->{
+              gp.mSurface.mSaturation = sl1.getValue()/100f;
+              gp.mScene3D.update();
+              gp.repaint();
+            });
+            add(sl1);
+        }
+    }
+
     public static void main(String[] args) {
         JFrame frame =  new JFrame("3d Plot");
-        Graph3dPanel  p = new Graph3dPanel();
+        JPanel  p = new JPanel(new BorderLayout());
+        Graph3dPanel  gp = new Graph3dPanel();
+        p.add(gp);
+        p.add(new Controls(gp),BorderLayout.SOUTH);
         frame.setContentPane(p);
         frame.setBounds(100,100,500,500);
         frame.setVisible(true);

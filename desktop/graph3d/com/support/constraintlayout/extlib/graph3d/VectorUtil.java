@@ -15,6 +15,8 @@
  */
 package com.support.constraintlayout.extlib.graph3d;
 
+import java.text.DecimalFormat;
+
 /**
  * A few utilities for vector calculations.
  */
@@ -103,5 +105,23 @@ public class VectorUtil {
         out[0] = out0;
         out[1] = out1;
         out[2] = out2;
+    }
+
+    private static String trim(String s){
+        return  s.substring(s.length()-7);
+    }
+
+    public static String vecToString(float[] light) {
+        DecimalFormat df =new DecimalFormat("        ##0.000");
+        String str = "[";
+        for (int i = 0; i < 3; i++) {
+            if (Float.isNaN(light[i])) {
+                str+=(((i == 0) ? "" : " , ") + trim("           NAN"));
+                continue;
+            }
+            str+=(((i == 0) ? "" : " , ") + trim(df.format(light[i])));
+        }
+           return str+ "]";
+
     }
 }

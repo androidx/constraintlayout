@@ -32,8 +32,9 @@ public class Scene3D {
     float[] zBuff;
     int[] img;
 
-    private float[] light = {0, -0.3f, 1}; // The direction of the light source
-    public float[] mTransformedLight = {0, -1, -1}; // The direction of the light source
+    private float[] light = {0, 0, 1}; // The direction of the light source
+    public float[] mTransformedLight = {0, 1, 1}; // The direction of the light source
+    public boolean mLightMovesWithCamera = false;
 
     int width, height;
     public float[] tmpVec = new float[3];
@@ -43,7 +44,6 @@ public class Scene3D {
     private Function mFunction;
     private float mZoomZ = 1;
     int background;
-    private boolean mLightMovesWithCamera = true;
 
     public int getLineColor() {
         return lineColor;
@@ -95,7 +95,7 @@ public class Scene3D {
     public void transform() {
         Matrix m = mInverse;
         if (mLightMovesWithCamera) {
-            m.mult3v(light, mTransformedLight);
+            mMatrix.mult3v(light, mTransformedLight);
             VectorUtil.normalize(mTransformedLight);
         } else {
             System.arraycopy(light, 0, mTransformedLight, 0, 3);
@@ -451,6 +451,7 @@ public class Scene3D {
                                 float h3, float b3,
                                 float h2, float b2,
                                 float h1, float b1,
+                                float sat,
                                 int w, int h,
                                 float fx3, float fy3, float fz3,
                                 float fx2, float fy2, float fz2,
@@ -583,7 +584,7 @@ public class Scene3D {
                     float bright = pb + dbx * x;
                     if (zbuff[point] > zval) {
                         zbuff[point] = zval;
-                        img[point] = Scene3D.hsvToRgb(hue, 0.8f, bright);;
+                        img[point] = Scene3D.hsvToRgb(hue, sat, bright);;
                     }
                 }
                 CX1 -= FDY12;

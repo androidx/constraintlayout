@@ -115,6 +115,16 @@ public class Matrix {
             dest[i] =(float) sum;
         }
     }
+    public void mult3v(float[]src,int off,float [] dest){
+        for (int i = 0; i < 3; i++) {
+            int col = i*4;
+            double sum =  0;
+            for (int j = 0; j < 3; j++) {
+                sum += m[col+j]*src[off+j];
+            }
+            dest[i] =(float) sum;
+        }
+    }
 
     public void mult4(double[]src,double [] dest){
         for (int i = 0; i < 4; i++) {

@@ -27,6 +27,10 @@ public class Object3D {
     protected float mMinX, mMaxX, mMinY, mMaxY, mMinZ, mMaxZ; // bounds in x,y & z
     protected int mType = 4;
 
+    float mAmbient = 0.3f;
+    float mDefuse = 0.7f;
+    public float mSaturation = 0.6f;
+
     public int getType() {
         return mType;
     }
@@ -110,9 +114,6 @@ public class Object3D {
         }
     }
 
-    float mAmbient = 0.2f;
-    float mDefuse = 0.82f;
-
     // float mSpec = 0.2f;
     void raster_color(Scene3D s, float[] zbuff, int[] img, int w, int h) {
         for (int i = 0; i < index.length; i += 3) {
@@ -150,6 +151,10 @@ public class Object3D {
         return Math.min(1, Math.max(0, bright));
     }
 
+    private float defuse(float[] normals, int off, float[] light) {
+        // s.mMatrix.mult3v(normal,off,s.tmpVec);
+        return Math.abs(VectorUtil.dot(normal, off, light));
+    }
 
     void raster_phong(Scene3D s, float[] zbuff, int[] img, int w, int h) {
         for (int i = 0; i < index.length; i += 3) {
@@ -160,9 +165,12 @@ public class Object3D {
             //    VectorUtil.triangleNormal(tVert, p1, p2, p3, s.tmpVec);
 
 
-            float defuse1 = VectorUtil.dot(normal, p1, s.mTransformedLight);
-            float defuse2 = VectorUtil.dot(normal, p2, s.mTransformedLight);
-            float defuse3 = VectorUtil.dot(normal, p3, s.mTransformedLight);
+//            float defuse1 = VectorUtil.dot(normal, p1, s.mTransformedLight);
+//            float defuse2 = VectorUtil.dot(normal, p2, s.mTransformedLight);
+//            float defuse3 = VectorUtil.dot(normal, p3, s.mTransformedLight);
+            float defuse1 = defuse(normal, p1, s.mTransformedLight);
+            float defuse2 = defuse(normal, p2, s.mTransformedLight);
+            float defuse3 = defuse(normal, p3, s.mTransformedLight);
             float col1_hue = hue((vert[p1 + 2] - mMinZ) / (mMaxZ - mMinZ));
             float col2_hue = hue((vert[p2 + 2] - mMinZ) / (mMaxZ - mMinZ));
             float col3_hue = hue((vert[p3 + 2] - mMinZ) / (mMaxZ - mMinZ));
@@ -174,6 +182,7 @@ public class Object3D {
                     col1_hue, col1_bright,
                     col2_hue, col2_bright,
                     col3_hue, col3_bright,
+                    mSaturation,
                     w, h,
                     tVert[p1], tVert[p1 + 1], tVert[p1 + 2],
                     tVert[p2], tVert[p2 + 1], tVert[p2 + 2],

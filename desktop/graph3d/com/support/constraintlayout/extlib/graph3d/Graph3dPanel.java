@@ -44,6 +44,7 @@ public class Graph3dPanel extends JPanel {
     float minZ = -10;
     float maxZ = 10;
     float mZoomFactor = 1;
+    boolean animated = false;
 
     public void buildSurface() {
 
@@ -70,6 +71,13 @@ public class Graph3dPanel extends JPanel {
             }
 
         });
+        setFocusable(true);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                onKeyTyped(e);
+            }
+        });
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -78,6 +86,7 @@ public class Graph3dPanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                requestFocus();
                 onMouseDown(e);
             }
 
@@ -94,6 +103,54 @@ public class Graph3dPanel extends JPanel {
         addMouseWheelListener(mouseAdapter);
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
+    }
+
+    public void onKeyTyped(KeyEvent e) {
+       char c=  e.getKeyChar();
+        System.out.println(c);
+        switch (c) {
+            case  ' ':
+                toggleAnimation();
+        }
+    }
+    Timer animationTimer;
+    long nanoTime;
+    float time = 0;
+    void toggleAnimation() {
+        animated = !animated;
+
+
+        if (!animated) {
+            animationTimer.stop();
+            animationTimer = null;
+            return;
+        }
+
+        mSurface = new Surface3D((x, y) -> {
+            float d = (float) Math.sqrt(x * x + y * y);
+            float d2 = (float) Math.pow(x * x + y * y,0.125);
+            float angle = (float) Math.atan2(y,x);
+            float s = (float) Math.sin(d+angle-time*5);
+            float s2 = (float) Math.sin(time);
+            float c = (float) Math.cos(d+angle-time*5);
+            return  (s2*s2+0.1f)*d2*5*(s+c)/(1+d*d/20);
+          //  return  (float) (s*s+0.1) * (float) (Math.cos(d-time*5) *(y*y-x*x) /(1+d*d));
+        });
+        nanoTime = System.nanoTime();
+        mScene3D.setObject(mSurface);
+        mSurface.setRange(-range, range, -range, range,minZ,maxZ);
+        animationTimer = new Timer(7, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                long now = System.nanoTime();
+                time += (now-nanoTime)*1E-9f;
+                nanoTime = now;
+                mSurface.calcSurface(false);
+                mScene3D.update();
+                repaint();
+            }
+        });
+        animationTimer.start();
     }
 
     public void onSizeChanged(ComponentEvent c) {
@@ -155,6 +212,8 @@ public class Graph3dPanel extends JPanel {
         repaint();
     }
 
+    long previous = System.nanoTime();
+    int count = 0;
     public void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
@@ -167,6 +226,13 @@ public class Graph3dPanel extends JPanel {
             return;
         }
         g.drawImage(mImage, 0, 0, null);
+        count++;
+        long now = System.nanoTime();
+        if (now -previous > 1000000000) {
+          //  System.out.println(time+" fps "+count/((now-previous)*1E-9f));
+            count = 0;
+            previous = now;
+        }
     }
 
 
