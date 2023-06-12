@@ -62,18 +62,17 @@ fun Greeting(name: String) {
 
 @Composable
 fun Graph3D(modifier: Modifier) {
-    var graph = remember { Graph() }
-    val time = remember { mutableStateOf(System.nanoTime()) }
+    val graph = remember { Graph() }
+    val time = remember { mutableLongStateOf(System.nanoTime()) }
 
     LaunchedEffect(Unit) {
         while (isActive) {
             withFrameNanos {
-                time.value = System.nanoTime()
+                time.longValue = System.nanoTime()
+                graph.getImageForTime(time.longValue)
             }
         }
     }
-
-    var bitmap = graph.getImageForTime(time.value)
 
     Canvas(modifier = modifier
         .onPlaced {
@@ -95,8 +94,9 @@ fun Graph3D(modifier: Modifier) {
                 }
             )
         }) {
+        time.longValue
         scale(2.0f, pivot = Offset(0f,0f)) {
-            drawImage(bitmap)
+            drawImage(graph.bitmap)
         }
     }
 
