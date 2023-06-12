@@ -16,7 +16,7 @@
 
 package android.support.drag2d
 
-import android.support.drag2d.compose.Material2DAnimationSpec
+import android.support.drag2d.compose.materialVelocity2D
 import android.support.drag2d.lib.MaterialEasing
 import android.support.drag2d.lib.MaterialVelocity
 import androidx.compose.animation.core.Animatable
@@ -144,10 +144,9 @@ fun Material2DMotionPreview() {
                                     touchUpIndex.value = accumulator.size - 1
                                     val initialVelocity = velocityTracker.calculateVelocity()
 
-                                    // Velocity tracker has a tendency to fail measuring velocity
                                     offset.animateTo(
                                         targetValue = Offset.Zero,
-                                        animationSpec = Material2DAnimationSpec(
+                                        animationSpec = materialVelocity2D(
                                             duration.value.roundToInt(),
                                             maxVelocity.value,
                                             maxAcceleration.value,
