@@ -15,9 +15,7 @@
  */
 package com.support.constraintlayout.extlib.graph3d;
 
-import com.support.constraintlayout.extlib.graph3d.objects.AxisBox;
-import com.support.constraintlayout.extlib.graph3d.objects.Surface3D;
-
+import  android.support.constraintLayout.extlib.graph3d.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -28,42 +26,32 @@ import java.awt.image.DataBufferInt;
  * The JPanel that draws the Scene and handles mouse input
  */
 public class Graph3dPanel extends JPanel {
+   class ImageAdapter implements Graph.ImageSupport {
+        private BufferedImage mImage;
+        private int[] mImageBuff;
 
-    Scene3D mScene3D = new Scene3D();
-    private BufferedImage mImage;
-    private int[] mImageBuff;
-    int mGraphType = 2;
-    private float mLastTouchX0 = Float.NaN;
-    private float mLastTouchY0;
-    private float mLastTrackBallX;
-    private float mLastTrackBallY;
-    double mDownScreenWidth;
-    Surface3D mSurface;
-    AxisBox mAxisBox;
-    float range = 20;
-    float minZ = -10;
-    float maxZ = 10;
-    float mZoomFactor = 1;
+        @Override
+        public void makeImage(int width, int height) {
+            mImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            mImageBuff = ((DataBufferInt) (mImage.getRaster().getDataBuffer())).getData();
+        }
+
+        @Override
+        public int[] getBacking() {
+            return mImageBuff;
+        }
+
+        public BufferedImage getmImage() {
+            return mImage;
+        }
+    }
+    ImageAdapter image = new ImageAdapter();
+    Graph graph = new Graph(image);
+    Timer animationTimer;
     boolean animated = false;
 
-    public void buildSurface() {
-
-        mSurface = new Surface3D((x, y) -> {
-            double d = Math.sqrt(x * x + y * y);
-            return  0.3f * (float) (Math.cos(d) *(y*y-x*x) /(1+d));
-        });
-        mSurface.setRange(-range, range, -range, range,minZ,maxZ);
-        mScene3D.setObject(mSurface);
-        mScene3D.resetCamera();
-        mAxisBox = new AxisBox();
-        mAxisBox.setRange(-range, range, -range, range, minZ, maxZ);
-        mScene3D.addPostObject(mAxisBox);
-    }
 
     public Graph3dPanel() {
-
-        buildSurface();
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -113,40 +101,22 @@ public class Graph3dPanel extends JPanel {
                 toggleAnimation();
         }
     }
-    Timer animationTimer;
-    long nanoTime;
-    float time = 0;
+
     void toggleAnimation() {
         animated = !animated;
-
-
         if (!animated) {
             animationTimer.stop();
             animationTimer = null;
             return;
         }
+        graph.setStartTime();
+        graph.buildSurface(Graph.BLACK_HOLE_MERGE);
 
-        mSurface = new Surface3D((x, y) -> {
-            float d = (float) Math.sqrt(x * x + y * y);
-            float d2 = (float) Math.pow(x * x + y * y,0.125);
-            float angle = (float) Math.atan2(y,x);
-            float s = (float) Math.sin(d+angle-time*5);
-            float s2 = (float) Math.sin(time);
-            float c = (float) Math.cos(d+angle-time*5);
-            return  (s2*s2+0.1f)*d2*5*(s+c)/(1+d*d/20);
-          //  return  (float) (s*s+0.1) * (float) (Math.cos(d-time*5) *(y*y-x*x) /(1+d*d));
-        });
-        nanoTime = System.nanoTime();
-        mScene3D.setObject(mSurface);
-        mSurface.setRange(-range, range, -range, range,minZ,maxZ);
         animationTimer = new Timer(7, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 long now = System.nanoTime();
-                time += (now-nanoTime)*1E-9f;
-                nanoTime = now;
-                mSurface.calcSurface(false);
-                mScene3D.update();
+                graph.tick(now);
                 repaint();
             }
         });
@@ -160,55 +130,27 @@ public class Graph3dPanel extends JPanel {
         if (width == 0 || height == 0) {
             return;
         }
-        mImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        mImageBuff = ((DataBufferInt) (mImage.getRaster().getDataBuffer())).getData();
-        mScene3D.setScreenDim(width, height, mImageBuff, 0x00AAAAAA);
+        graph.resize(width,height);
     }
 
     public void onMouseDown(MouseEvent ev) {
-        mDownScreenWidth = mScene3D.getScreenWidth();
-        mLastTouchX0 = ev.getX();
-        mLastTouchY0 = ev.getY();
-        mScene3D.trackBallDown(mLastTouchX0, mLastTouchY0);
-        mLastTrackBallX = mLastTouchX0;
-        mLastTrackBallY = mLastTouchY0;
+graph.trackDown(ev.getX(),ev.getY());
     }
 
     public void onMouseDrag(MouseEvent ev) {
-        if (Float.isNaN(mLastTouchX0)) {
-            return;
-        }
-        float tx = ev.getX();
-        float ty = ev.getY();
-        float moveX = (mLastTrackBallX - tx);
-        float moveY = (mLastTrackBallY - ty);
-        if (moveX * moveX + moveY * moveY < 4000f) {
-            mScene3D.trackBallMove(tx, ty);
-        }
-        mLastTrackBallX = tx;
-        mLastTrackBallY = ty;
+graph.trackDrag(ev.getX(),ev.getY());
         repaint();
     }
 
     public void onMouseUP(MouseEvent ev) {
-        mLastTouchX0 = Float.NaN;
-        mLastTouchY0 = Float.NaN;
+        graph.trackDone();
     }
 
 
     public void onMouseWheel(MouseWheelEvent ev) {
-        if (ev.isControlDown()) {
-            mZoomFactor *= (float) Math.pow(1.01, ev.getWheelRotation());
-            mScene3D.setZoom(mZoomFactor);
-            mScene3D.setUpMatrix(getWidth(), getHeight());
-            mScene3D.update();
-        } else {
-            range = range * (float) Math.pow(1.01, ev.getWheelRotation());
-            mSurface.setArraySize(Math.min(300, (int) (range * 5)));
-            mSurface.setRange(-range, range, -range, range,minZ,maxZ);
-            mAxisBox.setRange(-range, range, -range, range, minZ, maxZ);
-            mScene3D.update();
-        }
+       boolean  control = ev.isControlDown();
+       float rotation = ev.getWheelRotation();
+       graph.wheel(rotation, control);
         repaint();
     }
 
@@ -217,15 +159,11 @@ public class Graph3dPanel extends JPanel {
     public void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
-        if (mScene3D.notSetUp()) {
-            mScene3D.setUpMatrix(w, h);
-        }
-
-        mScene3D.render(mGraphType);
-        if (mImage == null) {
+       graph.render();
+        if (image.getmImage() == null) {
             return;
         }
-        g.drawImage(mImage, 0, 0, null);
+        g.drawImage(image.getmImage(), 0, 0, null);
         count++;
         long now = System.nanoTime();
         if (now -previous > 1000000000) {

@@ -29,14 +29,13 @@ public class Main {
             this.gp = gp;
             JCheckBox cb1 = new JCheckBox("camera Light",false);
             cb1.addActionListener((e)->{
-                gp.mScene3D.mLightMovesWithCamera = cb1.isSelected();
-                System.out.println(gp.mScene3D.mLightMovesWithCamera);
+                gp.graph.lightMovesWithCamera(cb1.isSelected());
+                gp.repaint();
             });
             add(cb1);
             JSlider sl1 = new JSlider();
             sl1.getModel().addChangeListener((e)->{
-              gp.mSurface.mSaturation = sl1.getValue()/100f;
-              gp.mScene3D.update();
+              gp.graph.setSaturation(sl1.getValue()/100f);
               gp.repaint();
             });
             add(sl1);

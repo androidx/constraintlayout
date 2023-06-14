@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.support.constraintlayout.extlib.graph3d.objects;
+package android.support.constraintLayout.extlib.graph3d.objects;
 
-import com.support.constraintlayout.extlib.graph3d.Object3D;
+
+import android.support.constraintLayout.extlib.graph3d.Object3D;
 
 /**
  * Plots a surface based on Z = f(X,Y)
@@ -24,7 +25,7 @@ public class Surface3D extends Object3D {
     private Function mFunction;
     private float mZoomZ = 1;
     int mSize = 100;
-
+    float time = 0;
     public void setRange(float minX, float maxX, float minY, float maxY, float minZ, float maxZ) {
         mMinX = minX;
         mMaxX = maxX;
@@ -32,30 +33,30 @@ public class Surface3D extends Object3D {
         mMaxY = maxY;
         mMinZ = minZ;
         mMaxZ = maxZ;
-        computeSurface(Float.isNaN(mMinZ));
+        computeSurface(time, Float.isNaN(mMinZ));
     }
 
     public void setArraySize(int size) {
         mSize = size;
-        computeSurface(false);
+        computeSurface(time,false);
     }
 
     public interface Function {
-        float eval(float x, float y);
+        float eval(float x, float y, float t);
     }
 
     public Surface3D(Function func) {
         mFunction = func;
     }
    
-    public void computeSurface(boolean resetZ) {
+    public void computeSurface(float t,boolean resetZ) {
 
         int n = (mSize + 1) * (mSize + 1);
         makeVert(n);
         makeIndexes(mSize * mSize * 2);
-        calcSurface(resetZ);
+        calcSurface(t, resetZ);
     }
-    public void calcSurface(boolean resetZ) {
+    public void calcSurface(float t, boolean resetZ) {
         float min_x = mMinX;
         float max_x = mMaxX;
         float min_y = mMinY;
@@ -71,8 +72,8 @@ public class Surface3D extends Object3D {
             for (int ix = 0; ix <= mSize; ix++) {
                 float x = min_x + ix * (max_x - min_x) / (mSize);
                 float delta = 0.001f;
-                float dx = (mFunction.eval(x+delta, y)- mFunction.eval(x-delta, y))/(2*delta);
-                float dy = (mFunction.eval(x, y+delta)- mFunction.eval(x, y-delta))/(2*delta);
+                float dx = (mFunction.eval(x+delta, y, t)- mFunction.eval(x-delta, y, t))/(2*delta);
+                float dy = (mFunction.eval(x, y+delta, t)- mFunction.eval(x, y-delta, t))/(2*delta);
                 float dz = 1;
                 float norm = (float) Math.sqrt(dz*dz+dx*dx+dy*dy);
                 dx/=norm;
@@ -83,12 +84,12 @@ public class Surface3D extends Object3D {
                 normal[count] = dy;
                 vert[count++] = y;
                 normal[count] = -dz;
-                float z = mFunction.eval(x, y);
+                float z = mFunction.eval(x, y, t);
 
                 if (Float.isNaN(z) || Float.isInfinite(z)) {
                     float epslonX = 0.000005232f;
                     float epslonY = 0.00000898f;
-                    z = mFunction.eval(x + epslonX, y + epslonY);
+                    z = mFunction.eval(x + epslonX, y + epslonY, t);
                 }
                 vert[count++] = z;
 
