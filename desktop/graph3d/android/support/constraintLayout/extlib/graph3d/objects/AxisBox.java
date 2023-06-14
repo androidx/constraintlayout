@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.support.constraintlayout.extlib.graph3d.objects;
+package android.support.constraintLayout.extlib.graph3d.objects;
 
-import com.support.constraintlayout.extlib.graph3d.Object3D;
-import com.support.constraintlayout.extlib.graph3d.Scene3D;
-import com.support.constraintlayout.extlib.graph3d.VectorUtil;
+import android.support.constraintLayout.extlib.graph3d.Object3D;
+import android.support.constraintLayout.extlib.graph3d.Scene3D;
+import android.support.constraintLayout.extlib.graph3d.VectorUtil;
+
 
 /**
  * Draws box along the axis
