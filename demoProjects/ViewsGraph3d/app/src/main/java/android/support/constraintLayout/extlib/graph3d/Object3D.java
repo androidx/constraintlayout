@@ -22,7 +22,9 @@ package android.support.constraintLayout.extlib.graph3d;
 public class Object3D {
     protected float[] vert;
     protected float[] normal;
-    protected int[] index;
+ 
+    protected short[] index;
+ 
     protected float[] tVert; // the vertices transformed into screen space
     protected float mMinX, mMaxX, mMinY, mMaxY, mMinZ, mMaxZ; // bounds in x,y & z
     protected int mType = 4;
@@ -46,7 +48,7 @@ public class Object3D {
     }
 
     public void makeIndexes(int n) {
-        index = new int[n * 3];
+        index = new short[n * 3];
     }
 
     public void transform(Matrix m) {
