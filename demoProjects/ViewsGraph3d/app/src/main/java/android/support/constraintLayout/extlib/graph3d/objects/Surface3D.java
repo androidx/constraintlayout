@@ -139,13 +139,13 @@ public class Surface3D extends Object3D {
                 int p2 = 3 * (1 + ix + iy * (mSize + 1));
                 int p3 = 3 * (ix + (iy + 1) * (mSize + 1));
                 int p4 = 3 * (1 + ix + (iy + 1) * (mSize + 1));
-                index[count++] = p1;
-                index[count++] = p2;
-                index[count++] = p3;
+                index[count++] = (short)p1;
+                index[count++] = (short)p2;
+                index[count++] = (short)p3;
 
-                index[count++] = p4;
-                index[count++] = p3;
-                index[count++] = p2;
+                index[count++] = (short)p4;
+                index[count++] = (short)p3;
+                index[count++] = (short)p2;
             }
         }
     }
