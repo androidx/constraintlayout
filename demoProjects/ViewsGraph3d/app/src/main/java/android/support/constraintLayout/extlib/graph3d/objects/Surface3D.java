@@ -146,6 +146,7 @@ public class Surface3D extends Object3D {
                 index[count++] = (short)p4;
                 index[count++] = (short)p3;
                 index[count++] = (short)p2;
+
             }
         }
     }

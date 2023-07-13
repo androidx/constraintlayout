@@ -48,7 +48,8 @@ public class AxisBox extends Object3D {
             vert[i * 3 + 2] = (((i >> 2) & 1) == 0) ? mMinZ : mMaxZ; // Z
         }
 
-        index = new short[6 * 2* 3]; // 6 sides x 2 triangles x 3 points per triangle
+ 
+        index = new short[6 * 2 * 3]; // 6 sides x 2 triangles x 3 points per triangle
         short []sides = {  // pattern of clockwise triangles around cube
                 0, 2, 1, 3, 1, 2,
                 0, 1, 4, 5, 4, 1,
