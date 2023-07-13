@@ -77,6 +77,19 @@ public class ViewMatrix extends Matrix {
         this.mLookPoint = mLookPoint;
     }
 
+    /**
+     * return the distance from the look point to the eye point
+     * @return
+     */
+    public double calCameraDistance() {
+        double[] zv = {
+                mEyePoint[0] - mLookPoint[0],
+                mEyePoint[1] - mLookPoint[1],
+                mEyePoint[2] - mLookPoint[2]
+        };
+        return  VectorUtil.norm(zv);
+    }
+
     public double[] getEyePoint() {
         return mEyePoint;
     }
@@ -271,6 +284,7 @@ public class ViewMatrix extends Matrix {
     double[] mMoveToV = new double[3];
     double[] mStartEyePoint;
     double[] mStartUpVector;
+    double dist = 0;
     Quaternion mQ = new Quaternion(0, 0, 0, 0);
 
     public void trackBallUP(float x, float y) {
@@ -278,6 +292,7 @@ public class ViewMatrix extends Matrix {
     }
 
     public void trackBallDown(float x, float y) {
+        dist = calCameraDistance();
         mStartx = x;
         mStarty = y;
         ballToVec(x, y, mStartV);
@@ -304,7 +319,8 @@ public class ViewMatrix extends Matrix {
 
         mEyePoint = mQ.rotateVec(mEyePoint);
         mUpVector = mQ.rotateVec(mStartUpVector);
-
+        VectorUtil.normalize(mEyePoint);
+        VectorUtil.mult(mEyePoint,dist,mEyePoint);
         VectorUtil.sub(mLookPoint, mEyePoint, mEyePoint);
         calcMatrix();
 
