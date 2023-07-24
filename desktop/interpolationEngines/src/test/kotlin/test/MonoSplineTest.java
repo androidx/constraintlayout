@@ -38,10 +38,10 @@ public class MonoSplineTest {
 
     @Test
     public void testCurveFit01() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 0}, {1, 1}, {2, 0}
         };
-        double[] time = {
+        float[] time = {
                 0, 5, 10
         };
         MonoSpline spline = new MonoSpline( time, Arrays.asList(points));
@@ -55,7 +55,7 @@ public class MonoSplineTest {
 
     @Test
     public void testMonoSpline() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 0},
                 {1, 1},
                 {1, 0},
@@ -63,18 +63,18 @@ public class MonoSplineTest {
                 {2, 0},
                 {3, 0},
         };
-        double[] time = {
+        float[] time = {
                 0,1,2,3,4,5
         };
         MonoSpline mspline = new MonoSpline( time, Arrays.asList(points));
 
 
         assertEquals(1.0, mspline.getPos(1, 0), 0.001);
-        assertEquals(1.0, mspline.getPos(1.1, 0), 0.001);
-        assertEquals(1.0, mspline.getPos(1.3, 0), 0.001);
-        assertEquals(1.0, mspline.getPos(1.6, 0), 0.001);
-        assertEquals(1.0, mspline.getPos(1.9, 0), 0.001);
-        assertEquals(2.0, mspline.getPos(3.5, 0), 0.001);
+        assertEquals(1.0, mspline.getPos(1.1f, 0), 0.001);
+        assertEquals(1.0, mspline.getPos(1.3f, 0), 0.001);
+        assertEquals(1.0, mspline.getPos(1.6f, 0), 0.001);
+        assertEquals(1.0, mspline.getPos(1.9f, 0), 0.001);
+        assertEquals(2.0, mspline.getPos(3.5f, 0), 0.001);
         String s  = plotMonoSpline(mspline, 0,  0f, 5);
         String expect = "|***                                                         | 0.0\n" +
                 "|   **                                                       |\n" +
@@ -106,16 +106,16 @@ public class MonoSplineTest {
                 {3, 3},
         };
 
-        Spline mspline = new Spline( Arrays.asList(points));
+        Spline spline = new Spline( Arrays.asList(points));
 
 
-        assertEquals(0.0, mspline.getPos(0, 0), 0.001);
-        assertEquals(0.440, mspline.getPos(.1, 0), 0.001);
-        assertEquals(1, mspline.getPos(.3, 0), 0.001);
-        assertEquals(1.874, mspline.getPos(.6, 0), 0.001);
-        assertEquals(2.56, mspline.getPos(.9, 0), 0.001);
-        assertEquals(3, mspline.getPos(1, 0), 0.001);
-        String s  = plotSpline(mspline, 0,  0f, 1);
+        assertEquals(0.0, spline.getPos(0, 0), 0.001);
+        assertEquals(0.440, spline.getPos(.1, 0), 0.001);
+        assertEquals(1, spline.getPos(.3, 0), 0.001);
+        assertEquals(1.874, spline.getPos(.6, 0), 0.001);
+        assertEquals(2.56, spline.getPos(.9, 0), 0.001);
+        assertEquals(3, spline.getPos(1, 0), 0.001);
+        String s  = plotSpline(spline, 0,  0f, 1);
         String expect =
                 "|***                                                         | 0.0\n" +
                 "|   ***                                                      |\n" +

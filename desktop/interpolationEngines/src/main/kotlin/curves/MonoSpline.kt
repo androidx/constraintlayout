@@ -20,16 +20,16 @@ package curves
  *
  *
  */
-class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
-    val timePoints: DoubleArray
-    var mY: ArrayList<DoubleArray>
-    var mTangent: ArrayList<DoubleArray>
+class MonoSpline(time: FloatArray, y: List<FloatArray>) {
+    val timePoints: FloatArray
+    var mY: ArrayList<FloatArray>
+    var mTangent: ArrayList<FloatArray>
     private val mExtrapolate = true
-    var mSlopeTemp: DoubleArray
-    fun makeDoubleArray(a: Int, b: Int): ArrayList<DoubleArray> {
-        val ret = ArrayList<DoubleArray>() //new double[a][b];
+    var mSlopeTemp: FloatArray
+    fun makeFloatArray(a: Int, b: Int): ArrayList<FloatArray> {
+        val ret = ArrayList<FloatArray>() //new Float[a][b];
         for (i in 0 until a) {
-            ret.add(DoubleArray(b))
+            ret.add(FloatArray(b))
         }
         return ret
     }
@@ -37,9 +37,9 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
     init {
         val n = time.size
         val dim = y[0].size
-        mSlopeTemp = DoubleArray(dim)
-        val slope = makeDoubleArray(n - 1, dim) // could optimize this out
-        val tangent = makeDoubleArray(n, dim)
+        mSlopeTemp = FloatArray(dim)
+        val slope = makeFloatArray(n - 1, dim) // could optimize this out
+        val tangent = makeFloatArray(n, dim)
         for (j in 0 until dim) {
             for (i in 0 until n - 1) {
                 val dt = time[i + 1] - time[i]
@@ -54,15 +54,15 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         }
         for (i in 0 until n - 1) {
             for (j in 0 until dim) {
-                if (slope[i][j] == 0.0) {
-                    tangent[i][j] = 0.0
-                    tangent[i + 1][j] = 0.0
+                if (slope[i][j] == 0.0f) {
+                    tangent[i][j] = 0.0f
+                    tangent[i + 1][j] = 0.0f
                 } else {
                     val a = tangent[i][j] / slope[i][j]
                     val b = tangent[i + 1][j] / slope[i][j]
-                    val h = Math.hypot(a, b)
+                    val h = Math.hypot(a.toDouble(), b.toDouble()).toFloat()
                     if (h > 9.0) {
-                        val t = 3.0 / h
+                        val t = 3.0f / h
                         tangent[i][j] = t * a * slope[i][j]
                         tangent[i + 1][j] = t * b * slope[i][j]
                     }
@@ -74,15 +74,15 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         mTangent = tangent
     }
 
-    private fun copyData(y: List<DoubleArray>): ArrayList<DoubleArray> {
-        val ret = ArrayList<DoubleArray>()
+    private fun copyData(y: List<FloatArray>): ArrayList<FloatArray> {
+        val ret = ArrayList<FloatArray>()
         for (array in y) {
             ret.add(array)
         }
         return ret
     }
 
-    fun getPos(t: Double, v: DoubleArray) {
+    fun getPos(t: Float, v: FloatArray) {
         val n = timePoints.size
         val dim = mY[0].size
         if (mExtrapolate) {
@@ -135,7 +135,7 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         }
     }
 
-    fun getPos(t: Double, v: FloatArray) {
+    fun getPos2(t: Float, v: FloatArray) {
         val n = timePoints.size
         val dim = mY[0].size
         if (mExtrapolate) {
@@ -188,7 +188,7 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         }
     }
 
-    fun getPos(t: Double, j: Int): Double {
+    fun getPos(t: Float, j: Int): Float {
         val n = timePoints.size
         if (mExtrapolate) {
             if (t <= timePoints[0]) {
@@ -219,10 +219,10 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
                 return interpolate(h, x, y1, y2, t1, t2)
             }
         }
-        return 0.0 // should never reach here
+        return 0.0f // should never reach here
     }
 
-    fun getSlope(time: Double, v: DoubleArray) {
+    fun getSlope(time: Float, v: FloatArray) {
         var t = time
         val n = timePoints.size
         val dim = mY[0].size
@@ -248,7 +248,7 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         return
     }
 
-    fun getSlope(time: Double, j: Int): Double {
+    fun getSlope(time: Float, j: Int): Float {
         var t = time
         val n = timePoints.size
         if (t < timePoints[0]) {
@@ -267,7 +267,7 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
                 return diff(h, x, y1, y2, t1, t2) / h
             }
         }
-        return 0.0 // should never reach here
+        return 0.0f // should never reach here
     }
 
     companion object {
@@ -275,13 +275,13 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
          * Cubic Hermite spline
          */
         private fun interpolate(
-            h: Double,
-            x: Double,
-            y1: Double,
-            y2: Double,
-            t1: Double,
-            t2: Double
-        ): Double {
+            h: Float,
+            x: Float,
+            y1: Float,
+            y2: Float,
+            t1: Float,
+            t2: Float
+        ): Float {
             val x2 = x * x
             val x3 = x2 * x
             return (-2 * x3 * y2 + 3 * x2 * y2 + 2 * x3 * y1 - 3 * x2 * y1 + y1 + h * t2 * x3 + h * t1 * x3 - h * t2 * x2 - 2 * h * t1 * x2
@@ -291,7 +291,7 @@ class MonoSpline(time: DoubleArray, y: List<DoubleArray>) {
         /**
          * Cubic Hermite spline slope differentiated
          */
-        private fun diff(h: Double, x: Double, y1: Double, y2: Double, t1: Double, t2: Double): Double {
+        private fun diff(h: Float, x: Float, y1: Float, y2: Float, t1: Float, t2: Float): Float {
             val x2 = x * x
             return -6 * x2 * y2 + 6 * x * y2 + 6 * x2 * y1 - 6 * x * y1 + 3 * h * t2 * x2 + 3 * h * t1 * x2 - 2 * h * t2 * x - 4 * h * t1 * x + h * t1
         }
