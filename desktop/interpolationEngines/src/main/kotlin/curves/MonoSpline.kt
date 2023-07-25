@@ -15,24 +15,18 @@
  */
 package curves
 
+import kotlin.math.hypot
+
 /**
  * This performs a spline interpolation in multiple dimensions
  *
  */
 class MonoSpline(time: FloatArray, y: List<FloatArray>) {
     private val timePoints: FloatArray
-    var mY: ArrayList<FloatArray>
+    private var mY: ArrayList<FloatArray>
     private var mTangent: ArrayList<FloatArray>
     private val mExtrapolate = true
     private var mSlopeTemp: FloatArray
-
-    fun makeFloatArray(a: Int, b: Int): ArrayList<FloatArray> {
-        val ret = ArrayList<FloatArray>() //new Float[a][b];
-        for (i in 0 until a) {
-            ret.add(FloatArray(b))
-        }
-        return ret
-    }
 
     init {
         val n = time.size
@@ -60,7 +54,7 @@ class MonoSpline(time: FloatArray, y: List<FloatArray>) {
                 } else {
                     val a = tangent[i][j] / slope[i][j]
                     val b = tangent[i + 1][j] / slope[i][j]
-                    val h = Math.hypot(a.toDouble(), b.toDouble()).toFloat()
+                    val h = hypot(a , b)
                     if (h > 9.0) {
                         val t = 3.0f / h
                         tangent[i][j] = t * a * slope[i][j]
@@ -72,6 +66,14 @@ class MonoSpline(time: FloatArray, y: List<FloatArray>) {
         timePoints = time
         mY = copyData(y)
         mTangent = tangent
+    }
+
+    private fun makeFloatArray(a: Int, b: Int): ArrayList<FloatArray> {
+        val ret = ArrayList<FloatArray>() //new Float[a][b];
+        for (i in 0 until a) {
+            ret.add(FloatArray(b))
+        }
+        return ret
     }
 
     private fun copyData(y: List<FloatArray>): ArrayList<FloatArray> {
