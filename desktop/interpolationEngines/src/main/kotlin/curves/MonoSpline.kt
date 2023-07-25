@@ -18,14 +18,14 @@ package curves
 /**
  * This performs a spline interpolation in multiple dimensions
  *
- *
  */
 class MonoSpline(time: FloatArray, y: List<FloatArray>) {
-    val timePoints: FloatArray
+    private val timePoints: FloatArray
     var mY: ArrayList<FloatArray>
-    var mTangent: ArrayList<FloatArray>
+    private var mTangent: ArrayList<FloatArray>
     private val mExtrapolate = true
-    var mSlopeTemp: FloatArray
+    private var mSlopeTemp: FloatArray
+
     fun makeFloatArray(a: Int, b: Int): ArrayList<FloatArray> {
         val ret = ArrayList<FloatArray>() //new Float[a][b];
         for (i in 0 until a) {
@@ -135,59 +135,6 @@ class MonoSpline(time: FloatArray, y: List<FloatArray>) {
         }
     }
 
-    fun getPos2(t: Float, v: FloatArray) {
-        val n = timePoints.size
-        val dim = mY[0].size
-        if (mExtrapolate) {
-            if (t <= timePoints[0]) {
-                getSlope(timePoints[0], mSlopeTemp)
-                for (j in 0 until dim) {
-                    v[j] = (mY[0][j] + (t - timePoints[0]) * mSlopeTemp[j]).toFloat()
-                }
-                return
-            }
-            if (t >= timePoints[n - 1]) {
-                getSlope(timePoints[n - 1], mSlopeTemp)
-                for (j in 0 until dim) {
-                    v[j] = (mY[n - 1][j] + (t - timePoints[n - 1]) * mSlopeTemp[j]).toFloat()
-                }
-                return
-            }
-        } else {
-            if (t <= timePoints[0]) {
-                for (j in 0 until dim) {
-                    v[j] = mY[0][j].toFloat()
-                }
-                return
-            }
-            if (t >= timePoints[n - 1]) {
-                for (j in 0 until dim) {
-                    v[j] = mY[n - 1][j].toFloat()
-                }
-                return
-            }
-        }
-        for (i in 0 until n - 1) {
-            if (t == timePoints[i]) {
-                for (j in 0 until dim) {
-                    v[j] = mY[i][j].toFloat()
-                }
-            }
-            if (t < timePoints[i + 1]) {
-                val h = timePoints[i + 1] - timePoints[i]
-                val x = (t - timePoints[i]) / h
-                for (j in 0 until dim) {
-                    val y1 = mY[i][j]
-                    val y2 = mY[i + 1][j]
-                    val t1 = mTangent[i][j]
-                    val t2 = mTangent[i + 1][j]
-                    v[j] = interpolate(h, x, y1, y2, t1, t2).toFloat()
-                }
-                return
-            }
-        }
-    }
-
     fun getPos(t: Float, j: Int): Float {
         val n = timePoints.size
         if (mExtrapolate) {
@@ -270,30 +217,43 @@ class MonoSpline(time: FloatArray, y: List<FloatArray>) {
         return 0.0f // should never reach here
     }
 
-    companion object {
-        /**
-         * Cubic Hermite spline
-         */
-        private fun interpolate(
-            h: Float,
-            x: Float,
-            y1: Float,
-            y2: Float,
-            t1: Float,
-            t2: Float
-        ): Float {
-            val x2 = x * x
-            val x3 = x2 * x
-            return (-2 * x3 * y2 + 3 * x2 * y2 + 2 * x3 * y1 - 3 * x2 * y1 + y1 + h * t2 * x3 + h * t1 * x3 - h * t2 * x2 - 2 * h * t1 * x2
-                    + h * t1 * x)
-        }
-
-        /**
-         * Cubic Hermite spline slope differentiated
-         */
-        private fun diff(h: Float, x: Float, y1: Float, y2: Float, t1: Float, t2: Float): Float {
-            val x2 = x * x
-            return -6 * x2 * y2 + 6 * x * y2 + 6 * x2 * y1 - 6 * x * y1 + 3 * h * t2 * x2 + 3 * h * t1 * x2 - 2 * h * t2 * x - 4 * h * t1 * x + h * t1
-        }
+    /**
+     * Cubic Hermite spline
+     */
+    private fun interpolate(
+        h: Float,
+        x: Float,
+        y1: Float,
+        y2: Float,
+        t1: Float,
+        t2: Float
+    ): Float {
+        val x2 = x * x
+        val x3 = x2 * x
+        return (-2 * x3 * y2
+                + 3 * x2 * y2
+                + 2 * x3 * y1
+                - 3 * x2 * y1
+                + y1 + h * t2 * x3
+                + h * t1 * x3
+                - h * t2 * x2
+                - 2 * h * t1 * x2
+                + h * t1 * x)
     }
+
+    /**
+     * Cubic Hermite spline slope differentiated
+     */
+    private fun diff(h: Float, x: Float, y1: Float, y2: Float, t1: Float, t2: Float): Float {
+        val x2 = x * x
+        return (-6 * x2 * y2
+                + 6 * x * y2
+                + 6 * x2 * y1
+                - 6 * x * y1
+                + 3 * h * t2 * x2
+                + 3 * h * t1 * x2
+                - 2 * h * t2 * x
+                - 4 * h * t1 * x + h * t1)
+    }
+
 }

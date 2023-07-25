@@ -18,7 +18,7 @@ package curves
 import java.util.*
 
 /**
- * This provides provides a curve fit system that stitches the x,y path together with
+ * This provides a curve fit system that stitches the x,y path together with
  * quarter ellipses
  */
 class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArray>) {
@@ -54,60 +54,9 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         }
     }
 
-    fun getPosf(t: Float, v: FloatArray) {
-        var t = t
-        if (mExtrapolate) {
-            if (t < mArcs[0]!!.mTime1) {
-                val t0 = mArcs[0]!!.mTime1
-                val dt = t - mArcs[0]!!.mTime1
-                val p = 0
-                if (mArcs[p]!!.mLinear) {
-                    v[0] = mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0)
-                    v[1] = mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0)
-                } else {
-                    mArcs[p]!!.setPoint(t0)
-                    v[0] = mArcs[p]!!.calcX() + dt * mArcs[p]!!.calcDX()
-                    v[1] = mArcs[p]!!.calcY() + dt * mArcs[p]!!.calcDY()
-                }
-                return
-            }
-            if (t > mArcs[mArcs.size - 1]!!.mTime2) {
-                val t0 = mArcs[mArcs.size - 1]!!.mTime2
-                val dt = t - t0
-                val p = mArcs.size - 1
-                if (mArcs[p]!!.mLinear) {
-                    v[0] = mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0)
-                    v[1] = mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0)
-                } else {
-                    mArcs[p]!!.setPoint(t)
-                    v[0] = mArcs[p]!!.calcX() + dt * mArcs[p]!!.calcDX()
-                    v[1] = mArcs[p]!!.calcY() + dt * mArcs[p]!!.calcDY()
-                }
-                return
-            }
-        } else {
-            if (t < mArcs[0]!!.mTime1) {
-                t = mArcs[0]!!.mTime1
-            }
-            if (t > mArcs[mArcs.size - 1]!!.mTime2) {
-                t = mArcs[mArcs.size - 1]!!.mTime2
-            }
-        }
-        for (i in mArcs.indices) {
-            if (t <= mArcs[i]!!.mTime2) {
-                if (mArcs[i]!!.mLinear) {
-                    v[0] = mArcs[i]!!.getLinearX(t)
-                    v[1] = mArcs[i]!!.getLinearY(t)
-                    return
-                }
-                mArcs[i]!!.setPoint(t)
-                v[0] = mArcs[i]!!.calcX()
-                v[1] = mArcs[i]!!.calcY()
-                return
-            }
-        }
-    }
-
+    /**
+     * get the values of the at t point in time.
+     */
     fun getPos(t: Float, v: FloatArray) {
         var t = t
         if (mExtrapolate) {
@@ -116,12 +65,12 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
                 val dt = t - mArcs[0]!!.mTime1
                 val p = 0
                 if (mArcs[p]!!.mLinear) {
-                    v[0] = (mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0))
-                    v[1] = (mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0))
+                    v[0] = mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0)
+                    v[1] = mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0)
                 } else {
                     mArcs[p]!!.setPoint(t0)
-                    v[0] = (mArcs[p]!!.calcX() + dt * mArcs[p]!!.calcDX())
-                    v[1] = (mArcs[p]!!.calcY() + dt * mArcs[p]!!.calcDY())
+                    v[0] = mArcs[p]!!.calcX() + dt * mArcs[p]!!.calcDX()
+                    v[1] = mArcs[p]!!.calcY() + dt * mArcs[p]!!.calcDY()
                 }
                 return
             }
@@ -130,19 +79,20 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
                 val dt = t - t0
                 val p = mArcs.size - 1
                 if (mArcs[p]!!.mLinear) {
-                    v[0] = (mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0))
-                    v[1] = (mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0))
+                    v[0] = mArcs[p]!!.getLinearX(t0) + dt * mArcs[p]!!.getLinearDX(t0)
+                    v[1] = mArcs[p]!!.getLinearY(t0) + dt * mArcs[p]!!.getLinearDY(t0)
                 } else {
                     mArcs[p]!!.setPoint(t)
-                    v[0] = mArcs[p]!!.calcX()
-                    v[1] = mArcs[p]!!.calcY()
+                    v[0] = mArcs[p]!!.calcX() + dt * mArcs[p]!!.calcDX()
+                    v[1] = mArcs[p]!!.calcY() + dt * mArcs[p]!!.calcDY()
                 }
                 return
             }
         } else {
             if (t < mArcs[0]!!.mTime1) {
                 t = mArcs[0]!!.mTime1
-            } else if (t > mArcs[mArcs.size - 1]!!.mTime2) {
+            }
+            if (t > mArcs[mArcs.size - 1]!!.mTime2) {
                 t = mArcs[mArcs.size - 1]!!.mTime2
             }
         }
@@ -161,6 +111,9 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         }
     }
 
+    /**
+     * Get the differential which of the curves at point t
+     */
     fun getSlope(t: Float, v: FloatArray) {
         var t = t
         if (t < mArcs[0]!!.mTime1) {
@@ -183,6 +136,9 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         }
     }
 
+    /**
+     * get the value of the j'th curve at point in time t
+     */
     fun getPos(t: Float, j: Int): Float {
         var t = t
         if (mExtrapolate) {
@@ -232,6 +188,9 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         return Float.NaN
     }
 
+    /**
+     * Get the slope of j'th curve at time t
+     */
     fun getSlope(t: Float, j: Int): Float {
         var t = t
         if (t < mArcs[0]!!.mTime1) {
