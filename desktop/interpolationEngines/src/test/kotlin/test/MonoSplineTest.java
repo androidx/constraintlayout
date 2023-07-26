@@ -97,7 +97,7 @@ public class MonoSplineTest {
     }
     @Test
     public void testSpline() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 0},
                 {1, 1},
                 {1, 1},
@@ -110,10 +110,10 @@ public class MonoSplineTest {
 
 
         assertEquals(0.0, spline.getPos(0, 0), 0.001);
-        assertEquals(0.440, spline.getPos(.1, 0), 0.001);
-        assertEquals(1, spline.getPos(.3, 0), 0.001);
-        assertEquals(1.874, spline.getPos(.6, 0), 0.001);
-        assertEquals(2.56, spline.getPos(.9, 0), 0.001);
+        assertEquals(0.440, spline.getPos(.1f, 0), 0.001);
+        assertEquals(1, spline.getPos(.3f, 0), 0.001);
+        assertEquals(1.874, spline.getPos(.6f, 0), 0.001);
+        assertEquals(2.56, spline.getPos(.9f, 0), 0.001);
         assertEquals(3, spline.getPos(1, 0), 0.001);
         String s  = plotSpline(spline, 0,  0f, 1);
         String expect =

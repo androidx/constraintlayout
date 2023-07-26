@@ -38,13 +38,13 @@ public class SplineTest {
 
     @Test
     public void testSpline01() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 2}, {1, 1}, {2, 0}
         };
         Spline spline = new  Spline(Arrays.asList(points));
 
-        assertEquals(1, spline.getPos(0.5, 1), 0.001);
-        assertEquals(1, spline.getPos(0.5, 0), 0.001);
+        assertEquals(1f, spline.getPos(0.5f, 1), 0.001);
+        assertEquals(1f, spline.getPos(0.5f, 0), 0.001);
     }
 
     @Test

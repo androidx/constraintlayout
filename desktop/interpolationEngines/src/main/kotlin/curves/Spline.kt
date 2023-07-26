@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,11 @@ import kotlin.math.sqrt
  * Currently not used, but it is anticipated that we will be using it in the
  * KeyMotion
  *
- *
+ *Spline in N dimensions
+ * @param points
  */
-class Spline
-/**
- * Spline in N dimensions
- *
- * @param points [mPoints][dimensionality]
- */(points: List<FloatArray>) {
+
+class Spline(points: List<FloatArray>) {
     private var mPoints = 0
     private lateinit var mCurve: ArrayList<Array<Cubic>>
     private var mDimensionality = 0
@@ -40,7 +37,6 @@ class Spline
     init {
         setup(points)
     }
-
 
     private fun setup(points: List<FloatArray>) {
         mDimensionality = points[0].size
@@ -55,12 +51,13 @@ class Spline
             }
         }
         for (d in 0 until mDimensionality) {
-            mCurve.add(calcNaturalCubic(mCtl!![d].size, mCtl[d]))
+            mCurve.add(calcNaturalCubic(mCtl[d].size, mCtl[d]))
         }
         mCurveLength = FloatArray(mPoints - 1)
         mTotalLength = 0.0f
         val temp = arrayOfNulls<Cubic>(mDimensionality)
         for (p in mCurveLength.indices) {
+
             for (d in 0 until mDimensionality) {
                 temp[d] = mCurve[d][p]
             }
@@ -94,7 +91,7 @@ class Spline
             k++
         }
         for (i in x.indices) {
-            x[i] = mCurve[i][k]!!.eval(pos / mCurveLength[k])
+            x[i] = mCurve[i][k].eval(pos / mCurveLength[k])
         }
     }
 
@@ -106,11 +103,10 @@ class Spline
             pos -= mCurveLength[k]
             k++
         }
-        return mCurve[splineNumber][k]!!.eval(pos / mCurveLength[k])
+        return mCurve[splineNumber][k].eval(pos / mCurveLength[k])
     }
 
-    // @TODO: add description
-    fun approxLength(curve: Array<Cubic?>): Float {
+    private fun approxLength(curve: Array<Cubic?>): Float {
         var sum = 0.0f
         val n = curve.size
         val old = FloatArray(n)
@@ -139,13 +135,12 @@ class Spline
         return sum
     }
 
-    class Cubic(var mA: Float, var mB: Float, var mC: Float, var mD: Float) {
-        // @TODO: add description
+    private class Cubic(var mA: Float, var mB: Float, var mC: Float, var mD: Float) {
+
         fun eval(u: Float): Float {
             return ((mD * u + mC) * u + mB) * u + mA
         }
 
-        // @TODO: add description
         fun vel(v: Float): Float {
             //  (((mD * u) + mC) * u + mB) * u + mA
             //  =  "mA + u*mB + u*u*mC+u*u*u*mD" a cubic expression
@@ -154,7 +149,6 @@ class Spline
             return (mD * 3 * v + mC * 2) * v + mB
         }
     }
-
 
     private fun calcNaturalCubic(cubic: Int, x: FloatArray): Array<Cubic> {
         var n = cubic

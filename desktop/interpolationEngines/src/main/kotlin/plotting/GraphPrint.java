@@ -1,16 +1,30 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package plotting;
 
 
 import curves.ArcSpline;
 import curves.MonoSpline;
-import curves.Spline;
 import utils.ArcCurveFit;
-import utils.CurveFit;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -18,16 +32,22 @@ import java.awt.image.DataBufferInt;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.prefs.Preferences;
 
 public class GraphPrint extends JPanel {
     public static String TITLE1 = "Velocity";
     private static String TITLE2 = "Velocity";
-    private String mTitle= "Velocity";
+    private static final String PREFS_NODE_NAME = "FramePositionSaver";
+    private static final String PREF_X = "x";
+    private static final String PREF_Y = "y";
+    private static final String PREF_WIDTH = "width";
+    private static final String PREF_HEIGHT = "height";
+    private String mTitle = "Velocity";
     Color AXIS_COLOR = new Color(0x804040);
     Color GRID_COLOR = new Color(0x19543B);
     Color TEXT1_COLOR = new Color(0x6E9DC4);
     Color PERIOD_GRAD_TOP = new Color(0x1A284C);
-    Color BACK_COLOR =  new Color(0x091515);
+    Color BACK_COLOR = new Color(0x091515);
 
 //    Color AXIS_COLOR = new Color(0x182142);
 //    Color GRID_COLOR = new Color(0x8DCEB3);
@@ -83,12 +103,13 @@ public class GraphPrint extends JPanel {
         private float last_maxy;
         private boolean mLock = false;
 
-        float getX(float x,int w) {
+        float getX(float x, int w) {
             int draw_width = w - ins_left - ins_right;
             return draw_width * (x - minx)
                     / (maxx - minx) + ins_left;
 
         }
+
         float getY(float y, int h) {
             int draw_height = h - ins_top - ins_botom;
 
@@ -96,6 +117,7 @@ public class GraphPrint extends JPanel {
                     * (1 - (y - miny) / (maxy - miny))
                     + ins_top;
         }
+
         void calcRangeTicks(int width, int height) {
             double dx = actual_maxx - actual_minx;
             double dy = actual_maxy - actual_miny;
@@ -173,7 +195,6 @@ public class GraphPrint extends JPanel {
             resetRange();
 
 
-
             if (mLock) {
                 minx = 0;
                 maxy = 100;
@@ -228,8 +249,8 @@ public class GraphPrint extends JPanel {
             }
             g.setColor(drawing);
             g.setColor(AXIS_COLOR);
-            int x = (int)plotInfo.getX(0,w);
-            int y = (int) plotInfo.getY(0,h);
+            int x = (int) plotInfo.getX(0, w);
+            int y = (int) plotInfo.getY(0, h);
             g.drawLine(x, plotInfo.ins_top, x, h - plotInfo.ins_botom);
             g.drawLine(plotInfo.ins_left, y, w - plotInfo.ins_right, y);
         }
@@ -240,7 +261,6 @@ public class GraphPrint extends JPanel {
 
 
         private float mPeriodMultiplier = 1;
-
 
 
         DecimalFormat df = new DecimalFormat("###.#");
@@ -317,7 +337,7 @@ public class GraphPrint extends JPanel {
         int h = getHeight();
         plotInfo.calcRangeTicks(w, h);
         g.setColor(getBackground());
-        g.fillRect(0,0,w,h);
+        g.fillRect(0, 0, w, h);
         Graphics2D g2d = (Graphics2D) g;
         for (DrawItem drawItem : baseDraw) {
             drawItem.paint(g2d, w, h);
@@ -328,7 +348,7 @@ public class GraphPrint extends JPanel {
 
     }
 
-    public void addBasicPlot(float[] x, float[] y, Color c,String title) {
+    public void addBasicPlot(float[] x, float[] y, Color c, String title) {
         plotDraw.add(new BasicPlot(x, y, c, title, 0));
         plotInfo.calcRange(plotDraw);
         repaint();
@@ -361,7 +381,7 @@ public class GraphPrint extends JPanel {
         repaint();
     }
 
-    public void addData(  Color c, float[] x,float[] y) {
+    public void addData(Color c, float[] x, float[] y) {
         plotDraw.add(new CoolPlot(x, y, c));
         plotInfo.calcRange(plotDraw);
         repaint();
@@ -389,6 +409,7 @@ public class GraphPrint extends JPanel {
         plotInfo.calcRange(plotDraw);
         repaint();
     }
+
     public void addFunction2(String title, double minx, double maxx, Color c, Function f) {
         float[] x = new float[128];
         float[] y = new float[x.length];
@@ -406,14 +427,15 @@ public class GraphPrint extends JPanel {
             y[i] = (float) value;
             last = value;
         }
-        plotDraw.add(new BasicPlot(x, y, c, title,0));
+        plotDraw.add(new BasicPlot(x, y, c, title, 0));
         plotInfo.calcRange(plotDraw);
         repaint();
     }
-    public void addFunction2d(String title, double mint, double maxt, Color c, Function fx,Function fy) {
+
+    public void addFunction2d(String title, double mint, double maxt, Color c, Function fx, Function fy) {
         float[] x = new float[128];
         float[] y = new float[x.length];
-        double lastX = 0,lastY=0;
+        double lastX = 0, lastY = 0;
         for (int i = 0; i < x.length; i++) {
             double t = mint + maxt * (i / (double) (x.length - 1));
 
@@ -438,7 +460,7 @@ public class GraphPrint extends JPanel {
             lastY = valueY;
             lastX = valueX;
         }
-        plotDraw.add(new BasicPlot(x, y, c, title,0.2f));
+        plotDraw.add(new BasicPlot(x, y, c, title, 0.2f));
         plotInfo.calcRange(plotDraw);
         repaint();
     }
@@ -461,6 +483,7 @@ public class GraphPrint extends JPanel {
         float[] xPoints;
         float[] yPoints;
         float titlePos;
+
         public float[] getX() {
             return xPoints;
         }
@@ -513,7 +536,7 @@ public class GraphPrint extends JPanel {
                     yp[i] = (int) y;
                 }
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                int tp = ((int) (titlePos*xp.length))%xp.length;
+                int tp = ((int) (titlePos * xp.length)) % xp.length;
 
                 g.setColor(color);
                 g.setStroke(stroke);
@@ -619,12 +642,12 @@ public class GraphPrint extends JPanel {
                 Point2D start = new Point2D.Float(0, y0);
                 Point2D end = new Point2D.Float(0, y1);
                 float[] dist = {0.0f, 1.0f};
-                Color[] colors = {new Color(0xFFFFFF,true)  ,  new Color(color.getRGB(),true)};
+                Color[] colors = {new Color(0xFFFFFF, true), new Color(color.getRGB(), true)};
                 LinearGradientPaint p =
-                        new LinearGradientPaint(start, end, dist, colors,MultipleGradientPaint.CycleMethod.REFLECT);
+                        new LinearGradientPaint(start, end, dist, colors, MultipleGradientPaint.CycleMethod.REFLECT);
                 g.setPaint(p);
                 g.setStroke(stroke);
-        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+                g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g.fillPolygon(tmpX, tmpY, xPoints.length + 2);
                 g.setPaint(color);
@@ -809,8 +832,8 @@ public class GraphPrint extends JPanel {
         Stroke stroke = new BasicStroke(2f);
         float[] xPoints;
         float[] yPoints;
-        BufferedImage image,tmpImg;
-        int []data;
+        BufferedImage image, tmpImg;
+        int[] data;
 
 
         public float[] getX() {
@@ -852,19 +875,19 @@ public class GraphPrint extends JPanel {
 
             tmpImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             paintMask(tmpImg.createGraphics(), w, h);
-            int[]tmpdata = ((DataBufferInt) (tmpImg.getRaster().getDataBuffer())).getData();
+            int[] tmpdata = ((DataBufferInt) (tmpImg.getRaster().getDataBuffer())).getData();
 
             for (int i = 0; i < data.length; i++) {
-              int v =     ((tmpdata[i]>>24)&0xFF);
-               if (v>0) {
-                   v = Math.min((data[i]&0xFF)*4,255)<<24;
-               } else {
-                   v = 0;
-               }
-              data[i] =   (data[i] & 0xFFFFFF) | (v);
+                int v = ((tmpdata[i] >> 24) & 0xFF);
+                if (v > 0) {
+                    v = Math.min((data[i] & 0xFF) * 4, 255) << 24;
+                } else {
+                    v = 0;
+                }
+                data[i] = (data[i] & 0xFFFFFF) | (v);
 
             }
-            paintLines(g,w,h,true,false);
+            paintLines(g, w, h, true, false);
 
         }
 
@@ -932,7 +955,7 @@ public class GraphPrint extends JPanel {
                 int b = 0x00FFFFFF;
                 int c = 0xFF000000;
                 int d = 0xFFFFFFFF;
-               g.setColor(Color.WHITE);
+                g.setColor(Color.WHITE);
 
                 float y0 = draw_height
                         * (1 - (0 - plotInfo.miny) / (plotInfo.maxy - plotInfo.miny))
@@ -940,7 +963,7 @@ public class GraphPrint extends JPanel {
                 float y1 = draw_height
                         * (1 - (plotInfo.maxy - plotInfo.miny) / (plotInfo.maxy - plotInfo.miny))
                         + plotInfo.ins_top;
-               // g.setPaint(new TexturePaint(image, new Rectangle2D.Float(0, 0, w, h)));
+                // g.setPaint(new TexturePaint(image, new Rectangle2D.Float(0, 0, w, h)));
 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g.fillPolygon(tmpX, tmpY, xPoints.length + 2);
@@ -1075,10 +1098,58 @@ public class GraphPrint extends JPanel {
         }
     }
 
+
+    public static JFrame smartFrame(String name) {
+        JFrame frame = new JFrame(name);
+        String fName = name.replace(' ', '_');
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setBounds(100, 10, 500, 500);
+        restoreFramePosition(frame, fName);
+        frame.addComponentListener(new ComponentAdapter() {
+
+            public void componentMoved(ComponentEvent e) {
+                saveFramePosition(frame, fName);
+            }
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                 saveFramePosition(frame, fName);
+            }
+        });
+        return frame;
+    }
+
+    public static void restoreFramePosition(JFrame frame, String name) {
+        Preferences prefs = Preferences.userRoot().node(name);
+        int x = prefs.getInt(PREF_X, 100);
+        int y = prefs.getInt(PREF_Y, 100);
+        int width = prefs.getInt(PREF_WIDTH, 500);
+        int height = prefs.getInt(PREF_HEIGHT, 500);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if (x + width > screenSize.width) {
+            x = screenSize.width - width;
+        }
+        if (y + height > screenSize.height) {
+            y = screenSize.height - height;
+        }
+        frame.setBounds(x, y, width, height);
+
+    }
+
+
+    public static void saveFramePosition(JFrame frame, String name) {
+        Preferences prefs = Preferences.userRoot().node(name);
+        prefs.putInt(PREF_X, frame.getX());
+        prefs.putInt(PREF_Y, frame.getY());
+        prefs.putInt(PREF_WIDTH, frame.getWidth());
+        prefs.putInt(PREF_HEIGHT, frame.getHeight());
+    }
     public static void main(String[] arg) {
-        JFrame frame = new JFrame("Graph");
-        frame.setBounds(100,100, 400, 400);
-       // frame.setUndecorated(true);
+        graphArc();
+    }
+    public static void graphArc() {
+        JFrame frame = smartFrame("Graph");
         float[][] points = {
                 {0, 0},
                 {1, 1},
@@ -1088,15 +1159,62 @@ public class GraphPrint extends JPanel {
                 {3, 3},
         };
         float[] time = {
-                0,1,2,3,4,5
+                0, 1, 2, 3, 4, 5
         };
         GraphPrint p = setupFrame(frame, "spline");
 
 
+        int[] mode = {
+                ArcCurveFit.ARC_BELOW,
+                ArcCurveFit.ARC_ABOVE,
+                ArcCurveFit.ARC_ABOVE,
+                ArcCurveFit.ARC_ABOVE,
+                ArcCurveFit.ARC_ABOVE,
+
+        };
+        ArcSpline arcSpline = new ArcSpline(mode, time, Arrays.asList(points));
+
+        p.addFunction2("arc dx/dt", time[0], time[time.length - 1],  new Color(0x4C8F4F),
+                x -> arcSpline.getSlope((float) x, 0));
+        p.addFunction2("arc dy/dt", time[0], time[time.length - 1],  new Color(0x9F664E),
+                x -> arcSpline.getSlope((float) x, 1));
+
+        p.addFunction2d("arc", time[0], time[time.length - 1], new Color(0xECDE44),
+                t -> arcSpline.getPos((float) t, 0), t ->  arcSpline.getPos((float) t, 1));
 
 
+
+
+//        Spline spline = new Spline(  Arrays.asList(points));
+//        color =  new Color(0x918789);
+//        p.addFunction2("spline",  time[0], time[time.length-1], color, new Function() {
+//            @Override
+//            public double f(double x) {
+//                return spline.getPos((float)x/5,0);
+//            }
+//        });
+
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.setVisible(true);
+
+    }
+    public static void graphMonoSpline() {
+        JFrame frame = smartFrame("Graph");
+        float[][] points = {
+                {0, 0},
+                {1, 1},
+                {1, 1},
+                {2, 2},
+                {2, 2},
+                {3, 3},
+        };
+        float[] time = {
+                0, 1, 2, 3, 4, 5
+        };
+        GraphPrint p = setupFrame(frame, "spline");
         MonoSpline monoSpline = new MonoSpline( time, Arrays.asList(points));
-        Color c =  new Color(0xDE68D3);
+        Color c = new Color(0xDE68D3);
 
         p.addFunction2("mono slope", time[0], time[time.length-1], c, new Function() {
             @Override
@@ -1112,34 +1230,6 @@ public class GraphPrint extends JPanel {
             }
         });
 
-        int[] mode = {
-                ArcCurveFit.ARC_BELOW,
-                ArcCurveFit.ARC_ABOVE,
-                ArcCurveFit.ARC_ABOVE,
-                ArcCurveFit.ARC_ABOVE,
-                ArcCurveFit.ARC_ABOVE,
-
-        };
-        ArcSpline arcSpline = new ArcSpline(mode, time, Arrays.asList(points));
-        Color color =  new Color(0x3C9D31);
-        p.addFunction2("arc",  time[0], time[time.length-1], color, new Function() {
-            @Override
-            public double f(double x) {
-                return arcSpline.getPos((float)x,0);
-            }
-        });
-        Spline spline = new Spline(  Arrays.asList(points));
-        color =  new Color(0x918789);
-        p.addFunction2("spline",  time[0], time[time.length-1], color, new Function() {
-            @Override
-            public double f(double x) {
-                return spline.getPos((float)x/5,0);
-            }
-        });
-
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        frame.setVisible(true);
 
     }
 
