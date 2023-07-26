@@ -1146,7 +1146,8 @@ public class GraphPrint extends JPanel {
         prefs.putInt(PREF_HEIGHT, frame.getHeight());
     }
     public static void main(String[] arg) {
-        graphArc();
+        //graphArc();
+        graphMonoSpline();
     }
     public static void graphArc() {
         JFrame frame = smartFrame("Graph");
@@ -1194,7 +1195,6 @@ public class GraphPrint extends JPanel {
 //            }
 //        });
 
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         frame.setVisible(true);
 
@@ -1229,7 +1229,7 @@ public class GraphPrint extends JPanel {
                  return monoSpline.getPos((float)x,0);
             }
         });
-
+        frame.setVisible(true);
 
     }
 

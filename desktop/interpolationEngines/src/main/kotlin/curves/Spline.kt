@@ -55,7 +55,10 @@ class Spline(points: List<FloatArray>) {
         }
         mCurveLength = FloatArray(mPoints - 1)
         mTotalLength = 0.0f
-        val temp = arrayOfNulls<Cubic>(mDimensionality)
+        val dummy = Cubic(0f, 0f, 0f, 0f)
+        val temp = Array<Cubic>(mDimensionality) {
+            dummy
+        }
         for (p in mCurveLength.indices) {
 
             for (d in 0 until mDimensionality) {
@@ -106,7 +109,7 @@ class Spline(points: List<FloatArray>) {
         return mCurve[splineNumber][k].eval(pos / mCurveLength[k])
     }
 
-    private fun approxLength(curve: Array<Cubic?>): Float {
+    private fun approxLength(curve: Array<Cubic>): Float {
         var sum = 0.0f
         val n = curve.size
         val old = FloatArray(n)
@@ -115,7 +118,7 @@ class Spline(points: List<FloatArray>) {
             var s = 0.0f
             for (j in 0 until n) {
                 var tmp = old[j]
-                old[j] = curve[j]!!.eval(i)
+                old[j] = curve[j].eval(i)
                 tmp -= old[j]
                 s += tmp * tmp
             }
@@ -127,7 +130,7 @@ class Spline(points: List<FloatArray>) {
         var s = 0.0f
         for (j in 0 until n) {
             var tmp = old[j]
-            old[j] = curve[j]!!.eval(1.0f)
+            old[j] = curve[j].eval(1.0f)
             tmp -= old[j]
             s += tmp * tmp
         }
@@ -170,8 +173,8 @@ class Spline(points: List<FloatArray>) {
         for (i in n - 1 downTo 0) {
             d[i] = delta[i] - gamma[i] * d[i + 1]
         }
-        return Array(n) {i->
-             Cubic(
+        return Array(n) { i ->
+            Cubic(
                 x[i], d[i], 3 * (x[i + 1] - x[i]) - (2
                         * d[i]) - d[i + 1], 2 * (x[i] - x[i + 1]) + d[i] + d[i + 1]
             )
