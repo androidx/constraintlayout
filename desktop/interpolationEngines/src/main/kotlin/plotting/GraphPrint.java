@@ -424,7 +424,11 @@ public class GraphPrint extends JPanel {
     }
 
     public PlotItem addFunction2(String title, double minx, double maxx, Color c, Function f) {
-        float[] x = new float[128];
+        return addFunction2(128, title, minx, maxx, c, f);
+    }
+
+    public PlotItem addFunction2(int steps, String title, double minx, double maxx, Color c, Function f) {
+        float[] x = new float[steps];
         float[] y = new float[x.length];
         double last = 0;
         for (int i = 0; i < x.length; i++) {
@@ -1132,7 +1136,7 @@ public class GraphPrint extends JPanel {
 
             @Override
             public void componentResized(ComponentEvent e) {
-                 saveFramePosition(frame, fName);
+                saveFramePosition(frame, fName);
             }
         });
         return frame;
@@ -1164,61 +1168,83 @@ public class GraphPrint extends JPanel {
         prefs.putInt(PREF_WIDTH, frame.getWidth());
         prefs.putInt(PREF_HEIGHT, frame.getHeight());
     }
+
     public static void main(String[] arg) {
         JFrame frame = smartFrame("Graph");
         JPanel base = new JPanel(new BorderLayout());
         JPanel ctl = new JPanel();
         frame.setContentPane(base);
-        base.add(ctl,BorderLayout.SOUTH);
+        base.add(ctl, BorderLayout.SOUTH);
         GraphPrint graph = new GraphPrint("graph");
         base.add(graph);
 
-        Runnable []cleanup =new  Runnable[1];
+        Runnable[] cleanup = new Runnable[1];
         JButton b;
-        cleanup[0] =  displayMonoSpline1(graph);
-         b  = new JButton(new AbstractAction("Mono Spline") {
+        cleanup[0] = displayMonoSpline1(graph);
+        b = new JButton(new AbstractAction("Mono Spline") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cleanup[0] != null) {
                     cleanup[0].run();
-                    cleanup[0]  = null;
+                    cleanup[0] = null;
                 }
 
-                cleanup[0] =  displayMonoSpline1(graph);
-            }
-        });
-    ctl.add(b);
-         b  = new JButton(new AbstractAction("Arc mode") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (cleanup[0] != null) {
-                    cleanup[0].run();
-                    cleanup[0]  = null;
-                }
-                cleanup[0] =  displayArc1(graph);
+                cleanup[0] = displayMonoSpline1(graph);
             }
         });
         ctl.add(b);
-        b  = new JButton(new AbstractAction("cycle mode") {
+        b = new JButton(new AbstractAction("Arc mode") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cleanup[0] != null) {
                     cleanup[0].run();
-                    cleanup[0]  = null;
+                    cleanup[0] = null;
                 }
-                cleanup[0] =  displayCycle1(graph);
+                cleanup[0] = displayArc1(graph);
             }
         });
         ctl.add(b);
-
-
+        b = new JButton(new AbstractAction("custom cycle mode") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cleanup[0] != null) {
+                    cleanup[0].run();
+                    cleanup[0] = null;
+                }
+                cleanup[0] = displayCycle1(graph);
+            }
+        });
+        ctl.add(b);
+        String[] typeNames = {
+                "SIN_WAVE",
+                "SQUARE_WAVE",
+                "TRIANGLE_WAVE",
+                "SAW_WAVE",
+                "REVERSE_SAW_WAVE",
+                "COS_WAVE",
+                "BOUNCE",
+        };
+        for (int i = 0; i < typeNames.length; i++) {
+            int type = i;
+            b = new JButton(new AbstractAction(typeNames[i]) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (cleanup[0] != null) {
+                        cleanup[0].run();
+                        cleanup[0] = null;
+                    }
+                    cleanup[0] = displayCycle(graph,type);
+                }
+            });
+            ctl.add(b);
+        }
 
 
 //        graphMonoSpline();
         frame.setVisible(true);
     }
 
-    public static Runnable  displayMonoSpline1(GraphPrint graph){
+    public static Runnable displayMonoSpline1(GraphPrint graph) {
         graph.setTitle("Monotonic Spline");
         float[][] points = {
                 {0, 0},
@@ -1232,20 +1258,20 @@ public class GraphPrint extends JPanel {
                 0, 1, 2, 3, 4, 5
         };
 
-        MonoSpline monoSpline = new MonoSpline( time, Arrays.asList(points));
+        MonoSpline monoSpline = new MonoSpline(time, Arrays.asList(points));
         Color c = new Color(0xDE68D3);
-        PlotItem plot1,plot2;
-        plot1 =    graph.addFunction2("mono slope", time[0], time[time.length-1], c, new Function() {
+        PlotItem plot1, plot2;
+        plot1 = graph.addFunction2("mono slope", time[0], time[time.length - 1], c, new Function() {
             @Override
             public double f(double x) {
-                return monoSpline.getSlope((float)x,0) ;
+                return monoSpline.getSlope((float) x, 0);
             }
         });
-        Color d =  new Color(0x0004FF);
-        plot2 = graph.addFunction2("mono",  time[0], time[time.length-1], d, new Function() {
+        Color d = new Color(0x0004FF);
+        plot2 = graph.addFunction2("mono", time[0], time[time.length - 1], d, new Function() {
             @Override
             public double f(double x) {
-                return monoSpline.getPos((float)x,0);
+                return monoSpline.getPos((float) x, 0);
             }
         });
 
@@ -1255,7 +1281,7 @@ public class GraphPrint extends JPanel {
         };
     }
 
-    public static Runnable  displayArc1(GraphPrint graph){
+    public static Runnable displayArc1(GraphPrint graph) {
         graph.setTitle("Monotonic Spline");
         float[][] points = {
                 {0, 0},
@@ -1277,15 +1303,15 @@ public class GraphPrint extends JPanel {
 
         };
         ArcSpline arcSpline = new ArcSpline(mode, time, Arrays.asList(points));
-        PlotItem p1,p2,p3;
+        PlotItem p1, p2, p3;
 
-        p1 = graph.addFunction2("arc dx/dt", time[0], time[time.length - 1],  new Color(0x2C4F2F),
+        p1 = graph.addFunction2("arc dx/dt", time[0], time[time.length - 1], new Color(0x2C4F2F),
                 x -> arcSpline.getSlope((float) x, 0));
-        p2 = graph.addFunction2("arc dy/dt", time[0], time[time.length - 1],  new Color(0x4F362E),
+        p2 = graph.addFunction2("arc dy/dt", time[0], time[time.length - 1], new Color(0x4F362E),
                 x -> arcSpline.getSlope((float) x, 1));
 
         p3 = graph.addFunction2d("arc", time[0], time[time.length - 1], new Color(0xECDE44),
-                t -> arcSpline.getPos((float) t, 0), t ->  arcSpline.getPos((float) t, 1));
+                t -> arcSpline.getPos((float) t, 0), t -> arcSpline.getPos((float) t, 1));
         return () -> {
             graph.removeFunction(p1);
             graph.removeFunction(p2);
@@ -1293,25 +1319,63 @@ public class GraphPrint extends JPanel {
         };
     }
 
-    public static Runnable  displayCycle1(GraphPrint graph){
+    public static Runnable displayCycle(GraphPrint graph, int type) {
+
+        String[] typeNames = {
+                "SIN_WAVE",
+                "SQUARE_WAVE",
+                "TRIANGLE_WAVE",
+                "SAW_WAVE",
+                "REVERSE_SAW_WAVE",
+                "COS_WAVE",
+                "BOUNCE",
+        };
+        graph.setTitle(typeNames[type]);
+
+        Cycles cycles = new Cycles();
+        cycles.setType(type, null);
+        cycles.addPoint(0, 1);
+        cycles.addPoint(0.25f, 1);
+        cycles.addPoint(0.5f, 1);
+        cycles.addPoint(0.55f, 6);
+        cycles.addPoint(0.7f, 0);
+        cycles.addPoint(1f, 0);
+        cycles.normalize();
+        PlotItem p1, p3;
+
+        p1 = graph.addFunction2("cycle_slope", 0, 1, new Color(0x2C4F2F),
+                t -> cycles.getSlope((float) t, 0, 0));
+
+
+        p3 = graph.addFunction2(512, "cycle", 0, 1, new Color(0xECDE44),
+                t -> 100 * cycles.getValue((float) t, 0));
+        return () -> {
+            graph.removeFunction(p1);
+
+            graph.removeFunction(p3);
+        };
+    }
+
+    public static Runnable displayCycle1(GraphPrint graph) {
         graph.setTitle("Cycle Spline");
 
         Cycles cycles = new Cycles();
-        cycles.setType(Cycles.CUSTOM,new float[]{0 ,1, 1 ,-1 ,0});
-        cycles.addPoint(0,0);
-        cycles.addPoint(0.25f,1);
-        cycles.addPoint(0.5f,0);
-        cycles.addPoint(0.75f,2);
-        cycles.addPoint(1f,0);
+        cycles.setType(Cycles.CUSTOM, new float[]{0, 0, 0.2f, 0, 0, -0.2f, 1, -0.3f, 0, 0, 0.3f, 0, 0});
+        cycles.addPoint(0, 1);
+        cycles.addPoint(0.25f, 1);
+        cycles.addPoint(0.5f, 1);
+        cycles.addPoint(0.55f, 6);
+        cycles.addPoint(0.7f, 0);
+        cycles.addPoint(1f, 0);
         cycles.normalize();
-        PlotItem p1,p2,p3;
+        PlotItem p1, p2, p3;
 
-        p1 = graph.addFunction2("cycle_slope", 0, 1,  new Color(0x2C4F2F),
-                t -> cycles.getSlope((float)t, 0,0));
+        p1 = graph.addFunction2("cycle_slope", 0, 1, new Color(0x2C4F2F),
+                t -> cycles.getSlope((float) t, 0, 0));
 
 
-        p3 = graph.addFunction2("cycle",0, 1, new Color(0xECDE44),
-                t -> 100*cycles.getValue((float) t, 0));
+        p3 = graph.addFunction2(512, "cycle", 0, 1, new Color(0xECDE44),
+                t -> 100 * cycles.getValue((float) t, 0));
         return () -> {
             graph.removeFunction(p1);
 
