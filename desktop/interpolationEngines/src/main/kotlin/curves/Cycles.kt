@@ -16,6 +16,10 @@
 package curves
 
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sign
+import kotlin.math.sin
 
 /**
  * This generates variable frequency oscillation curves
@@ -26,7 +30,7 @@ class Cycles {
     private var mPeriod = floatArrayOf()
     private var mPosition = floatArrayOf()
     private lateinit var mArea: FloatArray
-    private var mCustomType: String? = null
+    private var mCustomType: FloatArray? = null
     private var mCustomCurve: MonoSpline? = null
     private var mType = 0
     private var mPI2 = Math.PI.toFloat() * 2
@@ -36,10 +40,10 @@ class Cycles {
     }
 
     // @TODO: add description
-    fun setType(type: Int, customType: String) {
+    fun setType(type: Int, customType: FloatArray?) {
         mType = type
         mCustomType = customType
-        if (mCustomType != null) {
+        if (customType != null) {
             mCustomCurve = buildWave(customType)
         }
     }
@@ -87,7 +91,7 @@ class Cycles {
         mNormalized = true
     }
 
-    fun getP(time: Float): Float {
+    private fun getP(time: Float): Float {
         var time = time
         if (time < 0) {
             time = 0f
@@ -103,7 +107,8 @@ class Cycles {
             val t = time
             val m = ((mPeriod[index] - mPeriod[index - 1])
                     / (mPosition[index] - mPosition[index - 1]))
-            p = mArea[index - 1] + (mPeriod[index - 1] - m * mPosition[index - 1]) * (t - mPosition[index - 1]) + m * (t * t - mPosition[index - 1] * mPosition[index - 1]) / 2
+            p =
+                mArea[index - 1] + (mPeriod[index - 1] - m * mPosition[index - 1]) * (t - mPosition[index - 1]) + m * (t * t - mPosition[index - 1] * mPosition[index - 1]) / 2
         }
         return p
     }
@@ -112,19 +117,19 @@ class Cycles {
     fun getValue(time: Float, phase: Float): Float {
         val angle = phase + getP(time) // angle is / by 360
         return when (mType) {
-            SIN_WAVE -> Math.sin((mPI2 * angle).toDouble()).toFloat()
-            SQUARE_WAVE -> Math.signum(0.5 - angle % 1).toFloat()
-            TRIANGLE_WAVE -> 1 - Math.abs((angle * 4 + 1) % 4 - 2)
+            SIN_WAVE -> sin(mPI2 * angle)
+            SQUARE_WAVE -> sign(0.5f - angle % 1)
+            TRIANGLE_WAVE -> 1 - abs((angle * 4 + 1) % 4 - 2)
             SAW_WAVE -> (angle * 2 + 1) % 2 - 1
             REVERSE_SAW_WAVE -> 1 - (angle * 2 + 1) % 2
-            COS_WAVE -> Math.cos((mPI2 * (phase + angle)).toDouble()).toFloat()
+            COS_WAVE -> cos(mPI2 * (phase + angle))
             BOUNCE -> {
                 val x = 1 - Math.abs(angle * 4 % 4 - 2)
                 1 - x * x
             }
 
             CUSTOM -> mCustomCurve!!.getPos((angle % 1), 0)
-            else -> Math.sin((mPI2 * angle).toDouble()).toFloat()
+            else -> sin(mPI2 * angle)
         }
     }
 
@@ -155,20 +160,19 @@ class Cycles {
         val angle = phase + getP(time)
         val dangle_dtime = getDP(time) + dphase
         return when (mType) {
-            SIN_WAVE -> (mPI2 * dangle_dtime * Math.cos((mPI2 * angle).toDouble())).toFloat()
+            SIN_WAVE -> (mPI2 * dangle_dtime * cos((mPI2 * angle)))
             SQUARE_WAVE -> 0f
             TRIANGLE_WAVE -> 4 * dangle_dtime * Math.signum((angle * 4 + 3) % 4 - 2)
             SAW_WAVE -> dangle_dtime * 2
             REVERSE_SAW_WAVE -> -dangle_dtime * 2
-            COS_WAVE -> (-mPI2 * dangle_dtime * Math.sin((mPI2 * angle).toDouble())).toFloat()
+            COS_WAVE -> -mPI2 * dangle_dtime * sin(mPI2 * angle)
             BOUNCE -> 4 * dangle_dtime * ((angle * 4 + 2) % 4 - 2)
             CUSTOM -> mCustomCurve!!.getSlope((angle % 1), 0)
-            else -> (mPI2 * dangle_dtime * Math.cos((mPI2 * angle).toDouble())).toFloat()
+            else -> mPI2 * dangle_dtime * cos((mPI2 * angle))
         }
     }
 
     companion object {
-        var TAG = "Oscillator"
         const val SIN_WAVE = 0 // theses must line up with attributes
         const val SQUARE_WAVE = 1
         const val TRIANGLE_WAVE = 2
@@ -177,45 +181,33 @@ class Cycles {
         const val COS_WAVE = 5
         const val BOUNCE = 6
         const val CUSTOM = 7
+    }
 
-        /**
-         * This builds a monotonic spline to be used as a wave function
-         */
-        fun buildWave(configString: String): MonoSpline {
-            // done this way for efficiency
-            val values = FloatArray(configString.length / 2)
-            var start = configString.indexOf('(') + 1
-            var off1 = configString.indexOf(',', start)
-            var count = 0
-            while (off1 != -1) {
-                val tmp = configString.substring(start, off1).trim { it <= ' ' }
-                values[count++] = tmp.toFloat()
-                off1 = configString.indexOf(',', off1 + 1.also { start = it })
-            }
-            off1 = configString.indexOf(')', start)
-            val tmp = configString.substring(start, off1).trim { it <= ' ' }
-            values[count++] = tmp.toFloat()
-            return buildWave(Arrays.copyOf(values, count))
-        }
+    /**
+     * This builds a monotonic spline to be used as a wave function
+     */
 
-        private fun buildWave(values: FloatArray): MonoSpline {
-            val length = values.size * 3 - 2
-            val len = values.size - 1
-            val gap = 1.0f / len
-            val points = ArrayList<FloatArray>(length)
-            val time = FloatArray(length)
-            for (i in values.indices) {
-                val v = values[i]
-                points[i + len][0] = v
-                time[i + len] = i * gap
-                if (i > 0) {
-                    points[i + len * 2][0] = v + 1
-                    time[i + len * 2] = i * gap + 1
-                    points[i - 1][0] = v - 1 - gap
-                    time[i - 1] = i * gap + -1 - gap
-                }
-            }
-            return MonoSpline(time, points)
+
+    private fun buildWave(values: FloatArray): MonoSpline {
+        val length = values.size * 3 - 2
+        val len = values.size - 1
+        val gap = 1.0f / len
+        val points = ArrayList<FloatArray>(length)
+        for (i in 0 until length) {
+            points.add(FloatArray(1))
         }
+        val time = FloatArray(length)
+        for (i in values.indices) {
+            val v = values[i]
+            points[i + len][0] = v
+            time[i + len] = i * gap
+            if (i > 0) {
+                points[i + len * 2][0] = v + 1
+                time[i + len * 2] = i * gap + 1
+                points[i - 1][0] = v - 1 - gap
+                time[i - 1] = i * gap + -1 - gap
+            }
+        }
+        return MonoSpline(time, points)
     }
 }

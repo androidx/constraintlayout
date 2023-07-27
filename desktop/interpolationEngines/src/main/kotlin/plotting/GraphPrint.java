@@ -18,11 +18,13 @@ package plotting;
 
 
 import curves.ArcSpline;
+import curves.Cycles;
 import curves.MonoSpline;
 import utils.ArcCurveFit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
@@ -58,6 +60,11 @@ public class GraphPrint extends JPanel {
     plotInfo plotInfo = new plotInfo();
     ArrayList<DrawItem> baseDraw = new ArrayList<>();
     ArrayList<PlotItem> plotDraw = new ArrayList<>();
+
+    public void setTitle(String mTitle) {
+        this.mTitle = mTitle;
+        repaint();
+    }
 
     public GraphPrint(String title) {
         mTitle = title;
@@ -388,7 +395,7 @@ public class GraphPrint extends JPanel {
     }
 
 
-    public void addFunction(String title, double minx, double maxx, Color c, Function f) {
+    public PlotItem addFunction(String title, double minx, double maxx, Color c, Function f) {
         float[] x = new float[512];
         float[] y = new float[512];
         double last = 0;
@@ -405,12 +412,18 @@ public class GraphPrint extends JPanel {
             y[i] = (float) value;
             last = value;
         }
-        plotDraw.add(new CoolPlot(x, y, c));
+        PlotItem ret;
+        plotDraw.add(ret = new CoolPlot(x, y, c));
         plotInfo.calcRange(plotDraw);
         repaint();
+        return ret;
     }
 
-    public void addFunction2(String title, double minx, double maxx, Color c, Function f) {
+    public void removeFunction(PlotItem plot) {
+        plotDraw.remove(plot);
+    }
+
+    public PlotItem addFunction2(String title, double minx, double maxx, Color c, Function f) {
         float[] x = new float[128];
         float[] y = new float[x.length];
         double last = 0;
@@ -427,12 +440,16 @@ public class GraphPrint extends JPanel {
             y[i] = (float) value;
             last = value;
         }
-        plotDraw.add(new BasicPlot(x, y, c, title, 0));
+        PlotItem ret;
+
+        plotDraw.add(ret = new BasicPlot(x, y, c, title, 0));
         plotInfo.calcRange(plotDraw);
         repaint();
+        return ret;
+
     }
 
-    public void addFunction2d(String title, double mint, double maxt, Color c, Function fx, Function fy) {
+    public PlotItem addFunction2d(String title, double mint, double maxt, Color c, Function fx, Function fy) {
         float[] x = new float[128];
         float[] y = new float[x.length];
         double lastX = 0, lastY = 0;
@@ -460,9 +477,11 @@ public class GraphPrint extends JPanel {
             lastY = valueY;
             lastX = valueX;
         }
-        plotDraw.add(new BasicPlot(x, y, c, title, 0.2f));
+        PlotItem ret;
+        plotDraw.add(ret = new BasicPlot(x, y, c, title, 0.2f));
         plotInfo.calcRange(plotDraw);
         repaint();
+        return ret;
     }
 
     interface PlotItem extends DrawItem {
@@ -1146,11 +1165,61 @@ public class GraphPrint extends JPanel {
         prefs.putInt(PREF_HEIGHT, frame.getHeight());
     }
     public static void main(String[] arg) {
-        //graphArc();
-        graphMonoSpline();
-    }
-    public static void graphArc() {
         JFrame frame = smartFrame("Graph");
+        JPanel base = new JPanel(new BorderLayout());
+        JPanel ctl = new JPanel();
+        frame.setContentPane(base);
+        base.add(ctl,BorderLayout.SOUTH);
+        GraphPrint graph = new GraphPrint("graph");
+        base.add(graph);
+
+        Runnable []cleanup =new  Runnable[1];
+        JButton b;
+        cleanup[0] =  displayMonoSpline1(graph);
+         b  = new JButton(new AbstractAction("Mono Spline") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cleanup[0] != null) {
+                    cleanup[0].run();
+                    cleanup[0]  = null;
+                }
+
+                cleanup[0] =  displayMonoSpline1(graph);
+            }
+        });
+    ctl.add(b);
+         b  = new JButton(new AbstractAction("Arc mode") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cleanup[0] != null) {
+                    cleanup[0].run();
+                    cleanup[0]  = null;
+                }
+                cleanup[0] =  displayArc1(graph);
+            }
+        });
+        ctl.add(b);
+        b  = new JButton(new AbstractAction("cycle mode") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cleanup[0] != null) {
+                    cleanup[0].run();
+                    cleanup[0]  = null;
+                }
+                cleanup[0] =  displayCycle1(graph);
+            }
+        });
+        ctl.add(b);
+
+
+
+
+//        graphMonoSpline();
+        frame.setVisible(true);
+    }
+
+    public static Runnable  displayMonoSpline1(GraphPrint graph){
+        graph.setTitle("Monotonic Spline");
         float[][] points = {
                 {0, 0},
                 {1, 1},
@@ -1162,9 +1231,43 @@ public class GraphPrint extends JPanel {
         float[] time = {
                 0, 1, 2, 3, 4, 5
         };
-        GraphPrint p = setupFrame(frame, "spline");
 
+        MonoSpline monoSpline = new MonoSpline( time, Arrays.asList(points));
+        Color c = new Color(0xDE68D3);
+        PlotItem plot1,plot2;
+        plot1 =    graph.addFunction2("mono slope", time[0], time[time.length-1], c, new Function() {
+            @Override
+            public double f(double x) {
+                return monoSpline.getSlope((float)x,0) ;
+            }
+        });
+        Color d =  new Color(0x0004FF);
+        plot2 = graph.addFunction2("mono",  time[0], time[time.length-1], d, new Function() {
+            @Override
+            public double f(double x) {
+                return monoSpline.getPos((float)x,0);
+            }
+        });
 
+        return () -> {
+            graph.removeFunction(plot1);
+            graph.removeFunction(plot2);
+        };
+    }
+
+    public static Runnable  displayArc1(GraphPrint graph){
+        graph.setTitle("Monotonic Spline");
+        float[][] points = {
+                {0, 0},
+                {1, 1},
+                {1, 1},
+                {2, 2},
+                {2, 2},
+                {5, 5},
+        };
+        float[] time = {
+                0, 1, 2, 3, 4, 5
+        };
         int[] mode = {
                 ArcCurveFit.ARC_BELOW,
                 ArcCurveFit.ARC_ABOVE,
@@ -1174,63 +1277,46 @@ public class GraphPrint extends JPanel {
 
         };
         ArcSpline arcSpline = new ArcSpline(mode, time, Arrays.asList(points));
+        PlotItem p1,p2,p3;
 
-        p.addFunction2("arc dx/dt", time[0], time[time.length - 1],  new Color(0x4C8F4F),
+        p1 = graph.addFunction2("arc dx/dt", time[0], time[time.length - 1],  new Color(0x2C4F2F),
                 x -> arcSpline.getSlope((float) x, 0));
-        p.addFunction2("arc dy/dt", time[0], time[time.length - 1],  new Color(0x9F664E),
+        p2 = graph.addFunction2("arc dy/dt", time[0], time[time.length - 1],  new Color(0x4F362E),
                 x -> arcSpline.getSlope((float) x, 1));
 
-        p.addFunction2d("arc", time[0], time[time.length - 1], new Color(0xECDE44),
+        p3 = graph.addFunction2d("arc", time[0], time[time.length - 1], new Color(0xECDE44),
                 t -> arcSpline.getPos((float) t, 0), t ->  arcSpline.getPos((float) t, 1));
-
-
-
-
-//        Spline spline = new Spline(  Arrays.asList(points));
-//        color =  new Color(0x918789);
-//        p.addFunction2("spline",  time[0], time[time.length-1], color, new Function() {
-//            @Override
-//            public double f(double x) {
-//                return spline.getPos((float)x/5,0);
-//            }
-//        });
-
-
-        frame.setVisible(true);
-
+        return () -> {
+            graph.removeFunction(p1);
+            graph.removeFunction(p2);
+            graph.removeFunction(p3);
+        };
     }
-    public static void graphMonoSpline() {
-        JFrame frame = smartFrame("Graph");
-        float[][] points = {
-                {0, 0},
-                {1, 1},
-                {1, 1},
-                {2, 2},
-                {2, 2},
-                {3, 3},
-        };
-        float[] time = {
-                0, 1, 2, 3, 4, 5
-        };
-        GraphPrint p = setupFrame(frame, "spline");
-        MonoSpline monoSpline = new MonoSpline( time, Arrays.asList(points));
-        Color c = new Color(0xDE68D3);
 
-        p.addFunction2("mono slope", time[0], time[time.length-1], c, new Function() {
-            @Override
-            public double f(double x) {
-                return monoSpline.getSlope((float)x,0) ;
-            }
-        });
-        Color d =  new Color(0x0004FF);
-        p.addFunction2("mono",  time[0], time[time.length-1], d, new Function() {
-            @Override
-            public double f(double x) {
-                 return monoSpline.getPos((float)x,0);
-            }
-        });
-        frame.setVisible(true);
+    public static Runnable  displayCycle1(GraphPrint graph){
+        graph.setTitle("Cycle Spline");
 
+        Cycles cycles = new Cycles();
+        cycles.setType(Cycles.CUSTOM,new float[]{0 ,1, 1 ,-1 ,0});
+        cycles.addPoint(0,0);
+        cycles.addPoint(0.25f,1);
+        cycles.addPoint(0.5f,0);
+        cycles.addPoint(0.75f,2);
+        cycles.addPoint(1f,0);
+        cycles.normalize();
+        PlotItem p1,p2,p3;
+
+        p1 = graph.addFunction2("cycle_slope", 0, 1,  new Color(0x2C4F2F),
+                t -> cycles.getSlope((float)t, 0,0));
+
+
+        p3 = graph.addFunction2("cycle",0, 1, new Color(0xECDE44),
+                t -> 100*cycles.getValue((float) t, 0));
+        return () -> {
+            graph.removeFunction(p1);
+
+            graph.removeFunction(p3);
+        };
     }
 
 }
