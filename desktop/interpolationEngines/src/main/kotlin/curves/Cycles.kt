@@ -24,7 +24,6 @@ import kotlin.math.sin
 /**
  * This generates variable frequency oscillation curves
  *
- *
  */
 class Cycles {
     private var mPeriod = floatArrayOf()
@@ -48,7 +47,14 @@ class Cycles {
         }
     }
 
-    // @TODO: add description
+    /**
+     * This adds a point in the cycle positions are from 0..1
+     * period represents the number of oscillations.
+     * The periods should typically:
+     * - add up to a whole number.
+     * - have a value at 0 and 1.
+     * After all points are added call normalize
+     */
     fun addPoint(position: Float, period: Float) {
         val len = mPeriod.size + 1
         var j = Arrays.binarySearch(mPosition, position)
@@ -66,6 +72,7 @@ class Cycles {
 
     /**
      * After adding point every thing must be normalized
+     * This must be called adding points
      */
     fun normalize() {
         var totalArea = 0f
@@ -91,6 +98,10 @@ class Cycles {
         mNormalized = true
     }
 
+    /**
+     * Calculate the phase of the cycle given the accumulation of cycles up to
+     * that point in time.
+     */
     private fun getP(time: Float): Float {
         var time = time
         if (time < 0) {
@@ -113,7 +124,11 @@ class Cycles {
         return p
     }
 
-    // @TODO: add description
+    /**
+     * Get the value for time. (Time here is typically progress 0..1)
+     * Phase typically thought of as an angle is from 0..1 (not 0-360 or 0-2PI)
+     * This makes it mathematically more efficient
+     */
     fun getValue(time: Float, phase: Float): Float {
         val angle = phase + getP(time) // angle is / by 360
         return when (mType) {
@@ -122,7 +137,7 @@ class Cycles {
             TRIANGLE_WAVE -> 1 - abs((angle * 4 + 1) % 4 - 2)
             SAW_WAVE -> (angle * 2 + 1) % 2 - 1
             REVERSE_SAW_WAVE -> 1 - (angle * 2 + 1) % 2
-            COS_WAVE -> cos(mPI2 * (phase + angle))
+            COS_WAVE -> cos(mPI2 * (angle))
             BOUNCE -> {
                 val x = 1 - Math.abs(angle * 4 % 4 - 2)
                 1 - x * x
@@ -133,6 +148,9 @@ class Cycles {
         }
     }
 
+    /**
+     * Get the differential  dValue/dt
+     */
     fun getDP(time: Float): Float {
         var time = time
         if (time <= 0) {
