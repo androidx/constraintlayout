@@ -15,11 +15,9 @@
  */
 package test;
 
-import curves.Spline;
+import curves.*;
 import org.junit.Test;
-import utils.*;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -41,7 +39,7 @@ public class SplineTest {
         float[][] points = {
                 {0, 2}, {1, 1}, {2, 0}
         };
-        Spline spline = new  Spline(Arrays.asList(points));
+        Spline spline = new Spline(Arrays.asList(points));
 
         assertEquals(1f, spline.getPos(0.5f, 1), 0.001);
         assertEquals(1f, spline.getPos(0.5f, 0), 0.001);
@@ -49,14 +47,14 @@ public class SplineTest {
 
     @Test
     public void testCurveFit01() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 0}, {1, 1}, {2, 0}
         };
-        double[] time = {
+        float[] time = {
                 0, 5, 10
         };
-        CurveFit spline = CurveFit.get(CurveFit.SPLINE, time, points);
-        double value = spline.getPos(5, 0);
+        MonoSpline spline = new MonoSpline(time, Arrays.asList(points));
+        float value = spline.getPos(5, 0);
         assertEquals(1, value, 0.001);
         value = spline.getPos(7, 0);
         assertEquals(1.4, value, 0.001);
@@ -66,14 +64,14 @@ public class SplineTest {
 
     @Test
     public void testCurveFit02() throws Exception {
-        double[][] points = {
+        float[][] points = {
                 {0, 0}, {1, 1}, {2, 0}
         };
-        double[] time = {
+        float[] time = {
                 0, 5, 10
         };
-        CurveFit spline = CurveFit.get(CurveFit.LINEAR, time, points);
-        double value = spline.getPos(5, 0);
+        LinearCurve spline = new LinearCurve(time, Arrays.asList(points));
+        float value = spline.getPos(5, 0);
         assertEquals(1, value, 0.001);
         value = spline.getPos(7, 0);
         assertEquals(1.4, value, 0.001);
@@ -83,49 +81,48 @@ public class SplineTest {
 
     @Test
     public void testEasing01() throws Exception {
-        double value, diffValue;
-        Easing easing;
-        easing = Easing.getInterpolator("cubic=(1,1,0,0)");
-        value = easing.get(0.5);
-        assertEquals(0.5, value, 0.001);
-        diffValue = easing.getDiff(0.5);
+        float value, diffValue;
+        Easing easing = new Easing.CubicEasing("cubic=(1,1,0,0)");
+        value = easing.get(0.5f);
+        assertEquals(0.5f, value, 0.001);
+        diffValue = easing.getDiff(0.5f);
         assertEquals(1, diffValue, 0.001);
-        diffValue = easing.getDiff(0.1);
+        diffValue = easing.getDiff(0.1f);
         assertEquals(1, diffValue, 0.001);
-        diffValue = easing.getDiff(0.9);
+        diffValue = easing.getDiff(0.9f);
         assertEquals(1, diffValue, 0.001);
 
-        easing = Easing.getInterpolator("cubic=(1,0,0,1)");
-        value = easing.get(0.5);
+        easing = new Easing.CubicEasing("cubic=(1,0,0,1)");
+        value = easing.get(0.5f);
         assertEquals(0.5, value, 0.001);
 
-        diffValue = easing.getDiff(0.001);
+        diffValue = easing.getDiff(0.001f);
         assertEquals(0, diffValue, 0.001);
-        diffValue = easing.getDiff(0.9999);
+        diffValue = easing.getDiff(0.9999f);
         assertEquals(0, diffValue, 0.001);
 
-        easing = Easing.getInterpolator("cubic=(0.5,1,0.5,0)");
-        value = easing.get(0.5);
+        easing = new Easing.CubicEasing("cubic=(0.5,1,0.5,0)");
+        value = easing.get(0.5f);
         assertEquals(0.5, value, 0.001);
-        diffValue = easing.getDiff(0.5);
+        diffValue = easing.getDiff(0.5f);
         assertEquals(0, diffValue, 0.001);
-        diffValue = easing.getDiff(0.00001);
+        diffValue = easing.getDiff(0.00001f);
         assertEquals(2, diffValue, 0.001);
-        diffValue = easing.getDiff(0.99999);
+        diffValue = easing.getDiff(0.99999f);
         assertEquals(2, diffValue, 0.001);
 
     }
 
     @Test
     public void testLinearCurveFit01() throws Exception {
-        double value, diffValue;
-        double[][] points = {
+        float value;
+        float[][] points = {
                 {0, 0}, {1, 1}, {2, 0}
         };
-        double[] time = {
+        float[] time = {
                 0, 5, 10
         };
-        LinearCurveFit lcurve = new LinearCurveFit(time, points);
+        LinearCurve lcurve = new LinearCurve(time, Arrays.asList(points));
         value = lcurve.getPos(5, 0);
         assertEquals(1, value, 0.001);
         value = lcurve.getPos(7, 0);
@@ -136,50 +133,28 @@ public class SplineTest {
 
     @Test
     public void testOscillator01() throws Exception {
-        Oscillator o = new Oscillator();
-        o.setType(Oscillator.SQUARE_WAVE, null);
+        Cycles o = new Cycles();
+        o.setType(Cycles.SQUARE_WAVE, null);
         o.addPoint(0, 0);
-        o.addPoint(0.5, 10);
+        o.addPoint(0.5f, 10);
         o.addPoint(1, 0);
         o.normalize();
-        assertEquals(19, countZeroCrossings(o, Oscillator.SIN_WAVE));
-        assertEquals(19, countZeroCrossings(o, Oscillator.SQUARE_WAVE));
-        assertEquals(19, countZeroCrossings(o, Oscillator.TRIANGLE_WAVE));
-        assertEquals(19, countZeroCrossings(o, Oscillator.SAW_WAVE));
-        assertEquals(19, countZeroCrossings(o, Oscillator.REVERSE_SAW_WAVE));
-        assertEquals(20, countZeroCrossings(o, Oscillator.COS_WAVE));
+        assertEquals(19, countZeroCrossings(o, Cycles.SIN_WAVE));
+        assertEquals(19, countZeroCrossings(o, Cycles.SQUARE_WAVE));
+        assertEquals(19, countZeroCrossings(o, Cycles.TRIANGLE_WAVE));
+        assertEquals(19, countZeroCrossings(o, Cycles.SAW_WAVE));
+        assertEquals(19, countZeroCrossings(o, Cycles.REVERSE_SAW_WAVE));
+        assertEquals(20, countZeroCrossings(o, Cycles.COS_WAVE));
     }
 
-    @Test
-    public void testStopLogic01() throws Exception {
-        String[] results = {
-                "[0.4, 0.36, 0.42, 0.578, 0.778, 0.938, 0.999, 1, 1, 1]",
-                "[0.4, 0.383, 0.464, 0.64, 0.838, 0.967, 1, 1, 1, 1]",
-                "[0.4, 0.405, 0.509, 0.697, 0.885, 0.986, 1, 1, 1, 1]",
-                "[0.4, 0.427, 0.553, 0.75, 0.921, 0.997, 1, 1, 1, 1]",
-                "[0.4, 0.449, 0.598, 0.798, 0.948, 1, 1, 1, 1, 1]",
-                "[0.4, 0.472, 0.64, 0.838, 0.967, 1, 1, 1, 1, 1]",
-                "[0.4, 0.494, 0.678, 0.87, 0.981, 1, 1, 1, 1, 1]",
-                "[0.4, 0.516, 0.71, 0.894, 0.989, 1, 1, 1, 1, 1]",
-                "[0.4, 0.538, 0.737, 0.913, 0.995, 1, 1, 1, 1, 1]",
-                "[0.4, 0.56, 0.76, 0.927, 0.998, 1, 1, 1, 1, 1]"
-
-        };
-
-        for (int i = 0; i < 10; i++) {
-            float[] f = stopGraph((i - 4) * .1f);
-            assertEquals(" test " + i, results[i], arrayToString(f));
-        }
-    }
-
-    private int countZeroCrossings(Oscillator o, int type) {
+    private int countZeroCrossings(Cycles o, int type) {
         int n = 1000;
-        double last = o.getValue(0, 0);
+        float last = o.getValue(0, 0);
         int count = 0;
         o.setType(type, null);
         for (int i = 0; i < n; i++) {
 
-            double v = o.getValue(0.0001 + i / (double) n, 0);
+            float v = o.getValue(0.0001f + i / (float) n, 0);
             if (v * last < 0) {
                 count++;
             }
@@ -187,31 +162,4 @@ public class SplineTest {
         }
         return count;
     }
-
-    String arrayToString(float[] f) {
-        String ret = "[";
-        DecimalFormat df = new DecimalFormat("###.###");
-        for (int i = 0; i < f.length; i++) {
-            Float aFloat = f[i];
-            if (i > 0) {
-                ret += ", ";
-            }
-            ret += df.format(f[i]);
-        }
-        return ret + "]";
-    }
-
-    private static float[] stopGraph(float vel) {
-        StopLogicEngine breakLogic = new StopLogicEngine();
-        breakLogic.config(.4f, 1f, vel, 1, 2f, 0.9f);
-        float[] ret = new float[10];
-
-        for (int i = 0; i < ret.length; i++) {
-            float time = 2 * i / (float) (ret.length - 1);
-            float pos = breakLogic.getInterpolation(time);
-            ret[i] = pos;
-        }
-        return ret;
-    }
-
 }

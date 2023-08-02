@@ -16,6 +16,9 @@
 package curves
 
 import java.util.*
+import kotlin.math.cos
+import kotlin.math.hypot
+import kotlin.math.sin
 
 /**
  * This provides a curve fit system that stitches the x,y path together with
@@ -29,7 +32,9 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         mArcs = arrayOfNulls(timePoints.size - 1)
         var mode = START_VERTICAL
         var last = START_VERTICAL
-        for (i in mArcs.indices) {
+
+        mArcs = Array(timePoints.size - 1) {it->
+            val i  = it
             when (arcModes[i]) {
                 ARC_START_VERTICAL -> {
                     mode = START_VERTICAL
@@ -50,7 +55,7 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
                 ARC_ABOVE -> mode = UP_ARC
                 ARC_BELOW -> mode = DOWN_ARC
             }
-            mArcs[i] = Arc(mode, timePoints[i], timePoints[i + 1], y[i][0], y[i][1], y[i + 1][0], y[i + 1][1])
+           Arc(mode, timePoints[i], timePoints[i + 1], y[i][0], y[i][1], y[i + 1][0], y[i + 1][1])
         }
     }
 
@@ -258,7 +263,7 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
                 mX2 = x2
                 mY1 = y1
                 mY2 = y2
-                mArcDistance = Math.hypot(dy.toDouble(), dx.toDouble()).toFloat()
+                mArcDistance = hypot(dy, dx).toFloat()
                 mArcVelocity = mArcDistance * mOneOverDeltaTime
                 mEllipseCenterX = dx / (mTime2 - mTime1) // cache the slope in the unused center
                 mEllipseCenterY = dy / (mTime2 - mTime1) // cache the slope in the unused center
@@ -279,8 +284,8 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         fun setPoint(time: Float) {
             val percent = (if (mVertical) mTime2 - time else time - mTime1) * mOneOverDeltaTime
             val angle = Math.PI.toFloat() * 0.5f * lookup(percent)
-            mTmpSinAngle = Math.sin(angle.toDouble()).toFloat()
-            mTmpCosAngle = Math.cos(angle.toDouble()).toFloat()
+            mTmpSinAngle = sin(angle)
+            mTmpCosAngle = cos(angle)
         }
 
         fun calcX(): Float {
@@ -294,14 +299,14 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
         fun calcDX(): Float {
             val vx = mEllipseA * mTmpCosAngle
             val vy = -mEllipseB * mTmpSinAngle
-            val norm = mArcVelocity / Math.hypot(vx.toDouble(), vy.toDouble()).toFloat()
+            val norm = mArcVelocity / hypot(vx, vy)
             return if (mVertical) -vx * norm else vx * norm
         }
 
         fun calcDY(): Float {
             val vx = mEllipseA * mTmpCosAngle
             val vy = -mEllipseB * mTmpSinAngle
-            val norm = mArcVelocity / Math.hypot(vx.toDouble(), vy.toDouble()).toFloat()
+            val norm = mArcVelocity / hypot(vx, vy)
             return if (mVertical) -vy * norm else vy * norm
         }
 
@@ -346,12 +351,12 @@ class ArcSpline(arcModes: IntArray, val timePoints: FloatArray, y: List<FloatArr
             var dist = 0f
             for (i in sOurPercent.indices) {
                 val angle = Math.toRadians(90.0 * i / (sOurPercent.size - 1)).toFloat()
-                val s = Math.sin(angle.toDouble()).toFloat()
-                val c = Math.cos(angle.toDouble()).toFloat()
+                val s = sin(angle)
+                val c = cos(angle)
                 val px = a * s
                 val py = b * c
                 if (i > 0) {
-                    dist += Math.hypot((px - lx).toDouble(), (py - ly).toDouble()).toFloat()
+                    dist += hypot((px - lx), (py - ly)).toFloat()
                     sOurPercent[i] = dist
                 }
                 lx = px

@@ -16,6 +16,7 @@
 package curves
 
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sign
@@ -35,7 +36,7 @@ class Cycles {
     private var mPI2 = Math.PI.toFloat() * 2
     private var mNormalized = false
     override fun toString(): String {
-        return "pos =" + Arrays.toString(mPosition) + " period=" + Arrays.toString(mPeriod)
+        return "pos =" + mPosition.contentToString() + " period=" + mPeriod.contentToString()
     }
 
     // @TODO: add description
@@ -45,6 +46,16 @@ class Cycles {
         if (customType != null) {
             mCustomCurve = buildWave(customType)
         }
+    }
+
+    /**
+     * Clear points
+     */
+    fun clearPoints() {
+        mPosition = floatArrayOf()
+        mPeriod = floatArrayOf()
+        mArea = FloatArray(0)
+        mNormalized = false
     }
 
     /**
@@ -83,7 +94,7 @@ class Cycles {
         for (i in 1 until mPeriod.size) {
             val h = (mPeriod[i - 1] + mPeriod[i]) / 2
             val w = mPosition[i] - mPosition[i - 1]
-            totalArea = totalArea + w * h
+            totalArea += w * h
         }
         // scale periods to normalize it
         for (i in mPeriod.indices) {
@@ -103,19 +114,18 @@ class Cycles {
      * that point in time.
      */
     private fun getP(time: Float): Float {
-        var time = time
-        if (time < 0) {
-            time = 0f
-        } else if (time > 1) {
-            time = 1f
+        var t = time
+        if (t < 0) {
+            t = 0f
+        } else if (t > 1) {
+            t = 1f
         }
-        var index = Arrays.binarySearch(mPosition, time)
+        var index = Arrays.binarySearch(mPosition, t)
         var p = 0f
         if (index > 0) {
             p = 1f
         } else if (index != 0) {
             index = -index - 1
-            val t = time
             val m = ((mPeriod[index] - mPeriod[index - 1])
                     / (mPosition[index] - mPosition[index - 1]))
             p =
@@ -149,23 +159,22 @@ class Cycles {
     }
 
     /**
-     * Get the differential  dValue/dt
+     * Get the differential  of the phase(Dphase/Dt)
      */
     fun getDP(time: Float): Float {
-        var time = time
-        if (time <= 0) {
-            time = 0.00001f
-        } else if (time >= 1) {
-            time = .999999f
+        var t = time
+        if (t <= 0) {
+            t = 0.00001f
+        } else if (t >= 1) {
+            t = .999999f
         }
-        var index = Arrays.binarySearch(mPosition, time)
+        var index = Arrays.binarySearch(mPosition, t)
         var p = 0f
         if (index > 0) {
             return 0f
         }
         if (index != 0) {
             index = -index - 1
-            val t = time
             val m = ((mPeriod[index] - mPeriod[index - 1])
                     / (mPosition[index] - mPosition[index - 1]))
             p = m * t + (mPeriod[index - 1] - m * mPosition[index - 1])
@@ -173,7 +182,9 @@ class Cycles {
         return p
     }
 
-    // @TODO: add description
+    /**
+     * Get the differential of the value dv/dt needs the differential of the phase function
+     */
     fun getSlope(time: Float, phase: Float, dphase: Float): Float {
         val angle = phase + getP(time)
         val dangle_dtime = getDP(time) + dphase
@@ -204,8 +215,6 @@ class Cycles {
     /**
      * This builds a monotonic spline to be used as a wave function
      */
-
-
     private fun buildWave(values: FloatArray): MonoSpline {
         val length = values.size * 3 - 2
         val len = values.size - 1
