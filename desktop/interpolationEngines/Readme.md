@@ -1,0 +1,7 @@
+- [ArcSpline](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/ArcSpline.kt): Arc mode paths
+- [Cycles](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/Cycles.kt): Core to KeyCycles engine
+- [LinearCurve](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/LinearCurve.kt): Lineare interpolation
+- [MonoSpline](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/MonoSpline.kt): Motonic spline engine
+- [Shilick](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/Shilick.kt):   Shilick easing
+- [Spline](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/Spline.kt): Traditional Spline curves
+- [StepCurve](https://github.com/androidx/constraintlayout/blob/main/desktop/interpolationEngines/src/main/kotlin/curves/StepCurve.kt): Spline based easing curves
