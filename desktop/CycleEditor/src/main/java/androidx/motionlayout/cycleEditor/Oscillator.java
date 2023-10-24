@@ -58,19 +58,22 @@ public class Oscillator {
     }
 
     double getP(double time) {
-        int index = Arrays.binarySearch(mPosition, time);
-        double p = 0;
-        if (index > 0) {
-            p = 1;
-        } else if (index != 0) {
-            index = -index - 1;
-            double t = time;
-            double m = (mPeriod[index] - mPeriod[index - 1]) / (mPosition[index] - mPosition[index - 1]);
-            p = mArea[index - 1]
-                    + (mPeriod[index - 1] - m * mPosition[index - 1]) * (t - mPosition[index - 1])
-                    + m * (t * t - mPosition[index - 1] * mPosition[index - 1]) / 2;
+        if (time <= 0.0) {
+            return 0.0;
+        } else if (time >= 1) {
+            return 1.0;
         }
-        return p;
+        int index = Arrays.binarySearch(mPosition, time);
+        if (index < 0) {
+            index = -index - 1;
+        }
+
+        double t = time;
+        double m =
+                (mPeriod[index] - mPeriod[index - 1]) / (mPosition[index] - mPosition[index - 1]);
+        return mArea[index - 1]
+                + (mPeriod[index - 1] - m * mPosition[index - 1]) * (t - mPosition[index - 1])
+                + m * (t * t - mPosition[index - 1] * mPosition[index - 1]) / 2;
     }
 
     public double getValue(double time) {
