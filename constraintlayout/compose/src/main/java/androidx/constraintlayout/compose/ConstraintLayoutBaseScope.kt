@@ -19,6 +19,7 @@ package androidx.constraintlayout.compose
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLArray
@@ -101,6 +102,19 @@ abstract class ConstraintLayoutBaseScope internal constructor(extendFrom: CLObje
     // TODO(popam): investigate if this can be just a HorizontalAnchor
     @Stable
     data class BaselineAnchor internal constructor(
+        internal val id: Any,
+        val reference: LayoutReference
+    )
+
+    /**
+     * Represents a horizontal anchor corresponding to the [LastBaseline] of a layout that other
+     * layouts can link to in their `Modifier.constrainAs` or `constrain` blocks.
+     *
+     * @param reference The [LayoutReference] that this anchor belongs to.
+     */
+    // TODO(popam): investigate if this can be just a HorizontalAnchor
+    @Stable
+    data class LastBaselineAnchor internal constructor(
         internal val id: Any,
         val reference: LayoutReference
     )
@@ -1740,6 +1754,12 @@ class ConstrainedLayoutReference(override val id: Any) : LayoutReference(id) {
      */
     @Stable
     val baseline = ConstraintLayoutBaseScope.BaselineAnchor(id, this)
+
+    /**
+     * The lastBaseline anchor of this layout.
+     */
+    @Stable
+    val lastBaseline = ConstraintLayoutBaseScope.LastBaselineAnchor(id, this)
 }
 
 /**
@@ -1918,6 +1938,7 @@ class VerticalAlign internal constructor(
         val Bottom = VerticalAlign("bottom")
         val Center = VerticalAlign("center")
         val Baseline = VerticalAlign("baseline")
+        val LastBaseline = VerticalAlign("lastBaseline")
     }
 }
 

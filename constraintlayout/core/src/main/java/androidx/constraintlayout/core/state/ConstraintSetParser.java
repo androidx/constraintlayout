@@ -411,6 +411,7 @@ public class ConstraintSetParser {
                             base.remove("top");
                             base.remove("bottom");
                             base.remove("baseline");
+                            base.remove("lastBaseline");
                             base.remove("center");
                             base.remove("centerHorizontally");
                             base.remove("centerVertically");
@@ -1867,6 +1868,10 @@ public class ConstraintSetParser {
                             state.baselineNeededFor(targetReference.getKey());
                             reference.topToBaseline(targetReference);
                             break;
+                        case "lastBaseline":
+                            state.lastBaselineNeededFor(targetReference.getKey());
+                            reference.topToLastBaseline(targetReference);
+                            break;
                     }
                     break;
                 case "bottom":
@@ -1880,6 +1885,9 @@ public class ConstraintSetParser {
                         case "baseline":
                             state.baselineNeededFor(targetReference.getKey());
                             reference.bottomToBaseline(targetReference);
+                        case "lastBaseline":
+                            state.lastBaselineNeededFor(targetReference.getKey());
+                            reference.bottomToLastBaseline(targetReference);
                     }
                     break;
                 case "baseline":
@@ -1889,6 +1897,11 @@ public class ConstraintSetParser {
                             state.baselineNeededFor(targetReference.getKey());
                             reference.baselineToBaseline(targetReference);
                             break;
+                        case "lastBaseline":
+                            state.lastBaselineNeededFor(reference.getKey());
+                            state.lastBaselineNeededFor(targetReference.getKey());
+                            reference.baselineToLastBaseline(targetReference);
+                            break;
                         case "top":
                             state.baselineNeededFor(reference.getKey());
                             reference.baselineToTop(targetReference);
@@ -1896,6 +1909,28 @@ public class ConstraintSetParser {
                         case "bottom":
                             state.baselineNeededFor(reference.getKey());
                             reference.baselineToBottom(targetReference);
+                            break;
+                    }
+                    break;
+                case "lastBaseline":
+                    switch (anchor) {
+                        case "baseline":
+                            state.lastBaselineNeededFor(reference.getKey());
+                            state.lastBaselineNeededFor(targetReference.getKey());
+                            reference.lastBaselineToBaseline(targetReference);
+                            break;
+                        case "lastBaseline":
+                            state.lastBaselineNeededFor(reference.getKey());
+                            state.lastBaselineNeededFor(targetReference.getKey());
+                            reference.lastBaselineToLastBaseline(targetReference);
+                            break;
+                        case "top":
+                            state.lastBaselineNeededFor(reference.getKey());
+                            reference.lastBaselineToTop(targetReference);
+                            break;
+                        case "bottom":
+                            state.lastBaselineNeededFor(reference.getKey());
+                            reference.lastBaselineToBottom(targetReference);
                             break;
                     }
                     break;
@@ -1983,6 +2018,11 @@ public class ConstraintSetParser {
                         state.baselineNeededFor(reference.getKey());
                         state.baselineNeededFor(targetReference.getKey());
                         reference.baselineToBaseline(targetReference);
+                        break;
+                    case "lastBaseline":
+                        state.lastBaselineNeededFor(reference.getKey());
+                        state.lastBaselineNeededFor(targetReference.getKey());
+                        reference.lastBaselineToLastBaseline(targetReference);
                         break;
                 }
             }

@@ -18,6 +18,7 @@ package androidx.constraintlayout.compose
 
 import android.util.Log
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLArray
@@ -64,6 +65,15 @@ interface HorizontalAnchorable {
         margin: Dp = 0.dp,
         goneMargin: Dp = 0.dp
     )
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.LastBaselineAnchor].
+     */
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
 }
 
 @JvmDefaultWithCompatibility
@@ -77,6 +87,49 @@ interface BaselineAnchorable {
      */
     fun linkTo(
         anchor: ConstraintLayoutBaseScope.BaselineAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.LastBaselineAnchor].
+     */
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
+     */
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.HorizontalAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
+}
+
+@JvmDefaultWithCompatibility
+/**
+ * Represents the [LastBaseline] of a layout that can be anchored
+ * using [linkTo] in their `Modifier.constrainAs` blocks.
+ */
+interface LastBaselineAnchorable {
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.BaselineAnchor].
+     */
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.BaselineAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
+
+    /**
+     * Adds a link towards a [ConstraintLayoutBaseScope.LastBaselineAnchor].
+     */
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
         margin: Dp = 0.dp,
         goneMargin: Dp = 0.dp
     )
@@ -142,6 +195,20 @@ internal abstract class BaseHorizontalAnchorable(
         val constraintArray = CLArray(charArrayOf()).apply {
             add(CLString.from(anchor.id.toString()))
             add(CLString.from("baseline"))
+            add(CLNumber(margin.value))
+            add(CLNumber(goneMargin.value))
+        }
+        containerObject.put(anchorName, constraintArray)
+    }
+
+    final override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.LastBaselineAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
+        val constraintArray = CLArray(charArrayOf()).apply {
+            add(CLString.from(anchor.id.toString()))
+            add(CLString.from("lastBaseline"))
             add(CLNumber(margin.value))
             add(CLNumber(goneMargin.value))
         }
