@@ -42,6 +42,11 @@ public class GridCore extends VirtualLayout {
     private static final int MAX_ROWS = 50; // maximum number of rows can be specified.
     private static final int MAX_COLUMNS = 50; // maximum number of columns can be specified.
 
+    // Values of the chain styles
+    public static final String CHAIN_SPREAD = "spread";
+    public static final String CHAIN_SPREAD_INSIDE = "spread_inside";
+    public static final String CHAIN_PACKED = "packed";
+
     /**
      * Container for all the ConstraintWidgets
      */
@@ -161,6 +166,27 @@ public class GridCore extends VirtualLayout {
      * e.g., 1:3x2 -> 1:2x3
      */
     private boolean mSubGridByColRow = false;
+
+    public String getChainStyle() {
+        return mChainStyle;
+    }
+
+    public void setChainStyle(String chainStyle) {
+        mChainStyle = chainStyle;
+    }
+
+    public float getChainBias() {
+        return mChainBias;
+    }
+
+    public void setChainBias(float chainBias) {
+        mChainBias = chainBias;
+    }
+
+    private String mChainStyle;
+
+
+    private float mChainBias;
 
     public GridCore() {
         updateActualRowsAndColumns();
@@ -781,9 +807,64 @@ public class GridCore extends VirtualLayout {
      * Chains the boxWidgets and add constraints to the widgets
      */
     private void addConstraints() {
-        setBoxWidgetVerticalChains();
-        setBoxWidgetHorizontalChains();
-        arrangeWidgets();
+//        setBoxWidgetVerticalChains();
+//        setBoxWidgetHorizontalChains();
+//        arrangeWidgets();
+
+        int style = -1;
+        if (mChainStyle.equals(CHAIN_SPREAD)) {
+            style = 0;
+        } else if (mChainStyle.equals(CHAIN_SPREAD_INSIDE)) {
+            style = 1;
+        } else if (mChainStyle.equals(CHAIN_PACKED)) {
+            style = 2;
+        }
+
+        if (mRows == 1 && style != -1) {
+            for (int i = 0; i < mWidgetsCount; i++) {
+                if (i == 0) {
+                    mWidgets[i].mLeft.connect(mLeft, 0);
+                    mWidgets[i].setHorizontalChainStyle(style);
+                    mWidgets[i].setHorizontalBiasPercent(mChainBias);
+                } else {
+                    mWidgets[i].mLeft.connect(mWidgets[i - 1].mRight, 0);
+                }
+                if (i == mWidgetsCount - 1) {
+                    mWidgets[i].mRight.connect(mRight, 0);
+                } else {
+                    mWidgets[i].mRight.connect(mWidgets[i + 1].mLeft, 0);
+                }
+
+                if (mWidgets[i].mTop.mTarget == null && mWidgets[i].mBottom.mTarget == null) {
+                    mWidgets[i].mTop.connect(mTop, 0);
+                    mWidgets[i].mBottom.connect(mBottom, 0);
+                }
+            }
+        } else if (mColumns == 1 && style != -1) {
+            for (int i = 0; i < mWidgetsCount; i++) {
+                if (i == 0) {
+                    mWidgets[i].mTop.connect(mTop, 0);
+                    mWidgets[i].setVerticalChainStyle(style);
+                    mWidgets[i].setVerticalBiasPercent(mChainBias);
+                } else {
+                    mWidgets[i].mTop.connect(mWidgets[i - 1].mBottom, 0);
+                }
+                if (i == mWidgetsCount - 1) {
+                    mWidgets[i].mBottom.connect(mBottom, 0);
+                } else {
+                    mWidgets[i].mBottom.connect(mWidgets[i + 1].mTop, 0);
+                }
+
+                if (mWidgets[i].mLeft.mTarget == null && mWidgets[i].mRight.mTarget == null) {
+                    mWidgets[i].mLeft.connect(mLeft, 0);
+                    mWidgets[i].mRight.connect(mRight, 0);
+                }
+            }
+        } else {
+            setBoxWidgetVerticalChains();
+            setBoxWidgetHorizontalChains();
+            arrangeWidgets();
+        }
     }
 
     /**

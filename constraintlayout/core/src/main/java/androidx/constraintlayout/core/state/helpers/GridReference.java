@@ -117,6 +117,27 @@ public class GridReference extends HelperReference {
      */
     private int[] mFlags;
 
+    public String getChainStyle() {
+        return mChainStyle;
+    }
+
+    public void setChainStyle(String chainStyle) {
+        mChainStyle = chainStyle;
+    }
+
+    private String mChainStyle;
+
+
+    public float getChainBias() {
+        return mChainBias;
+    }
+
+    public void setChainBias(float chainBias) {
+        mChainBias = chainBias;
+    }
+
+    private float mChainBias;
+
     /**
      * get padding left
      * @return padding left
@@ -452,6 +473,14 @@ public class GridReference extends HelperReference {
 
         if (mFlags != null && mFlags.length > 0) {
             mGrid.setFlags(mFlags);
+        }
+
+        if (mChainStyle != null) {
+            mGrid.setChainStyle(mChainStyle);
+        }
+
+        if (mChainBias >= 0 && mChainBias <= 1) {
+            mGrid.setChainBias(mChainBias);
         }
 
         // General attributes of a widget
